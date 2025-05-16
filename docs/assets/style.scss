@@ -1,0 +1,25 @@
+table {
+  width: auto !important;
+  display: inline-table;
+}
+
+/***** SIDEBAR *****/
+
+/***** MATH *****/
+.theorem,
+.definition {
+  border: 1px solid #bbb;
+  border-radius: 0.5rem;
+  padding: 1rem 1rem 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.example {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.proof-title {
+  font-weight: bold;
+}

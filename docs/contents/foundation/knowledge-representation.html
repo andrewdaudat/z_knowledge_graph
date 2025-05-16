@@ -1,0 +1,3397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Knowledge Representation and Ontologies – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/construction/kg-construction.html" rel="next">
+<link href="../../contents/foundation/graph-fundamentals.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/knowledge-representation.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#foundations-of-knowledge-representation" id="toc-foundations-of-knowledge-representation" class="nav-link active" data-scroll-target="#foundations-of-knowledge-representation"><span class="header-section-number">5.1</span> Foundations of knowledge representation</a>
+  <ul class="collapse">
+  <li><a href="#knowledge-representation-approaches" id="toc-knowledge-representation-approaches" class="nav-link" data-scroll-target="#knowledge-representation-approaches"><span class="header-section-number">5.1.1</span> Knowledge representation approaches</a></li>
+  <li><a href="#knowledge-representation-primitives" id="toc-knowledge-representation-primitives" class="nav-link" data-scroll-target="#knowledge-representation-primitives"><span class="header-section-number">5.1.2</span> Knowledge representation primitives</a></li>
+  <li><a href="#taxonomic-relationships" id="toc-taxonomic-relationships" class="nav-link" data-scroll-target="#taxonomic-relationships"><span class="header-section-number">5.1.3</span> Taxonomic relationships</a></li>
+  <li><a href="#mereological-relationships" id="toc-mereological-relationships" class="nav-link" data-scroll-target="#mereological-relationships"><span class="header-section-number">5.1.4</span> Mereological relationships</a></li>
+  <li><a href="#non-hierarchical-relationships" id="toc-non-hierarchical-relationships" class="nav-link" data-scroll-target="#non-hierarchical-relationships"><span class="header-section-number">5.1.5</span> Non-hierarchical relationships</a></li>
+  <li><a href="#attributes-and-properties" id="toc-attributes-and-properties" class="nav-link" data-scroll-target="#attributes-and-properties"><span class="header-section-number">5.1.6</span> Attributes and properties</a></li>
+  </ul></li>
+  <li><a href="#logic-based-knowledge-representation" id="toc-logic-based-knowledge-representation" class="nav-link" data-scroll-target="#logic-based-knowledge-representation"><span class="header-section-number">5.2</span> Logic-based knowledge representation</a>
+  <ul class="collapse">
+  <li><a href="#propositional-logic" id="toc-propositional-logic" class="nav-link" data-scroll-target="#propositional-logic"><span class="header-section-number">5.2.1</span> Propositional logic</a></li>
+  <li><a href="#first-order-logic" id="toc-first-order-logic" class="nav-link" data-scroll-target="#first-order-logic"><span class="header-section-number">5.2.2</span> First-order logic</a></li>
+  <li><a href="#description-logics" id="toc-description-logics" class="nav-link" data-scroll-target="#description-logics"><span class="header-section-number">5.2.3</span> Description logics</a></li>
+  <li><a href="#rule-based-knowledge-representation" id="toc-rule-based-knowledge-representation" class="nav-link" data-scroll-target="#rule-based-knowledge-representation"><span class="header-section-number">5.2.4</span> Rule-based knowledge representation</a></li>
+  <li><a href="#semantic-web-rules" id="toc-semantic-web-rules" class="nav-link" data-scroll-target="#semantic-web-rules"><span class="header-section-number">5.2.5</span> Semantic web rules</a></li>
+  </ul></li>
+  <li><a href="#ontologies-for-knowledge-graphs" id="toc-ontologies-for-knowledge-graphs" class="nav-link" data-scroll-target="#ontologies-for-knowledge-graphs"><span class="header-section-number">5.3</span> Ontologies for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#what-is-an-ontology" id="toc-what-is-an-ontology" class="nav-link" data-scroll-target="#what-is-an-ontology"><span class="header-section-number">5.3.1</span> What is an ontology?</a></li>
+  <li><a href="#types-of-ontologies" id="toc-types-of-ontologies" class="nav-link" data-scroll-target="#types-of-ontologies"><span class="header-section-number">5.3.2</span> Types of ontologies</a></li>
+  <li><a href="#ontology-design-principles" id="toc-ontology-design-principles" class="nav-link" data-scroll-target="#ontology-design-principles"><span class="header-section-number">5.3.3</span> Ontology design principles</a></li>
+  <li><a href="#ontology-engineering-methodologies" id="toc-ontology-engineering-methodologies" class="nav-link" data-scroll-target="#ontology-engineering-methodologies"><span class="header-section-number">5.3.4</span> Ontology engineering methodologies</a></li>
+  <li><a href="#upper-ontologies" id="toc-upper-ontologies" class="nav-link" data-scroll-target="#upper-ontologies"><span class="header-section-number">5.3.5</span> Upper ontologies</a></li>
+  <li><a href="#domain-ontologies" id="toc-domain-ontologies" class="nav-link" data-scroll-target="#domain-ontologies"><span class="header-section-number">5.3.6</span> Domain ontologies</a></li>
+  <li><a href="#application-ontologies-and-ontology-design-patterns" id="toc-application-ontologies-and-ontology-design-patterns" class="nav-link" data-scroll-target="#application-ontologies-and-ontology-design-patterns"><span class="header-section-number">5.3.7</span> Application ontologies and ontology design patterns</a></li>
+  </ul></li>
+  <li><a href="#semantic-web-technologies-for-knowledge-graphs" id="toc-semantic-web-technologies-for-knowledge-graphs" class="nav-link" data-scroll-target="#semantic-web-technologies-for-knowledge-graphs"><span class="header-section-number">5.4</span> Semantic web technologies for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#resource-description-framework-rdf" id="toc-resource-description-framework-rdf" class="nav-link" data-scroll-target="#resource-description-framework-rdf"><span class="header-section-number">5.4.1</span> Resource Description Framework (RDF)</a></li>
+  <li><a href="#rdf-schema-rdfs" id="toc-rdf-schema-rdfs" class="nav-link" data-scroll-target="#rdf-schema-rdfs"><span class="header-section-number">5.4.2</span> RDF Schema (RDFS)</a></li>
+  <li><a href="#web-ontology-language-owl" id="toc-web-ontology-language-owl" class="nav-link" data-scroll-target="#web-ontology-language-owl"><span class="header-section-number">5.4.3</span> Web Ontology Language (OWL)</a></li>
+  <li><a href="#sparql-query-language" id="toc-sparql-query-language" class="nav-link" data-scroll-target="#sparql-query-language"><span class="header-section-number">5.4.4</span> SPARQL query language</a></li>
+  <li><a href="#semantic-web-stack-and-linked-data-principles" id="toc-semantic-web-stack-and-linked-data-principles" class="nav-link" data-scroll-target="#semantic-web-stack-and-linked-data-principles"><span class="header-section-number">5.4.5</span> Semantic Web stack and linked data principles</a></li>
+  </ul></li>
+  <li><a href="#practical-ontology-development" id="toc-practical-ontology-development" class="nav-link" data-scroll-target="#practical-ontology-development"><span class="header-section-number">5.5</span> Practical ontology development</a>
+  <ul class="collapse">
+  <li><a href="#ontology-development-tools" id="toc-ontology-development-tools" class="nav-link" data-scroll-target="#ontology-development-tools"><span class="header-section-number">5.5.1</span> Ontology development tools</a></li>
+  <li><a href="#ontology-languages-for-knowledge-graphs" id="toc-ontology-languages-for-knowledge-graphs" class="nav-link" data-scroll-target="#ontology-languages-for-knowledge-graphs"><span class="header-section-number">5.5.2</span> Ontology languages for knowledge graphs</a></li>
+  <li><a href="#ontology-evaluation-and-quality-assurance" id="toc-ontology-evaluation-and-quality-assurance" class="nav-link" data-scroll-target="#ontology-evaluation-and-quality-assurance"><span class="header-section-number">5.5.3</span> Ontology evaluation and quality assurance</a></li>
+  </ul></li>
+  <li><a href="#practical-ontology-development-continued" id="toc-practical-ontology-development-continued" class="nav-link" data-scroll-target="#practical-ontology-development-continued"><span class="header-section-number">5.6</span> Practical ontology development (continued)</a>
+  <ul class="collapse">
+  <li><a href="#ontology-integration-and-alignment" id="toc-ontology-integration-and-alignment" class="nav-link" data-scroll-target="#ontology-integration-and-alignment"><span class="header-section-number">5.6.1</span> Ontology integration and alignment</a></li>
+  <li><a href="#ontology-maintenance-and-evolution" id="toc-ontology-maintenance-and-evolution" class="nav-link" data-scroll-target="#ontology-maintenance-and-evolution"><span class="header-section-number">5.6.2</span> Ontology maintenance and evolution</a></li>
+  <li><a href="#ontology-governance-and-collaboration" id="toc-ontology-governance-and-collaboration" class="nav-link" data-scroll-target="#ontology-governance-and-collaboration"><span class="header-section-number">5.6.3</span> Ontology governance and collaboration</a></li>
+  </ul></li>
+  <li><a href="#applications-of-ontologies-in-knowledge-graphs" id="toc-applications-of-ontologies-in-knowledge-graphs" class="nav-link" data-scroll-target="#applications-of-ontologies-in-knowledge-graphs"><span class="header-section-number">5.7</span> Applications of ontologies in knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#schema-validation-and-constraints" id="toc-schema-validation-and-constraints" class="nav-link" data-scroll-target="#schema-validation-and-constraints"><span class="header-section-number">5.7.1</span> Schema validation and constraints</a></li>
+  <li><a href="#semantic-search-and-query-enhancement" id="toc-semantic-search-and-query-enhancement" class="nav-link" data-scroll-target="#semantic-search-and-query-enhancement"><span class="header-section-number">5.7.2</span> Semantic search and query enhancement</a></li>
+  <li><a href="#reasoning-and-inference" id="toc-reasoning-and-inference" class="nav-link" data-scroll-target="#reasoning-and-inference"><span class="header-section-number">5.7.3</span> Reasoning and inference</a></li>
+  <li><a href="#ontology-based-data-integration" id="toc-ontology-based-data-integration" class="nav-link" data-scroll-target="#ontology-based-data-integration"><span class="header-section-number">5.7.4</span> Ontology-based data integration</a></li>
+  <li><a href="#knowledge-graph-completion-and-enrichment" id="toc-knowledge-graph-completion-and-enrichment" class="nav-link" data-scroll-target="#knowledge-graph-completion-and-enrichment"><span class="header-section-number">5.7.5</span> Knowledge graph completion and enrichment</a></li>
+  <li><a href="#explainable-ai-and-knowledge-graphs" id="toc-explainable-ai-and-knowledge-graphs" class="nav-link" data-scroll-target="#explainable-ai-and-knowledge-graphs"><span class="header-section-number">5.7.6</span> Explainable AI and knowledge graphs</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5.8</span> Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">5.9</span> Exercises</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">5.10</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/knowledge-representation.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter explores the foundations of knowledge representation and ontologies, which provide the theoretical and practical framework for structuring knowledge in knowledge graphs. We’ll examine how knowledge can be formally represented, the role of ontologies in providing semantic structure, and the various languages and formalisms used for knowledge representation in practice.</p>
+<section id="foundations-of-knowledge-representation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="foundations-of-knowledge-representation"><span class="header-section-number">5.1</span> Foundations of knowledge representation</h2>
+<p>Knowledge representation is concerned with how to formally encode information in a way that enables automated reasoning and effective information management. It serves as the theoretical underpinning for knowledge graphs and other AI systems.</p>
+<section id="knowledge-representation-approaches" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="knowledge-representation-approaches"><span class="header-section-number">5.1.1</span> Knowledge representation approaches</h3>
+<div id="def-knowledge-representation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.1 (Knowledge representation)</strong></span> <strong>Knowledge representation</strong> is the field of artificial intelligence dedicated to representing information about the world in a form that can be utilized by computer systems to solve complex tasks. It involves designing data structures and encoding conventions that capture the relevant aspects of knowledge in a domain.</p>
+</div>
+<p>Knowledge representation systems must balance several competing requirements:</p>
+<ol type="1">
+<li><strong>Expressivity</strong>: The ability to represent complex and nuanced knowledge</li>
+<li><strong>Computational efficiency</strong>: The ability to reason with knowledge within practical computational constraints</li>
+<li><strong>Inferential adequacy</strong>: The ability to derive new knowledge from existing knowledge</li>
+<li><strong>Acquisitional efficiency</strong>: The ease with which new knowledge can be added to the system</li>
+</ol>
+<p>Different approaches to knowledge representation emerge from different weightings of these requirements:</p>
+<div id="exm-kr-approaches" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.1 (Knowledge representation approaches)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Logic-based approaches</strong> emphasize formal semantics and inference capabilities:</p>
+<ul>
+<li>First-order logic: “∀x (Researcher(x) → ∃y (Publication(y) ∧ authorOf(x, y)))”</li>
+<li>Description logics: “Researcher ⊑ Person ⊓ ∃authorOf.Publication”</li>
+</ul></li>
+<li><p><strong>Frame-based approaches</strong> organize knowledge around entities and their properties:</p>
+<pre><code>Frame: Researcher
+  is-a: Person
+  slots:
+    affiliation: [University]
+    publications: [Publication]
+    research_areas: [Topic]</code></pre></li>
+<li><p><strong>Graph-based approaches</strong> represent knowledge as networks of interconnected entities:</p>
+<ul>
+<li>Semantic networks: Researcher –authorOf–&gt; Publication –publishedIn–&gt; Conference</li>
+<li>Conceptual graphs: [Researcher: #1]←(authorOf)←[Publication: #2]→(publishedIn)→[Conference: #3]</li>
+</ul></li>
+<li><p><strong>Rule-based approaches</strong> encode knowledge as conditional statements:</p>
+<pre><code>IF Paper(p) AND highCitationCount(p) THEN importantPaper(p)
+IF authorOf(r, p) AND importantPaper(p) THEN influentialResearcher(r)</code></pre></li>
+</ol>
+</div>
+<p>These approaches are not mutually exclusive; modern knowledge representation systems, including knowledge graphs, often combine aspects of multiple approaches to leverage their respective strengths.</p>
+</section>
+<section id="knowledge-representation-primitives" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="knowledge-representation-primitives"><span class="header-section-number">5.1.2</span> Knowledge representation primitives</h3>
+<p>Knowledge representation systems build upon fundamental primitives that provide the basic building blocks for encoding knowledge:</p>
+<div id="def-kr-primitives" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.2 (Knowledge representation primitives)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><strong>Entities</strong>: Objects, concepts, or things that exist in the domain of interest</li>
+<li><strong>Attributes</strong>: Properties or characteristics of entities</li>
+<li><strong>Relationships</strong>: Connections or associations between entities</li>
+<li><strong>Classes</strong>: Categories or types that group similar entities</li>
+<li><strong>Instances</strong>: Specific individual entities belonging to a class</li>
+<li><strong>Assertions</strong>: Statements that declare facts about entities and relationships</li>
+<li><strong>Rules</strong>: Conditional statements that define how to derive new knowledge</li>
+</ol>
+</div>
+<div id="exm-kr-primitives" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.2 (Knowledge representation primitives in a scientific domain)</strong></span> In a scientific knowledge graph:</p>
+<ul>
+<li><strong>Entities</strong>: Albert Einstein, Theory of Relativity, Princeton University</li>
+<li><strong>Attributes</strong>: birthDate(Albert Einstein, “1879-03-14”), fieldOfStudy(Theory of Relativity, “Physics”)</li>
+<li><strong>Relationships</strong>: developed(Albert Einstein, Theory of Relativity), affiliatedWith(Albert Einstein, Princeton University)</li>
+<li><strong>Classes</strong>: Scientist, Theory, University</li>
+<li><strong>Instances</strong>: Albert Einstein is an instance of Scientist, Princeton University is an instance of University</li>
+<li><strong>Assertions</strong>: “Albert Einstein developed the Theory of Relativity”</li>
+<li><strong>Rules</strong>: “If a person developed a scientific theory, then that person is a scientist”</li>
+</ul>
+</div>
+<p>These primitives serve as the foundation for more complex knowledge structures and enable the representation of diverse domains of knowledge in a formal, machine-processable manner.</p>
+</section>
+<section id="taxonomic-relationships" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="taxonomic-relationships"><span class="header-section-number">5.1.3</span> Taxonomic relationships</h3>
+<p>Taxonomic relationships organize entities into hierarchies, providing a fundamental organizational structure for knowledge:</p>
+<div id="def-taxonomic-relationships" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.3 (Taxonomic relationships)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>is-a (subclass-of)</strong>: Defines a specialization relationship between classes, where one class is a more specific type of another.</p>
+<ul>
+<li>Formally: A ⊑ B means that all instances of class A are also instances of class B.</li>
+</ul></li>
+<li><p><strong>instance-of</strong>: Defines the relationship between an individual entity and the class(es) it belongs to.</p>
+<ul>
+<li>Formally: a ∈ A means that individual a is an instance of class A.</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-taxonomic-relationships" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.3 (Taxonomic relationships in a biological domain)</strong></span> <strong>Class hierarchy (is-a relationships):</strong></p>
+<ul>
+<li>Organism
+<ul>
+<li>Animal ⊑ Organism
+<ul>
+<li>Vertebrate ⊑ Animal
+<ul>
+<li>Mammal ⊑ Vertebrate
+<ul>
+<li>Primate ⊑ Mammal
+<ul>
+<li>Homo ⊑ Primate
+<ul>
+<li>Homo sapiens ⊑ Homo</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Plant ⊑ Organism
+<ul>
+<li>Flowering Plant ⊑ Plant
+<ul>
+<li>Fruit Tree ⊑ Flowering Plant</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>Instance relationships:</strong></p>
+<ul>
+<li>Human1 ∈ Homo sapiens (Jane Doe is an instance of Homo sapiens)</li>
+<li>AppleTree1 ∈ Fruit Tree (This specific apple tree is an instance of Fruit Tree)</li>
+</ul>
+</div>
+<p>Taxonomic relationships enable important inferential capabilities. If we know that an entity belongs to a specific class, we can infer that it also belongs to all superclasses in the hierarchy and inherits their properties.</p>
+</section>
+<section id="mereological-relationships" class="level3" data-number="5.1.4">
+<h3 data-number="5.1.4" class="anchored" data-anchor-id="mereological-relationships"><span class="header-section-number">5.1.4</span> Mereological relationships</h3>
+<p>While taxonomic relationships deal with classification, mereological relationships concern the composition of entities from parts and their relationship to wholes:</p>
+<div id="def-mereological-relationships" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.4 (Mereological relationships)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>part-of</strong>: Indicates that one entity is a component or constituent of another.</p>
+<ul>
+<li>Formally: part-of(a, b) means that entity a is a part of entity b.</li>
+</ul></li>
+<li><p><strong>has-part</strong>: The inverse of part-of, indicating that an entity contains another entity as a component.</p>
+<ul>
+<li>Formally: has-part(b, a) means that entity b has entity a as a part.</li>
+</ul></li>
+<li><p><strong>proper-part-of</strong>: A stricter version of part-of, excluding the case where an entity is considered part of itself.</p>
+<ul>
+<li>Formally: proper-part-of(a, b) means that a is a part of b and a ≠ b.</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-mereological-relationships" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.4 (Mereological relationships in an anatomical domain)</strong></span> <strong>Part-whole relationships:</strong></p>
+<ul>
+<li>part-of(Heart, Cardiovascular System)</li>
+<li>part-of(Ventricle, Heart)</li>
+<li>part-of(Valve, Heart)</li>
+<li>part-of(Cell, Tissue)</li>
+<li>part-of(Tissue, Organ)</li>
+<li>part-of(Organ, Organ System)</li>
+</ul>
+<p><strong>Transitivity of part-of relations:</strong></p>
+<ul>
+<li>part-of(Ventricle, Heart) ∧ part-of(Heart, Cardiovascular System) ⟹ part-of(Ventricle, Cardiovascular System)</li>
+</ul>
+<p><strong>Different types of part-of relationships:</strong></p>
+<ul>
+<li>structural-part-of(Engine, Car)</li>
+<li>functional-part-of(Transmission, Drivetrain)</li>
+<li>spatial-part-of(Downtown, City)</li>
+<li>temporal-part-of(Adolescence, Human Life)</li>
+</ul>
+</div>
+<p>Mereological relationships are crucial for representing complex systems, physical objects, and hierarchical structures. They enable reasoning about how components interact and how properties of parts contribute to properties of wholes.</p>
+</section>
+<section id="non-hierarchical-relationships" class="level3" data-number="5.1.5">
+<h3 data-number="5.1.5" class="anchored" data-anchor-id="non-hierarchical-relationships"><span class="header-section-number">5.1.5</span> Non-hierarchical relationships</h3>
+<p>While taxonomic and mereological relationships form hierarchical structures, many important relationships in knowledge graphs are non-hierarchical:</p>
+<div id="def-non-hierarchical-relationships" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.5 (Non-hierarchical relationships)</strong></span> Non-hierarchical relationships connect entities in ways that don’t form strict hierarchies. Common types include:</p>
+<ol type="1">
+<li><p><strong>Functional relationships</strong>: Describing how entities interact or affect each other</p>
+<ul>
+<li>uses(Person, Tool)</li>
+<li>produces(Factory, Product)</li>
+</ul></li>
+<li><p><strong>Spatial relationships</strong>: Describing location and spatial arrangements</p>
+<ul>
+<li>locatedIn(Building, City)</li>
+<li>adjacentTo(Country1, Country2)</li>
+</ul></li>
+<li><p><strong>Temporal relationships</strong>: Describing time-based connections</p>
+<ul>
+<li>precedes(Event1, Event2)</li>
+<li>during(Meeting, BusinessHours)</li>
+</ul></li>
+<li><p><strong>Social relationships</strong>: Describing interpersonal connections</p>
+<ul>
+<li>friendOf(Person1, Person2)</li>
+<li>employeeOf(Person, Organization)</li>
+</ul></li>
+<li><p><strong>Causal relationships</strong>: Describing cause and effect</p>
+<ul>
+<li>causes(Smoking, LungCancer)</li>
+<li>prevents(Vaccination, Disease)</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-non-hierarchical-relationships" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.5 (Non-hierarchical relationships in a historical domain)</strong></span> <strong>Temporal relationships:</strong></p>
+<ul>
+<li>precedes(World War I, World War II)</li>
+<li>during(Battle of Gettysburg, American Civil War)</li>
+</ul>
+<p><strong>Causal relationships:</strong></p>
+<ul>
+<li>contributedTo(Assassination of Archduke Ferdinand, Start of World War I)</li>
+<li>led-to(Great Depression, Rise of Fascism)</li>
+</ul>
+<p><strong>Spatial relationships:</strong></p>
+<ul>
+<li>locatedIn(Eiffel Tower, Paris)</li>
+<li>borderingCountry(France, Germany)</li>
+</ul>
+<p><strong>Social relationships:</strong></p>
+<ul>
+<li>allies(United States, United Kingdom, World War II)</li>
+<li>opposedBy(Allied Powers, Axis Powers, World War II)</li>
+</ul>
+<p><strong>Functional relationships:</strong></p>
+<ul>
+<li>used(Romans, Aqueducts, Water Distribution)</li>
+<li>resulted-in(Industrial Revolution, Urbanization)</li>
+</ul>
+</div>
+<p>Non-hierarchical relationships capture the rich and diverse ways entities interact in the real world. They are essential for knowledge graphs that aim to represent complex domains with multifaceted relationships between entities.</p>
+</section>
+<section id="attributes-and-properties" class="level3" data-number="5.1.6">
+<h3 data-number="5.1.6" class="anchored" data-anchor-id="attributes-and-properties"><span class="header-section-number">5.1.6</span> Attributes and properties</h3>
+<p>Attributes and properties describe characteristics of entities, providing essential information about their nature, status, and features:</p>
+<div id="def-attributes-properties" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.6 (Attributes and properties)</strong></span> <strong>Attributes</strong> (or <strong>properties</strong>) are characteristics or features associated with entities. They typically consist of:</p>
+<ol type="1">
+<li>An <strong>entity</strong> that possesses the attribute</li>
+<li>An <strong>attribute type</strong> that specifies the kind of characteristic</li>
+<li>An <strong>attribute value</strong> that provides the specific information</li>
+</ol>
+<p>Attributes can be represented in several ways:</p>
+<ul>
+<li>As binary predicates: hasAge(John, 25)</li>
+<li>As triples: (John, hasAge, 25)</li>
+<li>As key-value pairs associated with an entity: John{age: 25, height: 180cm}</li>
+</ul>
+</div>
+<p>Attributes can be categorized based on various properties:</p>
+<div id="def-attribute-types" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.7 (Attribute types)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Intrinsic vs.&nbsp;extrinsic attributes</strong>:</p>
+<ul>
+<li><strong>Intrinsic</strong>: Inherent to the entity (height, color, chemical composition)</li>
+<li><strong>Extrinsic</strong>: Dependent on external context (price, role, address)</li>
+</ul></li>
+<li><p><strong>Required vs.&nbsp;optional attributes</strong>:</p>
+<ul>
+<li><strong>Required</strong>: Must be specified for all instances of a class</li>
+<li><strong>Optional</strong>: May or may not be specified</li>
+</ul></li>
+<li><p><strong>Single-valued vs.&nbsp;multi-valued attributes</strong>:</p>
+<ul>
+<li><strong>Single-valued</strong>: Can have only one value for an entity (birthdate)</li>
+<li><strong>Multi-valued</strong>: Can have multiple values for an entity (skill set)</li>
+</ul></li>
+<li><p><strong>Simple vs.&nbsp;complex attributes</strong>:</p>
+<ul>
+<li><strong>Simple</strong>: Values are atomic (age as an integer)</li>
+<li><strong>Complex</strong>: Values have internal structure (address as a composite of street, city, etc.)</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-attributes" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.6 (Attributes in a product knowledge graph)</strong></span> For a product “Smartphone X”:</p>
+<p><strong>Intrinsic attributes:</strong></p>
+<ul>
+<li>weight: 150g</li>
+<li>dimensions: [142mm, 70mm, 8mm]</li>
+<li>screenSize: 6.1 inches</li>
+<li>batteryCapacity: 3200mAh</li>
+</ul>
+<p><strong>Extrinsic attributes:</strong></p>
+<ul>
+<li>price: $799</li>
+<li>availableIn: [“US”, “EU”, “Asia”]</li>
+<li>launchDate: “2024-03-15”</li>
+<li>rating: 4.5</li>
+</ul>
+<p><strong>Complex attributes:</strong></p>
+<ul>
+<li>camera: {mainSensor: “48MP”, ultrawide: “12MP”, telephoto: “8MP”}</li>
+<li>processor: {model: “SnapX 8000”, cores: 8, speed: “2.8GHz”}</li>
+</ul>
+<p><strong>Multi-valued attributes:</strong></p>
+<ul>
+<li>supportedNetworks: [“5G”, “LTE”, “3G”, “2G”]</li>
+<li>connectivity: [“Bluetooth 5.2”, “WiFi 6E”, “NFC”]</li>
+</ul>
+</div>
+<p>Attributes provide the detailed information that makes knowledge graphs useful for specific applications. They allow for rich descriptions of entities beyond their relational structure and enable more sophisticated querying and filtering.</p>
+</section>
+</section>
+<section id="logic-based-knowledge-representation" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="logic-based-knowledge-representation"><span class="header-section-number">5.2</span> Logic-based knowledge representation</h2>
+<p>Logic provides a formal foundation for representing and reasoning with knowledge. Various logical formalisms offer different balances of expressivity and computational tractability for knowledge representation.</p>
+<section id="propositional-logic" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="propositional-logic"><span class="header-section-number">5.2.1</span> Propositional logic</h3>
+<p>Propositional logic is the simplest form of formal logic, dealing with propositions that can be either true or false:</p>
+<div id="def-propositional-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.8 (Propositional logic)</strong></span> <strong>Propositional logic</strong> (or <strong>propositional calculus</strong>) is a formal system where:</p>
+<ol type="1">
+<li><strong>Atomic propositions</strong> are statements that cannot be broken down further and are either true or false</li>
+<li><strong>Compound propositions</strong> are formed by combining atomic propositions using logical connectives</li>
+<li><strong>Logical connectives</strong> include:
+<ul>
+<li>Negation (¬): “not”</li>
+<li>Conjunction (∧): “and”</li>
+<li>Disjunction (∨): “or”</li>
+<li>Implication (→): “if…then”</li>
+<li>Equivalence (↔︎): “if and only if”</li>
+</ul></li>
+</ol>
+</div>
+<p>While propositional logic has limited expressivity for knowledge representation, it provides the foundation for more expressive logical formalisms:</p>
+<div id="exm-propositional-logic" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.7 (Propositional logic in a medical context)</strong></span> Let’s define atomic propositions:</p>
+<ul>
+<li>P: “The patient has a fever”</li>
+<li>Q: “The patient has a rash”</li>
+<li>R: “The patient has been diagnosed with measles”</li>
+<li>S: “The patient requires isolation”</li>
+</ul>
+<p>Compound propositions might include:</p>
+<ul>
+<li>P ∧ Q: “The patient has both a fever and a rash”</li>
+<li>P ∧ Q → R: “If the patient has both a fever and a rash, then the patient has been diagnosed with measles”</li>
+<li>R → S: “If the patient has been diagnosed with measles, then the patient requires isolation”</li>
+<li>P ∧ Q → S: “If the patient has both a fever and a rash, then the patient requires isolation”</li>
+</ul>
+<p>Through logical inference, we can deduce:</p>
+<ul>
+<li>If we know P ∧ Q (patient has fever and rash) and P ∧ Q → R (this implies measles), we can infer R (patient has measles)</li>
+<li>If we know R (patient has measles) and R → S (measles requires isolation), we can infer S (patient requires isolation)</li>
+</ul>
+</div>
+<p>Propositional logic’s limitations for knowledge graphs include its inability to represent relationships between entities, quantification, or to make general statements about classes of objects.</p>
+</section>
+<section id="first-order-logic" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="first-order-logic"><span class="header-section-number">5.2.2</span> First-order logic</h3>
+<p>First-order logic (FOL) extends propositional logic with variables, quantifiers, and relations, making it much more expressive for knowledge representation:</p>
+<div id="def-first-order-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.9 (First-order logic)</strong></span> <strong>First-order logic</strong> (also called <strong>predicate logic</strong>) extends propositional logic with:</p>
+<ol type="1">
+<li><strong>Terms</strong>: Variables, constants, and functions that refer to objects in the domain</li>
+<li><strong>Predicates</strong>: Expressions that represent relations or properties and evaluate to true or false</li>
+<li><strong>Quantifiers</strong>:
+<ul>
+<li>Universal quantifier (∀): “for all”</li>
+<li>Existential quantifier (∃): “there exists”</li>
+</ul></li>
+</ol>
+<p>The syntax of FOL includes:</p>
+<ul>
+<li>Atomic formulas: P(t₁, t₂, …, tₙ), where P is a predicate and t₁, t₂, …, tₙ are terms</li>
+<li>Compound formulas formed with logical connectives (¬, ∧, ∨, →, ↔︎)</li>
+<li>Quantified formulas: ∀x Φ(x) or ∃x Φ(x), where Φ(x) is a formula containing the variable x</li>
+</ul>
+</div>
+<p>First-order logic provides the expressivity needed to represent complex knowledge:</p>
+<div id="exm-first-order-logic" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.8 (First-order logic in an academic context)</strong></span> <strong>Constants</strong>:</p>
+<ul>
+<li>Individuals: alice, bob, paper1, conference2023</li>
+<li>Functions: advisor(x) - returns the advisor of person x</li>
+</ul>
+<p><strong>Predicates</strong>:</p>
+<ul>
+<li>Person(x): “x is a person”</li>
+<li>Paper(x): “x is a paper”</li>
+<li>Conference(x): “x is a conference”</li>
+<li>AuthorOf(x, y): “x is an author of y”</li>
+<li>SubmittedTo(x, y): “x was submitted to y”</li>
+<li>Accepted(x): “x was accepted”</li>
+</ul>
+<p><strong>FOL statements</strong>:</p>
+<ul>
+<li>Person(alice) ∧ Person(bob): “Alice and Bob are persons”</li>
+<li>Paper(paper1): “paper1 is a paper”</li>
+<li>AuthorOf(alice, paper1): “Alice is an author of paper1”</li>
+<li>SubmittedTo(paper1, conference2023): “paper1 was submitted to conference2023”</li>
+</ul>
+<p><strong>Quantified statements</strong>:</p>
+<ul>
+<li>∀x (Person(x) → ∃y (Paper(y) ∧ AuthorOf(x, y))): “Every person is an author of at least one paper”</li>
+<li>∀x ∀y (Paper(x) ∧ SubmittedTo(x, y) ∧ Accepted(x) → ∃z (Person(z) ∧ AuthorOf(z, x) ∧ Attends(z, y))): “For every paper that is submitted to a conference and accepted, at least one of its authors attends the conference”</li>
+</ul>
+</div>
+<p>First-order logic provides a strong foundation for knowledge representation in knowledge graphs, but its high computational complexity for certain reasoning tasks has led to the development of more tractable fragments and extensions.</p>
+</section>
+<section id="description-logics" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="description-logics"><span class="header-section-number">5.2.3</span> Description logics</h3>
+<p>Description logics (DLs) are a family of formal knowledge representation languages that are particularly well-suited for defining ontologies. They balance expressivity with computational tractability:</p>
+<div id="def-description-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.10 (Description logic)</strong></span> <strong>Description logics</strong> are a family of logical formalisms designed for knowledge representation that:</p>
+<ol type="1">
+<li>Describe knowledge in terms of <strong>concepts</strong> (classes), <strong>roles</strong> (relationships), and <strong>individuals</strong> (instances)</li>
+<li>Provide formal semantics based on interpretations mapping to a domain</li>
+<li>Support tractable reasoning for many useful fragments</li>
+<li>Form the theoretical foundation for ontology languages like OWL</li>
+</ol>
+<p>A DL knowledge base typically consists of:</p>
+<ol type="1">
+<li>A <strong>TBox</strong> (terminological box) containing concept definitions and axioms</li>
+<li>An <strong>ABox</strong> (assertional box) containing facts about individuals</li>
+</ol>
+</div>
+<p>Description logics provide a rich vocabulary for defining concepts, roles, and their relationships:</p>
+<div id="def-dl-constructors" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.11 (Description logic constructors)</strong></span> Basic DL constructors include:</p>
+<ol type="1">
+<li><p><strong>Concept constructors</strong>:</p>
+<ul>
+<li>Intersection (⊓): Scientist ⊓ Professor</li>
+<li>Union (⊔): Student ⊔ Faculty</li>
+<li>Negation (¬): ¬Student</li>
+<li>Universal restriction (∀R.C): ∀teaches.Mathematics</li>
+<li>Existential restriction (∃R.C): ∃publishedIn.Journal</li>
+<li>Cardinality restrictions (≥n R.C, ≤n R.C): ≥3 authorOf.Paper</li>
+</ul></li>
+<li><p><strong>Axioms</strong>:</p>
+<ul>
+<li>Concept inclusion (⊑): Researcher ⊑ Person</li>
+<li>Concept equivalence (≡): Professor ≡ Faculty ⊓ ∃hasRank.ProfessorialRank</li>
+<li>Disjointness (⊓ ¬): Student ⊓ Faculty ⊑ ⊥ (empty concept)</li>
+<li>Role inclusion (⊑): supervises ⊑ mentors</li>
+<li>Role characteristics: transitive(ancestorOf), symmetric(collaboratesWith)</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-description-logic" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.9 (Description logic in an academic domain)</strong></span> <strong>TBox (terminological knowledge)</strong>:</p>
+<ul>
+<li>Academic ≡ Person ⊓ (Faculty ⊔ Student ⊔ Researcher)</li>
+<li>Faculty ⊑ ∃teaches.Course</li>
+<li>Professor ⊑ Faculty ⊓ ∃hasRank.ProfessorialRank</li>
+<li>AssistantProfessor ⊑ Professor</li>
+<li>Course ⊑ ∃offeredBy.Department</li>
+<li>GraduateCourse ≡ Course ⊓ ∀enrolls.GraduateStudent</li>
+<li>Researcher ⊑ Person ⊓ ∃authorOf.Publication</li>
+<li>ActiveResearcher ≡ Researcher ⊓ ≥3 authorOf.(Publication ⊓ ∃publishedIn.Journal)</li>
+</ul>
+<p><strong>ABox (assertional knowledge)</strong>:</p>
+<ul>
+<li>Person(john)</li>
+<li>Faculty(john)</li>
+<li>teaches(john, cs101)</li>
+<li>Course(cs101)</li>
+<li>Publication(paper1)</li>
+<li>authorOf(john, paper1)</li>
+</ul>
+</div>
+<p>Description logics provide the logical foundation for Web Ontology Language (OWL) and are widely used for defining ontologies in knowledge graphs. Different description logic variants offer different trade-offs between expressivity and computational complexity.</p>
+</section>
+<section id="rule-based-knowledge-representation" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="rule-based-knowledge-representation"><span class="header-section-number">5.2.4</span> Rule-based knowledge representation</h3>
+<p>Rule-based approaches use conditional statements to express complex relationships and derive new knowledge:</p>
+<div id="def-rule-based-knowledge" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.12 (Rule-based knowledge representation)</strong></span> <strong>Rule-based knowledge representation</strong> expresses knowledge in the form of conditional statements (rules) that specify actions or conclusions to be drawn when certain conditions are met.</p>
+<p>Rules typically have the form:</p>
+<ul>
+<li>IF condition THEN conclusion</li>
+<li>condition → conclusion</li>
+<li>condition ⇒ action</li>
+</ul>
+<p>In formal terms, rules are often expressed as Horn clauses or similar logical constructs.</p>
+</div>
+<p>Rules can represent procedural knowledge, heuristics, and complex logical relationships that are difficult to express using other formalisms:</p>
+<div id="exm-rule-based-knowledge" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.10 (Rule-based knowledge in a medical domain)</strong></span> <strong>Simple rules</strong>:</p>
+<ul>
+<li>IF hasFever(Patient) AND hasRash(Patient) THEN suspectMeasles(Patient)</li>
+<li>IF suspectMeasles(Patient) THEN orderTest(Patient, MeaslesAntibodyTest)</li>
+<li>IF hasPositiveTest(Patient, MeaslesAntibodyTest) THEN diagnose(Patient, Measles)</li>
+<li>IF diagnose(Patient, Measles) THEN prescribe(Patient, BedRest) AND isolate(Patient, 4days)</li>
+</ul>
+<p><strong>Rules with variables</strong>:</p>
+<ul>
+<li>∀x, y: prescribe(x, y) ∧ allergicTo(x, y) → contraindicated(x, y)</li>
+<li>∀x, d: diagnose(x, d) ∧ requiresSpecialist(d) → refer(x, getSpecialist(d))</li>
+</ul>
+<p><strong>Rules with negation</strong>:</p>
+<ul>
+<li>∀x: suspectDiabetes(x) ∧ ¬hasPositiveTest(x, GlucoseToleranceTest) → orderTest(x, HbA1cTest)</li>
+</ul>
+</div>
+<p>Rule-based knowledge representation is particularly useful for:</p>
+<ol type="1">
+<li>Capturing expert knowledge and heuristics</li>
+<li>Representing causal relationships and inference patterns</li>
+<li>Implementing procedural knowledge and decision-making processes</li>
+<li>Handling exceptions and non-monotonic reasoning</li>
+</ol>
+<p>Different rule formalisms vary in their treatment of negation, uncertainty, and conflict resolution, leading to systems like Prolog, production rules, and defeasible logic.</p>
+</section>
+<section id="semantic-web-rules" class="level3" data-number="5.2.5">
+<h3 data-number="5.2.5" class="anchored" data-anchor-id="semantic-web-rules"><span class="header-section-number">5.2.5</span> Semantic web rules</h3>
+<p>The Semantic Web stack includes specialized rule languages designed to work with RDF and OWL:</p>
+<div id="def-semantic-web-rules" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.13 (Semantic web rules)</strong></span> <strong>Semantic Web rule languages</strong> extend ontology languages with rule-based capabilities while maintaining compatibility with the underlying semantic web technologies. Key languages include:</p>
+<ol type="1">
+<li><strong>Rule Interchange Format (RIF)</strong>: W3C standard for exchanging rules between different rule systems</li>
+<li><strong>Semantic Web Rule Language (SWRL)</strong>: Combines OWL with rule syntax</li>
+<li><strong>SPARQL Inferencing Notation (SPIN)</strong>: Represents SPARQL queries as RDF</li>
+<li><strong>Shapes Constraint Language (SHACL)</strong>: Defines constraints and validation rules for RDF graphs</li>
+</ol>
+</div>
+<div id="exm-semantic-web-rules" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.11 (SWRL rules example)</strong></span> In SWRL (Semantic Web Rule Language), rules combine OWL concepts with Horn-like rules:</p>
+<pre><code>Person(?p) ∧ hasParent(?p, ?q) ∧ hasSibling(?q, ?r) → hasAunt(?p, ?r) ∧ Woman(?r)</code></pre>
+<p>This rule states that if person p has a parent q, and q has a sibling r who is a woman, then r is p’s aunt.</p>
+<p>A bibliographic example:</p>
+<pre><code>Paper(?p) ∧ publishedIn(?p, ?j) ∧ impactFactor(?j, ?i) ∧ greaterThan(?i, 5.0) → HighImpactPaper(?p)</code></pre>
+<p>This rule classifies papers published in journals with an impact factor greater than 5.0 as high-impact papers.</p>
+</div>
+<p>Semantic Web rules enhance the inferential capabilities of knowledge graphs, allowing for more complex reasoning patterns while maintaining interoperability with existing Semantic Web standards.</p>
+</section>
+</section>
+<section id="ontologies-for-knowledge-graphs" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="ontologies-for-knowledge-graphs"><span class="header-section-number">5.3</span> Ontologies for knowledge graphs</h2>
+<p>Ontologies provide the semantic framework for organizing knowledge in a structured, consistent, and interoperable manner.</p>
+<section id="what-is-an-ontology" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="what-is-an-ontology"><span class="header-section-number">5.3.1</span> What is an ontology?</h3>
+<div id="def-ontology" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.14 (Ontology)</strong></span> An <strong>ontology</strong> is a formal, explicit specification of a shared conceptualization. It provides a structured representation of knowledge that:</p>
+<ol type="1">
+<li>Defines a vocabulary of terms representing classes of entities, relationships, and attributes</li>
+<li>Specifies the semantics of these terms through formal axioms and constraints</li>
+<li>Creates a framework for organizing and integrating knowledge across domains</li>
+</ol>
+<p>In practical terms, an ontology typically consists of:</p>
+<ul>
+<li>A taxonomy of classes (concepts)</li>
+<li>Relationships between classes</li>
+<li>Properties associated with classes</li>
+<li>Constraints and rules governing these elements</li>
+<li>Instances of classes (individuals) in some cases</li>
+</ul>
+</div>
+<p>Ontologies serve several crucial functions in knowledge graphs:</p>
+<div id="exm-ontology-functions" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.12 (Functions of ontologies in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Providing semantic structure</strong>: Defining the meaning of entities and relationships</p>
+<ul>
+<li>Example: Specifying that “treats” in a medical context means a therapeutic relationship between a medication and a condition, not a social interaction</li>
+</ul></li>
+<li><p><strong>Supporting interoperability</strong>: Enabling different systems to share and integrate data</p>
+<ul>
+<li>Example: Mapping the concept “Author” in one system to “Creator” in another through their shared ontological definition</li>
+</ul></li>
+<li><p><strong>Enabling inference</strong>: Allowing the derivation of implicit knowledge</p>
+<ul>
+<li>Example: Inferring that if Alzheimer’s is a subclass of Neurodegenerative Disease, and Medication X treats Neurodegenerative Diseases, then Medication X might treat Alzheimer’s</li>
+</ul></li>
+<li><p><strong>Validating data</strong>: Ensuring consistency and detecting errors</p>
+<ul>
+<li>Example: Identifying a logical impossibility if something is classified as both a LivingOrganism and a ChemicalCompound</li>
+</ul></li>
+<li><p><strong>Guiding knowledge acquisition</strong>: Providing a framework for what knowledge should be captured</p>
+<ul>
+<li>Example: Specifying that for every Medication, information about dosage, contraindications, and side effects should be recorded</li>
+</ul></li>
+</ol>
+</div>
+<p>Ontologies range from lightweight taxonomies to complex logical theories, depending on the domain and application requirements. The appropriate level of formality and detail depends on the specific use case and reasoning needs.</p>
+</section>
+<section id="types-of-ontologies" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="types-of-ontologies"><span class="header-section-number">5.3.2</span> Types of ontologies</h3>
+<p>Ontologies can be categorized based on their scope, level of generality, expressivity, and purpose:</p>
+<div id="def-ontology-types" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.15 (Ontology types)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Based on scope and generality</strong>:</p>
+<ul>
+<li><strong>Top-level (upper) ontologies</strong>: Describe very general concepts applicable across domains</li>
+<li><strong>Domain ontologies</strong>: Represent concepts specific to a particular field</li>
+<li><strong>Task ontologies</strong>: Describe vocabulary related to a specific activity or task</li>
+<li><strong>Application ontologies</strong>: Specialized for a particular application</li>
+</ul></li>
+<li><p><strong>Based on expressivity</strong>:</p>
+<ul>
+<li><strong>Lightweight ontologies</strong>: Primarily taxonomic structures with minimal logical formalism</li>
+<li><strong>Heavyweight ontologies</strong>: Rich logical axiomatization with formal semantics</li>
+</ul></li>
+<li><p><strong>Based on purpose</strong>:</p>
+<ul>
+<li><strong>Reference ontologies</strong>: Comprehensive models of a domain for knowledge sharing</li>
+<li><strong>Application ontologies</strong>: Tailored for specific systems or applications</li>
+<li><strong>Bridge ontologies</strong>: Connect and align concepts across different ontologies</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-ontology-types" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.13 (Examples of different ontology types)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Top-level ontology</strong>: BFO (Basic Formal Ontology)</p>
+<ul>
+<li>Includes abstract concepts like ‘continuant’ and ‘occurrent’</li>
+<li>Used as a foundation for scientific domain ontologies</li>
+</ul></li>
+<li><p><strong>Domain ontology</strong>: Gene Ontology (GO)</p>
+<ul>
+<li>Represents knowledge about gene and gene product attributes</li>
+<li>Covers molecular functions, biological processes, and cellular components</li>
+</ul></li>
+<li><p><strong>Task ontology</strong>: OBI (Ontology for Biomedical Investigations)</p>
+<ul>
+<li>Focuses on the design, protocols, and instrumentation of scientific investigations</li>
+<li>Specialized for representing experimental processes</li>
+</ul></li>
+<li><p><strong>Application ontology</strong>: An e-commerce product ontology</p>
+<ul>
+<li>Specific to a particular online marketplace</li>
+<li>Combines elements of product classification with site-specific attributes</li>
+</ul></li>
+<li><p><strong>Lightweight vs.&nbsp;heavyweight comparison</strong>:</p>
+<ul>
+<li><p><strong>Lightweight</strong>: A simple product category hierarchy with subsumption relationships</p>
+<pre><code>ElectronicDevice
+  ├── Computer
+  │     ├── Laptop
+  │     └── Desktop
+  └── MobileDevice
+        ├── Smartphone
+        └── Tablet</code></pre></li>
+<li><p><strong>Heavyweight</strong>: A biomedical ontology with complex axioms</p>
+<pre><code>Heart ⊑ Organ ⊓ ∃hasFunction.BloodPumping
+∀hasFunction.BloodPumping ⊑ ∃partOf.CardiovascularSystem
+Cardiomyopathy ⊑ Disease ⊓ ∃affects.Heart ⊓ ∀hasPathology.AbnormalHeartMuscle</code></pre></li>
+</ul></li>
+</ol>
+</div>
+<p>Different types of ontologies serve different purposes in knowledge graphs. Many knowledge graph applications combine multiple ontologies, using top-level ontologies to provide structural consistency while domain and application ontologies supply specialized knowledge.</p>
+</section>
+<section id="ontology-design-principles" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="ontology-design-principles"><span class="header-section-number">5.3.3</span> Ontology design principles</h3>
+<p>Designing effective ontologies requires balancing competing considerations and following established best practices:</p>
+<div id="def-ontology-design-principles" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.16 (Ontology design principles)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><strong>Clarity</strong>: Concepts should be defined precisely with formal axioms and natural language documentation</li>
+<li><strong>Coherence</strong>: Definitions should be logically consistent and inference results should align with definitions</li>
+<li><strong>Extensibility</strong>: The ontology should accommodate future growth without requiring redesign</li>
+<li><strong>Minimal encoding bias</strong>: Representation should be at the knowledge level, not driven by implementation details</li>
+<li><strong>Minimal ontological commitment</strong>: Make the fewest claims about the domain, allowing for various use cases</li>
+<li><strong>Modularity</strong>: Organize the ontology into cohesive, loosely-coupled modules</li>
+<li><strong>Reuse</strong>: Leverage existing ontologies when possible rather than reinventing concepts</li>
+</ol>
+</div>
+<div id="exm-ontology-design" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.14 (Ontology design in practice)</strong></span> <strong>Poor design practices</strong>:</p>
+<ul>
+<li><strong>Confusing is-a with part-of</strong>: “Finger is-a Hand” instead of “Finger part-of Hand”</li>
+<li><strong>Mixing levels of abstraction</strong>: Having both “Dog” and “German Shepherd” as direct subclasses of “Animal”</li>
+<li><strong>Circular definitions</strong>: Defining A in terms of B and B in terms of A</li>
+<li><strong>Inconsistent naming conventions</strong>: Using both CamelCase and snake_case for class names</li>
+<li><strong>Overly complex class hierarchies</strong>: Creating deep taxonomies that are difficult to navigate and maintain</li>
+</ul>
+<p><strong>Good design practices</strong>:</p>
+<ol type="1">
+<li><p><strong>Clear class hierarchy</strong>:</p>
+<pre><code>Vehicle
+  ├── LandVehicle
+  │     ├── Automobile
+  │     └── Motorcycle
+  └── WaterVehicle
+        ├── Sailboat
+        └── Motorboat</code></pre></li>
+<li><p><strong>Consistent property definitions</strong>:</p>
+<pre><code>Property: hasManufacturer
+Domain: Product
+Range: Organization
+Characteristics: Functional (a product has exactly one manufacturer)</code></pre></li>
+<li><p><strong>Proper documentation</strong>:</p>
+<pre><code>Class: ClinicalTrial
+Definition: A research study involving human participants designed to evaluate the safety and efficacy of medical interventions.
+Examples: Phase I drug trials, randomized controlled studies
+Subclass of: ScientificInvestigation</code></pre></li>
+<li><p><strong>Modular design</strong>:</p>
+<ul>
+<li>Core module: basic types and relationships</li>
+<li>Domain-specific modules: specialized concepts</li>
+<li>Mapping modules: alignments with other ontologies</li>
+</ul></li>
+</ol>
+</div>
+<p>Following these principles leads to ontologies that are more maintainable, reusable, and effective at supporting knowledge graph applications. The principles should be applied pragmatically, with the specific requirements of the knowledge graph in mind.</p>
+</section>
+<section id="ontology-engineering-methodologies" class="level3" data-number="5.3.4">
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="ontology-engineering-methodologies"><span class="header-section-number">5.3.4</span> Ontology engineering methodologies</h3>
+<p>Ontology engineering methodologies provide structured approaches to ontology development, from requirement gathering to deployment and maintenance:</p>
+<div id="def-ontology-engineering" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.17 (Ontology engineering methodologies)</strong></span> <strong>Ontology engineering</strong> is the disciplined approach to designing, implementing, evaluating, and maintaining ontologies. Major methodologies include:</p>
+<ol type="1">
+<li><p><strong>METHONTOLOGY</strong>: A structured methodology covering the entire ontology lifecycle</p>
+<ul>
+<li>Knowledge acquisition → Conceptualization → Formalization → Implementation → Maintenance</li>
+</ul></li>
+<li><p><strong>On-To-Knowledge</strong>: A process focused on knowledge management applications</p>
+<ul>
+<li>Feasibility study → Kickoff → Refinement → Evaluation → Maintenance</li>
+</ul></li>
+<li><p><strong>NeOn Methodology</strong>: A scenario-based approach for networked ontologies</p>
+<ul>
+<li>Supports various development paths rather than prescribing a rigid workflow</li>
+</ul></li>
+<li><p><strong>OBO Foundry Principles</strong>: Guidelines for collaborative ontology development in biomedical domains</p>
+<ul>
+<li>Emphasizes open development, common formats, and clear versioning</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-ontology-engineering" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.15 (Ontology engineering in practice)</strong></span> <strong>Applying METHONTOLOGY to develop a university ontology</strong>:</p>
+<ol type="1">
+<li><p><strong>Specification</strong>:</p>
+<ul>
+<li>Purpose: Represent academic structures and relationships for a university information system</li>
+<li>Scope: Departments, courses, people (faculty, students, staff), facilities, academic processes</li>
+<li>Users: Registrar’s office, academic advisors, students, faculty</li>
+</ul></li>
+<li><p><strong>Knowledge acquisition</strong>:</p>
+<ul>
+<li>Sources: University catalogs, academic policies, interviews with stakeholders, existing database schemas</li>
+<li>Techniques: Document analysis, structured interviews, collaborative workshops</li>
+</ul></li>
+<li><p><strong>Conceptualization</strong>:</p>
+<ul>
+<li>Create glossary of terms: “Course”, “Faculty”, “Department”, “Degree Program”, etc.</li>
+<li>Identify concept hierarchies: Academic (Professor, Associate Professor, Assistant Professor)</li>
+<li>Define relationships: teaches(Faculty, Course), enrolledIn(Student, Course)</li>
+<li>Identify axioms: “A course must have at least one instructor”, “A student cannot be enrolled in two courses that meet at the same time”</li>
+</ul></li>
+<li><p><strong>Formalization</strong>:</p>
+<ul>
+<li><p>Express in formal language (e.g., OWL):</p>
+<pre><code>Class: Course
+  SubClassOf: AcademicEntity
+  DisjointWith: Person, Department
+
+ObjectProperty: teaches
+  Domain: Faculty
+  Range: Course
+
+Class: GraduateCourse
+  SubClassOf: Course
+  SubClassOf: enrolledIn only GraduateStudent</code></pre></li>
+</ul></li>
+<li><p><strong>Implementation</strong>:</p>
+<ul>
+<li>Encode in ontology editor (Protégé)</li>
+<li>Validate with reasoning tools</li>
+<li>Document with annotations</li>
+</ul></li>
+<li><p><strong>Maintenance</strong>:</p>
+<ul>
+<li>Establish versioning protocol</li>
+<li>Define processes for extension requests</li>
+<li>Create documentation for ontology users</li>
+</ul></li>
+</ol>
+</div>
+<p>Methodology selection depends on project context, team expertise, and specific requirements. Larger, more complex ontologies typically benefit from more structured methodologies, while simpler projects may use lightweight approaches.</p>
+</section>
+<section id="upper-ontologies" class="level3" data-number="5.3.5">
+<h3 data-number="5.3.5" class="anchored" data-anchor-id="upper-ontologies"><span class="header-section-number">5.3.5</span> Upper ontologies</h3>
+<p>Upper ontologies (also called foundational or top-level ontologies) provide the most general concepts that apply across all domains, serving as a foundation for more specific domain ontologies:</p>
+<div id="def-upper-ontology" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.18 (Upper ontology)</strong></span> An <strong>upper ontology</strong> (or <strong>top-level ontology</strong>) defines very general concepts that are common across all domains. These ontologies:</p>
+<ol type="1">
+<li>Provide a framework for integrating more specific domain ontologies</li>
+<li>Define fundamental distinctions like physical vs.&nbsp;abstract, continuant vs.&nbsp;occurrent</li>
+<li>Support interoperability across diverse knowledge systems</li>
+<li>Usually maintain strict logical consistency and philosophical rigor</li>
+</ol>
+</div>
+<p>Several important upper ontologies are widely used in knowledge graph applications:</p>
+<div id="exm-upper-ontologies" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.16 (Major upper ontologies)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Basic Formal Ontology (BFO)</strong>:</p>
+<ul>
+<li>Developed for scientific domains, especially biomedical</li>
+<li>Primary division between <strong>continuants</strong> (entities that persist through time) and <strong>occurrents</strong> (processes, events)</li>
+<li>Continuants further divided into <strong>independent</strong> (things like organisms, molecules) and <strong>dependent</strong> (qualities, functions)</li>
+<li>Used in OBO Foundry biomedical ontologies</li>
+</ul></li>
+<li><p><strong>Descriptive Ontology for Linguistic and Cognitive Engineering (DOLCE)</strong>:</p>
+<ul>
+<li>Focused on capturing natural language categories and common sense</li>
+<li>Includes <strong>endurants</strong> (objects), <strong>perdurants</strong> (events), <strong>qualities</strong>, and <strong>abstracts</strong></li>
+<li>Emphasizes ontological distinctions relevant to human cognition</li>
+<li>Used in semantic web applications and natural language processing</li>
+</ul></li>
+<li><p><strong>Suggested Upper Merged Ontology (SUMO)</strong>:</p>
+<ul>
+<li>Comprehensive upper ontology with mappings to all WordNet concepts</li>
+<li>Includes concepts for physical entities, processes, abstract entities, etc.</li>
+<li>Has both a core upper ontology and domain ontologies</li>
+<li>Used in NLP, information retrieval, and semantic interoperability</li>
+</ul></li>
+<li><p><strong>CIDOC Conceptual Reference Model (CRM)</strong>:</p>
+<ul>
+<li>Upper ontology for cultural heritage information</li>
+<li>Focuses on events, temporal entities, physical and conceptual objects</li>
+<li>Provides a foundation for metadata integration in museums, archives, and libraries</li>
+</ul></li>
+</ol>
+</div>
+<p>Using upper ontologies provides several benefits for knowledge graphs:</p>
+<ol type="1">
+<li>Promotes consistency in conceptual modeling</li>
+<li>Facilitates integration of multiple domain ontologies</li>
+<li>Provides well-founded semantic distinctions</li>
+<li>Supports reasoning across domains</li>
+</ol>
+<p>However, they also introduce challenges, including:</p>
+<ol type="1">
+<li>Steep learning curve for domain experts</li>
+<li>Potential philosophical disagreements</li>
+<li>Overhead of maintaining alignment with upper ontology</li>
+</ol>
+<p>The decision to use an upper ontology should consider the scale, complexity, and integration requirements of the knowledge graph project.</p>
+</section>
+<section id="domain-ontologies" class="level3" data-number="5.3.6">
+<h3 data-number="5.3.6" class="anchored" data-anchor-id="domain-ontologies"><span class="header-section-number">5.3.6</span> Domain ontologies</h3>
+<p>Domain ontologies capture the concepts, relationships, and axioms specific to a particular field or application area:</p>
+<div id="def-domain-ontology" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.19 (Domain ontology)</strong></span> A <strong>domain ontology</strong> represents concepts within a specific field of knowledge, including:</p>
+<ol type="1">
+<li>Specialized terminology and vocabulary of the domain</li>
+<li>Relationships specific to the field</li>
+<li>Domain-specific constraints and axioms</li>
+<li>Standard practices and shared understandings among domain experts</li>
+</ol>
+<p>Domain ontologies may be aligned with upper ontologies to facilitate cross-domain integration.</p>
+</div>
+<div id="exm-domain-ontologies" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.17 (Examples of domain ontologies)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Gene Ontology (GO)</strong>:</p>
+<ul>
+<li>Covers molecular functions, biological processes, and cellular components</li>
+<li>Used to annotate gene products across species</li>
+<li>Example concepts: “DNA replication”, “mitochondrion”, “protein binding”</li>
+<li>Contains over 45,000 terms with precisely defined relationships</li>
+</ul></li>
+<li><p><strong>Financial Industry Business Ontology (FIBO)</strong>:</p>
+<ul>
+<li>Represents financial instruments, business entities, and market data</li>
+<li>Standardizes financial terminology across institutions</li>
+<li>Example concepts: “Derivative”, “Interest Rate Swap”, “Collateral”</li>
+<li>Supports regulatory reporting and cross-institutional data exchange</li>
+</ul></li>
+<li><p><strong>Pizza Ontology</strong>:</p>
+<ul>
+<li>Educational example used to teach ontology development</li>
+<li>Models pizza types, toppings, and bases</li>
+<li>Demonstrates classification principles and restriction patterns</li>
+<li>Example concepts: “VegetarianPizza”, “TomatoTopping”, “ThinCrust”</li>
+</ul></li>
+<li><p><strong>Chemical Entities of Biological Interest (ChEBI)</strong>:</p>
+<ul>
+<li>Focuses on chemical compounds relevant to biological systems</li>
+<li>Organized by both structural and functional classifications</li>
+<li>Example concepts: “penicillin”, “hormone”, “vitamin”</li>
+<li>Contains detailed chemical structures and properties</li>
+</ul></li>
+</ol>
+</div>
+<p>Domain ontologies are essential components of knowledge graphs, providing the specialized vocabulary and semantics needed for particular applications. Their development typically involves close collaboration with domain experts and may leverage existing standards, vocabularies, and data models in the field.</p>
+</section>
+<section id="application-ontologies-and-ontology-design-patterns" class="level3" data-number="5.3.7">
+<h3 data-number="5.3.7" class="anchored" data-anchor-id="application-ontologies-and-ontology-design-patterns"><span class="header-section-number">5.3.7</span> Application ontologies and ontology design patterns</h3>
+<p>Application ontologies focus on specific use cases, while ontology design patterns provide reusable solutions to common modeling problems:</p>
+<div id="def-application-ontology" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.20 (Application ontology)</strong></span> An <strong>application ontology</strong> is tailored for a specific application or system, often combining elements from domain and task ontologies. Application ontologies typically:</p>
+<ol type="1">
+<li>Focus on practical requirements rather than theoretical completeness</li>
+<li>Include only concepts relevant to the target application</li>
+<li>May sacrifice some generality for efficiency and usability</li>
+<li>Often integrate multiple domains relevant to the application</li>
+</ol>
+</div>
+<div id="def-ontology-pattern" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.21 (Ontology design pattern)</strong></span> An <strong>ontology design pattern</strong> (ODP) is a reusable solution to a recurring ontology design problem. ODPs serve as:</p>
+<ol type="1">
+<li>Building blocks for creating larger ontologies</li>
+<li>Best practices for modeling specific types of knowledge</li>
+<li>Templates that can be specialized for particular domains</li>
+<li>Means to improve ontology quality and consistency</li>
+</ol>
+</div>
+<div id="exm-application-ontology" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.18 (Application ontology example)</strong></span> <strong>E-commerce product catalog ontology</strong>:</p>
+<p>This application ontology integrates concepts from multiple domains to support an online shopping platform:</p>
+<p><strong>Classes</strong>:</p>
+<ul>
+<li>Product (with subclasses like Electronics, Clothing, Books)</li>
+<li>Customer</li>
+<li>Order</li>
+<li>Review</li>
+<li>Promotion</li>
+<li>ShippingMethod</li>
+</ul>
+<p><strong>Properties</strong>:</p>
+<ul>
+<li>hasPrice, hasDescription, hasImage, inStock</li>
+<li>placedBy (Order to Customer)</li>
+<li>contains (Order to Product)</li>
+<li>reviewedBy, hasRating</li>
+</ul>
+<p><strong>Axioms</strong>:</p>
+<ul>
+<li>Every Order must have at least one Product</li>
+<li>A DiscountedProduct must have both an originalPrice and a currentPrice</li>
+<li>A FeaturedProduct must appear on the homepage</li>
+</ul>
+<p>This ontology combines product classification (domain knowledge) with e-commerce specific concepts (application knowledge) to support specific functions like product search, recommendation, and order processing.</p>
+</div>
+<div id="exm-ontology-patterns" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.19 (Ontology design pattern examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Participation pattern</strong>:</p>
+<ul>
+<li>Represents involvement of an object in an event</li>
+<li>Core elements: Object, Event, participatesIn relationship</li>
+<li>Example: Person participatesIn Conference</li>
+</ul></li>
+<li><p><strong>N-ary relationship pattern</strong>:</p>
+<ul>
+<li>Represents relationships involving more than two entities</li>
+<li>Reifies the relationship as a class with multiple binary relationships</li>
+<li>Example: Diagnosis (connects Patient, Doctor, Disease, and Date)</li>
+</ul></li>
+<li><p><strong>Information object pattern</strong>:</p>
+<ul>
+<li>Distinguishes between information and what it’s about</li>
+<li>Core elements: InformationObject, isAbout relationship, Subject</li>
+<li>Example: MedicalRecord isAbout Patient</li>
+</ul></li>
+<li><p><strong>Time interval pattern</strong>:</p>
+<ul>
+<li>Represents temporal information with clear semantics</li>
+<li>Core elements: TimeInterval, hasBeginning, hasEnd, TimePoint</li>
+<li>Example: Project hasTimeInterval Interval1, Interval1 hasBeginning “2023-01-15”</li>
+</ul></li>
+</ol>
+</div>
+<p>Application ontologies and ontology design patterns represent practical approaches to ontology engineering that balance theoretical rigor with usability concerns. They help make ontology development more efficient and result in more consistent, maintainable knowledge graphs.</p>
+</section>
+</section>
+<section id="semantic-web-technologies-for-knowledge-graphs" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="semantic-web-technologies-for-knowledge-graphs"><span class="header-section-number">5.4</span> Semantic web technologies for knowledge graphs</h2>
+<p>The Semantic Web technology stack provides standardized languages and tools for implementing knowledge graphs with well-defined semantics.</p>
+<section id="resource-description-framework-rdf" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="resource-description-framework-rdf"><span class="header-section-number">5.4.1</span> Resource Description Framework (RDF)</h3>
+<p>RDF provides the fundamental data model for Semantic Web applications and serves as the foundation for many knowledge graph implementations:</p>
+<div id="def-rdf" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.22 (Resource Description Framework (RDF))</strong></span> The <strong>Resource Description Framework (RDF)</strong> is a standard model for data interchange on the Web, with features including:</p>
+<ol type="1">
+<li>A graph-based data model consisting of triples (subject, predicate, object)</li>
+<li>Global identification of resources using URIs/IRIs</li>
+<li>Support for both structured and semi-structured data</li>
+<li>A foundation for more expressive semantic technologies like RDFS and OWL</li>
+</ol>
+<p>The basic building block of RDF is the triple, which consists of:</p>
+<ul>
+<li><strong>Subject</strong>: A resource being described (URI or blank node)</li>
+<li><strong>Predicate</strong>: A property or relationship (URI)</li>
+<li><strong>Object</strong>: A value, which can be a URI, blank node, or literal value</li>
+</ul>
+</div>
+<div id="exm-rdf" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.20 (RDF examples)</strong></span> <strong>RDF triples (Turtle syntax)</strong>:</p>
+<pre class="turtle"><code>@prefix ex: &lt;http://example.org/&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+ex:JohnDoe a foaf:Person ;
+    foaf:name "John Doe" ;
+    foaf:mbox &lt;mailto:john@example.org&gt; ;
+    ex:employedBy ex:Acme ;
+    ex:startDate "2020-01-15"^^xsd:date .
+
+ex:Acme a ex:Company ;
+    ex:founded "1985"^^xsd:integer ;
+    ex:headquartersIn ex:NewYork .</code></pre>
+<p><strong>The same RDF data as a graph</strong>:</p>
+<pre><code>[ex:JohnDoe] --a--&gt; [foaf:Person]
+      |
+      |--foaf:name--&gt; ["John Doe"]
+      |
+      |--foaf:mbox--&gt; [mailto:john@example.org]
+      |
+      |--ex:employedBy--&gt; [ex:Acme] --a--&gt; [ex:Company]
+      |                       |
+      |                       |--ex:founded--&gt; ["1985"^^xsd:integer]
+      |                       |
+      |                       |--ex:headquartersIn--&gt; [ex:NewYork]
+      |
+      |--ex:startDate--&gt; ["2020-01-15"^^xsd:date]</code></pre>
+</div>
+<p>RDF provides several serialization formats, including:</p>
+<ol type="1">
+<li><strong>RDF/XML</strong>: The original XML-based syntax</li>
+<li><strong>Turtle</strong>: A concise, human-friendly text format</li>
+<li><strong>JSON-LD</strong>: JSON-based format for integrating with web applications</li>
+<li><strong>N-Triples</strong>: A line-based, plain text format for simple processing</li>
+<li><strong>TriG</strong>: An extension of Turtle for named graphs</li>
+</ol>
+<p>The flexibility and simplicity of the RDF model make it an ideal foundation for knowledge graphs, allowing for incremental extension and integration of diverse data sources.</p>
+</section>
+<section id="rdf-schema-rdfs" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="rdf-schema-rdfs"><span class="header-section-number">5.4.2</span> RDF Schema (RDFS)</h3>
+<p>RDF Schema extends RDF with a vocabulary for describing classes, properties, and their relationships, providing basic semantic capabilities:</p>
+<div id="def-rdfs" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.23 (RDF Schema (RDFS))</strong></span> <strong>RDF Schema (RDFS)</strong> is a semantic extension of RDF that provides a vocabulary for describing:</p>
+<ol type="1">
+<li><strong>Classes and instances</strong>: rdfs:Class, rdf:type</li>
+<li><strong>Class hierarchies</strong>: rdfs:subClassOf</li>
+<li><strong>Property hierarchies</strong>: rdfs:subPropertyOf</li>
+<li><strong>Domain and range constraints</strong>: rdfs:domain, rdfs:range</li>
+<li><strong>Documentation</strong>: rdfs:label, rdfs:comment</li>
+</ol>
+<p>RDFS enables basic inference capabilities, such as inheritance of class properties and instance membership transitivity.</p>
+</div>
+<div id="exm-rdfs" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.21 (RDFS example)</strong></span> &nbsp;</p>
+<pre class="turtle"><code>@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix ex: &lt;http://example.org/&gt; .
+
+# Class definitions
+ex:Person a rdfs:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "A human individual" .
+
+ex:Researcher a rdfs:Class ;
+    rdfs:subClassOf ex:Person ;
+    rdfs:label "Researcher" .
+
+ex:Publication a rdfs:Class ;
+    rdfs:label "Publication" .
+
+# Property definitions
+ex:authorOf a rdf:Property ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Publication ;
+    rdfs:label "author of" .
+
+ex:hasCoAuthor a rdf:Property ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Person ;
+    rdfs:subPropertyOf ex:collaboratesWith .
+
+# Instances
+ex:JohnDoe a ex:Researcher .
+ex:Paper1 a ex:Publication .
+ex:JohnDoe ex:authorOf ex:Paper1 .</code></pre>
+<p><strong>Inferences enabled by RDFS</strong>:</p>
+<ul>
+<li>Since ex:JohnDoe is a ex:Researcher, and ex:Researcher is a subclass of ex:Person, we can infer that ex:JohnDoe is a ex:Person.</li>
+<li>Since ex:JohnDoe ex:authorOf ex:Paper1, and the domain of ex:authorOf is ex:Person, we can infer that ex:JohnDoe is a ex:Person (redundant in this case).</li>
+<li>Since ex:JohnDoe ex:authorOf ex:Paper1, and the range of ex:authorOf is ex:Publication, we can infer that ex:Paper1 is a ex:Publication (redundant in this case).</li>
+</ul>
+</div>
+<p>RDFS provides a lightweight ontology language that balances expressivity with simplicity. It supports basic schema definition and inference capabilities while remaining computationally tractable. For many knowledge graph applications, RDFS provides sufficient semantics without the complexity of more expressive languages like OWL.</p>
+</section>
+<section id="web-ontology-language-owl" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="web-ontology-language-owl"><span class="header-section-number">5.4.3</span> Web Ontology Language (OWL)</h3>
+<p>OWL extends RDFS with more expressive constructs for defining complex ontologies, based on description logic:</p>
+<div id="def-owl" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.24 (Web Ontology Language (OWL))</strong></span> The <strong>Web Ontology Language (OWL)</strong> is a family of knowledge representation languages for authoring ontologies, characterized by:</p>
+<ol type="1">
+<li>Formal semantics based on description logics</li>
+<li>More expressive constructs than RDFS</li>
+<li>Support for complex class expressions and property characteristics</li>
+<li>Different profiles (sublanguages) with varying expressivity/complexity tradeoffs</li>
+</ol>
+<p>Key OWL constructs include:</p>
+<ul>
+<li><strong>Class expressions</strong>: intersection, union, complement, restrictions</li>
+<li><strong>Property characteristics</strong>: functional, inverse functional, transitive, symmetric</li>
+<li><strong>Property restrictions</strong>: existential (someValuesFrom), universal (allValuesFrom), cardinality</li>
+<li><strong>Complex axioms</strong>: disjointness, equivalence, property chains</li>
+</ul>
+</div>
+<p>OWL comes in several profiles, each offering different expressivity and computational complexity trade-offs:</p>
+<div id="def-owl-profiles" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.25 (OWL profiles)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>OWL Full</strong>: The most expressive variant, but undecidable (no guarantee of computational tractability)</p></li>
+<li><p><strong>OWL DL</strong>: Based on description logic, maintains decidability while providing high expressivity</p></li>
+<li><p><strong>OWL 2 profiles</strong>:</p>
+<ul>
+<li><strong>OWL 2 EL</strong>: Optimized for large biomedical ontologies with complex class hierarchies</li>
+<li><strong>OWL 2 QL</strong>: Designed for efficient query answering with large instance data</li>
+<li><strong>OWL 2 RL</strong>: Rule-based subset supporting forward-chaining rule implementations</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-owl" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.22 (OWL examples)</strong></span> <strong>Class definitions with complex expressions</strong>:</p>
+<pre class="turtle"><code>@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix ex: &lt;http://example.org/&gt; .
+
+# Class intersection
+ex:ProfessorEmeritus a owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            ex:Professor
+            ex:RetiredFaculty
+        )
+    ] .
+
+# Class with property restriction
+ex:ResearchProfessor a owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            ex:Professor
+            [ a owl:Restriction ;
+              owl:onProperty ex:supervisesStudents ;
+              owl:someValuesFrom ex:GraduateStudent ]
+            [ a owl:Restriction ;
+              owl:onProperty ex:hasPublication ;
+              owl:minCardinality "5"^^xsd:nonNegativeInteger ]
+        )
+    ] .</code></pre>
+<p><strong>Property characteristics</strong>:</p>
+<pre class="turtle"><code>ex:hasParent a owl:ObjectProperty .
+
+ex:hasAncestor a owl:ObjectProperty ;
+    owl:transitiveProperty true ;
+    rdfs:subPropertyOf ex:hasRelative .
+
+ex:hasChild a owl:ObjectProperty ;
+    owl:inverseOf ex:hasParent .
+
+ex:marriedTo a owl:ObjectProperty ;
+    owl:symmetricProperty true ;
+    owl:irreflexiveProperty true .
+
+ex:hasBirthDate a owl:DatatypeProperty ;
+    owl:functionalProperty true .</code></pre>
+<p><strong>Disjointness and complex axioms</strong>:</p>
+<pre class="turtle"><code>ex:Student owl:disjointWith ex:Faculty .
+
+ex:supervisorOf owl:propertyChainAxiom (
+    ex:advisorOf ex:memberOf
+) .</code></pre>
+</div>
+<p>OWL provides the semantic richness required for complex knowledge graphs, particularly in domains requiring sophisticated reasoning and inference. Its formal semantics enables consistency checking, classification, and query answering beyond what’s possible with simpler representations.</p>
+</section>
+<section id="sparql-query-language" class="level3" data-number="5.4.4">
+<h3 data-number="5.4.4" class="anchored" data-anchor-id="sparql-query-language"><span class="header-section-number">5.4.4</span> SPARQL query language</h3>
+<p>SPARQL provides a standardized way to query and manipulate RDF data, serving as the primary query language for knowledge graphs built on Semantic Web technologies:</p>
+<div id="def-sparql" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.26 (SPARQL)</strong></span> <strong>SPARQL</strong> (SPARQL Protocol and RDF Query Language) is the standard query language for RDF data, offering:</p>
+<ol type="1">
+<li>A SQL-like syntax for querying graph patterns in RDF data</li>
+<li>Support for various query forms: SELECT, CONSTRUCT, ASK, DESCRIBE</li>
+<li>Query modifiers like filtering, ordering, and aggregation</li>
+<li>Graph manipulation capabilities through INSERT and DELETE operations (SPARQL Update)</li>
+</ol>
+<p>SPARQL queries primarily match graph patterns against RDF datasets, retrieving or modifying the matching subgraphs.</p>
+</div>
+<div id="exm-sparql" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.23 (SPARQL query examples)</strong></span> <strong>Basic SELECT query</strong>:</p>
+<pre class="sparql"><code>PREFIX ex: &lt;http://example.org/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+SELECT ?person ?name
+WHERE {
+  ?person a ex:Researcher ;
+          foaf:name ?name ;
+          ex:publishedIn ?journal .
+  ?journal ex:impactFactor ?impact .
+  FILTER (?impact &gt; 5.0)
+}
+ORDER BY DESC(?impact)
+LIMIT 10</code></pre>
+<p>This query finds the top 10 researchers who have published in high-impact journals (impact factor &gt; 5.0).</p>
+<p><strong>CONSTRUCT query to create new triples</strong>:</p>
+<pre class="sparql"><code>PREFIX ex: &lt;http://example.org/&gt;
+
+CONSTRUCT {
+  ?person ex:expertIn ?field .
+}
+WHERE {
+  ?person ex:authorOf ?paper .
+  ?paper ex:hasTopic ?field .
+  {
+    SELECT ?person ?field (COUNT(?paper) as ?count)
+    WHERE {
+      ?person ex:authorOf ?paper .
+      ?paper ex:hasTopic ?field .
+    }
+    GROUP BY ?person ?field
+    HAVING (?count &gt;= 5)
+  }
+}</code></pre>
+<p>This CONSTRUCT query creates new “expertIn” relationships for researchers who have authored at least 5 papers on a particular topic.</p>
+<p><strong>ASK query</strong>:</p>
+<pre class="sparql"><code>PREFIX ex: &lt;http://example.org/&gt;
+
+ASK {
+  ex:JohnDoe ex:collaboratesWith ex:JaneSmith .
+}</code></pre>
+<p>This query returns a boolean indicating whether John Doe collaborates with Jane Smith.</p>
+<p><strong>SPARQL Update</strong>:</p>
+<pre class="sparql"><code>PREFIX ex: &lt;http://example.org/&gt;
+
+DELETE {
+  ?paper ex:status "under review" .
+}
+INSERT {
+  ?paper ex:status "published" ;
+         ex:publicationDate "2024-05-15"^^xsd:date .
+}
+WHERE {
+  ?paper ex:manuscriptID "MS-2024-156" .
+}</code></pre>
+<p>This update changes the status of a specific paper from “under review” to “published” and adds a publication date.</p>
+</div>
+<p>SPARQL’s ability to express complex graph patterns and transformations makes it a powerful tool for working with knowledge graphs. It enables not only data retrieval but also knowledge discovery through pattern matching, aggregation, and path queries across the graph structure.</p>
+</section>
+<section id="semantic-web-stack-and-linked-data-principles" class="level3" data-number="5.4.5">
+<h3 data-number="5.4.5" class="anchored" data-anchor-id="semantic-web-stack-and-linked-data-principles"><span class="header-section-number">5.4.5</span> Semantic Web stack and linked data principles</h3>
+<p>The Semantic Web stack provides a layered architecture of technologies for building knowledge graphs, while linked data principles establish best practices for publishing and connecting structured data:</p>
+<div id="def-semantic-web-stack" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.27 (Semantic Web stack)</strong></span> The <strong>Semantic Web stack</strong> (or “Semantic Web layer cake”) is a layered architecture of technologies that build upon each other to enable the vision of a web of structured, machine-readable data:</p>
+<ol type="1">
+<li><strong>Foundation</strong>: URI/IRI, Unicode, XML</li>
+<li><strong>Data model</strong>: RDF</li>
+<li><strong>Schema and ontology</strong>: RDFS, OWL</li>
+<li><strong>Query</strong>: SPARQL</li>
+<li><strong>Rules</strong>: RIF, SWRL</li>
+<li><strong>Proof and trust</strong>: Digital signatures, Web of trust</li>
+</ol>
+</div>
+<div id="def-linked-data" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.28 (Linked data principles)</strong></span> <strong>Linked data</strong> refers to a set of best practices for publishing and connecting structured data on the web, established by Tim Berners-Lee:</p>
+<ol type="1">
+<li>Use URIs (or IRIs) as names for things</li>
+<li>Use HTTP URIs so that people can look up those names</li>
+<li>When someone looks up a URI, provide useful information, using standards (RDF, SPARQL)</li>
+<li>Include links to other URIs so they can discover more things</li>
+</ol>
+</div>
+<div id="exm-linked-data" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.24 (Linked data in practice)</strong></span> <strong>Publishing linked data about scientific publications</strong>:</p>
+<ol type="1">
+<li><p><strong>Identify resources with HTTP URIs</strong>:</p>
+<ul>
+<li><code>http://example.org/publications/paper123</code> (the paper)</li>
+<li><code>http://example.org/researchers/smith42</code> (an author)</li>
+<li><code>http://example.org/topics/machine-learning</code> (a topic)</li>
+</ul></li>
+<li><p><strong>Return RDF data when the URI is dereferenced</strong>:</p>
+<pre class="turtle"><code>@prefix ex: &lt;http://example.org/&gt; .
+@prefix dct: &lt;http://purl.org/dc/terms/&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+
+ex:publications/paper123 a ex:ResearchPaper ;
+    dct:title "Advances in Knowledge Graph Embeddings" ;
+    dct:published "2023"^^xsd:integer ;
+    ex:author ex:researchers/smith42 ;
+    ex:topic ex:topics/machine-learning, ex:topics/knowledge-graphs .</code></pre></li>
+<li><p><strong>Include links to external datasets</strong>:</p>
+<pre class="turtle"><code>ex:researchers/smith42 a foaf:Person ;
+    foaf:name "Jane Smith" ;
+    owl:sameAs &lt;http://orcid.org/0000-0002-1234-5678&gt; ;
+    ex:affiliation &lt;http://dbpedia.org/resource/Stanford_University&gt; .
+
+ex:topics/machine-learning owl:sameAs &lt;http://dbpedia.org/resource/Machine_learning&gt; .</code></pre></li>
+<li><p><strong>Support SPARQL queries over the data</strong>:</p>
+<ul>
+<li>Provide a SPARQL endpoint at <code>http://example.org/sparql</code></li>
+<li>Enable discovery of related resources through query</li>
+</ul></li>
+</ol>
+</div>
+<p>The combination of Semantic Web technologies and linked data principles provides a comprehensive framework for implementing interoperable knowledge graphs. This approach facilitates not only the representation of knowledge within a single system but also the integration of knowledge across distributed sources throughout the web.</p>
+</section>
+</section>
+<section id="practical-ontology-development" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="practical-ontology-development"><span class="header-section-number">5.5</span> Practical ontology development</h2>
+<p>This section covers practical aspects of ontology development, from tools and languages to evaluation and governance.</p>
+<section id="ontology-development-tools" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="ontology-development-tools"><span class="header-section-number">5.5.1</span> Ontology development tools</h3>
+<p>Various tools support different aspects of the ontology development process:</p>
+<div id="def-ontology-tools" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.29 (Ontology development tools)</strong></span> <strong>Ontology development tools</strong> assist in creating, editing, visualizing, and managing ontologies. Key categories include:</p>
+<ol type="1">
+<li><strong>Ontology editors</strong>: Graphical interfaces for creating and editing ontologies</li>
+<li><strong>Reasoners</strong>: Software that performs logical inference and consistency checking</li>
+<li><strong>Visualization tools</strong>: Generate graphical representations of ontological structures</li>
+<li><strong>Collaborative platforms</strong>: Support team-based ontology development</li>
+<li><strong>Repositories</strong>: Store, version, and distribute ontologies</li>
+</ol>
+</div>
+<div id="exm-ontology-tools" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.25 (Common ontology development tools)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Protégé</strong>:</p>
+<ul>
+<li>Full-featured, open-source ontology editor developed at Stanford</li>
+<li>Supports OWL, RDF, and XML Schema</li>
+<li>Extensible plugin architecture</li>
+<li>Integrated visualization and reasoning capabilities</li>
+<li>Example usage: Creating an OWL ontology with class hierarchies, property definitions, and restrictions</li>
+</ul></li>
+<li><p><strong>TopBraid Composer</strong>:</p>
+<ul>
+<li>Commercial semantic modeling environment</li>
+<li>Supports RDFS, OWL, SHACL, and other W3C standards</li>
+<li>Integrated graph database and SPARQL query capabilities</li>
+<li>Enterprise features for team development</li>
+<li>Example usage: Developing industry standards and enterprise knowledge models</li>
+</ul></li>
+<li><p><strong>WebProtégé</strong>:</p>
+<ul>
+<li>Web-based collaborative ontology development platform</li>
+<li>Multi-user editing with change tracking</li>
+<li>Simplified interface for domain experts</li>
+<li>Example usage: Distributed teams collaboratively developing a medical ontology</li>
+</ul></li>
+<li><p><strong>OWL reasoners</strong>:</p>
+<ul>
+<li>HermiT: First reasoner to fully support OWL 2 DL</li>
+<li>Pellet: Open-source reasoner with explanation facilities</li>
+<li>FaCT++: Fast tableaux-based reasoner</li>
+<li>ELK: Specialized for OWL 2 EL profile ontologies</li>
+<li>Example usage: Verifying ontology consistency and computing inferred class hierarchies</li>
+</ul></li>
+<li><p><strong>Ontology repositories</strong>:</p>
+<ul>
+<li>BioPortal: Repository for biomedical ontologies</li>
+<li>OBO Foundry: Coordinated collection of interoperable ontologies</li>
+<li>LOV (Linked Open Vocabularies): Catalog of reusable vocabularies</li>
+<li>Example usage: Discovering existing ontologies for reuse in a new knowledge graph project</li>
+</ul></li>
+</ol>
+</div>
+<p>The selection of appropriate tools depends on factors such as the ontology language (RDF, OWL), team expertise, scale of the project, and specific requirements for reasoning or collaboration. Many projects use multiple tools at different stages of the ontology lifecycle.</p>
+</section>
+<section id="ontology-languages-for-knowledge-graphs" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="ontology-languages-for-knowledge-graphs"><span class="header-section-number">5.5.2</span> Ontology languages for knowledge graphs</h3>
+<p>Different ontology languages offer varying expressivity, semantic foundations, and computational properties:</p>
+<div id="def-ontology-languages" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.30 (Ontology languages)</strong></span> <strong>Ontology languages</strong> are formal languages used to construct ontologies, differing in their:</p>
+<ol type="1">
+<li>Expressivity (what can be represented)</li>
+<li>Formal semantics (how expressions are interpreted)</li>
+<li>Reasoning complexity (computational properties)</li>
+<li>Syntax and serialization formats</li>
+</ol>
+<p>Modern ontology languages typically build on established logical formalisms while providing practical features for knowledge engineering.</p>
+</div>
+<div id="exm-ontology-languages" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.26 (Comparison of ontology languages)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>RDF Schema (RDFS)</strong>:</p>
+<ul>
+<li><p><strong>Expressivity</strong>: Basic class hierarchies, domain/range constraints</p></li>
+<li><p><strong>Key features</strong>: Classes, subclasses, properties, domain/range</p></li>
+<li><p><strong>Limitations</strong>: No class expressions, property restrictions, or disjointness</p></li>
+<li><p><strong>Use case</strong>: Simple vocabulary definition, lightweight taxonomies</p></li>
+<li><p><strong>Example</strong>:</p>
+<pre class="turtle"><code>ex:Researcher rdfs:subClassOf ex:Person .
+ex:authorOf rdfs:domain ex:Person ; rdfs:range ex:Publication .</code></pre></li>
+</ul></li>
+<li><p><strong>OWL (Web Ontology Language)</strong>:</p>
+<ul>
+<li><p><strong>Expressivity</strong>: Rich class expressions, property characteristics, complex axioms</p></li>
+<li><p><strong>Key features</strong>: Class constructors, property restrictions, disjointness, equivalence</p></li>
+<li><p><strong>Limitations</strong>: Decidability constraints (in OWL DL), complexity trade-offs</p></li>
+<li><p><strong>Use case</strong>: Complex domain models requiring formal reasoning</p></li>
+<li><p><strong>Example</strong>:</p>
+<pre class="turtle"><code>ex:Researcher owl:equivalentClass [
+  owl:intersectionOf (
+    ex:Person
+    [ owl:onProperty ex:authorOf ; owl:minCardinality 1 ]
+  )
+] .</code></pre></li>
+</ul></li>
+<li><p><strong>SKOS (Simple Knowledge Organization System)</strong>:</p>
+<ul>
+<li><p><strong>Expressivity</strong>: Designed for thesauri, taxonomies, classification schemes</p></li>
+<li><p><strong>Key features</strong>: Concepts, labels, semantic relationships (broader/narrower)</p></li>
+<li><p><strong>Limitations</strong>: Limited formal semantics, focus on terminology organization</p></li>
+<li><p><strong>Use case</strong>: Migration of existing classification systems, multilingual vocabularies</p></li>
+<li><p><strong>Example</strong>:</p>
+<pre class="turtle"><code>ex:MachineLearning a skos:Concept ;
+  skos:prefLabel "Machine Learning"@en ;
+  skos:altLabel "ML"@en ;
+  skos:broader ex:ArtificialIntelligence .</code></pre></li>
+</ul></li>
+<li><p><strong>SHACL (Shapes Constraint Language)</strong>:</p>
+<ul>
+<li><p><strong>Expressivity</strong>: Graph validation, constraints, rules</p></li>
+<li><p><strong>Key features</strong>: Shape definitions, property constraints, logical constraints</p></li>
+<li><p><strong>Limitations</strong>: Focused on validation rather than inference</p></li>
+<li><p><strong>Use case</strong>: Data quality enforcement, schema validation</p></li>
+<li><p><strong>Example</strong>:</p>
+<pre class="turtle"><code>ex:ResearcherShape a sh:NodeShape ;
+  sh:targetClass ex:Researcher ;
+  sh:property [
+    sh:path ex:name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ex:affiliation ;
+    sh:class ex:Institution ;
+  ] .</code></pre></li>
+</ul></li>
+</ol>
+</div>
+<p>The choice of ontology language should be guided by:</p>
+<ol type="1">
+<li>The complexity of the domain and required expressivity</li>
+<li>The need for automated reasoning and inference</li>
+<li>The expertise of the development team</li>
+<li>Integration requirements with existing systems</li>
+<li>Performance considerations for the target application</li>
+</ol>
+<p>Many knowledge graph projects use a combination of languages—for example, OWL for the core ontology with SHACL for data validation, or SKOS for terminology with RDFS for basic structural relationships.</p>
+</section>
+<section id="ontology-evaluation-and-quality-assurance" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="ontology-evaluation-and-quality-assurance"><span class="header-section-number">5.5.3</span> Ontology evaluation and quality assurance</h3>
+<p>Evaluating ontologies is essential to ensure they meet requirements and maintain quality over time:</p>
+<div id="def-ontology-evaluation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.31 (Ontology evaluation)</strong></span> <strong>Ontology evaluation</strong> assesses the quality of an ontology along various dimensions:</p>
+<ol type="1">
+<li><strong>Structural evaluation</strong>: Metrics on the ontology’s graph properties</li>
+<li><strong>Logical evaluation</strong>: Consistency, satisfiability, and reasoning complexity</li>
+<li><strong>Functional evaluation</strong>: Fitness for the intended purpose or competency</li>
+<li><strong>Usability evaluation</strong>: Clarity, documentation, and ease of understanding</li>
+</ol>
+<p>Evaluation may be performed automatically through tools or metrics, manually by experts, or through application in real-world scenarios.</p>
+</div>
+</section>
+</section>
+<section id="practical-ontology-development-continued" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="practical-ontology-development-continued"><span class="header-section-number">5.6</span> Practical ontology development (continued)</h2>
+<div id="exm-ontology-evaluation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.27 (Ontology evaluation methods)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Structural metrics</strong>:</p>
+<ul>
+<li><strong>Size and complexity</strong>: Number of classes, properties, axioms</li>
+<li><strong>Graph metrics</strong>: Average depth, breadth, branching factor</li>
+<li><strong>Connectivity</strong>: Distribution of relationships, isolated components</li>
+<li><strong>Example</strong>: A medical ontology with 8,000 classes, average depth of 12, and cohesion metric of 0.85</li>
+</ul></li>
+<li><p><strong>Logical quality</strong>:</p>
+<ul>
+<li><strong>Consistency checking</strong>: Identifying logical contradictions</li>
+<li><strong>Satisfiability</strong>: Ensuring classes can have instances</li>
+<li><strong>Redundancy detection</strong>: Finding equivalent classes or subsumption cycles</li>
+<li><strong>Example</strong>: Using the HermiT reasoner to detect that “VegetarianPizzaWithHam” is unsatisfiable due to conflicting definitions</li>
+</ul></li>
+<li><p><strong>Competency questions</strong>:</p>
+<ul>
+<li>Pre-defined questions the ontology should be able to answer</li>
+<li>Formalized as SPARQL queries or other formal queries</li>
+<li>Coverage evaluation based on query results</li>
+<li><strong>Example</strong>:
+<ul>
+<li>Question: “Which researchers work on both machine learning and knowledge graphs?”</li>
+<li>SPARQL: <code>SELECT ?r WHERE { ?r a :Researcher ; :worksOn :MachineLearning ; :worksOn :KnowledgeGraphs }</code></li>
+<li>Evaluation: Does the query return expected results?</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Expert review</strong>:</p>
+<ul>
+<li>Domain experts assess correctness and completeness</li>
+<li>Ontology engineers evaluate modeling decisions and best practices</li>
+<li>User evaluation of clarity and understandability</li>
+<li><strong>Example</strong>: A panel of medical experts reviewing a disease ontology for accurate classification of conditions</li>
+</ul></li>
+</ol>
+</div>
+<p>Ontology quality assurance involves both preventive measures and ongoing evaluation:</p>
+<div id="def-ontology-qa" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.32 (Ontology quality assurance)</strong></span> <strong>Ontology quality assurance</strong> encompasses processes and practices to maintain high-quality ontologies throughout their lifecycle:</p>
+<ol type="1">
+<li><p><strong>Quality control</strong>:</p>
+<ul>
+<li>Automated tests and validation</li>
+<li>Peer review processes</li>
+<li>Formal approval workflows</li>
+</ul></li>
+<li><p><strong>Documentation</strong>:</p>
+<ul>
+<li>Conceptual definitions and examples</li>
+<li>Annotation properties for human-readable descriptions</li>
+<li>Usage guidelines and patterns</li>
+</ul></li>
+<li><p><strong>Continuous evaluation</strong>:</p>
+<ul>
+<li>Change impact analysis</li>
+<li>Regression testing</li>
+<li>User feedback mechanisms</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-ontology-qa" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.28 (Ontology quality assurance in practice)</strong></span> <strong>Quality assurance process for a biomedical ontology</strong>:</p>
+<ol type="1">
+<li><p><strong>Development phase</strong>:</p>
+<ul>
+<li>Use of upper ontology (BFO) to ensure philosophical consistency</li>
+<li>Implementation of naming conventions (e.g., CamelCase for classes)</li>
+<li>Automated checks for missing labels or definitions</li>
+<li>Weekly peer review sessions for new additions</li>
+</ul></li>
+<li><p><strong>Pre-release validation</strong>:</p>
+<ul>
+<li>Logical consistency checking with multiple reasoners</li>
+<li>Custom SPARQL queries to detect modeling anti-patterns</li>
+<li>Verification against competency questions</li>
+<li>Domain expert review of key sections</li>
+</ul></li>
+<li><p><strong>Release and maintenance</strong>:</p>
+<ul>
+<li>Version control with semantic versioning (e.g., 2.4.1)</li>
+<li>Detailed release notes documenting changes</li>
+<li>Deprecation process for obsolete terms</li>
+<li>Automated regression tests to ensure backward compatibility</li>
+</ul></li>
+<li><p><strong>User feedback loop</strong>:</p>
+<ul>
+<li>Issue tracking system for error reports</li>
+<li>Term request process for new concepts</li>
+<li>Usage metrics to identify widely used vs.&nbsp;neglected sections</li>
+<li>Regular community calls for collaborative resolution of complex issues</li>
+</ul></li>
+</ol>
+</div>
+<p>Effective ontology evaluation and quality assurance processes are essential for creating and maintaining ontologies that provide reliable semantic foundations for knowledge graphs. They help prevent errors, ensure semantic coherence, and maintain alignment with evolving domain knowledge.</p>
+<section id="ontology-integration-and-alignment" class="level3" data-number="5.6.1">
+<h3 data-number="5.6.1" class="anchored" data-anchor-id="ontology-integration-and-alignment"><span class="header-section-number">5.6.1</span> Ontology integration and alignment</h3>
+<p>In real-world knowledge graphs, multiple ontologies often need to be combined or aligned:</p>
+<div id="def-ontology-integration" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.33 (Ontology integration and alignment)</strong></span> <strong>Ontology integration</strong> combines multiple ontologies into a coherent unified ontology.</p>
+<p><strong>Ontology alignment</strong> (or mapping) establishes correspondences between concepts in different ontologies without necessarily merging them.</p>
+<p>These processes address:</p>
+<ol type="1">
+<li><strong>Semantic heterogeneity</strong>: Different conceptualizations of the same domain</li>
+<li><strong>Structural differences</strong>: Variations in modeling approaches and granularity</li>
+<li><strong>Terminology variations</strong>: Different terms for the same concepts</li>
+<li><strong>Scope differences</strong>: Partial overlap between domains</li>
+</ol>
+</div>
+<div id="exm-ontology-integration" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.29 (Ontology integration and alignment examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Simple equivalence mappings</strong>:</p>
+<pre class="turtle"><code>ex1:Researcher owl:equivalentClass ex2:Scientist .
+ex1:authorOf owl:equivalentProperty ex2:wrote .
+ex1:University owl:equivalentClass ex2:HigherEducationInstitution .</code></pre></li>
+<li><p><strong>Complex alignment patterns</strong>:</p>
+<pre class="turtle"><code># Concept in ontology 1 is broader than in ontology 2
+ex1:Disease rdfs:subClassOf ex2:PathologicalProcess .
+
+# Property chain alignment
+ex1:hasDirector owl:propertyChainAxiom (ex2:hasDepartment ex2:headedBy) .
+
+# Class expression alignment
+ex1:Patient owl:equivalentClass [
+  owl:intersectionOf (
+    ex2:Person
+    [ a owl:Restriction ;
+      owl:onProperty ex2:undergoes ;
+      owl:someValuesFrom ex2:MedicalProcedure ]
+  )
+] .</code></pre></li>
+<li><p><strong>Integration through upper ontology</strong>: Both source ontologies are aligned to a common upper ontology (e.g., BFO or DOLCE), which provides a shared framework for integration:</p>
+<pre class="turtle"><code>ex1:Person rdfs:subClassOf bfo:Object .
+ex2:Human rdfs:subClassOf bfo:Object .
+# This shared superclass facilitates alignment</code></pre></li>
+<li><p><strong>Ontology import and module extraction</strong>:</p>
+<pre class="turtle"><code># Ontology 1 imports specific modules from Ontology 2
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+&lt;http://example.org/ontology1&gt;
+  a owl:Ontology ;
+  owl:imports &lt;http://example.org/ontology2-module&gt; .</code></pre></li>
+</ol>
+</div>
+<p>Approaches to ontology alignment and integration include:</p>
+<ol type="1">
+<li><strong>Manual alignment</strong>: Expert-driven identification of corresponding concepts</li>
+<li><strong>Semi-automated alignment</strong>: Tools suggest potential matches for expert validation</li>
+<li><strong>Automated alignment</strong>: Algorithms identify correspondences based on:
+<ul>
+<li>Lexical similarity (string matching, synonyms)</li>
+<li>Structural similarity (graph patterns)</li>
+<li>Semantic similarity (based on instances or external resources)</li>
+<li>Background knowledge (leveraging existing alignments or resources)</li>
+</ul></li>
+</ol>
+<div id="exm-alignment-tools" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.30 (Ontology alignment tools and techniques)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Matching systems</strong>:</p>
+<ul>
+<li><strong>AgreementMaker</strong>: Interactive system with multiple matching algorithms</li>
+<li><strong>LogMap</strong>: Scalable matching with logical consistency verification</li>
+<li><strong>ALIN</strong>: Interactive matching tool with user validation</li>
+</ul></li>
+<li><p><strong>Alignment representation</strong>:</p>
+<ul>
+<li><strong>Alignment API</strong>: Standard format for representing and manipulating alignments</li>
+<li><strong>EDOAL</strong>: Expressive language for complex alignments</li>
+</ul></li>
+<li><p><strong>Collaborative platforms</strong>:</p>
+<ul>
+<li><strong>VocBench</strong>: Collaborative environment supporting alignment</li>
+<li><strong>WebProtégé</strong>: Shared editing with importing and alignment capabilities</li>
+</ul></li>
+<li><p><strong>Alignment evaluation</strong>:</p>
+<ul>
+<li><strong>Precision</strong>: Proportion of correct alignments among those returned</li>
+<li><strong>Recall</strong>: Proportion of correct alignments found</li>
+<li><strong>F-measure</strong>: Harmonic mean of precision and recall</li>
+<li><strong>Coherence</strong>: Logical consistency of the aligned ontologies</li>
+</ul></li>
+</ol>
+</div>
+<p>Ontology integration and alignment are critical for building comprehensive knowledge graphs that leverage existing semantic resources. Successful integration enables knowledge sharing across domains and systems while maintaining semantic coherence.</p>
+</section>
+<section id="ontology-maintenance-and-evolution" class="level3" data-number="5.6.2">
+<h3 data-number="5.6.2" class="anchored" data-anchor-id="ontology-maintenance-and-evolution"><span class="header-section-number">5.6.2</span> Ontology maintenance and evolution</h3>
+<p>Ontologies are living artifacts that must evolve as domains change and knowledge expands:</p>
+<div id="def-ontology-evolution" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.34 (Ontology maintenance and evolution)</strong></span> <strong>Ontology maintenance</strong> involves keeping an ontology current, correct, and usable over time.</p>
+<p><strong>Ontology evolution</strong> refers to the process of adapting an ontology to changes in:</p>
+<ol type="1">
+<li>The domain being modeled</li>
+<li>Requirements or use cases</li>
+<li>Related ontologies or data sources</li>
+<li>Best practices or standards</li>
+</ol>
+<p>Evolution must be managed to preserve compatibility with existing data and applications while incorporating necessary changes.</p>
+</div>
+<div id="exm-ontology-evolution" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.31 (Ontology evolution examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Term addition</strong>:</p>
+<ul>
+<li>Adding new class “QuantumMachineLearning” as technology evolves</li>
+<li>Adding properties to represent newly discovered relationships</li>
+</ul></li>
+<li><p><strong>Refinement and specialization</strong>:</p>
+<ul>
+<li>Splitting general concept “Cancer” into more specific types</li>
+<li>Adding subclasses to represent finer distinctions</li>
+</ul></li>
+<li><p><strong>Restructuring</strong>:</p>
+<ul>
+<li>Reorganizing a taxonomy to better reflect current understanding</li>
+<li>Moving properties to more appropriate classes</li>
+</ul></li>
+<li><p><strong>Deprecation</strong>:</p>
+<ul>
+<li>Marking obsolete terms: <code>ex:LegacyTerm owl:deprecated true</code></li>
+<li>Providing replacement recommendations: <code>ex:LegacyTerm rdfs:seeAlso ex:NewTerm</code></li>
+</ul></li>
+<li><p><strong>Ontology refactoring</strong>:</p>
+<ul>
+<li>Modularizing a monolithic ontology</li>
+<li>Aligning with a new upper ontology</li>
+<li>Improving naming conventions</li>
+</ul></li>
+</ol>
+</div>
+<p>Effective ontology evolution requires carefully designed processes and infrastructure:</p>
+<div id="def-evolution-management" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.35 (Evolution management)</strong></span> <strong>Ontology evolution management</strong> encompasses:</p>
+<ol type="1">
+<li><p><strong>Version control</strong>:</p>
+<ul>
+<li>Systematic tracking of changes</li>
+<li>Semantic versioning schemes</li>
+<li>Historical preservation</li>
+</ul></li>
+<li><p><strong>Change documentation</strong>:</p>
+<ul>
+<li>Release notes and change logs</li>
+<li>Rationale for modifications</li>
+<li>Impact assessment</li>
+</ul></li>
+<li><p><strong>Compatibility mechanisms</strong>:</p>
+<ul>
+<li>Deprecation workflows</li>
+<li>Legacy support</li>
+<li>Migration paths</li>
+</ul></li>
+<li><p><strong>Governance processes</strong>:</p>
+<ul>
+<li>Change request protocols</li>
+<li>Review and approval workflows</li>
+<li>Stakeholder involvement</li>
+</ul></li>
+</ol>
+</div>
+<div id="exm-evolution-management" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.32 (Evolution management in practice)</strong></span> <strong>Version management for Gene Ontology (GO)</strong>:</p>
+<ol type="1">
+<li><p><strong>Systematic versioning</strong>:</p>
+<ul>
+<li>Daily releases with timestamp identifiers</li>
+<li>Monthly releases for wider distribution</li>
+<li>Persistent URI pattern including version information</li>
+</ul></li>
+<li><p><strong>Change tracking</strong>:</p>
+<ul>
+<li>Each term has metadata about creation and modification</li>
+<li>Full history preserved in GitHub repository</li>
+<li>Change log categorizes changes (additions, obsoletions, etc.)</li>
+</ul></li>
+<li><p><strong>Term lifecycle</strong>:</p>
+<ul>
+<li>New terms proposed through GitHub issues</li>
+<li>Terms can be marked obsolete but never deleted</li>
+<li>Obsolete terms include recommendations for replacements</li>
+</ul></li>
+<li><p><strong>Evolution governance</strong>:</p>
+<ul>
+<li>Editorial working groups for different sections</li>
+<li>Regular ontology developer calls</li>
+<li>Clear documentation of decision-making processes</li>
+<li>Community engagement for significant changes</li>
+</ul></li>
+</ol>
+</div>
+<p>Effective management of ontology evolution ensures that knowledge graphs can adapt to changing requirements and expanding knowledge while maintaining semantic stability and supporting existing applications. This balance between stability and evolution is essential for long-lived knowledge graph systems.</p>
+</section>
+<section id="ontology-governance-and-collaboration" class="level3" data-number="5.6.3">
+<h3 data-number="5.6.3" class="anchored" data-anchor-id="ontology-governance-and-collaboration"><span class="header-section-number">5.6.3</span> Ontology governance and collaboration</h3>
+<p>Large-scale ontology development typically involves multiple stakeholders and requires formal governance:</p>
+<div id="def-ontology-governance" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.36 (Ontology governance)</strong></span> <strong>Ontology governance</strong> encompasses the policies, processes, and organizational structures that guide the development, maintenance, and use of ontologies. Key aspects include:</p>
+<ol type="1">
+<li><strong>Decision-making authority</strong>: Who can approve changes or additions</li>
+<li><strong>Stakeholder representation</strong>: How different perspectives are incorporated</li>
+<li><strong>Quality control procedures</strong>: Standards for acceptance and validation</li>
+<li><strong>Conflict resolution mechanisms</strong>: Processes for resolving disagreements</li>
+<li><strong>Intellectual property policies</strong>: Licensing and attribution requirements</li>
+</ol>
+</div>
+<div id="exm-ontology-governance" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.33 (Governance models)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Centralized governance</strong> (OBO Foundry model):</p>
+<ul>
+<li>Central editorial board reviews all changes</li>
+<li>Strict adherence to shared principles and best practices</li>
+<li>Formal approval process for new terms</li>
+<li>Example: Gene Ontology Consortium governance with specialized curators and editors</li>
+</ul></li>
+<li><p><strong>Federated governance</strong> (W3C model):</p>
+<ul>
+<li>Distributed responsibility across working groups</li>
+<li>Formal recommendation track with public review</li>
+<li>Consensus-based decision making</li>
+<li>Example: Development of OWL specification through W3C working groups</li>
+</ul></li>
+<li><p><strong>Community governance</strong> (Wikipedia-like model):</p>
+<ul>
+<li>Open contribution with post-review</li>
+<li>Meritocratic authority based on participation</li>
+<li>Community voting for controversial decisions</li>
+<li>Example: Wikidata’s collaborative knowledge base development</li>
+</ul></li>
+<li><p><strong>Corporate governance</strong>:</p>
+<ul>
+<li>Internal authority structure aligned with organizational hierarchy</li>
+<li>Business needs driving prioritization</li>
+<li>Integration with enterprise data governance</li>
+<li>Example: Industry-specific ontologies maintained by standards bodies</li>
+</ul></li>
+</ol>
+</div>
+<p>Collaborative ontology development requires appropriate tools and processes:</p>
+<div id="def-collaborative-development" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.37 (Collaborative ontology development)</strong></span> <strong>Collaborative ontology development</strong> involves multiple individuals or organizations working together to create and maintain ontologies. Key enablers include:</p>
+<ol type="1">
+<li><strong>Collaborative platforms</strong>: Shared editing environments with access control</li>
+<li><strong>Communication channels</strong>: Forums, mailing lists, and synchronous discussions</li>
+<li><strong>Contribution workflows</strong>: Clear processes for suggesting and incorporating changes</li>
+<li><strong>Tracking systems</strong>: Issue management and feature requests</li>
+<li><strong>Documentation practices</strong>: Guidelines, examples, and tutorials</li>
+</ol>
+</div>
+<div id="exm-collaboration-practices" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.34 (Collaboration practices in action)</strong></span> <strong>Example: National Center for Biomedical Ontology (NCBO) collaboration approach</strong>:</p>
+<ol type="1">
+<li><p><strong>Infrastructure</strong>:</p>
+<ul>
+<li>BioPortal as a central repository for ontologies</li>
+<li>GitHub for version control and issue tracking</li>
+<li>Dedicated mailing lists for announcements and discussions</li>
+<li>Regular virtual meetings and annual in-person workshops</li>
+</ul></li>
+<li><p><strong>Contribution process</strong>:</p>
+<ul>
+<li>Clear contributor guidelines documented on website</li>
+<li>Issue templates for different types of changes</li>
+<li>Pull request workflow with required reviews</li>
+<li>Continuous integration tests for automated validation</li>
+</ul></li>
+<li><p><strong>Community engagement</strong>:</p>
+<ul>
+<li>Training workshops for new contributors</li>
+<li>Recognition of contributions in release notes</li>
+<li>Transparent roadmap and prioritization</li>
+<li>Regular community surveys for feedback</li>
+</ul></li>
+<li><p><strong>Conflict resolution</strong>:</p>
+<ul>
+<li>Structured discussion process for contentious issues</li>
+<li>Escalation path to editorial board for unresolved conflicts</li>
+<li>Documentation of decisions and rationale</li>
+<li>Periodic review of controversial decisions</li>
+</ul></li>
+</ol>
+</div>
+<p>Effective governance and collaboration processes are critical for developing ontologies that are widely adopted, technically sound, and sustainable over time. They help balance competing perspectives, maintain quality, and ensure that ontologies meet the needs of their intended users.</p>
+</section>
+</section>
+<section id="applications-of-ontologies-in-knowledge-graphs" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="applications-of-ontologies-in-knowledge-graphs"><span class="header-section-number">5.7</span> Applications of ontologies in knowledge graphs</h2>
+<p>This section explores how ontologies are applied in knowledge graph contexts to support various functionalities.</p>
+<section id="schema-validation-and-constraints" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="schema-validation-and-constraints"><span class="header-section-number">5.7.1</span> Schema validation and constraints</h3>
+<p>Ontologies provide a foundation for validating knowledge graph data and enforcing structural constraints:</p>
+<div id="def-schema-validation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.38 (Schema validation)</strong></span> <strong>Schema validation</strong> in knowledge graphs ensures that data conforms to the defined ontological structure. Validation can check:</p>
+<ol type="1">
+<li><strong>Type constraints</strong>: Entities belong to appropriate classes</li>
+<li><strong>Property constraints</strong>: Relationships have correct domains and ranges</li>
+<li><strong>Cardinality constraints</strong>: Required properties are present and multiplicity limits are respected</li>
+<li><strong>Value constraints</strong>: Property values meet specified conditions</li>
+<li><strong>Structural constraints</strong>: Graph patterns follow expected configurations</li>
+</ol>
+</div>
+<div id="exm-validation-languages" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.35 (Validation languages and examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>SHACL (Shapes Constraint Language)</strong>:</p>
+<pre class="turtle"><code>ex:PersonShape a sh:NodeShape ;
+  sh:targetClass ex:Person ;
+  sh:property [
+    sh:path ex:name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ex:age ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:maxInclusive 150 ;
+  ] ;
+  sh:property [
+    sh:path ex:email ;
+    sh:pattern "^[^@]+@[^@]+\\.[^@]+$" ;
+    sh:uniqueLang true ;
+  ] .</code></pre></li>
+<li><p><strong>ShEx (Shape Expressions)</strong>:</p>
+<pre><code>ex:PersonShape {
+  rdf:type [ ex:Person ] ;
+  ex:name xsd:string {1,1} ;
+  ex:age xsd:integer? AND &gt;= 0 AND &lt;= 150 ;
+  ex:email xsd:string? AND /^[^@]+@[^@]+\.[^@]+$/ ;
+  ex:friend @ex:PersonShape* ;
+}</code></pre></li>
+<li><p><strong>OWL constraints</strong> (using OWL axioms for validation):</p>
+<pre class="turtle"><code>ex:Person rdfs:subClassOf [
+  a owl:Restriction ;
+  owl:onProperty ex:name ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onDataRange xsd:string
+] .
+
+ex:hasParent a owl:ObjectProperty ;
+  rdfs:domain ex:Person ;
+  rdfs:range ex:Person .</code></pre></li>
+</ol>
+</div>
+<p>Schema validation serves several important functions in knowledge graph applications:</p>
+<ol type="1">
+<li><strong>Data quality assurance</strong>: Identifying and preventing errors during data ingestion</li>
+<li><strong>Consistency enforcement</strong>: Ensuring uniform representation across the graph</li>
+<li><strong>Application safety</strong>: Preventing runtime errors due to unexpected data structures</li>
+<li><strong>Documentation</strong>: Providing explicit specifications of expected data patterns</li>
+<li><strong>Interoperability</strong>: Facilitating data exchange between systems with shared expectations</li>
+</ol>
+<p>Different validation approaches offer different trade-offs between expressivity, performance, and integration with other semantic technologies.</p>
+</section>
+<section id="semantic-search-and-query-enhancement" class="level3" data-number="5.7.2">
+<h3 data-number="5.7.2" class="anchored" data-anchor-id="semantic-search-and-query-enhancement"><span class="header-section-number">5.7.2</span> Semantic search and query enhancement</h3>
+<p>Ontologies enhance search and query capabilities by leveraging semantic relationships:</p>
+<div id="def-semantic-search" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.39 (Semantic search)</strong></span> <strong>Semantic search</strong> uses knowledge about concepts and their relationships to improve information retrieval beyond keyword matching. Ontology-based semantic search can provide:</p>
+<ol type="1">
+<li><strong>Query expansion</strong>: Including synonyms, subtypes, or related concepts</li>
+<li><strong>Concept-based matching</strong>: Finding results based on meaning rather than exact terms</li>
+<li><strong>Faceted search</strong>: Organizing results along multiple semantic dimensions</li>
+<li><strong>Contextual disambiguation</strong>: Resolving ambiguous terms based on query context</li>
+<li><strong>Natural language understanding</strong>: Interpreting questions in terms of ontological concepts</li>
+</ol>
+</div>
+<div id="exm-semantic-search" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.36 (Semantic search examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Query expansion using taxonomic relationships</strong>:</p>
+<ul>
+<li>Original query: “treatment for diabetes”</li>
+<li>Expanded using subclasses: “treatment for type 1 diabetes OR type 2 diabetes OR gestational diabetes”</li>
+<li>Expanded using subproperties: “treatment OR therapy OR medication OR intervention for diabetes”</li>
+</ul></li>
+<li><p><strong>Ontology-based query interpretation</strong>:</p>
+<ul>
+<li><p>Natural language query: “Which universities are located in California?”</p></li>
+<li><p>Ontological mapping:</p>
+<ul>
+<li>“universities” → instances of class ex:University</li>
+<li>“located in” → property ex:locatedIn</li>
+<li>“California” → instance ex:California of class ex:State</li>
+</ul></li>
+<li><p>SPARQL translation:</p>
+<pre class="sparql"><code>SELECT ?university WHERE {
+  ?university a ex:University ;
+             ex:locatedIn ex:California .
+}</code></pre></li>
+</ul></li>
+<li><p><strong>Faceted navigation based on ontology</strong>:</p>
+<ul>
+<li>Product search with dynamically generated facets:
+<ul>
+<li>Categories based on class hierarchy (Electronics &gt; Computers &gt; Laptops)</li>
+<li>Features based on property values (Memory: 8GB, 16GB, 32GB)</li>
+<li>Compatibility based on relationships (Compatible with: Windows, macOS)</li>
+</ul></li>
+<li>Each facet derived from ontological structure</li>
+</ul></li>
+</ol>
+</div>
+<p>Ontologies can also enhance query processing through inference:</p>
+<div id="def-query-inference" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.40 (Query inference)</strong></span> <strong>Query inference</strong> uses logical reasoning based on ontological knowledge to derive answers that aren’t explicitly stated in the data. Types include:</p>
+<ol type="1">
+<li><strong>Subsumption reasoning</strong>: Inferring class membership through hierarchies</li>
+<li><strong>Property reasoning</strong>: Using property characteristics like transitivity or inverses</li>
+<li><strong>Rule-based inference</strong>: Applying custom inference rules</li>
+<li><strong>Description logic reasoning</strong>: Complex inference based on class expressions</li>
+</ol>
+</div>
+<div id="exm-query-inference" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.37 (Query inference examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Subsumption reasoning</strong>:</p>
+<pre class="sparql"><code># Query for all mammals
+SELECT ?animal WHERE {
+  ?animal a ex:Mammal .
+}</code></pre>
+<p>Would also return instances of ex:Dog, ex:Cat, and other subclasses of ex:Mammal through reasoning.</p></li>
+<li><p><strong>Transitive property reasoning</strong>:</p>
+<pre class="sparql"><code># Query for all parts of the cardiovascular system
+SELECT ?part WHERE {
+  ?part ex:partOf ex:CardiovascularSystem .
+}</code></pre>
+<p>Would find direct parts and their parts recursively if ex:partOf is defined as transitive.</p></li>
+<li><p><strong>Rule-based inference</strong>: With a rule: “If a drug inhibits a protein that is overexpressed in a disease, then the drug potentially treats that disease”</p>
+<pre class="sparql"><code># Query for potential treatments for cancer
+SELECT ?drug WHERE {
+  ?drug ex:potentiallyTreats ex:Cancer .
+}</code></pre>
+<p>Would find drugs based on their protein interactions, not just explicit treatment relationships.</p></li>
+</ol>
+</div>
+<p>Semantic search and query enhancement make knowledge graphs more accessible and powerful by allowing users to find information based on meaning rather than exact syntactic matches. This is particularly valuable in complex domains where terminology may vary and relationships between concepts are important.</p>
+</section>
+<section id="reasoning-and-inference" class="level3" data-number="5.7.3">
+<h3 data-number="5.7.3" class="anchored" data-anchor-id="reasoning-and-inference"><span class="header-section-number">5.7.3</span> Reasoning and inference</h3>
+<p>Ontologies enable automated reasoning and inference to derive implicit knowledge from explicit facts:</p>
+<div id="def-reasoning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.41 (Reasoning and inference)</strong></span> <strong>Reasoning</strong> is the process of deriving logical conclusions from premises through systematic rules.</p>
+<p><strong>Inference</strong> refers to the specific conclusions drawn through reasoning.</p>
+<p>In knowledge graphs, reasoning leverages ontological knowledge to:</p>
+<ol type="1">
+<li><strong>Complete missing information</strong>: Deriving implicit facts</li>
+<li><strong>Check consistency</strong>: Identifying logical contradictions</li>
+<li><strong>Classify instances</strong>: Determining class membership</li>
+<li><strong>Simplify queries</strong>: Precomputing inferred relationships</li>
+</ol>
+</div>
+<p>Different reasoning mechanisms apply to different ontology languages:</p>
+<div id="def-reasoning-types" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.42 (Types of reasoning)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><strong>RDFS reasoning</strong>: Basic inference based on subclass/subproperty hierarchies and domain/range constraints</li>
+<li><strong>OWL reasoning</strong>: More complex inference using description logic semantics</li>
+<li><strong>Rule-based reasoning</strong>: Custom inference rules often expressed in languages like SWRL or SPARQL CONSTRUCT</li>
+<li><strong>Statistical reasoning</strong>: Probabilistic inference using confidence scores or statistical methods</li>
+</ol>
+</div>
+<div id="exm-reasoning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.38 (Reasoning examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>RDFS inference</strong>:</p>
+<pre class="turtle"><code># Explicit knowledge:
+ex:Researcher rdfs:subClassOf ex:Person .
+ex:Alice a ex:Researcher .
+ex:authorOf rdfs:domain ex:Person .
+ex:Alice ex:authorOf ex:Paper1 .
+
+# Inferred:
+ex:Alice a ex:Person . # Subclass inheritance</code></pre></li>
+<li><p><strong>OWL property reasoning</strong>:</p>
+<pre class="turtle"><code># Explicit knowledge:
+ex:hasParent a owl:TransitiveProperty .
+ex:hasAncestor a owl:TransitiveProperty .
+ex:hasParent rdfs:subPropertyOf ex:hasAncestor .
+ex:John ex:hasParent ex:Mary .
+ex:Mary ex:hasParent ex:Elizabeth .
+
+# Inferred:
+ex:John ex:hasParent ex:Elizabeth . # Transitivity
+ex:John ex:hasAncestor ex:Mary . # Subproperty
+ex:John ex:hasAncestor ex:Elizabeth . # Combined inference</code></pre></li>
+<li><p><strong>OWL class reasoning</strong>:</p>
+<pre class="turtle"><code># Explicit knowledge:
+ex:Parent owl:equivalentClass [
+  owl:intersectionOf (
+    ex:Person
+    [ owl:onProperty ex:hasChild ; owl:someValuesFrom ex:Person ]
+  )
+] .
+ex:Sarah a ex:Person .
+ex:James a ex:Person .
+ex:Sarah ex:hasChild ex:James .
+
+# Inferred:
+ex:Sarah a ex:Parent . # Class expression satisfaction</code></pre></li>
+<li><p><strong>Rule-based reasoning</strong> (SWRL):</p>
+<pre><code>ex:Person(?p) ^ ex:hasParent(?p, ?parent) ^ ex:hasSibling(?parent, ?s) ^ ex:Female(?s)
+-&gt; ex:hasAunt(?p, ?s)</code></pre>
+<p>This rule infers “aunt” relationships based on parent and sibling relationships.</p></li>
+</ol>
+</div>
+<p>Practical considerations for reasoning in knowledge graphs include:</p>
+<ol type="1">
+<li><strong>Performance trade-offs</strong>: More expressive reasoning is computationally expensive</li>
+<li><strong>Materialization vs.&nbsp;query-time reasoning</strong>: Pre-computing inferences vs.&nbsp;on-demand</li>
+<li><strong>Reasoning boundaries</strong>: Limiting scope to maintain tractability</li>
+<li><strong>Closed-world vs.&nbsp;open-world semantics</strong>: Different assumptions about unknown information</li>
+</ol>
+<div id="exm-reasoning-approaches" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.39 (Reasoning approaches in practice)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Materialization approach</strong> (forward chaining):</p>
+<ul>
+<li>Compute all possible inferences in advance</li>
+<li>Store inferred triples alongside explicit ones</li>
+<li>Fast query execution but higher storage requirements</li>
+<li>Must recompute when data changes</li>
+<li>Example: Adding 10 million inferred triples to a knowledge graph during a nightly batch process</li>
+</ul></li>
+<li><p><strong>Query rewriting approach</strong> (backward chaining):</p>
+<ul>
+<li>Rewrite queries to account for inference rules</li>
+<li>Compute inferences only as needed for query answers</li>
+<li>Lower storage requirements but more complex query processing</li>
+<li>Example: Expanding a query for “mammals” to include all subclasses automatically</li>
+</ul></li>
+<li><p><strong>Hybrid approach</strong>:</p>
+<ul>
+<li>Materialize some inference types (e.g., class hierarchy)</li>
+<li>Use query-time reasoning for others (e.g., complex property chains)</li>
+<li>Balance between performance and freshness</li>
+<li>Example: Materializing taxonomic relationships while computing transitive closures at query time</li>
+</ul></li>
+</ol>
+</div>
+<p>Reasoning capabilities are a key advantage of ontology-based knowledge graphs, allowing them to represent knowledge more compactly and answer queries more intelligently than simple graph databases. However, reasoning must be applied judiciously to balance expressivity with computational practicality.</p>
+</section>
+<section id="ontology-based-data-integration" class="level3" data-number="5.7.4">
+<h3 data-number="5.7.4" class="anchored" data-anchor-id="ontology-based-data-integration"><span class="header-section-number">5.7.4</span> Ontology-based data integration</h3>
+<p>Ontologies provide semantic frameworks for integrating heterogeneous data sources:</p>
+<div id="def-data-integration" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.43 (Ontology-based data integration)</strong></span> <strong>Ontology-based data integration</strong> uses ontologies to combine data from multiple sources into a unified knowledge graph. Key approaches include:</p>
+<ol type="1">
+<li><strong>Global-as-view (GAV)</strong>: The global schema is defined as a view over source schemas</li>
+<li><strong>Local-as-view (LAV)</strong>: Source schemas are defined as views over the global schema</li>
+<li><strong>Hybrid approaches</strong>: Combining aspects of both GAV and LAV</li>
+</ol>
+<p>Ontologies serve as:</p>
+<ul>
+<li>Global schemas providing a unified view</li>
+<li>Semantic mappings between source and target schemas</li>
+<li>Query mediation frameworks</li>
+</ul>
+</div>
+<div id="exm-data-integration" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.40 (Data integration examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Ontology as global schema</strong>:</p>
+<ul>
+<li>Global ontology: Unified biomedical ontology with classes for genes, proteins, diseases</li>
+<li>Data sources: GenBank (genes), UniProt (proteins), OMIM (genetic disorders)</li>
+<li>Mappings: Define how each source maps to the global ontology</li>
+<li>Query: User queries the global schema, system translates to source-specific queries</li>
+</ul></li>
+<li><p><strong>Semantic mappings</strong> (using R2RML - RDB to RDF Mapping Language):</p>
+<pre class="turtle"><code>@prefix rr: &lt;http://www.w3.org/ns/r2rml#&gt; .
+@prefix ex: &lt;http://example.org/&gt; .
+
+# Map a database table to ontology classes
+&lt;#ResearcherMapping&gt;
+  rr:logicalTable [ rr:tableName "researchers" ] ;
+  rr:subjectMap [
+    rr:template "http://example.org/researcher/{id}" ;
+    rr:class ex:Researcher ;
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate ex:name ;
+    rr:objectMap [ rr:column "name" ] ;
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate ex:affiliation ;
+    rr:objectMap [
+      rr:template "http://example.org/institution/{institution_id}" ;
+    ] ;
+  ] .</code></pre></li>
+<li><p><strong>OBDA (Ontology-Based Data Access)</strong> configuration:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">mapping</span><span class="ot"> id=</span><span class="st">"researchers"</span>&gt;</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">source</span>&gt;</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    SELECT id, name, email, dept_id FROM researchers</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">source</span>&gt;</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">target</span>&gt;</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    :researcher/{id} a :Researcher ;</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>      :name {name} ;</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>      :email {email} ;</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>      :department :department/{dept_id} .</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">target</span>&gt;</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">mapping</span>&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</div>
+<p>Ontology-based data integration offers several advantages:</p>
+<ol type="1">
+<li><strong>Semantic mediation</strong>: Resolving semantic heterogeneity between sources</li>
+<li><strong>Schema evolution resilience</strong>: Adapting to changes in source schemas</li>
+<li><strong>Query federation</strong>: Distributing queries across multiple sources</li>
+<li><strong>Data quality enhancement</strong>: Identifying inconsistencies through ontological constraints</li>
+<li><strong>Incremental integration</strong>: Adding new sources without disrupting existing ones</li>
+</ol>
+<div id="exm-integration-challenges" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.41 (Integration challenges and solutions)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Schema heterogeneity</strong>:</p>
+<ul>
+<li><strong>Challenge</strong>: Sources use different models for the same concepts</li>
+<li><strong>Example</strong>: One source models “author” as an attribute, another as an entity</li>
+<li><strong>Solution</strong>: Ontological mappings that express transformations between models</li>
+</ul></li>
+<li><p><strong>Semantic conflicts</strong>:</p>
+<ul>
+<li><strong>Challenge</strong>: Same terms with different meanings across sources</li>
+<li><strong>Example</strong>: “Citation” as bibliographic reference vs.&nbsp;legal citation</li>
+<li><strong>Solution</strong>: Explicit semantic definitions in the ontology with source-specific mappings</li>
+</ul></li>
+<li><p><strong>Identity resolution</strong>:</p>
+<ul>
+<li><strong>Challenge</strong>: Identifying when entities in different sources refer to the same real-world object</li>
+<li><strong>Example</strong>: Matching author records across publication databases</li>
+<li><strong>Solution</strong>: Ontology-driven entity resolution using equivalent identifiers and properties</li>
+</ul></li>
+<li><p><strong>Data quality variations</strong>:</p>
+<ul>
+<li><strong>Challenge</strong>: Sources have different levels of completeness, accuracy, or granularity</li>
+<li><strong>Example</strong>: Some sources provide detailed publication metadata, others minimal</li>
+<li><strong>Solution</strong>: Provenance tracking and quality assessment frameworks</li>
+</ul></li>
+</ol>
+</div>
+<p>Ontology-based data integration is fundamental to building comprehensive knowledge graphs that aggregate information from multiple sources while maintaining semantic coherence. By providing a shared conceptual model, ontologies enable intelligent integration that preserves meaning across heterogeneous data landscapes.</p>
+</section>
+<section id="knowledge-graph-completion-and-enrichment" class="level3" data-number="5.7.5">
+<h3 data-number="5.7.5" class="anchored" data-anchor-id="knowledge-graph-completion-and-enrichment"><span class="header-section-number">5.7.5</span> Knowledge graph completion and enrichment</h3>
+<p>Ontologies support the automatic completion and enrichment of knowledge graphs:</p>
+<div id="def-kg-completion" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.44 (Knowledge graph completion)</strong></span> <strong>Knowledge graph completion</strong> involves automatically adding missing facts to a knowledge graph through:</p>
+<ol type="1">
+<li><strong>Logical inference</strong>: Using ontological axioms to derive implied facts</li>
+<li><strong>Statistical prediction</strong>: Estimating likely missing relationships based on patterns</li>
+<li><strong>External knowledge integration</strong>: Incorporating facts from outside sources</li>
+<li><strong>Link prediction</strong>: Identifying probable connections between existing entities</li>
+</ol>
+</div>
+<div id="exm-kg-completion" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.42 (Knowledge graph completion examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Logical completion</strong> using OWL axioms:</p>
+<pre class="turtle"><code># Ontology definitions
+ex:FatherOf rdfs:subPropertyOf ex:ParentOf .
+ex:ParentOf owl:inverseOf ex:ChildOf .
+ex:GrandparentOf owl:propertyChainAxiom (ex:ParentOf ex:ParentOf) .
+
+# Explicit facts
+ex:John ex:FatherOf ex:Mary .
+ex:Mary ex:ParentOf ex:Lisa .
+
+# Inferred (completed) facts
+ex:John ex:ParentOf ex:Mary . # Subproperty inference
+ex:Mary ex:ChildOf ex:John . # Inverse property inference
+ex:John ex:GrandparentOf ex:Lisa . # Property chain inference</code></pre></li>
+<li><p><strong>Statistical completion</strong> using embedding models:</p>
+<ul>
+<li>Train knowledge graph embeddings (e.g., TransE, ComplEx)</li>
+<li>Score potential triples based on embedding similarity</li>
+<li>Add high-confidence predictions to the graph</li>
+<li>Example: Predicting drug-disease associations based on similar molecular structures and known treatment patterns</li>
+</ul></li>
+<li><p><strong>Rule-based completion</strong>:</p>
+<pre><code># Rule: People affiliated with the same institution likely collaborate
+ex:Person(?p1) ^ ex:Person(?p2) ^ ex:affiliated(?p1, ?i) ^ ex:affiliated(?p2, ?i) ^
+ex:hasPublication(?p1, ?pub) ^ ex:hasPublication(?p2, ?pub) ^
+differentFrom(?p1, ?p2) -&gt; ex:collaborates(?p1, ?p2)</code></pre></li>
+</ol>
+</div>
+<p>Ontologies also guide knowledge graph enrichment, which adds new dimensions to existing knowledge:</p>
+<div id="def-kg-enrichment" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.45 (Knowledge graph enrichment)</strong></span> <strong>Knowledge graph enrichment</strong> extends a knowledge graph with:</p>
+<ol type="1">
+<li><strong>Additional properties</strong>: New attributes for existing entities</li>
+<li><strong>Contextual information</strong>: Temporal, spatial, or provenance data</li>
+<li><strong>Semantic annotations</strong>: Links to concepts in external ontologies</li>
+<li><strong>Metadata and qualifiers</strong>: Confidence scores, relevance indicators, or usage notes</li>
+</ol>
+</div>
+<div id="exm-kg-enrichment" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.43 (Knowledge graph enrichment examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Ontology-driven entity typing</strong>:</p>
+<ul>
+<li>Analyze entity descriptions and relationships</li>
+<li>Map to most specific class in domain ontology</li>
+<li>Example: Classifying “acetaminophen” as ex:NonSteroidalAntiInflammatoryDrug based on its properties and relationships</li>
+</ul></li>
+<li><p><strong>Property enrichment</strong> through external data:</p>
+<ul>
+<li>Identify missing important properties based on ontology</li>
+<li>Query external sources for values</li>
+<li>Example: Adding geographic coordinates to location entities using a geocoding</li>
+</ul></li>
+<li><p><strong>Semantic annotation</strong> with domain concepts:</p>
+<ul>
+<li>Analyze textual descriptions associated with entities</li>
+<li>Extract mentions of ontology concepts</li>
+<li>Link entities to relevant concepts</li>
+<li>Example: Annotating a clinical document with SNOMED CT concepts for medical conditions mentioned in the text</li>
+</ul></li>
+<li><p><strong>Contextual enrichment</strong>:</p>
+<ul>
+<li><p>Temporal: Adding time validity to facts</p></li>
+<li><p>Spatial: Enhancing location information with geographic context</p></li>
+<li><p>Provenance: Recording sources and extraction methods</p></li>
+<li><p>Example:</p>
+<pre class="turtle"><code>ex:Statement1 {
+  ex:Berlin ex:capitalOf ex:Germany .
+}
+
+ex:Statement1 ex:validFrom "1990-10-03"^^xsd:date ;
+             ex:source ex:OfficialRecords ;
+             ex:confidence "1.0"^^xsd:decimal .</code></pre></li>
+</ul></li>
+</ol>
+</div>
+<p>Knowledge graph completion and enrichment leverage ontological knowledge to make graphs more comprehensive, accurate, and useful. By combining logical, statistical, and external knowledge, these processes transform sparse data into rich, interconnected knowledge resources.</p>
+</section>
+<section id="explainable-ai-and-knowledge-graphs" class="level3" data-number="5.7.6">
+<h3 data-number="5.7.6" class="anchored" data-anchor-id="explainable-ai-and-knowledge-graphs"><span class="header-section-number">5.7.6</span> Explainable AI and knowledge graphs</h3>
+<p>Ontology-based knowledge graphs support explainable AI by providing structured, interpretable representations:</p>
+<div id="def-explainable-ai" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.46 (Explainable AI with knowledge graphs)</strong></span> <strong>Explainable AI</strong> (XAI) aims to make artificial intelligence systems’ decisions understandable to humans. Ontology-based knowledge graphs contribute to XAI by:</p>
+<ol type="1">
+<li><strong>Providing symbolic representations</strong> alongside numerical/statistical models</li>
+<li><strong>Offering traceable reasoning paths</strong> that humans can follow</li>
+<li><strong>Linking predictions to authoritative knowledge sources</strong></li>
+<li><strong>Supporting counterfactual reasoning</strong> about alternative scenarios</li>
+<li><strong>Enabling semantic query capabilities</strong> for exploring model behavior</li>
+</ol>
+</div>
+<div id="exm-explainable-ai" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.44 (Explainability examples)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Medical diagnosis explanation</strong>:</p>
+<ul>
+<li>AI system predicts “Rheumatoid Arthritis” based on symptoms</li>
+<li>Knowledge graph provides explanation path:
+<ul>
+<li>Symptoms (joint pain, morning stiffness, symmetrical joints) are associated with inflammatory arthritis</li>
+<li>Patient’s lab results (positive RF, elevated CRP) are characteristic of rheumatoid arthritis</li>
+<li>Each step references relevant medical knowledge from ontology</li>
+<li>Explanation includes disease definition from standard medical ontology</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Recommendation explanation</strong>:</p>
+<ul>
+<li><p>Movie recommendation system suggests “The Matrix”</p></li>
+<li><p>Knowledge graph explains:</p>
+<pre><code>You watched "Inception" (sci-fi thriller with mind-bending plot)
+You rated "Blade Runner" highly (sci-fi with philosophical themes)
+"The Matrix" shares genre (sci-fi), themes (reality perception, AI),
+and director style (visual effects) with these films</code></pre></li>
+<li><p>Explanation references ontological concepts (genres, themes, stylistic elements)</p></li>
+</ul></li>
+<li><p><strong>Financial decision explanation</strong>:</p>
+<ul>
+<li>Loan application system denies a mortgage application</li>
+<li>Knowledge graph-backed explanation:
+<ul>
+<li>Debt-to-income ratio (concept from financial ontology) exceeds threshold</li>
+<li>Credit utilization (defined relationship between credit used and available) is high</li>
+<li>Explanation includes regulatory references and suggestion for improvement paths</li>
+<li>Counterfactual analysis: “If your monthly debt was reduced by $300, approval probability would increase to 75%”</li>
+</ul></li>
+</ul></li>
+</ol>
+</div>
+<p>Ontologies enhance explainability in several ways:</p>
+<div id="def-ontology-explainability" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.47 (Ontological contributions to explainability)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><strong>Conceptual grounding</strong>: Linking model features to well-defined domain concepts</li>
+<li><strong>Relationship contextualization</strong>: Showing how entities and features relate to each other</li>
+<li><strong>Background knowledge</strong>: Providing domain context beyond the training data</li>
+<li><strong>Common-sense reasoning</strong>: Incorporating general world knowledge</li>
+<li><strong>Natural language generation</strong>: Supporting verbalization of explanations using ontological terms</li>
+</ol>
+</div>
+<div id="exm-ontology-explainability" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.45 (Ontology for explainability example)</strong></span> <strong>Customer churn prediction explanation</strong>:</p>
+<p>Without ontology:</p>
+<pre><code>Feature importance:
+- monthly_fee: 0.32
+- contract_months: 0.28
+- service_calls_6m: 0.22
+- age: 0.08
+- location: 0.06</code></pre>
+<p>With ontology-enhanced explanation:</p>
+<pre><code>This customer has a HIGH churn risk (87%) because:
+- They pay a PREMIUM rate ($85/month) but have BASIC service level
+  (defined in service ontology as misaligned value)
+- Their 12-month contract is nearing expiration (78% of customers
+  reconsider at contract end according to historical patterns)
+- They have made 5 support calls in 6 months, categorized as:
+  * 3 network reliability issues (indicating service quality problems
+    for their location, which affects 13% of customers in their region)
+  * 2 billing inquiries (suggesting possible billing confusion)
+
+Recommended retention actions:
+- Offer service upgrade matching their premium payment
+- Present 24-month renewal with improved terms
+- Address network reliability in their service area</code></pre>
+<p>The ontology provides context about:</p>
+<ul>
+<li>How features relate to business concepts</li>
+<li>What constitutes normal vs.&nbsp;abnormal values</li>
+<li>How features connect to actionable business processes</li>
+<li>Domain-specific interpretations of numerical values</li>
+</ul>
+</div>
+<p>By integrating ontologies with machine learning systems through knowledge graphs, organizations can develop AI that not only makes accurate predictions but also explains its reasoning in domain-relevant terms that stakeholders can understand and trust.</p>
+</section>
+</section>
+<section id="summary" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="summary"><span class="header-section-number">5.8</span> Summary</h2>
+<p>This chapter has explored the rich landscape of knowledge representation and ontologies as they apply to knowledge graphs. We’ve covered the theoretical foundations, practical implementations, and diverse applications of formal knowledge representation in graph-based knowledge systems.</p>
+<p>Key topics included:</p>
+<ol type="1">
+<li><p><strong>Foundations of knowledge representation</strong>, including different approaches, primitives, and relationship types that form the conceptual building blocks of knowledge graphs.</p></li>
+<li><p><strong>Logic-based knowledge representation</strong>, exploring how propositional logic, first-order logic, description logics, and rule-based formalisms provide different balances of expressivity and tractability.</p></li>
+<li><p><strong>Ontologies for knowledge graphs</strong>, examining what ontologies are, their types, design principles, and methodologies for development.</p></li>
+<li><p><strong>Semantic Web technologies</strong>, covering the standards that implement knowledge representation for the web: RDF, RDFS, OWL, and SPARQL.</p></li>
+<li><p><strong>Practical ontology development</strong>, addressing tools, languages, evaluation, integration, maintenance, and governance aspects of ontology engineering.</p></li>
+<li><p><strong>Applications of ontologies in knowledge graphs</strong>, demonstrating how ontologies enable schema validation, semantic search, reasoning, data integration, knowledge graph completion, and explainable AI.</p></li>
+</ol>
+<p>The intersection of knowledge representation theory and ontology engineering practice provides a powerful foundation for knowledge graphs. By formalizing domain knowledge and relationships, ontologies allow knowledge graphs to capture not just data but meaningful, contextualized information that supports sophisticated applications across diverse domains.</p>
+<p>As knowledge graphs continue to evolve, the principles and techniques of knowledge representation and ontology engineering remain essential for building systems that can effectively capture, organize, and leverage the complex knowledge of our world.</p>
+</section>
+<section id="exercises" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="exercises"><span class="header-section-number">5.9</span> Exercises</h2>
+<div id="exr-knowledge-representation" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.1 (Knowledge representation comparison)</strong></span> Compare and contrast three different knowledge representation approaches (e.g., logic-based, frame-based, graph-based) by:</p>
+<ol type="1">
+<li>Representing the same domain excerpt (e.g., academic publications and authorship) in each approach</li>
+<li>Analyzing the expressivity of each representation</li>
+<li>Discussing the computational implications of each approach</li>
+<li>Identifying scenarios where each approach would be most appropriate</li>
+</ol>
+<p>Provide concrete examples for each representation and explain your reasoning.</p>
+</div>
+<div id="exr-description-logic" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.2 (Description logic modeling)</strong></span> Design a description logic ontology for a university domain that includes:</p>
+<ol type="1">
+<li>At least 10 classes (e.g., Person, Student, Faculty, Course, Department)</li>
+<li>At least 5 object properties (e.g., teaches, enrolledIn, memberOf)</li>
+<li>At least 3 data properties (e.g., name, studentID, credits)</li>
+<li>Class definitions using various constructors (intersection, union, negation, restrictions)</li>
+<li>Property characteristics (e.g., functional, transitive, inverse)</li>
+</ol>
+<p>Use formal DL notation and explain the semantics of your models. Then, provide examples of inference that would be enabled by your ontology.</p>
+</div>
+<div id="exr-ontology-design" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.3 (Ontology design and evaluation)</strong></span> Select a specific domain of interest and:</p>
+<ol type="1">
+<li>Design a small ontology (15-20 classes, 10-15 properties) following best practices</li>
+<li>Document your design decisions and how you applied ontology design principles</li>
+<li>Specify at least 5 competency questions your ontology should answer</li>
+<li>Evaluate your ontology against these competency questions</li>
+<li>Identify potential limitations of your design and how it might evolve</li>
+</ol>
+<p>Your solution should include a diagram of the ontology structure and sample instances.</p>
+</div>
+<div id="exr-semantic-web" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.4 (Semantic Web implementation)</strong></span> Implement a small knowledge graph using Semantic Web technologies:</p>
+<ol type="1">
+<li>Create an RDFS or OWL ontology for a domain of your choice</li>
+<li>Populate the ontology with instance data (at least 20 instances with relationships)</li>
+<li>Write SPARQL queries that demonstrate:
+<ul>
+<li>Simple pattern matching</li>
+<li>Filtering and ordering</li>
+<li>Optional patterns</li>
+<li>Aggregation</li>
+</ul></li>
+<li>Demonstrate at least one inference capability enabled by your ontology</li>
+</ol>
+<p>Provide the ontology code, instance data, queries, and results, with explanations.</p>
+</div>
+<div id="exr-ontology-application" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.5 (Ontology application scenario)</strong></span> Develop a detailed scenario for applying ontologies to a real-world knowledge graph application:</p>
+<ol type="1">
+<li>Describe the domain and specific use case</li>
+<li>Identify key ontological requirements and challenges</li>
+<li>Design a solution architecture that leverages ontologies</li>
+<li>Explain how reasoning or inference would enhance the application</li>
+<li>Discuss integration with other systems or data sources</li>
+<li>Address practical considerations like performance and maintenance</li>
+</ol>
+<p>Your scenario should demonstrate a deep understanding of how ontological knowledge can add value in practical applications.</p>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">5.10</span> Further reading</h2>
+<ol type="1">
+<li><p>Allemang, D., &amp; Hendler, J. (2011). <em>Semantic Web for the Working Ontologist: Effective Modeling in RDFS and OWL</em> (2nd ed.). Morgan Kaufmann.</p></li>
+<li><p>Baader, F., Calvanese, D., McGuinness, D. L., Nardi, D., &amp; Patel-Schneider, P. F. (Eds.). (2010). <em>The Description Logic Handbook: Theory, Implementation and Applications</em> (2nd ed.). Cambridge University Press.</p></li>
+<li><p>Gómez-Pérez, A., Fernández-López, M., &amp; Corcho, O. (2004). <em>Ontological Engineering: With Examples from the Areas of Knowledge Management, e-Commerce and the Semantic Web</em>. Springer.</p></li>
+<li><p>Hitzler, P., Krötzsch, M., &amp; Rudolph, S. (2010). <em>Foundations of Semantic Web Technologies</em>. Chapman and Hall/CRC.</p></li>
+<li><p>Guarino, N., Oberle, D., &amp; Staab, S. (2009). What is an Ontology? In <em>Handbook on Ontologies</em> (pp.&nbsp;1-17). Springer.</p></li>
+<li><p>Heath, T., &amp; Bizer, C. (2011). <em>Linked Data: Evolving the Web into a Global Data Space</em>. Morgan &amp; Claypool.</p></li>
+<li><p>Staab, S., &amp; Studer, R. (Eds.). (2009). <em>Handbook on Ontologies</em> (2nd ed.). Springer.</p></li>
+<li><p>Davis, R., Shrobe, H., &amp; Szolovits, P. (1993). What is a Knowledge Representation? <em>AI Magazine</em>, 14(1), 17-33.</p></li>
+<li><p>Smith, B., et al.&nbsp;(2007). The OBO Foundry: Coordinated Evolution of Ontologies to Support Biomedical Data Integration. <em>Nature Biotechnology</em>, 25(11), 1251-1255.</p></li>
+<li><p>Musen, M. A. (2015). The Protégé Project: A Look Back and a Look Forward. <em>AI Matters</em>, 1(4), 4-12.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/foundation/graph-fundamentals.html" class="pagination-link" aria-label="Graph Theory Fundamentals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../contents/construction/kg-construction.html" class="pagination-link" aria-label="Knowledge Graph Construction">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

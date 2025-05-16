@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Mathematical fundamentals – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/foundation/graph-fundamentals.html" rel="next">
+<link href="../../contents/foundation/introduction.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/math-fundamentals.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#set-theory-and-relations" id="toc-set-theory-and-relations" class="nav-link active" data-scroll-target="#set-theory-and-relations"><span class="header-section-number">3.1</span> Set theory and relations</a>
+  <ul class="collapse">
+  <li><a href="#basic-set-concepts" id="toc-basic-set-concepts" class="nav-link" data-scroll-target="#basic-set-concepts"><span class="header-section-number">3.1.1</span> Basic set concepts</a></li>
+  <li><a href="#relations-and-their-properties" id="toc-relations-and-their-properties" class="nav-link" data-scroll-target="#relations-and-their-properties"><span class="header-section-number">3.1.2</span> Relations and their properties</a></li>
+  <li><a href="#special-types-of-relations" id="toc-special-types-of-relations" class="nav-link" data-scroll-target="#special-types-of-relations"><span class="header-section-number">3.1.3</span> Special types of relations</a></li>
+  <li><a href="#functions-as-special-relations" id="toc-functions-as-special-relations" class="nav-link" data-scroll-target="#functions-as-special-relations"><span class="header-section-number">3.1.4</span> Functions as special relations</a></li>
+  </ul></li>
+  <li><a href="#linear-algebra-for-knowledge-graphs" id="toc-linear-algebra-for-knowledge-graphs" class="nav-link" data-scroll-target="#linear-algebra-for-knowledge-graphs"><span class="header-section-number">3.2</span> Linear algebra for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#vectors-and-vector-spaces" id="toc-vectors-and-vector-spaces" class="nav-link" data-scroll-target="#vectors-and-vector-spaces"><span class="header-section-number">3.2.1</span> Vectors and vector spaces</a></li>
+  <li><a href="#matrices-and-graph-representation" id="toc-matrices-and-graph-representation" class="nav-link" data-scroll-target="#matrices-and-graph-representation"><span class="header-section-number">3.2.2</span> Matrices and graph representation</a></li>
+  <li><a href="#tensor-representations" id="toc-tensor-representations" class="nav-link" data-scroll-target="#tensor-representations"><span class="header-section-number">3.2.3</span> Tensor representations</a></li>
+  <li><a href="#basic-matrix-operations" id="toc-basic-matrix-operations" class="nav-link" data-scroll-target="#basic-matrix-operations"><span class="header-section-number">3.2.4</span> Basic matrix operations</a></li>
+  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors"><span class="header-section-number">3.2.5</span> Eigenvalues and eigenvectors</a></li>
+  <li><a href="#matrix-decompositions" id="toc-matrix-decompositions" class="nav-link" data-scroll-target="#matrix-decompositions"><span class="header-section-number">3.2.6</span> Matrix decompositions</a></li>
+  </ul></li>
+  <li><a href="#probability-and-statistics-for-knowledge-graphs" id="toc-probability-and-statistics-for-knowledge-graphs" class="nav-link" data-scroll-target="#probability-and-statistics-for-knowledge-graphs"><span class="header-section-number">3.3</span> Probability and statistics for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#basic-probability-concepts" id="toc-basic-probability-concepts" class="nav-link" data-scroll-target="#basic-probability-concepts"><span class="header-section-number">3.3.1</span> Basic probability concepts</a></li>
+  <li><a href="#random-variables-and-distributions" id="toc-random-variables-and-distributions" class="nav-link" data-scroll-target="#random-variables-and-distributions"><span class="header-section-number">3.3.2</span> Random variables and distributions</a></li>
+  <li><a href="#conditional-probability-and-bayes-theorem" id="toc-conditional-probability-and-bayes-theorem" class="nav-link" data-scroll-target="#conditional-probability-and-bayes-theorem"><span class="header-section-number">3.3.3</span> Conditional probability and Bayes’ theorem</a></li>
+  <li><a href="#statistical-inference" id="toc-statistical-inference" class="nav-link" data-scroll-target="#statistical-inference"><span class="header-section-number">3.3.4</span> Statistical inference</a></li>
+  <li><a href="#information-theory" id="toc-information-theory" class="nav-link" data-scroll-target="#information-theory"><span class="header-section-number">3.3.5</span> Information theory</a></li>
+  </ul></li>
+  <li><a href="#computational-complexity-theory" id="toc-computational-complexity-theory" class="nav-link" data-scroll-target="#computational-complexity-theory"><span class="header-section-number">3.4</span> Computational complexity theory</a>
+  <ul class="collapse">
+  <li><a href="#basic-complexity-classes" id="toc-basic-complexity-classes" class="nav-link" data-scroll-target="#basic-complexity-classes"><span class="header-section-number">3.4.1</span> Basic complexity classes</a></li>
+  <li><a href="#computational-complexity-of-graph-algorithms" id="toc-computational-complexity-of-graph-algorithms" class="nav-link" data-scroll-target="#computational-complexity-of-graph-algorithms"><span class="header-section-number">3.4.2</span> Computational complexity of graph algorithms</a></li>
+  <li><a href="#approximation-algorithms" id="toc-approximation-algorithms" class="nav-link" data-scroll-target="#approximation-algorithms"><span class="header-section-number">3.4.3</span> Approximation algorithms</a></li>
+  <li><a href="#parameterized-complexity" id="toc-parameterized-complexity" class="nav-link" data-scroll-target="#parameterized-complexity"><span class="header-section-number">3.4.4</span> Parameterized complexity</a></li>
+  </ul></li>
+  <li><a href="#logic-and-formal-systems" id="toc-logic-and-formal-systems" class="nav-link" data-scroll-target="#logic-and-formal-systems"><span class="header-section-number">3.5</span> Logic and formal systems</a>
+  <ul class="collapse">
+  <li><a href="#propositional-logic" id="toc-propositional-logic" class="nav-link" data-scroll-target="#propositional-logic"><span class="header-section-number">3.5.1</span> Propositional logic</a></li>
+  <li><a href="#first-order-logic" id="toc-first-order-logic" class="nav-link" data-scroll-target="#first-order-logic"><span class="header-section-number">3.5.2</span> First-order logic</a></li>
+  <li><a href="#description-logics" id="toc-description-logics" class="nav-link" data-scroll-target="#description-logics"><span class="header-section-number">3.5.3</span> Description logics</a></li>
+  <li><a href="#reasoning-systems" id="toc-reasoning-systems" class="nav-link" data-scroll-target="#reasoning-systems"><span class="header-section-number">3.5.4</span> Reasoning systems</a></li>
+  <li><a href="#non-classical-logics" id="toc-non-classical-logics" class="nav-link" data-scroll-target="#non-classical-logics"><span class="header-section-number">3.5.5</span> Non-classical logics</a></li>
+  </ul></li>
+  <li><a href="#mathematical-economics-for-knowledge-graphs" id="toc-mathematical-economics-for-knowledge-graphs" class="nav-link" data-scroll-target="#mathematical-economics-for-knowledge-graphs"><span class="header-section-number">3.6</span> Mathematical economics for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#utility-theory" id="toc-utility-theory" class="nav-link" data-scroll-target="#utility-theory"><span class="header-section-number">3.6.1</span> Utility theory</a></li>
+  <li><a href="#game-theory" id="toc-game-theory" class="nav-link" data-scroll-target="#game-theory"><span class="header-section-number">3.6.2</span> Game theory</a></li>
+  <li><a href="#network-economics" id="toc-network-economics" class="nav-link" data-scroll-target="#network-economics"><span class="header-section-number">3.6.3</span> Network economics</a></li>
+  </ul></li>
+  <li><a href="#information-geometry" id="toc-information-geometry" class="nav-link" data-scroll-target="#information-geometry"><span class="header-section-number">3.7</span> Information geometry</a></li>
+  <li><a href="#category-theory" id="toc-category-theory" class="nav-link" data-scroll-target="#category-theory"><span class="header-section-number">3.8</span> Category theory</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">3.9</span> Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">3.10</span> Exercises</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">3.11</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/math-fundamentals.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter establishes the mathematical tools and frameworks necessary for a rigorous understanding of knowledge graphs. While knowledge graphs are intuitive at a conceptual level, their formal analysis requires a solid mathematical foundation. We’ll cover the essential mathematical concepts that underpin knowledge graph representation, analysis, and algorithms, providing sufficient background for students from diverse disciplines.</p>
+<section id="set-theory-and-relations" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="set-theory-and-relations"><span class="header-section-number">3.1</span> Set theory and relations</h2>
+<p>Set theory provides the most fundamental mathematical language for describing knowledge graphs, as graphs fundamentally represent relationships between sets of entities.</p>
+<section id="basic-set-concepts" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="basic-set-concepts"><span class="header-section-number">3.1.1</span> Basic set concepts</h3>
+<div id="def-set" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.1 (Set)</strong></span> A <strong>set</strong> is a collection of distinct objects, called elements or members. If an object <span class="math inline">x</span> is an element of set <span class="math inline">A</span>, we write <span class="math inline">x \in A</span>. If <span class="math inline">x</span> is not an element of <span class="math inline">A</span>, we write <span class="math inline">x \notin A</span>.</p>
+</div>
+<p>Sets can be defined by explicitly listing their elements (e.g., <span class="math inline">A = \{1, 2, 3\}</span>) or by specifying a property that determines membership (e.g., <span class="math inline">B = \{x \in \mathbb{Z} \mid x &gt; 0\}</span>, the set of positive integers).</p>
+<p>Several set operations are particularly relevant for knowledge graph operations:</p>
+<div id="def-set-operations" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.2 (Basic set operations)</strong></span> Let <span class="math inline">A</span> and <span class="math inline">B</span> be sets. The basic set operations are:</p>
+<ol type="1">
+<li><strong>Union</strong>: <span class="math inline">A \cup B = \{x \mid x \in A \text{ or } x \in B\}</span></li>
+<li><strong>Intersection</strong>: <span class="math inline">A \cap B = \{x \mid x \in A \text{ and } x \in B\}</span></li>
+<li><strong>Difference</strong>: <span class="math inline">A \setminus B = \{x \mid x \in A \text{ and } x \notin B\}</span></li>
+<li><strong>Cartesian product</strong>: <span class="math inline">A \times B = \{(a, b) \mid a \in A \text{ and } b \in B\}</span></li>
+</ol>
+</div>
+<p>The Cartesian product is particularly important for knowledge graphs, as it forms the basis for defining relations between sets.</p>
+</section>
+<section id="relations-and-their-properties" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="relations-and-their-properties"><span class="header-section-number">3.1.2</span> Relations and their properties</h3>
+<p>Relations formalize the concept of relationships between elements of sets, which is the essence of knowledge graph structure.</p>
+<div id="def-relation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.3 (Relation)</strong></span> A <strong>binary relation</strong> <span class="math inline">R</span> from set <span class="math inline">A</span> to set <span class="math inline">B</span> is a subset of the Cartesian product <span class="math inline">A \times B</span>. If <span class="math inline">(a, b) \in R</span>, we say that <span class="math inline">a</span> is related to <span class="math inline">b</span> by <span class="math inline">R</span>, often written as <span class="math inline">a R b</span>.</p>
+<p>A binary relation on a single set <span class="math inline">A</span> is a subset of <span class="math inline">A \times A</span>.</p>
+</div>
+<p>For knowledge graphs, we’re particularly interested in binary relations, though higher-order relations (involving more than two elements) are also relevant for certain knowledge representation tasks.</p>
+<p>Binary relations can possess various properties that influence their behavior in knowledge graphs:</p>
+<div id="def-relation-properties" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.4 (Properties of binary relations)</strong></span> Let <span class="math inline">R</span> be a binary relation on a set <span class="math inline">A</span>. <span class="math inline">R</span> may have the following properties:</p>
+<ol type="1">
+<li><strong>Reflexive</strong>: <span class="math inline">\forall a \in A, (a, a) \in R</span></li>
+<li><strong>Irreflexive</strong>: <span class="math inline">\forall a \in A, (a, a) \notin R</span></li>
+<li><strong>Symmetric</strong>: <span class="math inline">\forall a, b \in A, (a, b) \in R \implies (b, a) \in R</span></li>
+<li><strong>Antisymmetric</strong>: <span class="math inline">\forall a, b \in A, ((a, b) \in R \text{ and } (b, a) \in R) \implies a = b</span></li>
+<li><strong>Transitive</strong>: <span class="math inline">\forall a, b, c \in A, ((a, b) \in R \text{ and } (b, c) \in R) \implies (a, c) \in R</span></li>
+</ol>
+</div>
+<p>These properties have important implications for reasoning with knowledge graphs:</p>
+<ul>
+<li><p><strong>Reflexivity</strong> and <strong>irreflexivity</strong> define whether entities can relate to themselves, which is relevant for certain relationship types (e.g., “is identical to” is reflexive, while “is parent of” is irreflexive).</p></li>
+<li><p><strong>Symmetry</strong> determines whether relationships are bidirectional. For example, “is sibling of” is symmetric, while “is parent of” is not.</p></li>
+<li><p><strong>Antisymmetry</strong> is characteristic of ordering relations and hierarchies, such as “is subset of” or “is ancestor of.”</p></li>
+<li><p><strong>Transitivity</strong> enables inference chains in knowledge graphs. For instance, if “is subset of” is transitive, and <span class="math inline">A</span> is a subset of <span class="math inline">B</span> and <span class="math inline">B</span> is a subset of <span class="math inline">C</span>, then <span class="math inline">A</span> is a subset of <span class="math inline">C</span>.</p></li>
+</ul>
+<div id="exm-relation-properties" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.1 (Relations in a bibliographic knowledge graph)</strong></span> Consider a bibliographic knowledge graph with papers and authors:</p>
+<p>Relations:</p>
+<ul>
+<li>“cites”: Paper → Paper (irreflexive, antisymmetric, transitive)</li>
+<li>“authored by”: Paper → Author (neither reflexive nor irreflexive, not symmetric, not antisymmetric, not transitive)</li>
+<li>“collaborates with”: Author → Author (irreflexive, symmetric, not transitive)</li>
+</ul>
+<p>The different properties of these relations affect how we can reason about the knowledge graph. For example, the transitivity of “cites” means we can analyze citation chains, while the symmetry of “collaborates with” means we only need to store this relation in one direction.</p>
+</div>
+</section>
+<section id="special-types-of-relations" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="special-types-of-relations"><span class="header-section-number">3.1.3</span> Special types of relations</h3>
+<p>Certain types of relations have special significance in knowledge representation:</p>
+<div id="def-equivalence-relation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.5 (Equivalence relation)</strong></span> A binary relation <span class="math inline">R</span> on a set <span class="math inline">A</span> is an <strong>equivalence relation</strong> if it is reflexive, symmetric, and transitive.</p>
+<p>An equivalence relation partitions a set into disjoint subsets called <strong>equivalence classes</strong>, where elements in the same class are related to each other, and elements in different classes are not related.</p>
+</div>
+<p>Equivalence relations are important in knowledge graphs for entity resolution, where we need to determine whether different identifiers refer to the same real-world entity.</p>
+<div id="def-partial-order" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.6 (Partial order)</strong></span> A binary relation <span class="math inline">R</span> on a set <span class="math inline">A</span> is a <strong>partial order</strong> if it is reflexive, antisymmetric, and transitive.</p>
+<p>A partial order allows some elements to be comparable and others to be incomparable.</p>
+</div>
+<p>Partial orders represent hierarchical relationships in knowledge graphs, such as taxonomies, part-whole relationships, and specialization hierarchies.</p>
+<div id="exm-partial-order" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.2 (Partial order in a taxonomy)</strong></span> In a biological taxonomy knowledge graph:</p>
+<ul>
+<li>Entities: {Animal, Mammal, Bird, Dog, Cat, Robin}</li>
+<li>“is-a” relation: {(Mammal, Animal), (Bird, Animal), (Dog, Mammal), (Cat, Mammal), (Robin, Bird)}</li>
+</ul>
+<p>The “is-a” relation forms a partial order when we add the reflexive pairs (e.g., (Animal, Animal), etc.). This partial order captures the hierarchical organization of biological classification.</p>
+</div>
+</section>
+<section id="functions-as-special-relations" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="functions-as-special-relations"><span class="header-section-number">3.1.4</span> Functions as special relations</h3>
+<p>Functions represent a special type of relation where each input is associated with exactly one output.</p>
+<div id="def-function" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.7 (Function)</strong></span> A <strong>function</strong> <span class="math inline">f: A \rightarrow B</span> is a relation from set <span class="math inline">A</span> to set <span class="math inline">B</span> such that for every element <span class="math inline">a \in A</span>, there exists exactly one element <span class="math inline">b \in B</span> where <span class="math inline">(a, b) \in f</span>.</p>
+<p>The set <span class="math inline">A</span> is called the <strong>domain</strong> of the function, and the set <span class="math inline">B</span> is called the <strong>codomain</strong>.</p>
+</div>
+<p>In knowledge graphs, functions appear as special types of relationships and as operations that transform or query the graph.</p>
+<div id="exm-functions-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.3 (Functions in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Attribute functions</strong>: Map entities to attribute values, e.g., “birthDate(AlbertEinstein) = 1879-03-14”</p></li>
+<li><p><strong>Embedding functions</strong>: Map entities or relations to vector representations, e.g., “embed(AlbertEinstein) = [0.2, 0.5, -0.3, …]”</p></li>
+<li><p><strong>Query functions</strong>: Map graph patterns to result sets, e.g., “findAllScientistsBornIn(Germany) = {AlbertEinstein, MaxPlanck, …}”</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="linear-algebra-for-knowledge-graphs" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="linear-algebra-for-knowledge-graphs"><span class="header-section-number">3.2</span> Linear algebra for knowledge graphs</h2>
+<p>Linear algebra provides powerful tools for representing and analyzing knowledge graphs, particularly for computational implementations and learning algorithms.</p>
+<section id="vectors-and-vector-spaces" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="vectors-and-vector-spaces"><span class="header-section-number">3.2.1</span> Vectors and vector spaces</h3>
+<p>Vectors serve as the foundation for many knowledge graph algorithms and representation techniques.</p>
+<div id="def-vector" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.8 (Vector and vector space)</strong></span> A <strong>vector</strong> is an element of a vector space. A <strong>vector space</strong> over a field <span class="math inline">F</span> (typically <span class="math inline">\mathbb{R}</span> or <span class="math inline">\mathbb{C}</span>) is a set <span class="math inline">V</span> equipped with operations of addition and scalar multiplication that satisfy certain axioms.</p>
+<p>In the context of knowledge graphs, we most commonly work with real vector spaces <span class="math inline">\mathbb{R}^n</span>, where vectors are represented as <span class="math inline">n</span>-tuples of real numbers.</p>
+</div>
+<p>Vectors in knowledge graphs often represent:</p>
+<ol type="1">
+<li>Entities or relationships in embedding models</li>
+<li>Feature vectors for nodes or edges</li>
+<li>Activation patterns in neural network approaches to graph processing</li>
+</ol>
+<div id="exm-entity-embedding" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.4 (Entity embedding vectors)</strong></span> In a knowledge graph embedding model, entities might be represented as 100-dimensional vectors:</p>
+<ul>
+<li>“AlbertEinstein” → [0.24, -0.82, 0.12, …, 0.55]</li>
+<li>“TheoryOfRelativity” → [0.18, -0.23, 0.73, …, -0.11]</li>
+<li>“Princeton” → [-0.45, 0.91, 0.22, …, 0.03]</li>
+</ul>
+<p>These vector representations capture semantic similarities and relationships in the vector space geometry.</p>
+</div>
+</section>
+<section id="matrices-and-graph-representation" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="matrices-and-graph-representation"><span class="header-section-number">3.2.2</span> Matrices and graph representation</h3>
+<p>Matrices provide a natural way to represent the structure of knowledge graphs for computational processing.</p>
+<div id="def-matrix" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.9 (Matrix)</strong></span> A <strong>matrix</strong> is a rectangular array of numbers, symbols, or expressions arranged in rows and columns. A matrix with <span class="math inline">m</span> rows and <span class="math inline">n</span> columns is an <span class="math inline">m \times n</span> matrix.</p>
+<p>For a matrix <span class="math inline">A</span>, the element in the <span class="math inline">i</span>-th row and <span class="math inline">j</span>-th column is denoted <span class="math inline">A_{ij}</span>.</p>
+</div>
+<p>Several matrix representations are particularly relevant for knowledge graphs:</p>
+<div id="def-adjacency-matrix" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.10 (Adjacency matrix)</strong></span> The <strong>adjacency matrix</strong> of a graph with <span class="math inline">n</span> vertices is an <span class="math inline">n \times n</span> matrix <span class="math inline">A</span> where:</p>
+<p><span class="math display">
+A_{ij} = \begin{cases}
+1 &amp; \text{if there is an edge from vertex } i \text{ to vertex } j \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+<p>For weighted graphs, the entry <span class="math inline">A_{ij}</span> can represent the weight of the edge.</p>
+</div>
+<p>In knowledge graphs with multiple types of relationships, we can use a collection of adjacency matrices, one for each relationship type.</p>
+<div id="def-incidence-matrix" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.11 (Incidence matrix)</strong></span> The <strong>incidence matrix</strong> of a directed graph with <span class="math inline">n</span> vertices and <span class="math inline">m</span> edges is an <span class="math inline">n \times m</span> matrix <span class="math inline">B</span> where:</p>
+<p><span class="math display">
+B_{ij} = \begin{cases}
+-1 &amp; \text{if vertex } i \text{ is the source of edge } j \\
+1 &amp; \text{if vertex } i \text{ is the target of edge } j \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+</div>
+<p>Incidence matrices are useful for certain analytical techniques and for representing higher-order relationships.</p>
+<div id="exm-adjacency-matrix" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.5 (Adjacency matrix for a simple knowledge graph)</strong></span> Consider a small knowledge graph with entities {A, B, C, D} and a single relationship type:</p>
+<p>Edges: {(A, B), (B, C), (C, A), (B, D)}</p>
+<p>The adjacency matrix would be:</p>
+<p><span class="math display">
+A = \begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 1 \\
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+</span></p>
+<p>This matrix captures the graph structure in a form that enables algebraic operations.</p>
+</div>
+</section>
+<section id="tensor-representations" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="tensor-representations"><span class="header-section-number">3.2.3</span> Tensor representations</h3>
+<p>For knowledge graphs with multiple types of relationships, tensor representations provide a natural extension of matrix representations.</p>
+<div id="def-tensor" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.12 (Tensor)</strong></span> A <strong>tensor</strong> is a multidimensional array that generalizes scalars, vectors, and matrices to higher dimensions. An <span class="math inline">n</span>-th order tensor has <span class="math inline">n</span> indices.</p>
+</div>
+<p>In knowledge graph representation, a common approach is to use a 3rd-order tensor to represent the entire graph:</p>
+<div id="def-kg-tensor" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.13 (Knowledge graph tensor)</strong></span> A knowledge graph with <span class="math inline">n</span> entities and <span class="math inline">m</span> relationship types can be represented as a 3rd-order tensor <span class="math inline">\mathcal{T} \in \{0,1\}^{n \times n \times m}</span> where:</p>
+<p><span class="math display">
+\mathcal{T}_{ijk} = \begin{cases}
+1 &amp; \text{if entity } i \text{ is related to entity } j \text{ via relationship type } k \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+</div>
+<p>This tensor representation can be viewed as a stack of adjacency matrices, one for each relationship type.</p>
+<div id="exm-tensor-representation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.6 (Tensor representation of a knowledge graph)</strong></span> Consider a knowledge graph with entities {Person, Book, University} and relationship types {authorOf, affiliatedWith}.</p>
+<p>The tensor representation would have slices:</p>
+<p>authorOf:</p>
+<p><span class="math display">
+\begin{pmatrix}
+0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0
+\end{pmatrix}
+</span></p>
+<p>affiliatedWith:</p>
+<p><span class="math display">
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0
+\end{pmatrix}
+</span></p>
+<p>Where the rows and columns correspond to [Person, Book, University].</p>
+</div>
+</section>
+<section id="basic-matrix-operations" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="basic-matrix-operations"><span class="header-section-number">3.2.4</span> Basic matrix operations</h3>
+<p>Several matrix operations are particularly relevant for knowledge graph algorithms:</p>
+<div id="def-matrix-operations" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.14 (Basic matrix operations)</strong></span> For matrices <span class="math inline">A</span> and <span class="math inline">B</span> of compatible dimensions:</p>
+<ol type="1">
+<li><p><strong>Matrix addition</strong>: <span class="math inline">(A + B)_{ij} = A_{ij} + B_{ij}</span></p></li>
+<li><p><strong>Matrix multiplication</strong>: <span class="math inline">(AB)_{ij} = \sum_k A_{ik} B_{kj}</span></p></li>
+<li><p><strong>Transpose</strong>: <span class="math inline">A^T_{ij} = A_{ji}</span></p></li>
+<li><p><strong>Trace</strong>: <span class="math inline">\text{tr}(A) = \sum_i A_{ii}</span> (the sum of diagonal elements)</p></li>
+</ol>
+</div>
+<p>Matrix multiplication is especially important for knowledge graphs, as it underlies many graph algorithms:</p>
+<div id="exm-matrix-multiplication-paths" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.7 (Matrix multiplication and path counting)</strong></span> If <span class="math inline">A</span> is the adjacency matrix of a graph, then <span class="math inline">A^2_{ij}</span> gives the number of paths of length 2 from vertex <span class="math inline">i</span> to vertex <span class="math inline">j</span>.</p>
+<p>More generally, <span class="math inline">A^k_{ij}</span> gives the number of paths of length <span class="math inline">k</span> from <span class="math inline">i</span> to <span class="math inline">j</span>.</p>
+<p>This property is useful for analyzing connectivity and reachability in knowledge graphs.</p>
+</div>
+</section>
+<section id="eigenvalues-and-eigenvectors" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="eigenvalues-and-eigenvectors"><span class="header-section-number">3.2.5</span> Eigenvalues and eigenvectors</h3>
+<p>Eigendecomposition provides powerful tools for analyzing the structure of knowledge graphs.</p>
+<div id="def-eigendecomposition" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.15 (Eigenvalues and eigenvectors)</strong></span> For a square matrix <span class="math inline">A</span>, a non-zero vector <span class="math inline">v</span> is an <strong>eigenvector</strong> of <span class="math inline">A</span> if there exists a scalar <span class="math inline">\lambda</span> (the <strong>eigenvalue</strong>) such that:</p>
+<p><span class="math display">Av = \lambda v</span></p>
+<p>The <strong>eigendecomposition</strong> of a diagonalizable matrix <span class="math inline">A</span> is:</p>
+<p><span class="math display">A = P\Lambda P^{-1}</span></p>
+<p>where <span class="math inline">\Lambda</span> is a diagonal matrix of eigenvalues and <span class="math inline">P</span> is a matrix whose columns are the corresponding eigenvectors.</p>
+</div>
+<p>Eigenvalues and eigenvectors have numerous applications in knowledge graph analysis:</p>
+<ol type="1">
+<li><strong>Spectral clustering</strong>: Using eigenvectors of the graph Laplacian to identify communities</li>
+<li><strong>Centrality measures</strong>: Eigenvector centrality defines importance based on the principal eigenvector</li>
+<li><strong>Dimensionality reduction</strong>: Projecting onto the eigenvectors corresponding to the largest eigenvalues</li>
+<li><strong>Dynamic analysis</strong>: Understanding how information propagates through a graph</li>
+</ol>
+<div id="exm-eigenvector-centrality" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.8 (Eigenvector centrality)</strong></span> In a knowledge graph representing a citation network, the eigenvector centrality of a paper (corresponding to the principal eigenvector of the adjacency matrix) indicates its importance based on the importance of papers that cite it.</p>
+<p>This recursive definition of importance captures the intuition that citations from influential papers should count more than citations from obscure papers.</p>
+</div>
+</section>
+<section id="matrix-decompositions" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="matrix-decompositions"><span class="header-section-number">3.2.6</span> Matrix decompositions</h3>
+<p>Matrix decompositions are fundamental to many knowledge graph algorithms, particularly for embedding and learning tasks.</p>
+<div id="def-svd" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.16 (Singular Value Decomposition (SVD))</strong></span> The <strong>Singular Value Decomposition</strong> of a matrix <span class="math inline">A \in \mathbb{R}^{m \times n}</span> is:</p>
+<p><span class="math display">A = U\Sigma V^T</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">U \in \mathbb{R}^{m \times m}</span> is an orthogonal matrix whose columns are the left singular vectors</li>
+<li><span class="math inline">\Sigma \in \mathbb{R}^{m \times n}</span> is a diagonal matrix with non-negative singular values</li>
+<li><span class="math inline">V \in \mathbb{R}^{n \times n}</span> is an orthogonal matrix whose columns are the right singular vectors</li>
+</ul>
+</div>
+<p>SVD and related decompositions like non-negative matrix factorization (NMF) serve as the basis for many knowledge graph embedding techniques:</p>
+<div id="exm-svd-application" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.9 (SVD for knowledge graph embedding)</strong></span> Consider a knowledge graph represented as an adjacency matrix <span class="math inline">A</span>. By computing a truncated SVD:</p>
+<p><span class="math display">A \approx U_k \Sigma_k V_k^T</span></p>
+<p>where <span class="math inline">k</span> is much smaller than the dimensions of <span class="math inline">A</span>, we obtain low-dimensional embeddings:</p>
+<ul>
+<li>The rows of <span class="math inline">U_k \Sigma_k^{1/2}</span> provide embeddings for source entities</li>
+<li>The rows of <span class="math inline">V_k \Sigma_k^{1/2}</span> provide embeddings for target entities</li>
+</ul>
+<p>These embeddings capture the structural patterns in the knowledge graph in a compact form.</p>
+</div>
+</section>
+</section>
+<section id="probability-and-statistics-for-knowledge-graphs" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="probability-and-statistics-for-knowledge-graphs"><span class="header-section-number">3.3</span> Probability and statistics for knowledge graphs</h2>
+<p>Probability theory and statistics provide the tools for handling uncertainty, making predictions, and analyzing patterns in knowledge graphs.</p>
+<section id="basic-probability-concepts" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="basic-probability-concepts"><span class="header-section-number">3.3.1</span> Basic probability concepts</h3>
+<p>Probability theory gives us the language to reason about uncertainty in knowledge graphs.</p>
+<div id="def-probability-space" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.17 (Probability space)</strong></span> A <strong>probability space</strong> is a triple <span class="math inline">(\Omega, \mathcal{F}, P)</span> where:</p>
+<ul>
+<li><span class="math inline">\Omega</span> is the sample space (set of all possible outcomes)</li>
+<li><span class="math inline">\mathcal{F}</span> is a sigma-algebra on <span class="math inline">\Omega</span> (collection of events)</li>
+<li><span class="math inline">P: \mathcal{F} \rightarrow [0, 1]</span> is a probability measure satisfying:
+<ol type="1">
+<li><span class="math inline">P(\Omega) = 1</span></li>
+<li>For any countable sequence of disjoint events <span class="math inline">E_1, E_2, \ldots</span>, we have <span class="math inline">P(\cup_i E_i) = \sum_i P(E_i)</span></li>
+</ol></li>
+</ul>
+</div>
+<p>In the context of knowledge graphs, probability theory helps us reason about the likelihood of relationships, the uncertainty in facts, and make predictions about missing information.</p>
+<div id="exm-probabilistic-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.10 (Probabilistic knowledge graph)</strong></span> In a probabilistic knowledge graph, relationships might have associated probabilities:</p>
+<ul>
+<li>(AlbertEinstein, developedTheory, TheoryOfRelativity, 0.99)</li>
+<li>(AlbertEinstein, bornIn, Germany, 0.95)</li>
+<li>(AlbertEinstein, workedAt, InstituteForAdvancedStudy, 0.90)</li>
+</ul>
+<p>These probabilities could represent confidence scores, based on the reliability of the source or the uncertainty in the extraction process.</p>
+</div>
+</section>
+<section id="random-variables-and-distributions" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="random-variables-and-distributions"><span class="header-section-number">3.3.2</span> Random variables and distributions</h3>
+<p>Random variables provide a way to model uncertain quantities in knowledge graphs.</p>
+<div id="def-random-variable" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.18 (Random variable)</strong></span> A <strong>random variable</strong> is a function <span class="math inline">X: \Omega \rightarrow E</span> from a probability space <span class="math inline">(\Omega, \mathcal{F}, P)</span> to a measurable space <span class="math inline">(E, \mathcal{E})</span>.</p>
+<p>The <strong>probability distribution</strong> of <span class="math inline">X</span> is the measure <span class="math inline">P_X</span> on <span class="math inline">(E, \mathcal{E})</span> defined by <span class="math inline">P_X(A) = P(X^{-1}(A))</span> for <span class="math inline">A \in \mathcal{E}</span>.</p>
+</div>
+<p>Several probability distributions are particularly relevant for knowledge graph models:</p>
+<div id="def-common-distributions" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.19 (Common probability distributions)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Bernoulli distribution</strong>: Models binary outcomes (success/failure) with probability of success <span class="math inline">p</span></p></li>
+<li><p><strong>Multinomial distribution</strong>: Generalizes the Bernoulli distribution to multiple outcomes</p></li>
+<li><p><strong>Normal (Gaussian) distribution</strong>: Continuous distribution with probability density function: <span class="math display">f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}</span></p></li>
+<li><p><strong>Uniform distribution</strong>: Assigns equal probability to all outcomes in a finite or continuous space</p></li>
+</ol>
+</div>
+<div id="exm-distribution-applications" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.11 (Probability distributions in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Bernoulli distribution</strong>: Modeling the existence of a specific relation between two entities</p></li>
+<li><p><strong>Multinomial distribution</strong>: Modeling the type of relation that exists between two entities</p></li>
+<li><p><strong>Normal distribution</strong>: Modeling embedding vectors in continuous vector spaces</p></li>
+<li><p><strong>Uniform distribution</strong>: Prior distribution for entities when no additional information is available</p></li>
+</ol>
+</div>
+</section>
+<section id="conditional-probability-and-bayes-theorem" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="conditional-probability-and-bayes-theorem"><span class="header-section-number">3.3.3</span> Conditional probability and Bayes’ theorem</h3>
+<p>Conditional probability is crucial for reasoning under uncertainty in knowledge graphs.</p>
+<div id="def-conditional-probability" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.20 (Conditional probability)</strong></span> The <strong>conditional probability</strong> of event <span class="math inline">A</span> given event <span class="math inline">B</span> is defined as:</p>
+<p><span class="math display">P(A|B) = \frac{P(A \cap B)}{P(B)}</span></p>
+<p>for <span class="math inline">P(B) &gt; 0</span>.</p>
+</div>
+<p>Bayes’ theorem provides a way to update beliefs based on new evidence, which is fundamental for probabilistic reasoning in knowledge graphs.</p>
+<div id="def-bayes-theorem" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.21 (Bayes’ theorem)</strong></span> <strong>Bayes’ theorem</strong> states that for events <span class="math inline">A</span> and <span class="math inline">B</span> with <span class="math inline">P(B) &gt; 0</span>:</p>
+<p><span class="math display">P(A|B) = \frac{P(B|A)P(A)}{P(B)}</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">P(A)</span> is the prior probability of <span class="math inline">A</span></li>
+<li><span class="math inline">P(A|B)</span> is the posterior probability of <span class="math inline">A</span> given <span class="math inline">B</span></li>
+<li><span class="math inline">P(B|A)</span> is the likelihood of <span class="math inline">B</span> given <span class="math inline">A</span></li>
+<li><span class="math inline">P(B)</span> is the marginal probability of <span class="math inline">B</span></li>
+</ul>
+</div>
+<div id="exm-bayes-reasoning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.12 (Bayesian reasoning in knowledge graphs)</strong></span> Consider the task of determining whether an entity is a Scientist based on known relationships:</p>
+<ul>
+<li>Prior: <span class="math inline">P(\text{isScientist}(e)) = 0.01</span> (base rate of scientists in the population)</li>
+<li>Likelihood: <span class="math inline">P(\text{publishedPaper}(e) | \text{isScientist}(e)) = 0.8</span> (80% of scientists published papers)</li>
+<li>Likelihood: <span class="math inline">P(\text{publishedPaper}(e) | \neg\text{isScientist}(e)) = 0.05</span> (5% of non-scientists published papers)</li>
+</ul>
+<p>If we observe that entity <span class="math inline">e</span> published a paper, we can update our belief:</p>
+<p><span class="math display">P(\text{isScientist}(e) | \text{publishedPaper}(e)) = \frac{0.8 \times 0.01}{0.8 \times 0.01 + 0.05 \times 0.99} \approx 0.14</span></p>
+<p>This indicates that despite the strong likelihood ratio, the rarity of scientists means that publishing a paper alone doesn’t make it highly probable that someone is a scientist.</p>
+</div>
+</section>
+<section id="statistical-inference" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="statistical-inference"><span class="header-section-number">3.3.4</span> Statistical inference</h3>
+<p>Statistical inference provides methods for drawing conclusions from data, which is essential for learning and reasoning with knowledge graphs.</p>
+<div id="def-statistical-inference" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.22 (Statistical inference)</strong></span> <strong>Statistical inference</strong> is the process of using data to infer properties of an underlying distribution or process.</p>
+<p>Two main approaches to statistical inference are:</p>
+<ol type="1">
+<li><strong>Frequentist inference</strong>: Based on the frequency or proportion of data</li>
+<li><strong>Bayesian inference</strong>: Based on updating prior beliefs with observed data</li>
+</ol>
+</div>
+<p>In knowledge graphs, statistical inference is used for tasks such as:</p>
+<ol type="1">
+<li><strong>Link prediction</strong>: Inferring missing relationships between entities</li>
+<li><strong>Entity resolution</strong>: Determining whether different identifiers refer to the same entity</li>
+<li><strong>Relation extraction</strong>: Identifying relationships from unstructured text</li>
+<li><strong>Uncertainty quantification</strong>: Assessing confidence in derived facts</li>
+</ol>
+<div id="exm-link-prediction" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.13 (Statistical inference for link prediction)</strong></span> In link prediction, we might model the probability of a relationship between entities <span class="math inline">e_i</span> and <span class="math inline">e_j</span> of type <span class="math inline">r_k</span> as:</p>
+<p><span class="math display">P(r_k(e_i, e_j) = 1 | \mathcal{G}) = \sigma(f(e_i, r_k, e_j))</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\mathcal{G}</span> is the existing knowledge graph</li>
+<li><span class="math inline">f</span> is a scoring function based on features of the entities and relation</li>
+<li><span class="math inline">\sigma</span> is the logistic function to convert scores to probabilities</li>
+</ul>
+<p>By fitting this model to observed links, we can make predictions about unobserved links.</p>
+</div>
+</section>
+<section id="information-theory" class="level3" data-number="3.3.5">
+<h3 data-number="3.3.5" class="anchored" data-anchor-id="information-theory"><span class="header-section-number">3.3.5</span> Information theory</h3>
+<p>Information theory provides tools for quantifying information content and uncertainty, which are valuable for knowledge graph analysis and compression.</p>
+<div id="def-entropy" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.23 (Entropy)</strong></span> The <strong>entropy</strong> of a discrete random variable <span class="math inline">X</span> with probability mass function <span class="math inline">p(x)</span> is:</p>
+<p><span class="math display">H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x)</span></p>
+<p>Entropy measures the average uncertainty or information content of <span class="math inline">X</span>.</p>
+</div>
+<div id="def-mutual-information" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.24 (Mutual information)</strong></span> The <strong>mutual information</strong> between two random variables <span class="math inline">X</span> and <span class="math inline">Y</span> is:</p>
+<p><span class="math display">I(X;Y) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log_2 \frac{p(x,y)}{p(x)p(y)}</span></p>
+<p>Mutual information measures the amount of information obtained about one random variable through observing the other.</p>
+</div>
+<p>Information-theoretic concepts have several applications in knowledge graphs:</p>
+<div id="exm-information-theory-applications" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.14 (Information theory in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Entropy of node degrees</strong>: Measuring the heterogeneity of connectivity in the graph</p></li>
+<li><p><strong>Mutual information between attributes</strong>: Identifying redundant or correlated attributes</p></li>
+<li><p><strong>Information gain</strong>: Selecting the most informative features for link prediction</p></li>
+<li><p><strong>Minimum description length</strong>: Balancing model complexity and fit in knowledge graph completion</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="computational-complexity-theory" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="computational-complexity-theory"><span class="header-section-number">3.4</span> Computational complexity theory</h2>
+<p>Computational complexity theory helps us understand the fundamental limits and efficiency of algorithms for processing knowledge graphs.</p>
+<section id="basic-complexity-classes" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="basic-complexity-classes"><span class="header-section-number">3.4.1</span> Basic complexity classes</h3>
+<p>Complexity classes categorize computational problems based on the resources required to solve them.</p>
+<div id="def-complexity-classes" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.25 (Common complexity classes)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>P</strong>: Problems solvable in polynomial time by a deterministic Turing machine</p></li>
+<li><p><strong>NP</strong>: Problems verifiable in polynomial time by a deterministic Turing machine</p></li>
+<li><p><strong>NP-Hard</strong>: Problems at least as hard as the hardest problems in NP</p></li>
+<li><p><strong>NP-Complete</strong>: Problems that are both in NP and NP-Hard</p></li>
+</ol>
+</div>
+<p>Many important knowledge graph problems fall into challenging complexity classes:</p>
+<div id="exm-kg-complexity" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.15 (Complexity of knowledge graph problems)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Subgraph isomorphism</strong>: Determining whether a graph contains a subgraph isomorphic to another graph is NP-complete. This affects pattern matching queries in knowledge graphs.</p></li>
+<li><p><strong>Optimal graph partitioning</strong>: Finding the optimal way to partition a graph to minimize edge cuts is NP-hard, which impacts distributed storage of large knowledge graphs.</p></li>
+<li><p><strong>Maximum clique</strong>: Finding the largest complete subgraph is NP-hard, which affects community detection in knowledge graphs.</p></li>
+</ol>
+</div>
+</section>
+<section id="computational-complexity-of-graph-algorithms" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="computational-complexity-of-graph-algorithms"><span class="header-section-number">3.4.2</span> Computational complexity of graph algorithms</h3>
+<p>The computational complexity of graph algorithms is particularly relevant for knowledge graph processing.</p>
+<div id="def-graph-algorithm-complexity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.26 (Complexity of common graph algorithms)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Breadth-first search (BFS)</strong>: <span class="math inline">O(|V| + |E|)</span> for traversing a graph with vertices <span class="math inline">V</span> and edges <span class="math inline">E</span></p></li>
+<li><p><strong>Dijkstra’s algorithm</strong>: <span class="math inline">O(|E| + |V| \log |V|)</span> with a binary heap for finding shortest paths</p></li>
+<li><p><strong>Floyd-Warshall algorithm</strong>: <span class="math inline">O(|V|^3)</span> for all-pairs shortest paths</p></li>
+<li><p><strong>Graph isomorphism</strong>: Not known to be in P or NP-complete, but subexponential algorithms exist</p></li>
+</ol>
+</div>
+<p>Understanding these complexity bounds helps in designing efficient systems for knowledge graph querying and analysis.</p>
+<div id="exm-complexity-analysis" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.16 (Complexity analysis of a knowledge graph query)</strong></span> Consider a query to find all people who are connected to Albert Einstein through at most three collaboration links.</p>
+<p>Using BFS, this query has complexity <span class="math inline">O(|V| + |E|)</span>, where <span class="math inline">|V|</span> is the number of entities and <span class="math inline">|E|</span> is the number of relationships in the knowledge graph.</p>
+<p>For a large-scale knowledge graph with millions of entities, this query might be practical, whereas a query requiring an NP-hard algorithm might be infeasible.</p>
+</div>
+</section>
+<section id="approximation-algorithms" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="approximation-algorithms"><span class="header-section-number">3.4.3</span> Approximation algorithms</h3>
+<p>For many NP-hard problems relevant to knowledge graphs, approximation algorithms provide practical solutions.</p>
+<div id="def-approximation-algorithm" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.27 (Approximation algorithm)</strong></span> An <strong>approximation algorithm</strong> for an optimization problem runs in polynomial time and produces a solution whose value is guaranteed to be within a certain factor of the optimal solution.</p>
+<p>An algorithm has an <strong>approximation ratio</strong> of <span class="math inline">\alpha</span> if it produces a solution with value at most <span class="math inline">\alpha</span> times the optimal value (for minimization problems) or at least <span class="math inline">1/\alpha</span> times the optimal value (for maximization problems).</p>
+</div>
+<div id="exm-approximation-applications" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.17 (Approximation algorithms in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Minimum vertex cover</strong>: A simple 2-approximation algorithm exists, useful for selecting a minimal set of entities that cover all relationships.</p></li>
+<li><p><strong>Maximum cut</strong>: The Goemans-Williamson algorithm provides a 0.878-approximation, valuable for graph partitioning problems.</p></li>
+<li><p><strong>k-center clustering</strong>: A 2-approximation algorithm exists, applicable to entity clustering in knowledge graphs.</p></li>
+</ol>
+</div>
+</section>
+<section id="parameterized-complexity" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="parameterized-complexity"><span class="header-section-number">3.4.4</span> Parameterized complexity</h3>
+<p>Parameterized complexity provides an alternative framework for analyzing algorithms, particularly relevant for knowledge graph queries that may have certain structural parameters.</p>
+<div id="def-parameterized-complexity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.28 (Parameterized complexity)</strong></span> <strong>Parameterized complexity</strong> analyzes the running time of algorithms in terms of both the input size <span class="math inline">n</span> and a parameter <span class="math inline">k</span> that captures some aspect of the problem’s structure.</p>
+<p>A problem is <strong>fixed-parameter tractable (FPT)</strong> if it can be solved in time <span class="math inline">f(k) \cdot n^{O(1)}</span>, where <span class="math inline">f</span> is any computable function.</p>
+</div>
+<div id="exm-parameterized-application" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.18 (Parameterized complexity in knowledge graphs)</strong></span> Many graph problems that are NP-hard in general become fixed-parameter tractable when parameterized appropriately:</p>
+<ol type="1">
+<li><p><strong>k-path finding</strong>: Finding a path of length k is FPT when parameterized by k, which is relevant for bounded-length path queries in knowledge graphs.</p></li>
+<li><p><strong>Treewidth</strong>: Many NP-hard problems become FPT when parameterized by the treewidth of the graph, which can be leveraged for query optimization in knowledge graphs with bounded treewidth.</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="logic-and-formal-systems" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="logic-and-formal-systems"><span class="header-section-number">3.5</span> Logic and formal systems</h2>
+<p>Logic provides the foundation for representing knowledge and reasoning with knowledge graphs.</p>
+<section id="propositional-logic" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="propositional-logic"><span class="header-section-number">3.5.1</span> Propositional logic</h3>
+<p>Propositional logic is the simplest form of formal logic, dealing with propositions and logical operators.</p>
+<div id="def-propositional-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.29 (Propositional logic)</strong></span> <strong>Propositional logic</strong> deals with propositions (statements that can be either true or false) and logical connectives:</p>
+<ul>
+<li>Negation (<span class="math inline">\neg</span>): “not”</li>
+<li>Conjunction (<span class="math inline">\land</span>): “and”</li>
+<li>Disjunction (<span class="math inline">\lor</span>): “or”</li>
+<li>Implication (<span class="math inline">\rightarrow</span>): “if…then”</li>
+<li>Equivalence (<span class="math inline">\leftrightarrow</span>): “if and only if”</li>
+</ul>
+<p>A <strong>formula</strong> in propositional logic is built from atomic propositions and logical connectives.</p>
+</div>
+<p>While propositional logic is limited for knowledge representation, it provides the foundation for more expressive logics.</p>
+</section>
+<section id="first-order-logic" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="first-order-logic"><span class="header-section-number">3.5.2</span> First-order logic</h3>
+<p>First-order logic (FOL) extends propositional logic with quantifiers and predicates, making it much more expressive for knowledge representation.</p>
+<div id="def-first-order-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.30 (First-order logic)</strong></span> <strong>First-order logic (FOL)</strong> extends propositional logic with:</p>
+<ul>
+<li>Variables representing objects in a domain</li>
+<li>Predicates representing properties or relations</li>
+<li>Functions representing mappings between objects</li>
+<li>Quantifiers:
+<ul>
+<li>Universal quantifier (<span class="math inline">\forall</span>): “for all”</li>
+<li>Existential quantifier (<span class="math inline">\exists</span>): “there exists”</li>
+</ul></li>
+</ul>
+<p>A <strong>formula</strong> in FOL is built from predicates, functions, variables, logical connectives, and quantifiers.</p>
+</div>
+<p>FOL is widely used for formal knowledge representation in knowledge graphs, particularly in ontologies and logical reasoning systems.</p>
+<div id="exm-fol-knowledge" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.19 (FOL in knowledge graphs)</strong></span> Consider representing knowledge about scientists and their work:</p>
+<p><span class="math display">\forall x (Scientist(x) \rightarrow \exists y (Paper(y) \land Author(x, y)))</span></p>
+<p>This formula states: “For every scientist x, there exists a paper y such that x is an author of y.”</p>
+<p>We could also represent:</p>
+<p><span class="math display">\forall x \forall y (AuthorOf(x, y) \land Paper(y) \rightarrow Researcher(x))</span></p>
+<p>“Anyone who is an author of a paper is a researcher.”</p>
+<p><span class="math display">\forall x \forall y (SupervisorOf(x, y) \rightarrow \neg SupervisorOf(y, x))</span></p>
+<p>“If x is a supervisor of y, then y cannot be a supervisor of x.”</p>
+<p>These FOL formulas capture complex domain knowledge that can be encoded in knowledge graph schemas and used for reasoning.</p>
+</div>
+</section>
+<section id="description-logics" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="description-logics"><span class="header-section-number">3.5.3</span> Description logics</h3>
+<p>Description logics are a family of formal knowledge representation languages that are particularly well-suited for defining ontologies used in knowledge graphs.</p>
+<div id="def-description-logic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.31 (Description logic)</strong></span> <strong>Description logics (DLs)</strong> are a family of formal languages for knowledge representation that balance expressivity with computational tractability. They provide:</p>
+<ol type="1">
+<li><strong>Concepts</strong> (or classes): Sets of individuals</li>
+<li><strong>Roles</strong> (or properties): Binary relations between individuals</li>
+<li><strong>Individuals</strong>: Specific objects in the domain</li>
+</ol>
+<p>DLs support various constructors for building complex concepts and roles, and offer reasoning services like subsumption, satisfiability, and instance checking.</p>
+</div>
+<p>Description logics form the theoretical foundation for ontology languages like OWL (Web Ontology Language), which are widely used to define the schema of knowledge graphs.</p>
+<div id="exm-dl-concepts" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.20 (Description logic expressions)</strong></span> Basic DL concept constructors include:</p>
+<ol type="1">
+<li><strong>Intersection</strong>: Scientist ⊓ Professor (individuals who are both scientists and professors)</li>
+<li><strong>Union</strong>: Author ⊔ Editor (individuals who are either authors or editors)</li>
+<li><strong>Negation</strong>: ¬Student (individuals who are not students)</li>
+<li><strong>Existential restriction</strong>: ∃authorOf.Paper (individuals who are authors of at least one paper)</li>
+<li><strong>Universal restriction</strong>: ∀memberOf.ResearchInstitute (individuals who are only members of research institutes)</li>
+<li><strong>Cardinality restrictions</strong>: ≥3 authorOf.Paper (individuals who are authors of at least 3 papers)</li>
+</ol>
+<p>These constructors allow for the definition of complex concepts from simpler ones, providing a rich vocabulary for knowledge representation.</p>
+</div>
+</section>
+<section id="reasoning-systems" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="reasoning-systems"><span class="header-section-number">3.5.4</span> Reasoning systems</h3>
+<p>Reasoning systems apply logical inference rules to derive new knowledge from existing facts and axioms.</p>
+<div id="def-inference-rules" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.32 (Inference rules)</strong></span> <strong>Inference rules</strong> are patterns of reasoning that allow the derivation of new statements from existing ones. Common inference rules include:</p>
+<ol type="1">
+<li><strong>Modus Ponens</strong>: From P and P → Q, infer Q</li>
+<li><strong>Resolution</strong>: From (P ∨ Q) and (¬P ∨ R), infer (Q ∨ R)</li>
+<li><strong>Universal Instantiation</strong>: From ∀x P(x), infer P(a) for any specific a</li>
+<li><strong>Existential Instantiation</strong>: From ∃x P(x), infer P(a) for some a</li>
+</ol>
+</div>
+<p>In knowledge graphs, reasoning systems apply these and other inference rules to derive implicit facts from explicitly stated knowledge.</p>
+<div id="exm-reasoning-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.21 (Reasoning in knowledge graphs)</strong></span> Given the following facts in a knowledge graph:</p>
+<ul>
+<li>authorOf(Einstein, RelativityPaper)</li>
+<li>cites(RelativityPaper, MaxwellPaper)</li>
+<li>∀x ∀y ∀z (authorOf(x, y) ∧ cites(y, z) → influencedBy(x, z))</li>
+</ul>
+<p>A reasoning system would derive:</p>
+<ul>
+<li>influencedBy(Einstein, MaxwellPaper)</li>
+</ul>
+<p>This inference makes explicit knowledge that was previously only implicit in the graph.</p>
+</div>
+</section>
+<section id="non-classical-logics" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="non-classical-logics"><span class="header-section-number">3.5.5</span> Non-classical logics</h3>
+<p>While classical logics like FOL provide a strong foundation, knowledge graphs often need to represent and reason with uncertainty, vagueness, or conflicting information, requiring non-classical logics.</p>
+<div id="def-non-classical-logics" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.33 (Non-classical logics)</strong></span> <strong>Non-classical logics</strong> extend or modify principles of classical logic to handle phenomena that classical logic cannot adequately address. Relevant non-classical logics include:</p>
+<ol type="1">
+<li><strong>Fuzzy logic</strong>: Handles degrees of truth (values between 0 and 1)</li>
+<li><strong>Probabilistic logic</strong>: Incorporates uncertainty through probability theory</li>
+<li><strong>Temporal logic</strong>: Represents and reasons about time-dependent information</li>
+<li><strong>Modal logic</strong>: Deals with modalities like possibility, necessity, belief, and knowledge</li>
+<li><strong>Paraconsistent logic</strong>: Tolerates contradictions without logical explosion</li>
+</ol>
+</div>
+<div id="exm-fuzzy-logic" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.22 (Fuzzy logic in knowledge graphs)</strong></span> In a fuzzy knowledge graph, relationships might have truth values between 0 and 1:</p>
+<ul>
+<li>isHotLocation(Phoenix, 0.9)</li>
+<li>isColdLocation(Phoenix, 0.1)</li>
+<li>isHotLocation(Alaska, 0.2)</li>
+</ul>
+<p>Fuzzy logic operators like min (for conjunction) and max (for disjunction) allow reasoning with these partial truths:</p>
+<ul>
+<li>min(isHotLocation(Phoenix), hasBeaches(Phoenix)) = min(0.9, 0.7) = 0.7</li>
+</ul>
+<p>This corresponds to the truth value of the conjunction “Phoenix is hot AND has beaches.”</p>
+</div>
+</section>
+</section>
+<section id="mathematical-economics-for-knowledge-graphs" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="mathematical-economics-for-knowledge-graphs"><span class="header-section-number">3.6</span> Mathematical economics for knowledge graphs</h2>
+<p>Economic concepts provide valuable frameworks for understanding the formation, evolution, and utilization of knowledge graphs.</p>
+<section id="utility-theory" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="utility-theory"><span class="header-section-number">3.6.1</span> Utility theory</h3>
+<p>Utility theory provides a framework for representing preferences and making rational decisions, which is relevant for optimizing knowledge graph construction and querying.</p>
+<div id="def-utility-function" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.34 (Utility function)</strong></span> A <strong>utility function</strong> <span class="math inline">u: \Omega \rightarrow \mathbb{R}</span> <strong>represents</strong> a preference relation <span class="math inline">\succsim</span> on <span class="math inline">\Omega</span> if for all <span class="math inline">\omega, \omega' \in \Omega</span>:</p>
+<p><span class="math display">\omega \succsim \omega' \iff u(\omega) \geq u(\omega')</span></p>
+</div>
+<p>In knowledge graph contexts, utility functions can represent the value of different configurations, query outcomes, or information states.</p>
+<div id="exm-utility-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.23 (Utility functions in knowledge graphs)</strong></span> For a knowledge graph completion task, a utility function might evaluate the value of adding a particular fact:</p>
+<p><span class="math display">u(\text{add fact } f \text{ to } KG) = \text{Information Gain}(KG + f) - \text{Cost}(f)</span></p>
+<p>where Information Gain measures how much new knowledge is enabled by adding fact <span class="math inline">f</span>, and Cost represents the computational or storage cost.</p>
+<p>This allows rational decision-making about which facts to prioritize adding to the knowledge graph.</p>
+</div>
+</section>
+<section id="game-theory" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="game-theory"><span class="header-section-number">3.6.2</span> Game theory</h3>
+<p>Game theory analyzes strategic interactions between rational agents, providing insights into the dynamics of knowledge graph formation and usage.</p>
+<div id="def-game-theory" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.35 (Game theory)</strong></span> <strong>Game theory</strong> is the study of mathematical models of strategic interaction among rational agents. Key concepts include:</p>
+<ol type="1">
+<li><strong>Players</strong>: The decision-makers</li>
+<li><strong>Strategies</strong>: The actions available to players</li>
+<li><strong>Payoffs</strong>: The utility received by players based on the strategies chosen</li>
+<li><strong>Nash equilibrium</strong>: A set of strategies where no player can benefit by changing their strategy unilaterally</li>
+</ol>
+</div>
+<p>Game theory has several applications in knowledge graph contexts:</p>
+<div id="exm-game-theory-applications" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.24 (Game theory in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Contribution games</strong>: Modeling the incentives for different actors to contribute knowledge to a collaborative knowledge graph</p></li>
+<li><p><strong>Information sharing games</strong>: Analyzing strategic decisions about which knowledge to share versus keep private</p></li>
+<li><p><strong>Adversarial knowledge graphs</strong>: Modeling scenarios where adversaries attempt to manipulate or poison knowledge graphs</p></li>
+</ol>
+<p>Consider a simple contribution game where two organizations decide whether to contribute their proprietary knowledge to a shared knowledge graph:</p>
+<p>Payoff matrix: | | Org 2 Contributes | Org 2 Withholds | |—————|——————-|—————–| | Org 1 Contributes | (8, 8) | (2, 10) | | Org 1 Withholds | (10, 2) | (4, 4) |</p>
+<p>This represents a Prisoner’s Dilemma scenario, where the Nash equilibrium (both withhold) is sub-optimal compared to mutual contribution.</p>
+</div>
+</section>
+<section id="network-economics" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="network-economics"><span class="header-section-number">3.6.3</span> Network economics</h3>
+<p>Network economics studies how network structures influence economic outcomes, which is directly applicable to knowledge graphs as network structures.</p>
+<div id="def-network-economics" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.36 (Network economics)</strong></span> <strong>Network economics</strong> studies economic aspects of networks, including:</p>
+<ol type="1">
+<li><strong>Network effects</strong>: The value of a product or service increases as more people use it</li>
+<li><strong>Network externalities</strong>: The impact of one user’s decisions on the utility of other users</li>
+<li><strong>Two-sided markets</strong>: Platforms that connect two distinct user groups</li>
+<li><strong>Network formation</strong>: How and why links form between agents</li>
+</ol>
+</div>
+<p>These concepts help understand the economic dynamics of knowledge graph ecosystems:</p>
+<div id="exm-network-economics-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.25 (Network economics in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Value scaling</strong>: The value of a knowledge graph often increases superlinearly with its size and connectivity due to network effects</p></li>
+<li><p><strong>Contribution incentives</strong>: As more entities contribute to a knowledge graph, the incentive for others to contribute may increase due to positive externalities</p></li>
+<li><p><strong>Knowledge graph platforms</strong>: Often connect data providers and data consumers in a two-sided market</p></li>
+<li><p><strong>Strategic linking</strong>: Entities may form connections in knowledge graphs based on economic incentives rather than purely informational considerations</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="information-geometry" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="information-geometry"><span class="header-section-number">3.7</span> Information geometry</h2>
+<p>Information geometry applies differential geometry to spaces of probability distributions, providing tools for analyzing statistical models in knowledge graphs.</p>
+<div id="def-information-geometry" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.37 (Information geometry)</strong></span> <strong>Information geometry</strong> studies statistical manifolds—spaces of probability distributions—using tools from differential geometry. Key concepts include:</p>
+<ol type="1">
+<li><strong>Statistical manifold</strong>: A smooth manifold where each point corresponds to a probability distribution</li>
+<li><strong>Fisher information metric</strong>: A Riemannian metric on statistical manifolds</li>
+<li><strong>Divergence measures</strong>: Functions that quantify the “distance” between probability distributions</li>
+</ol>
+</div>
+<p>Information geometry provides powerful tools for analyzing probabilistic knowledge graph models:</p>
+<div id="exm-information-geometry-applications" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.26 (Information geometry in knowledge graphs)</strong></span> &nbsp;</p>
+<ol type="1">
+<li><p><strong>Embedding spaces</strong>: Analyzing the geometry of knowledge graph embedding spaces</p></li>
+<li><p><strong>Model comparison</strong>: Using divergence measures to compare different probabilistic models of the same knowledge graph</p></li>
+<li><p><strong>Parameter optimization</strong>: Leveraging the geometry of parameter spaces for more efficient learning algorithms</p></li>
+</ol>
+<p>For instance, the Kullback-Leibler (KL) divergence between two probabilistic knowledge graph models <span class="math inline">P</span> and <span class="math inline">Q</span> can be used to measure how much information is lost when using <span class="math inline">Q</span> to approximate <span class="math inline">P</span>:</p>
+<p><span class="math display">D_{KL}(P \parallel Q) = \sum_{(s,r,o)} P(s,r,o) \log \frac{P(s,r,o)}{Q(s,r,o)}</span></p>
+<p>where <span class="math inline">(s,r,o)</span> ranges over all possible subject-relation-object triples.</p>
+</div>
+</section>
+<section id="category-theory" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="category-theory"><span class="header-section-number">3.8</span> Category theory</h2>
+<p>Category theory provides an abstract framework for studying mathematical structures and relationships, offering a powerful perspective on knowledge representation.</p>
+<div id="def-category-theory" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.38 (Category theory)</strong></span> <strong>Category theory</strong> is a formalism that abstracts many mathematical concepts. A category consists of:</p>
+<ol type="1">
+<li><strong>Objects</strong>: The entities being studied</li>
+<li><strong>Morphisms</strong> (or arrows): Maps between objects</li>
+<li><strong>Composition operation</strong>: A way to combine morphisms</li>
+<li><strong>Identity morphisms</strong>: For each object, a morphism from the object to itself</li>
+</ol>
+<p>Categories must satisfy certain axioms regarding associativity of composition and the behavior of identity morphisms.</p>
+</div>
+<p>Category theory offers a unifying perspective on different knowledge representation formalisms:</p>
+<div id="exm-category-theory-kg" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.27 (Category theory in knowledge graphs)</strong></span> Knowledge graphs can be viewed through the lens of category theory in several ways:</p>
+<ol type="1">
+<li><p><strong>Knowledge graphs as categories</strong>: Entities as objects and relationships as morphisms</p></li>
+<li><p><strong>Knowledge graph transformations</strong>: Functors between knowledge graph categories representing mappings or translations</p></li>
+<li><p><strong>Integration of heterogeneous knowledge</strong>: Using categorical constructs like colimits to formalize the integration of different knowledge sources</p></li>
+<li><p><strong>Compositional reasoning</strong>: Using categorical composition to model multi-step inference paths</p></li>
+</ol>
+<p>For example, the composition of relationships in a knowledge graph corresponds directly to morphism composition in the corresponding category:</p>
+<p>If we have relationships (morphisms) worksWith(Alice, Bob) and supervises(Bob, Charlie), their composition gives us a relationship between Alice and Charlie that represents “Alice works with someone who supervises Charlie.”</p>
+</div>
+</section>
+<section id="summary" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">3.9</span> Summary</h2>
+<p>This chapter has provided a comprehensive overview of the mathematical foundations essential for understanding and working with knowledge graphs. We’ve covered:</p>
+<ol type="1">
+<li><p><strong>Set theory and relations</strong>: The fundamental language for describing entities and relationships in knowledge graphs.</p></li>
+<li><p><strong>Linear algebra</strong>: Tools for representing and computing with knowledge graphs, particularly through matrix and tensor representations.</p></li>
+<li><p><strong>Probability and statistics</strong>: Frameworks for handling uncertainty and making inferences in knowledge graphs.</p></li>
+<li><p><strong>Computational complexity</strong>: Insights into the algorithmic challenges and computational limits of knowledge graph operations.</p></li>
+<li><p><strong>Logic and formal systems</strong>: Languages for representing knowledge and reasoning about knowledge graphs.</p></li>
+<li><p><strong>Mathematical economics</strong>: Concepts for understanding the incentives and strategic dynamics of knowledge graph ecosystems.</p></li>
+<li><p><strong>Information geometry</strong>: Tools for analyzing the structure of probabilistic models in knowledge graphs.</p></li>
+<li><p><strong>Category theory</strong>: An abstract perspective on knowledge representation and transformation.</p></li>
+</ol>
+<p>These mathematical foundations provide the theoretical underpinnings for the more applied topics in subsequent chapters. While not every knowledge graph application requires deep expertise in all these areas, understanding these foundations enables more rigorous analysis, more efficient algorithms, and more powerful knowledge graph systems.</p>
+</section>
+<section id="exercises" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="exercises"><span class="header-section-number">3.10</span> Exercises</h2>
+<div id="exr-adjacency-matrices" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.1 (Adjacency matrices and graph operations)</strong></span> Consider a knowledge graph with entities <span class="math inline">E = \{e_1, e_2, e_3, e_4\}</span> and two types of relationships: “related to” (<span class="math inline">R_1</span>) and “depends on” (<span class="math inline">R_2</span>). The adjacency matrices are:</p>
+<p><span class="math display">
+R_1 = \begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 1 &amp; 0
+\end{pmatrix}
+\quad
+R_2 = \begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+</span></p>
+<ol type="1">
+<li>Draw the graph corresponding to these adjacency matrices.</li>
+<li>Compute <span class="math inline">R_1^2</span> and interpret the result.</li>
+<li>Compute the combined adjacency matrix <span class="math inline">R_1 + R_2</span> and interpret the result.</li>
+<li>Determine which entities have the highest degree centrality considering both relation types.</li>
+<li>Is there a path of length 2 that uses both relation types from <span class="math inline">e_1</span> to <span class="math inline">e_4</span>? If so, identify it.</li>
+</ol>
+</div>
+<div id="exr-set-theoretical-operations" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.2 (Set-theoretical operations on knowledge graphs)</strong></span> Let <span class="math inline">KG_1</span> and <span class="math inline">KG_2</span> be two knowledge graphs with:</p>
+<p><span class="math inline">KG_1 = (E_1, R_1)</span> where:</p>
+<ul>
+<li><span class="math inline">E_1 = \{Alice, Bob, Charlie, Research\_Paper\_1, University\_X\}</span></li>
+<li><span class="math inline">R_1 = \{(Alice, authorOf, Research\_Paper\_1), (Bob, authorOf, Research\_Paper\_1), (Alice, affiliatedWith, University\_X), (Bob, affiliatedWith, University\_X)\}</span></li>
+</ul>
+<p><span class="math inline">KG_2 = (E_2, R_2)</span> where:</p>
+<ul>
+<li><span class="math inline">E_2 = \{Alice, Charlie, David, Research\_Paper\_2, University\_Y\}</span></li>
+<li><span class="math inline">R_2 = \{(Alice, authorOf, Research\_Paper\_2), (Charlie, authorOf, Research\_Paper\_2), (Charlie, affiliatedWith, University\_Y), (David, affiliatedWith, University\_Y)\}</span></li>
+</ul>
+<ol type="1">
+<li>Define and compute the union of these knowledge graphs, <span class="math inline">KG_1 \cup KG_2</span>.</li>
+<li>Define and compute the intersection of these knowledge graphs, <span class="math inline">KG_1 \cap KG_2</span>.</li>
+<li>Identify all entities in <span class="math inline">(E_1 \cup E_2) \setminus (E_1 \cap E_2)</span>.</li>
+<li>Construct a query that would retrieve all papers authored by people affiliated with University_X.</li>
+<li>What challenges might arise when performing set operations on knowledge graphs with different schemas or ontologies?</li>
+</ol>
+</div>
+<div id="exr-probability-kg" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.3 (Probabilistic reasoning in knowledge graphs)</strong></span> Consider a probabilistic knowledge graph with the following facts and their associated probabilities:</p>
+<ol type="1">
+<li>(Alice, hasSkill, Programming) - 0.9</li>
+<li>(Alice, hasSkill, Statistics) - 0.8</li>
+<li>(Programming, requiredFor, DataScientist) - 0.95</li>
+<li>(Statistics, requiredFor, DataScientist) - 0.9</li>
+<li>(Alice, hasRole, DataScientist) - 0.7</li>
+</ol>
+<p>Assuming independence between facts, answer the following:</p>
+<ol type="1">
+<li>What is the probability that Alice has both Programming and Statistics skills?</li>
+<li>What is the probability that Alice has either Programming or Statistics skills (or both)?</li>
+<li>Using probabilistic inference, compute the probability that Alice is a Data Scientist based on her skills.</li>
+<li>If we learn with certainty that Alice is a Data Scientist, how would this affect our beliefs about her skills? (Hint: Apply Bayes’ theorem)</li>
+<li>Discuss the independence assumption in this scenario. Is it realistic? Why or why not?</li>
+</ol>
+</div>
+<div id="exr-logical-reasoning" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.4 (Logical reasoning with description logics)</strong></span> Consider a knowledge graph with the following TBox (terminological knowledge) expressed in description logic:</p>
+<pre><code>Professor ⊑ AcademicStaff
+Researcher ⊑ AcademicStaff
+Course ⊑ ∃taughtBy.Professor
+Publication ⊑ ∃hasAuthor.Researcher
+Professor ⊓ Researcher ⊑ SeniorAcademic
+∃authorOf.Publication ⊑ Researcher</code></pre>
+<p>And the following ABox (assertional knowledge):</p>
+<pre><code>Professor(Alice)
+Course(CS101)
+taughtBy(CS101, Alice)
+authorOf(Alice, Paper1)
+Publication(Paper1)</code></pre>
+<ol type="1">
+<li>What additional facts can be inferred from this knowledge base?</li>
+<li>Is Alice a Researcher? Explain your reasoning.</li>
+<li>Is Alice a SeniorAcademic? Explain your reasoning.</li>
+<li>Write a query in first-order logic that would retrieve all SeniorAcademics.</li>
+<li>Extend the TBox with a definition of “TeachingAssistant” that ensures teaching assistants are not professors but can teach courses.</li>
+</ol>
+</div>
+<div id="exr-computational-complexity" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.5 (Computational complexity analysis)</strong></span> For each of the following problems related to knowledge graphs, analyze the computational complexity and discuss approaches to address the computational challenges:</p>
+<ol type="1">
+<li><p>Given a knowledge graph with <span class="math inline">n</span> entities and <span class="math inline">m</span> relationships, what is the time complexity of finding all entities that are exactly <span class="math inline">k</span> hops away from a given entity?</p></li>
+<li><p>What is the complexity of determining whether a knowledge graph contains a subgraph isomorphic to a given pattern graph? How does this affect the implementation of complex pattern matching queries?</p></li>
+<li><p>Consider the problem of finding the shortest path between two entities in a knowledge graph where relationships have different weights (costs). Discuss an efficient algorithm and its complexity.</p></li>
+<li><p>What is the complexity of optimally partitioning a knowledge graph across <span class="math inline">k</span> machines to minimize the number of relationships that span different machines? Is this problem tractable for large knowledge graphs?</p></li>
+<li><p>For a knowledge graph with billions of entities and relationships, discuss strategies to make common queries tractable despite the theoretical complexity constraints.</p></li>
+</ol>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="3.11">
+<h2 data-number="3.11" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">3.11</span> Further reading</h2>
+<ol type="1">
+<li><p>Bordes, A., Usunier, N., Garcia-Duran, A., Weston, J., &amp; Yakhnenko, O. (2013). Translating embeddings for modeling multi-relational data. In <em>Advances in Neural Information Processing Systems</em> (pp.&nbsp;2787-2795).</p></li>
+<li><p>Getoor, L., &amp; Taskar, B. (Eds.). (2007). <em>Introduction to Statistical Relational Learning</em>. MIT press.</p></li>
+<li><p>Goldreich, O. (2008). <em>Computational Complexity: A Conceptual Perspective</em>. Cambridge University Press.</p></li>
+<li><p>Hitzler, P., Krötzsch, M., Parsia, B., Patel-Schneider, P. F., &amp; Rudolph, S. (2012). <em>OWL 2 Web Ontology Language Primer (Second Edition)</em>. W3C Recommendation.</p></li>
+<li><p>Leskovec, J., Rajaraman, A., &amp; Ullman, J. D. (2014). <em>Mining of Massive Datasets</em>. Cambridge University Press.</p></li>
+<li><p>Nickel, M., Murphy, K., Tresp, V., &amp; Gabrilovich, E. (2016). A review of relational machine learning for knowledge graphs. <em>Proceedings of the IEEE</em>, 104(1), 11-33.</p></li>
+<li><p>Pearl, J. (2009). <em>Causality: Models, Reasoning, and Inference</em> (2nd ed.). Cambridge University Press.</p></li>
+<li><p>Spivak, D. I. (2014). <em>Category Theory for the Sciences</em>. MIT Press.</p></li>
+<li><p>Varian, H. R. (2010). <em>Intermediate Microeconomics: A Modern Approach</em> (8th ed.). W.W. Norton &amp; Company.</p></li>
+<li><p>Zhang, C., &amp; Ma, Y. (Eds.). (2012). <em>Ensemble Machine Learning: Methods and Applications</em>. Springer.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/foundation/introduction.html" class="pagination-link" aria-label="Introduction to knowledge graphs and network science">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../contents/foundation/graph-fundamentals.html" class="pagination-link" aria-label="Graph Theory Fundamentals">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

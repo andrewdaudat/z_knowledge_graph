@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Introduction to knowledge graphs and network science – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/foundation/math-fundamentals.html" rel="next">
+<link href="../../contents/foundation/outline.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/introduction.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-are-knowledge-graphs" id="toc-what-are-knowledge-graphs" class="nav-link active" data-scroll-target="#what-are-knowledge-graphs"><span class="header-section-number">2.1</span> What are knowledge graphs?</a></li>
+  <li><a href="#historical-development-and-evolution" id="toc-historical-development-and-evolution" class="nav-link" data-scroll-target="#historical-development-and-evolution"><span class="header-section-number">2.2</span> Historical development and evolution</a>
+  <ul class="collapse">
+  <li><a href="#early-semantic-networks" id="toc-early-semantic-networks" class="nav-link" data-scroll-target="#early-semantic-networks"><span class="header-section-number">2.2.1</span> Early semantic networks</a></li>
+  <li><a href="#frame-systems-and-expert-systems" id="toc-frame-systems-and-expert-systems" class="nav-link" data-scroll-target="#frame-systems-and-expert-systems"><span class="header-section-number">2.2.2</span> Frame systems and expert systems</a></li>
+  <li><a href="#the-semantic-web-vision" id="toc-the-semantic-web-vision" class="nav-link" data-scroll-target="#the-semantic-web-vision"><span class="header-section-number">2.2.3</span> The semantic web vision</a></li>
+  <li><a href="#from-theory-to-practice-large-scale-knowledge-graphs" id="toc-from-theory-to-practice-large-scale-knowledge-graphs" class="nav-link" data-scroll-target="#from-theory-to-practice-large-scale-knowledge-graphs"><span class="header-section-number">2.2.4</span> From theory to practice: Large-scale knowledge graphs</a></li>
+  </ul></li>
+  <li><a href="#knowledge-graph-fundamentals" id="toc-knowledge-graph-fundamentals" class="nav-link" data-scroll-target="#knowledge-graph-fundamentals"><span class="header-section-number">2.3</span> Knowledge graph fundamentals</a>
+  <ul class="collapse">
+  <li><a href="#entities-and-relationships" id="toc-entities-and-relationships" class="nav-link" data-scroll-target="#entities-and-relationships"><span class="header-section-number">2.3.1</span> Entities and relationships</a></li>
+  <li><a href="#attributes-and-values" id="toc-attributes-and-values" class="nav-link" data-scroll-target="#attributes-and-values"><span class="header-section-number">2.3.2</span> Attributes and values</a></li>
+  <li><a href="#schema-and-ontologies" id="toc-schema-and-ontologies" class="nav-link" data-scroll-target="#schema-and-ontologies"><span class="header-section-number">2.3.3</span> Schema and ontologies</a></li>
+  <li><a href="#context-and-provenance" id="toc-context-and-provenance" class="nav-link" data-scroll-target="#context-and-provenance"><span class="header-section-number">2.3.4</span> Context and provenance</a></li>
+  </ul></li>
+  <li><a href="#the-relationship-between-knowledge-graphs-and-network-science" id="toc-the-relationship-between-knowledge-graphs-and-network-science" class="nav-link" data-scroll-target="#the-relationship-between-knowledge-graphs-and-network-science"><span class="header-section-number">2.4</span> The relationship between knowledge graphs and network science</a>
+  <ul class="collapse">
+  <li><a href="#structure-and-topology" id="toc-structure-and-topology" class="nav-link" data-scroll-target="#structure-and-topology"><span class="header-section-number">2.4.1</span> Structure and topology</a></li>
+  <li><a href="#dynamics-and-evolution" id="toc-dynamics-and-evolution" class="nav-link" data-scroll-target="#dynamics-and-evolution"><span class="header-section-number">2.4.2</span> Dynamics and evolution</a></li>
+  <li><a href="#information-flow-and-diffusion" id="toc-information-flow-and-diffusion" class="nav-link" data-scroll-target="#information-flow-and-diffusion"><span class="header-section-number">2.4.3</span> Information flow and diffusion</a></li>
+  </ul></li>
+  <li><a href="#applications-and-use-cases" id="toc-applications-and-use-cases" class="nav-link" data-scroll-target="#applications-and-use-cases"><span class="header-section-number">2.5</span> Applications and use cases</a>
+  <ul class="collapse">
+  <li><a href="#search-and-information-retrieval" id="toc-search-and-information-retrieval" class="nav-link" data-scroll-target="#search-and-information-retrieval"><span class="header-section-number">2.5.1</span> Search and information retrieval</a></li>
+  <li><a href="#recommendation-systems" id="toc-recommendation-systems" class="nav-link" data-scroll-target="#recommendation-systems"><span class="header-section-number">2.5.2</span> Recommendation systems</a></li>
+  <li><a href="#question-answering-and-virtual-assistants" id="toc-question-answering-and-virtual-assistants" class="nav-link" data-scroll-target="#question-answering-and-virtual-assistants"><span class="header-section-number">2.5.3</span> Question answering and virtual assistants</a></li>
+  <li><a href="#data-integration-and-master-data-management" id="toc-data-integration-and-master-data-management" class="nav-link" data-scroll-target="#data-integration-and-master-data-management"><span class="header-section-number">2.5.4</span> Data integration and master data management</a></li>
+  <li><a href="#scientific-discovery-and-research" id="toc-scientific-discovery-and-research" class="nav-link" data-scroll-target="#scientific-discovery-and-research"><span class="header-section-number">2.5.5</span> Scientific discovery and research</a></li>
+  <li><a href="#fraud-detection-and-risk-assessment" id="toc-fraud-detection-and-risk-assessment" class="nav-link" data-scroll-target="#fraud-detection-and-risk-assessment"><span class="header-section-number">2.5.6</span> Fraud detection and risk assessment</a></li>
+  </ul></li>
+  <li><a href="#challenges-and-limitations" id="toc-challenges-and-limitations" class="nav-link" data-scroll-target="#challenges-and-limitations"><span class="header-section-number">2.6</span> Challenges and limitations</a>
+  <ul class="collapse">
+  <li><a href="#construction-and-maintenance" id="toc-construction-and-maintenance" class="nav-link" data-scroll-target="#construction-and-maintenance"><span class="header-section-number">2.6.1</span> Construction and maintenance</a></li>
+  <li><a href="#incompleteness-and-uncertainty" id="toc-incompleteness-and-uncertainty" class="nav-link" data-scroll-target="#incompleteness-and-uncertainty"><span class="header-section-number">2.6.2</span> Incompleteness and uncertainty</a></li>
+  <li><a href="#scalability-and-performance" id="toc-scalability-and-performance" class="nav-link" data-scroll-target="#scalability-and-performance"><span class="header-section-number">2.6.3</span> Scalability and performance</a></li>
+  <li><a href="#ethical-and-social-considerations" id="toc-ethical-and-social-considerations" class="nav-link" data-scroll-target="#ethical-and-social-considerations"><span class="header-section-number">2.6.4</span> Ethical and social considerations</a></li>
+  </ul></li>
+  <li><a href="#emerging-trends-and-future-directions" id="toc-emerging-trends-and-future-directions" class="nav-link" data-scroll-target="#emerging-trends-and-future-directions"><span class="header-section-number">2.7</span> Emerging trends and future directions</a>
+  <ul class="collapse">
+  <li><a href="#multimodal-knowledge-graphs" id="toc-multimodal-knowledge-graphs" class="nav-link" data-scroll-target="#multimodal-knowledge-graphs"><span class="header-section-number">2.7.1</span> Multimodal knowledge graphs</a></li>
+  <li><a href="#neural-symbolic-integration" id="toc-neural-symbolic-integration" class="nav-link" data-scroll-target="#neural-symbolic-integration"><span class="header-section-number">2.7.2</span> Neural-symbolic integration</a></li>
+  <li><a href="#decentralized-and-collaborative-knowledge-graphs" id="toc-decentralized-and-collaborative-knowledge-graphs" class="nav-link" data-scroll-target="#decentralized-and-collaborative-knowledge-graphs"><span class="header-section-number">2.7.3</span> Decentralized and collaborative knowledge graphs</a></li>
+  <li><a href="#self-evolving-knowledge-systems" id="toc-self-evolving-knowledge-systems" class="nav-link" data-scroll-target="#self-evolving-knowledge-systems"><span class="header-section-number">2.7.4</span> Self-evolving knowledge systems</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">2.8</span> Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">2.9</span> Exercises</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">2.10</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/introduction.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Knowledge graphs represent a powerful paradigm for organizing, integrating, and analyzing complex information. This chapter introduces the fundamental concepts, historical development, and key applications of knowledge graphs, establishing the foundation for the more specialized topics covered in subsequent chapters.</p>
+<section id="what-are-knowledge-graphs" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-are-knowledge-graphs"><span class="header-section-number">2.1</span> What are knowledge graphs?</h2>
+<p>Knowledge graphs are structured representations of facts that store information in the form of entities, relationships, and attributes. Unlike traditional data structures that often rely on tabular representations or hierarchical models, knowledge graphs utilize a flexible graph-based approach to represent interconnected knowledge.</p>
+<div id="def-knowledge-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.1 (Knowledge graph)</strong></span> A <strong>knowledge graph</strong> is a graph-based data structure that integrates heterogeneous information from various sources into a unified representation where:</p>
+<ol type="1">
+<li>Entities are represented as nodes (vertices)</li>
+<li>Relationships between entities are represented as edges</li>
+<li>Attributes or properties of entities are stored as node properties</li>
+<li>Context, provenance, or metadata may be attached to both nodes and edges</li>
+</ol>
+<p>More formally, a knowledge graph <span class="math inline">G</span> can be defined as a tuple:</p>
+<p><span class="math display">G = (E, R, A, V)</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">E</span> is a set of entities (nodes)</li>
+<li><span class="math inline">R \subseteq E \times L_R \times E</span> is a set of relationships (edges) with labels from <span class="math inline">L_R</span></li>
+<li><span class="math inline">A</span> is a set of attributes associated with entities</li>
+<li><span class="math inline">V</span> is a set of values assigned to attributes for specific entities</li>
+</ul>
+</div>
+<p>Knowledge graphs differ from traditional databases and other data structures in several important ways. While relational databases excel at storing structured data with well-defined schemas, knowledge graphs offer greater flexibility for representing heterogeneous and interconnected information. This flexibility makes knowledge graphs particularly valuable for domains where relationships between entities are complex and evolving.</p>
+<div id="exm-simple-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.1 (A simple knowledge graph)</strong></span> Consider a simple knowledge graph representing information about authors and books:</p>
+<p>Entities (E):</p>
+<ul>
+<li>Person: “Jane Smith”</li>
+<li>Book: “Graph Theory Fundamentals”</li>
+<li>University: “Stanford University”</li>
+</ul>
+<p>Relationships (R):</p>
+<ul>
+<li>(“Jane Smith”, “authorOf”, “Graph Theory Fundamentals”)</li>
+<li>(“Jane Smith”, “affiliatedWith”, “Stanford University”)</li>
+</ul>
+<p>Attributes (A) and Values (V):</p>
+<ul>
+<li>(“Jane Smith”, “birthYear”, “1975”)</li>
+<li>(“Graph Theory Fundamentals”, “publicationYear”, “2018”)</li>
+<li>(“Stanford University”, “location”, “California, USA”)</li>
+</ul>
+<p>This knowledge graph captures not just the entities themselves, but the meaningful relationships between them and their properties.</p>
+</div>
+</section>
+<section id="historical-development-and-evolution" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="historical-development-and-evolution"><span class="header-section-number">2.2</span> Historical development and evolution</h2>
+<p>Knowledge graphs have evolved from several converging research traditions in computer science, linguistics, and artificial intelligence. Understanding this historical context provides valuable perspective on current approaches and future directions.</p>
+<section id="early-semantic-networks" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="early-semantic-networks"><span class="header-section-number">2.2.1</span> Early semantic networks</h3>
+<p>The concept of representing knowledge in graph-like structures dates back to the 1950s and 1960s with the development of semantic networks.</p>
+<div id="def-semantic-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.2 (Semantic network)</strong></span> A <strong>semantic network</strong> is a graph where nodes represent concepts or entities and edges represent semantic relationships between them. It was one of the earliest graph-based knowledge representation formalisms used in artificial intelligence and cognitive science.</p>
+</div>
+<p>In 1956, computer scientist Ross Quillian proposed semantic networks as a way to represent linguistic knowledge for natural language processing. These early networks focused primarily on taxonomic (is-a) and partonomic (part-of) relationships between concepts.</p>
+<div id="exm-semantic-network" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.2 (Early semantic network)</strong></span> A simple semantic network representing animal classification might have:</p>
+<ul>
+<li>Nodes: {Animal, Mammal, Bird, Dog, Cat, Robin, Sparrow}</li>
+<li>Edges: {(Mammal, is-a, Animal), (Bird, is-a, Animal), (Dog, is-a, Mammal), (Cat, is-a, Mammal), (Robin, is-a, Bird), (Sparrow, is-a, Bird)}</li>
+</ul>
+<p>This structure enables basic inheritance of properties: if we know that all animals breathe, we can infer that dogs breathe without explicitly storing that fact.</p>
+</div>
+</section>
+<section id="frame-systems-and-expert-systems" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="frame-systems-and-expert-systems"><span class="header-section-number">2.2.2</span> Frame systems and expert systems</h3>
+<p>In the 1970s, Marvin Minsky introduced frame systems, which expanded semantic networks by grouping related information about entities into structured units called frames. This approach influenced expert systems development, where domain-specific knowledge was encoded to solve complex problems.</p>
+<div id="def-frame" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.3 (Frame)</strong></span> A <strong>frame</strong> is a knowledge representation structure that groups attributes and values related to a concept or entity. Each frame typically includes slots (attributes) that can contain values or procedural attachments (methods).</p>
+</div>
+<p>Expert systems like MYCIN (for medical diagnosis) and DENDRAL (for chemical structure analysis) demonstrated that structured knowledge representation could enable computer systems to perform complex reasoning tasks.</p>
+</section>
+<section id="the-semantic-web-vision" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="the-semantic-web-vision"><span class="header-section-number">2.2.3</span> The semantic web vision</h3>
+<p>The modern concept of knowledge graphs gained significant momentum with Tim Berners-Lee’s vision of the Semantic Web, proposed in 2001. Berners-Lee envisioned an extension of the World Wide Web where information would be given well-defined meaning, enabling computers and humans to work in cooperation.</p>
+<div id="def-semantic-web" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.4 (Semantic web)</strong></span> The <strong>semantic web</strong> refers to the extension of the World Wide Web through standards set by the World Wide Web Consortium (W3C) that promote common data formats and exchange protocols, with the goal of making internet data machine-readable and enabling automated reasoning about web content.</p>
+</div>
+<p>This vision led to the development of key technologies that form the foundation of many modern knowledge graphs:</p>
+<ol type="1">
+<li><p><strong>Resource Description Framework (RDF)</strong> - A standard model for data interchange on the Web, representing information as triples in the form of subject-predicate-object expressions.</p></li>
+<li><p><strong>RDF Schema (RDFS)</strong> - A set of classes with certain properties that provide basic elements for describing ontologies.</p></li>
+<li><p><strong>Web Ontology Language (OWL)</strong> - A family of knowledge representation languages for authoring ontologies with formally defined semantics.</p></li>
+<li><p><strong>SPARQL</strong> - A query language for retrieving and manipulating data stored in RDF format.</p></li>
+</ol>
+</section>
+<section id="from-theory-to-practice-large-scale-knowledge-graphs" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="from-theory-to-practice-large-scale-knowledge-graphs"><span class="header-section-number">2.2.4</span> From theory to practice: Large-scale knowledge graphs</h3>
+<p>While academic research on semantic networks and the Semantic Web laid important theoretical foundations, the emergence of large-scale commercial knowledge graphs demonstrated their practical value. In 2012, Google introduced its Knowledge Graph, which enhanced search results with structured information gathered from various sources. This was followed by similar initiatives from other technology companies:</p>
+<ol type="1">
+<li><p><strong>Google Knowledge Graph</strong> - Powers enhanced search results and supports various Google services with structured information about people, places, and things.</p></li>
+<li><p><strong>Facebook Graph API</strong> - Represents information about users, photos, pages, and other Facebook objects in a social graph.</p></li>
+<li><p><strong>Microsoft Academic Graph</strong> - A heterogeneous graph containing scientific publication records, citation relationships, authors, institutions, and research topics.</p></li>
+<li><p><strong>Amazon Product Graph</strong> - Powers product recommendations and search by representing relationships between products, customers, and other entities.</p></li>
+<li><p><strong>DBpedia</strong> - A community effort to extract structured information from Wikipedia and make it available on the Web.</p></li>
+<li><p><strong>Wikidata</strong> - A free and collaborative knowledge base that acts as a source of open data for Wikipedia and other Wikimedia projects.</p></li>
+</ol>
+<p>These implementations demonstrated that knowledge graphs could be deployed at web scale, containing billions of entities and relationships while supporting real-time querying and inference.</p>
+</section>
+</section>
+<section id="knowledge-graph-fundamentals" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="knowledge-graph-fundamentals"><span class="header-section-number">2.3</span> Knowledge graph fundamentals</h2>
+<p>To understand knowledge graphs fully, we must examine their core components and structural principles.</p>
+<section id="entities-and-relationships" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="entities-and-relationships"><span class="header-section-number">2.3.1</span> Entities and relationships</h3>
+<p>The fundamental building blocks of knowledge graphs are entities and relationships.</p>
+<div id="def-entity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.5 (Entity)</strong></span> An <strong>entity</strong> represents a distinct object, concept, event, or thing in a knowledge graph. Formally, an entity <span class="math inline">e \in E</span> is a node in the graph structure that has a unique identifier and may have associated attributes and values.</p>
+</div>
+<div id="def-relationship" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.6 (Relationship)</strong></span> A <strong>relationship</strong> represents a directed connection between two entities in a knowledge graph. Formally, a relationship <span class="math inline">r \in R</span> is a triple <span class="math inline">(e_1, l, e_2)</span> where <span class="math inline">e_1, e_2 \in E</span> are entities and <span class="math inline">l \in L_R</span> is a relationship label from the set of possible relationship types.</p>
+</div>
+<p>Relationships in knowledge graphs are typically directed, meaning they have a specific orientation from a source entity to a target entity. However, some knowledge graph implementations support bidirectional or undirected relationships as well.</p>
+</section>
+<section id="attributes-and-values" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="attributes-and-values"><span class="header-section-number">2.3.2</span> Attributes and values</h3>
+<p>While relationships connect entities to other entities, attributes connect entities to literal values such as strings, numbers, dates, or other data types.</p>
+<div id="def-attribute" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.7 (Attribute)</strong></span> An <strong>attribute</strong> represents a property or characteristic of an entity. Formally, an attribute <span class="math inline">a \in A</span> is a key that can be associated with an entity <span class="math inline">e \in E</span> to store a specific value <span class="math inline">v \in V</span>.</p>
+</div>
+<p>Attributes provide detailed information about entities without creating new nodes in the graph. For example, rather than creating a node for “1975” to represent a person’s birth year, this information is more efficiently stored as an attribute of the person entity.</p>
+</section>
+<section id="schema-and-ontologies" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="schema-and-ontologies"><span class="header-section-number">2.3.3</span> Schema and ontologies</h3>
+<p>While knowledge graphs provide flexibility in data representation, they often employ schemas or ontologies to provide structure and semantic meaning to the data.</p>
+<div id="def-ontology" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.8 (Ontology)</strong></span> An <strong>ontology</strong> is a formal specification of a conceptualization that defines the types, properties, and interrelationships of entities within a domain. In knowledge graphs, ontologies provide a vocabulary for describing entities and relationships, constraints on how they can be used, and axioms that enable logical inference.</p>
+</div>
+<p>Ontologies can range from lightweight taxonomies that define basic hierarchical relationships to complex logical frameworks with formal semantics. The level of ontological formality in a knowledge graph depends on its intended use cases and reasoning requirements.</p>
+<div id="exm-simple-ontology" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.3 (Simple ontology for an academic knowledge graph)</strong></span> A simple ontology for an academic domain might define:</p>
+<p>Entity types:</p>
+<ul>
+<li>Person</li>
+<li>Publication</li>
+<li>Institution</li>
+<li>Conference</li>
+<li>ResearchTopic</li>
+</ul>
+<p>Relationship types:</p>
+<ul>
+<li>authorOf (Person → Publication)</li>
+<li>affiliatedWith (Person → Institution)</li>
+<li>publishedAt (Publication → Conference)</li>
+<li>relatesToTopic (Publication → ResearchTopic)</li>
+<li>collaboratesWith (Person → Person)</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>A Publication must have at least one author</li>
+<li>A Person can be affiliated with multiple Institutions</li>
+<li>Conference events occur on specific dates and at specific locations</li>
+</ul>
+<p>This ontology provides structure to the knowledge graph and enables validation of new information added to it.</p>
+</div>
+</section>
+<section id="context-and-provenance" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="context-and-provenance"><span class="header-section-number">2.3.4</span> Context and provenance</h3>
+<p>Modern knowledge graphs often incorporate context and provenance information to track the source, reliability, and temporal validity of facts.</p>
+<div id="def-provenance" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.9 (Provenance)</strong></span> <strong>Provenance</strong> in a knowledge graph refers to metadata about the origin, derivation, or history of a piece of knowledge. This may include information about the source, the time of acquisition, the extraction method, and confidence measures.</p>
+</div>
+<p>Provenance information is crucial for assessing the reliability of information, resolving conflicts between contradictory statements, and supporting trust mechanisms in knowledge graphs that integrate data from multiple sources.</p>
+</section>
+</section>
+<section id="the-relationship-between-knowledge-graphs-and-network-science" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="the-relationship-between-knowledge-graphs-and-network-science"><span class="header-section-number">2.4</span> The relationship between knowledge graphs and network science</h2>
+<p>Knowledge graphs represent a specific application of network science principles to the domain of knowledge representation. Network science provides the theoretical foundation and analytical tools for understanding and working with complex networks across various domains.</p>
+<div id="def-network-science" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.10 (Network science)</strong></span> <strong>Network science</strong> is the academic field that studies complex networks such as telecommunication networks, computer networks, biological networks, cognitive and semantic networks, and social networks. It combines elements from mathematics, physics, computer science, statistics, and data science to understand the structure, dynamics, and functions of networks.</p>
+</div>
+<p>The relationship between knowledge graphs and network science is bidirectional:</p>
+<ol type="1">
+<li><p><strong>Network science informs knowledge graph analysis</strong>: Concepts from network science such as centrality measures, community detection, and network evolution models provide powerful tools for analyzing and understanding knowledge graphs.</p></li>
+<li><p><strong>Knowledge graphs extend network science</strong>: Knowledge graphs introduce semantic richness and heterogeneity to network models, requiring adaptations of classical network analysis techniques and inspiring new approaches.</p></li>
+</ol>
+<p>This relationship is particularly evident in several key areas:</p>
+<section id="structure-and-topology" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="structure-and-topology"><span class="header-section-number">2.4.1</span> Structure and topology</h3>
+<p>Network science provides metrics and models for analyzing the structural properties of knowledge graphs:</p>
+<ul>
+<li><p><strong>Degree distribution</strong>: The distribution of connections across entities often follows power laws, with few highly connected entities and many sparsely connected ones.</p></li>
+<li><p><strong>Small-world properties</strong>: Many knowledge graphs exhibit small-world characteristics, where most nodes can be reached from any other node in a small number of steps despite having relatively few edges.</p></li>
+<li><p><strong>Community structure</strong>: Entities in knowledge graphs often form natural clusters or communities based on dense interconnections.</p></li>
+</ul>
+<div id="exm-small-world" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.4 (Small-world property in a knowledge graph)</strong></span> In a knowledge graph of scientific publications:</p>
+<ul>
+<li>The average path length between any two publications might be approximately 4-6 steps</li>
+<li>Most papers are connected to only a few others (sparse connectivity)</li>
+<li>Yet almost any paper can be reached from any other through a small number of citation links</li>
+</ul>
+<p>This small-world property facilitates knowledge discovery and traversal across seemingly distant domains.</p>
+</div>
+</section>
+<section id="dynamics-and-evolution" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="dynamics-and-evolution"><span class="header-section-number">2.4.2</span> Dynamics and evolution</h3>
+<p>Network science provides frameworks for understanding how knowledge graphs evolve over time:</p>
+<ul>
+<li><p><strong>Preferential attachment</strong>: New entities often connect preferentially to already well-connected entities, leading to rich-get-richer dynamics.</p></li>
+<li><p><strong>Growth models</strong>: Mathematical models from network science help predict how knowledge graphs expand over time.</p></li>
+<li><p><strong>Temporal patterns</strong>: Analysis of edge formation over time reveals patterns in how knowledge emerges and connects.</p></li>
+</ul>
+</section>
+<section id="information-flow-and-diffusion" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="information-flow-and-diffusion"><span class="header-section-number">2.4.3</span> Information flow and diffusion</h3>
+<p>Network science models of information flow help understand how knowledge propagates through knowledge graphs:</p>
+<ul>
+<li><p><strong>Centrality measures</strong>: Identify influential entities that serve as hubs for information transmission.</p></li>
+<li><p><strong>Information cascades</strong>: Model how new facts or corrections propagate through a knowledge graph.</p></li>
+<li><p><strong>Resilience and robustness</strong>: Assess how knowledge graphs respond to removal of entities or relationships.</p></li>
+</ul>
+</section>
+</section>
+<section id="applications-and-use-cases" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="applications-and-use-cases"><span class="header-section-number">2.5</span> Applications and use cases</h2>
+<p>Knowledge graphs have found applications across numerous domains, demonstrating their versatility and power for organizing and reasoning with complex information.</p>
+<section id="search-and-information-retrieval" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="search-and-information-retrieval"><span class="header-section-number">2.5.1</span> Search and information retrieval</h3>
+<p>One of the most visible applications of knowledge graphs is in enhancing search engines. By incorporating structured knowledge, search engines can:</p>
+<ol type="1">
+<li>Understand the semantics of search queries, distinguishing between different meanings of ambiguous terms</li>
+<li>Provide direct answers to factual questions rather than just links to documents</li>
+<li>Support entity-centric search, allowing users to explore relationships around specific entities</li>
+<li>Enhance query expansion by understanding related concepts</li>
+</ol>
+<div id="exm-search-application" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.5 (Knowledge graph in search)</strong></span> When a user searches for “Einstein,” a knowledge graph-enhanced search engine might:</p>
+<ul>
+<li>Display a summary of Albert Einstein including his birth date, death date, major achievements, and related images</li>
+<li>List his key publications with publication dates</li>
+<li>Show related scientists like Niels Bohr, Max Planck, and others</li>
+<li>Provide options to explore specific aspects like his work on relativity or his personal life</li>
+</ul>
+<p>This rich, structured response is powered by the underlying knowledge graph that connects Einstein to various entities and facts.</p>
+</div>
+</section>
+<section id="recommendation-systems" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="recommendation-systems"><span class="header-section-number">2.5.2</span> Recommendation systems</h3>
+<p>Knowledge graphs have transformed recommendation systems by enabling context-aware, explainable recommendations:</p>
+<ol type="1">
+<li><strong>Content-based recommendations</strong>: Using detailed entity attributes and relationships to find truly similar items</li>
+<li><strong>Collaborative knowledge-enhanced filtering</strong>: Combining user behavior patterns with semantic knowledge about items</li>
+<li><strong>Path-based recommendations</strong>: Finding complex connection paths between users and potential items of interest</li>
+<li><strong>Cross-domain recommendations</strong>: Leveraging connections across different types of entities (movies, books, music) to provide diverse recommendations</li>
+</ol>
+<p>The graph structure allows for tracing the “reasoning” behind recommendations, making them more transparent to users.</p>
+</section>
+<section id="question-answering-and-virtual-assistants" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="question-answering-and-virtual-assistants"><span class="header-section-number">2.5.3</span> Question answering and virtual assistants</h3>
+<p>Knowledge graphs serve as the backbone for many question answering systems and virtual assistants:</p>
+<ol type="1">
+<li><strong>Factoid question answering</strong>: Directly retrieving facts stored in the knowledge graph</li>
+<li><strong>Complex question decomposition</strong>: Breaking down complex questions into subqueries that can be answered from the graph</li>
+<li><strong>Contextual understanding</strong>: Maintaining conversation context by referencing entities in the knowledge graph</li>
+<li><strong>Multimodal interaction</strong>: Connecting language understanding with visual and other modalities</li>
+</ol>
+<p>Systems like Google Assistant, Amazon Alexa, and Apple Siri rely heavily on knowledge graphs to understand and respond to user queries.</p>
+</section>
+<section id="data-integration-and-master-data-management" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="data-integration-and-master-data-management"><span class="header-section-number">2.5.4</span> Data integration and master data management</h3>
+<p>Organizations use knowledge graphs to integrate heterogeneous data sources:</p>
+<ol type="1">
+<li><strong>Entity resolution</strong>: Identifying when different records refer to the same real-world entity</li>
+<li><strong>Schema mapping</strong>: Aligning different data models through semantic relationships</li>
+<li><strong>Master data management</strong>: Maintaining a single, consistent view of critical business entities</li>
+<li><strong>Data lineage tracking</strong>: Recording the provenance and transformations of data</li>
+</ol>
+<p>This application is particularly valuable in enterprise settings where data silos pose significant challenges.</p>
+<div id="exm-data-integration" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.6 (Enterprise data integration)</strong></span> A financial institution might use a knowledge graph to integrate:</p>
+<ul>
+<li>Customer data from multiple systems (CRM, transaction records, support tickets)</li>
+<li>Product information (accounts, loans, investment vehicles)</li>
+<li>Regulatory and compliance information</li>
+<li>Market and economic data</li>
+</ul>
+<p>The knowledge graph connects these domains, allowing questions that span multiple systems, such as “Show all high-value customers who have both investment accounts and mortgages but haven’t been contacted in 6 months.”</p>
+</div>
+</section>
+<section id="scientific-discovery-and-research" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="scientific-discovery-and-research"><span class="header-section-number">2.5.5</span> Scientific discovery and research</h3>
+<p>Knowledge graphs are increasingly important in scientific domains:</p>
+<ol type="1">
+<li><strong>Literature-based discovery</strong>: Finding implicit connections between concepts mentioned in scientific literature</li>
+<li><strong>Drug discovery</strong>: Identifying potential drug targets by analyzing biological interaction networks</li>
+<li><strong>Material science</strong>: Predicting properties of novel materials based on knowledge about similar compounds</li>
+<li><strong>Research collaboration networks</strong>: Analyzing patterns of collaboration and knowledge flow in academic communities</li>
+</ol>
+<p>In these contexts, knowledge graphs help synthesize information across vast corpora of scientific publications and datasets.</p>
+</section>
+<section id="fraud-detection-and-risk-assessment" class="level3" data-number="2.5.6">
+<h3 data-number="2.5.6" class="anchored" data-anchor-id="fraud-detection-and-risk-assessment"><span class="header-section-number">2.5.6</span> Fraud detection and risk assessment</h3>
+<p>Financial institutions and insurance companies use knowledge graphs for:</p>
+<ol type="1">
+<li><strong>Fraud ring detection</strong>: Identifying suspicious patterns of connections between entities</li>
+<li><strong>Risk propagation analysis</strong>: Understanding how risk spreads through networks of connected entities</li>
+<li><strong>Regulatory compliance</strong>: Tracking complex ownership structures and relationships for compliance purposes</li>
+<li><strong>Anomaly detection</strong>: Identifying transactions or patterns that deviate from normal behavior</li>
+</ol>
+<p>The graph structure is particularly effective at revealing hidden relationships that might indicate fraudulent activity.</p>
+</section>
+</section>
+<section id="challenges-and-limitations" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="challenges-and-limitations"><span class="header-section-number">2.6</span> Challenges and limitations</h2>
+<p>Despite their power and flexibility, knowledge graphs face several significant challenges:</p>
+<section id="construction-and-maintenance" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="construction-and-maintenance"><span class="header-section-number">2.6.1</span> Construction and maintenance</h3>
+<p>Building and maintaining high-quality knowledge graphs requires substantial effort:</p>
+<ol type="1">
+<li><strong>Information extraction</strong>: Automatically extracting structured information from unstructured text remains challenging</li>
+<li><strong>Quality control</strong>: Ensuring accuracy and consistency across billions of facts</li>
+<li><strong>Currency</strong>: Keeping information up-to-date as the world changes</li>
+<li><strong>Scaling</strong>: Managing the computational complexity of operations on very large graphs</li>
+</ol>
+<p>These challenges have led to the development of various semi-automated approaches that combine machine learning with human curation.</p>
+</section>
+<section id="incompleteness-and-uncertainty" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="incompleteness-and-uncertainty"><span class="header-section-number">2.6.2</span> Incompleteness and uncertainty</h3>
+<p>Real-world knowledge graphs are inevitably incomplete:</p>
+<ol type="1">
+<li><strong>Open-world assumption</strong>: The absence of a fact doesn’t imply its negation</li>
+<li><strong>Conflicting information</strong>: Different sources may provide contradictory information</li>
+<li><strong>Temporal validity</strong>: Facts change over time, requiring temporal qualification</li>
+<li><strong>Probabilistic knowledge</strong>: Many facts are not absolutely certain</li>
+</ol>
+<p>Techniques for handling incompleteness and uncertainty, such as knowledge graph embedding models and probabilistic graphical models, are active areas of research.</p>
+</section>
+<section id="scalability-and-performance" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="scalability-and-performance"><span class="header-section-number">2.6.3</span> Scalability and performance</h3>
+<p>As knowledge graphs grow to billions of entities and relationships, computational challenges emerge:</p>
+<ol type="1">
+<li><strong>Query optimization</strong>: Efficient execution of complex graph queries</li>
+<li><strong>Distributed storage and processing</strong>: Partitioning graphs across multiple machines</li>
+<li><strong>Indexing strategies</strong>: Creating appropriate indexes for different query patterns</li>
+<li><strong>Real-time updates</strong>: Modifying the graph while maintaining query performance</li>
+</ol>
+<p>These challenges have led to specialized graph database technologies and distributed computation frameworks.</p>
+</section>
+<section id="ethical-and-social-considerations" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="ethical-and-social-considerations"><span class="header-section-number">2.6.4</span> Ethical and social considerations</h3>
+<p>Knowledge graphs raise important ethical questions:</p>
+<ol type="1">
+<li><strong>Privacy</strong>: Integrating information from multiple sources may reveal sensitive patterns</li>
+<li><strong>Bias</strong>: Knowledge graphs may inherit and amplify biases present in their source data</li>
+<li><strong>Transparency</strong>: The complexity of knowledge graphs can make reasoning difficult to explain</li>
+<li><strong>Power concentration</strong>: Large-scale knowledge graphs are primarily controlled by major technology companies</li>
+</ol>
+<p>Addressing these challenges requires interdisciplinary approaches that combine technical solutions with ethical frameworks and policy considerations.</p>
+</section>
+</section>
+<section id="emerging-trends-and-future-directions" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="emerging-trends-and-future-directions"><span class="header-section-number">2.7</span> Emerging trends and future directions</h2>
+<p>The field of knowledge graphs continues to evolve rapidly, with several noteworthy trends:</p>
+<section id="multimodal-knowledge-graphs" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="multimodal-knowledge-graphs"><span class="header-section-number">2.7.1</span> Multimodal knowledge graphs</h3>
+<p>Traditional knowledge graphs primarily represent textual knowledge, but emerging approaches incorporate multiple modalities:</p>
+<ol type="1">
+<li><strong>Visual knowledge</strong>: Connecting images and visual attributes to entities</li>
+<li><strong>Audio knowledge</strong>: Representing relationships between sounds, music, and spoken content</li>
+<li><strong>Spatiotemporal knowledge</strong>: Capturing geographic and temporal dimensions of information</li>
+<li><strong>Cross-modal reasoning</strong>: Drawing inferences across different modalities</li>
+</ol>
+<p>These multimodal knowledge graphs enable richer representations and more comprehensive reasoning.</p>
+</section>
+<section id="neural-symbolic-integration" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="neural-symbolic-integration"><span class="header-section-number">2.7.2</span> Neural-symbolic integration</h3>
+<p>The integration of knowledge graphs with neural networks has become a major research direction:</p>
+<ol type="1">
+<li><strong>Knowledge graph embeddings</strong>: Representing entities and relationships in continuous vector spaces</li>
+<li><strong>Graph neural networks</strong>: Learning representations that respect the graph structure</li>
+<li><strong>Neuro-symbolic reasoning</strong>: Combining logical reasoning with neural learning</li>
+<li><strong>Knowledge-infused language models</strong>: Enhancing large language models with structured knowledge</li>
+</ol>
+<p>These approaches aim to combine the interpretability and explicit nature of symbolic representations with the learning capabilities of neural networks.</p>
+</section>
+<section id="decentralized-and-collaborative-knowledge-graphs" class="level3" data-number="2.7.3">
+<h3 data-number="2.7.3" class="anchored" data-anchor-id="decentralized-and-collaborative-knowledge-graphs"><span class="header-section-number">2.7.3</span> Decentralized and collaborative knowledge graphs</h3>
+<p>While early knowledge graphs were often centralized resources, new models for distributed construction and maintenance are emerging:</p>
+<ol type="1">
+<li><strong>Blockchain-based knowledge graphs</strong>: Using distributed ledger technology to track provenance and changes</li>
+<li><strong>Federated knowledge graphs</strong>: Connecting multiple knowledge graphs while maintaining local control</li>
+<li><strong>Collaborative construction</strong>: Developing tools and platforms for community-driven knowledge creation</li>
+<li><strong>Knowledge commons</strong>: Establishing shared, open knowledge resources with appropriate governance structures</li>
+</ol>
+<p>These approaches address concerns about centralization while enabling broader participation in knowledge creation.</p>
+</section>
+<section id="self-evolving-knowledge-systems" class="level3" data-number="2.7.4">
+<h3 data-number="2.7.4" class="anchored" data-anchor-id="self-evolving-knowledge-systems"><span class="header-section-number">2.7.4</span> Self-evolving knowledge systems</h3>
+<p>The next generation of knowledge graphs may have increased autonomy:</p>
+<ol type="1">
+<li><strong>Continuous learning</strong>: Automatically updating based on new information</li>
+<li><strong>Active information seeking</strong>: Identifying knowledge gaps and seeking information to fill them</li>
+<li><strong>Self-correction</strong>: Detecting and resolving inconsistencies</li>
+<li><strong>Adaptive reasoning</strong>: Selecting appropriate inference mechanisms based on the task</li>
+</ol>
+<p>These capabilities would reduce the maintenance burden while increasing the adaptability of knowledge systems.</p>
+</section>
+</section>
+<section id="summary" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="summary"><span class="header-section-number">2.8</span> Summary</h2>
+<p>This chapter has introduced the fundamental concepts of knowledge graphs, their historical development, and their relationship to network science. We have explored the core components of knowledge graphs—entities, relationships, attributes, and ontologies—and examined how they support a wide range of applications from search engines to scientific discovery.</p>
+<p>Knowledge graphs represent a powerful paradigm for organizing and reasoning with complex, interconnected information. By combining the structural insights of network science with the semantic richness of knowledge representation, they offer unique capabilities for navigating the complexity of modern information ecosystems.</p>
+<p>In the following chapters, we will build on this foundation to explore more specialized aspects of knowledge graphs, including their mathematical foundations, construction techniques, analysis methods, and applications across various domains.</p>
+</section>
+<section id="exercises" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="exercises"><span class="header-section-number">2.9</span> Exercises</h2>
+<div id="exr-kg-comparison" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.1 (Knowledge graph comparison)</strong></span> Compare and contrast knowledge graphs with relational databases, document stores, and property graphs. For each comparison, identify at least three strengths and three limitations of knowledge graphs relative to the alternative approach.</p>
+</div>
+<div id="exr-design-kg" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.2 (Knowledge graph design)</strong></span> Design a simple knowledge graph for a domain of your choice (e.g., movies, sports, academic publications). Identify the main entity types, relationship types, and key attributes. Draw a diagram illustrating the ontology and provide 5-10 example facts that would be represented in the knowledge graph.</p>
+</div>
+<div id="exr-kg-applications" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.3 (Industry application analysis)</strong></span> Select a specific industry (healthcare, finance, retail, etc.) and analyze how knowledge graphs are being used or could be used in that industry. Identify three specific use cases, the benefits they provide, and the challenges in implementing them.</p>
+</div>
+<div id="exr-network-measures" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.4 (Network measures in knowledge graphs)</strong></span> Consider a knowledge graph with 1000 entities and 5000 relationships. Discuss how the following network science measures would be interpreted in this context:</p>
+<ol type="1">
+<li>Average degree</li>
+<li>Clustering coefficient</li>
+<li>Path length</li>
+<li>Centrality measures (degree, betweenness, closeness)</li>
+</ol>
+</div>
+<div id="exr-kg-construction" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.5 (Knowledge graph construction challenges)</strong></span> You are tasked with building a knowledge graph about climate change using scientific literature, news articles, and social media as sources. Identify and explain five major challenges you would face and propose approaches to address each challenge.</p>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">2.10</span> Further reading</h2>
+<ol type="1">
+<li><p>Hogan, A., Blomqvist, E., Cochez, M., d’Amato, C., Melo, G. D., Gutierrez, C., … &amp; Zimmermann, A. (2021). Knowledge graphs. ACM Computing Surveys (CSUR), 54(4), 1-37.</p></li>
+<li><p>Paulheim, H. (2017). Knowledge graph refinement: A survey of approaches and evaluation methods. Semantic web, 8(3), 489-508.</p></li>
+<li><p>Ji, S., Pan, S., Cambria, E., Marttinen, P., &amp; Philip, S. Y. (2021). A survey on knowledge graphs: Representation, acquisition, and applications. IEEE Transactions on Neural Networks and Learning Systems, 33(2), 494-514.</p></li>
+<li><p>Fensel, D., Şimşek, U., Angele, K., Huaman, E., Kärle, E., Panasiuk, O., … &amp; Wahler, A. (2020). Introduction: What Is a Knowledge Graph? In Knowledge Graphs (pp.&nbsp;1-10). Springer, Cham.</p></li>
+<li><p>Barabási, A. L. (2016). Network science. Cambridge University Press.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/foundation/outline.html" class="pagination-link" aria-label="Outline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../contents/foundation/math-fundamentals.html" class="pagination-link" aria-label="Mathematical fundamentals">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Graph Theory Fundamentals – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/foundation/knowledge-representation.html" rel="next">
+<link href="../../contents/foundation/math-fundamentals.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/graph-fundamentals.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basic-graph-definitions-and-terminology" id="toc-basic-graph-definitions-and-terminology" class="nav-link active" data-scroll-target="#basic-graph-definitions-and-terminology"><span class="header-section-number">4.1</span> Basic graph definitions and terminology</a>
+  <ul class="collapse">
+  <li><a href="#graphs-vertices-and-edges" id="toc-graphs-vertices-and-edges" class="nav-link" data-scroll-target="#graphs-vertices-and-edges"><span class="header-section-number">4.1.1</span> Graphs, vertices, and edges</a></li>
+  <li><a href="#directed-and-undirected-graphs" id="toc-directed-and-undirected-graphs" class="nav-link" data-scroll-target="#directed-and-undirected-graphs"><span class="header-section-number">4.1.2</span> Directed and undirected graphs</a></li>
+  <li><a href="#graph-terminology" id="toc-graph-terminology" class="nav-link" data-scroll-target="#graph-terminology"><span class="header-section-number">4.1.3</span> Graph terminology</a></li>
+  <li><a href="#weighted-graphs" id="toc-weighted-graphs" class="nav-link" data-scroll-target="#weighted-graphs"><span class="header-section-number">4.1.4</span> Weighted graphs</a></li>
+  <li><a href="#multigraphs-and-hypergraphs" id="toc-multigraphs-and-hypergraphs" class="nav-link" data-scroll-target="#multigraphs-and-hypergraphs"><span class="header-section-number">4.1.5</span> Multigraphs and hypergraphs</a></li>
+  </ul></li>
+  <li><a href="#special-graph-structures" id="toc-special-graph-structures" class="nav-link" data-scroll-target="#special-graph-structures"><span class="header-section-number">4.2</span> Special graph structures</a>
+  <ul class="collapse">
+  <li><a href="#bipartite-graphs" id="toc-bipartite-graphs" class="nav-link" data-scroll-target="#bipartite-graphs"><span class="header-section-number">4.2.1</span> Bipartite graphs</a></li>
+  <li><a href="#complete-graphs" id="toc-complete-graphs" class="nav-link" data-scroll-target="#complete-graphs"><span class="header-section-number">4.2.2</span> Complete graphs</a></li>
+  <li><a href="#trees-and-forests" id="toc-trees-and-forests" class="nav-link" data-scroll-target="#trees-and-forests"><span class="header-section-number">4.2.3</span> Trees and forests</a></li>
+  <li><a href="#directed-acyclic-graphs-dags" id="toc-directed-acyclic-graphs-dags" class="nav-link" data-scroll-target="#directed-acyclic-graphs-dags"><span class="header-section-number">4.2.4</span> Directed acyclic graphs (DAGs)</a></li>
+  <li><a href="#regular-graphs" id="toc-regular-graphs" class="nav-link" data-scroll-target="#regular-graphs"><span class="header-section-number">4.2.5</span> Regular graphs</a></li>
+  </ul></li>
+  <li><a href="#graph-properties-and-measures" id="toc-graph-properties-and-measures" class="nav-link" data-scroll-target="#graph-properties-and-measures"><span class="header-section-number">4.3</span> Graph properties and measures</a>
+  <ul class="collapse">
+  <li><a href="#connectivity" id="toc-connectivity" class="nav-link" data-scroll-target="#connectivity"><span class="header-section-number">4.3.1</span> Connectivity</a></li>
+  <li><a href="#distance-measures" id="toc-distance-measures" class="nav-link" data-scroll-target="#distance-measures"><span class="header-section-number">4.3.2</span> Distance measures</a></li>
+  <li><a href="#centrality-measures" id="toc-centrality-measures" class="nav-link" data-scroll-target="#centrality-measures"><span class="header-section-number">4.3.3</span> Centrality measures</a></li>
+  <li><a href="#clustering-coefficient" id="toc-clustering-coefficient" class="nav-link" data-scroll-target="#clustering-coefficient"><span class="header-section-number">4.3.4</span> Clustering coefficient</a></li>
+  <li><a href="#assortativity" id="toc-assortativity" class="nav-link" data-scroll-target="#assortativity"><span class="header-section-number">4.3.5</span> Assortativity</a></li>
+  </ul></li>
+  <li><a href="#graph-representations-and-data-structures" id="toc-graph-representations-and-data-structures" class="nav-link" data-scroll-target="#graph-representations-and-data-structures"><span class="header-section-number">4.4</span> Graph representations and data structures</a>
+  <ul class="collapse">
+  <li><a href="#adjacency-matrix" id="toc-adjacency-matrix" class="nav-link" data-scroll-target="#adjacency-matrix"><span class="header-section-number">4.4.1</span> Adjacency matrix</a></li>
+  <li><a href="#adjacency-list" id="toc-adjacency-list" class="nav-link" data-scroll-target="#adjacency-list"><span class="header-section-number">4.4.2</span> Adjacency list</a></li>
+  <li><a href="#incidence-matrix" id="toc-incidence-matrix" class="nav-link" data-scroll-target="#incidence-matrix"><span class="header-section-number">4.4.3</span> Incidence matrix</a></li>
+  <li><a href="#edge-list" id="toc-edge-list" class="nav-link" data-scroll-target="#edge-list"><span class="header-section-number">4.4.4</span> Edge list</a></li>
+  <li><a href="#advanced-representations-for-knowledge-graphs" id="toc-advanced-representations-for-knowledge-graphs" class="nav-link" data-scroll-target="#advanced-representations-for-knowledge-graphs"><span class="header-section-number">4.4.5</span> Advanced representations for knowledge graphs</a></li>
+  </ul></li>
+  <li><a href="#graph-algorithms-fundamentals" id="toc-graph-algorithms-fundamentals" class="nav-link" data-scroll-target="#graph-algorithms-fundamentals"><span class="header-section-number">4.5</span> Graph algorithms fundamentals</a>
+  <ul class="collapse">
+  <li><a href="#graph-traversal-algorithms" id="toc-graph-traversal-algorithms" class="nav-link" data-scroll-target="#graph-traversal-algorithms"><span class="header-section-number">4.5.1</span> Graph traversal algorithms</a></li>
+  <li><a href="#shortest-path-algorithms" id="toc-shortest-path-algorithms" class="nav-link" data-scroll-target="#shortest-path-algorithms"><span class="header-section-number">4.5.2</span> Shortest path algorithms</a></li>
+  <li><a href="#minimum-spanning-tree-algorithms" id="toc-minimum-spanning-tree-algorithms" class="nav-link" data-scroll-target="#minimum-spanning-tree-algorithms"><span class="header-section-number">4.5.3</span> Minimum spanning tree algorithms</a></li>
+  <li><a href="#connected-components-algorithms" id="toc-connected-components-algorithms" class="nav-link" data-scroll-target="#connected-components-algorithms"><span class="header-section-number">4.5.4</span> Connected components algorithms</a></li>
+  <li><a href="#graph-coloring-and-matching-algorithms" id="toc-graph-coloring-and-matching-algorithms" class="nav-link" data-scroll-target="#graph-coloring-and-matching-algorithms"><span class="header-section-number">4.5.5</span> Graph coloring and matching algorithms</a></li>
+  </ul></li>
+  <li><a href="#graph-decomposition-and-community-detection" id="toc-graph-decomposition-and-community-detection" class="nav-link" data-scroll-target="#graph-decomposition-and-community-detection"><span class="header-section-number">4.6</span> Graph decomposition and community detection</a>
+  <ul class="collapse">
+  <li><a href="#graph-partitioning" id="toc-graph-partitioning" class="nav-link" data-scroll-target="#graph-partitioning"><span class="header-section-number">4.6.1</span> Graph partitioning</a></li>
+  <li><a href="#community-detection" id="toc-community-detection" class="nav-link" data-scroll-target="#community-detection"><span class="header-section-number">4.6.2</span> Community detection</a></li>
+  <li><a href="#core-periphery-structure" id="toc-core-periphery-structure" class="nav-link" data-scroll-target="#core-periphery-structure"><span class="header-section-number">4.6.3</span> Core-periphery structure</a></li>
+  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="header-section-number">4.6.4</span> Hierarchical clustering</a></li>
+  </ul></li>
+  <li><a href="#specialized-graph-types-for-knowledge-representation" id="toc-specialized-graph-types-for-knowledge-representation" class="nav-link" data-scroll-target="#specialized-graph-types-for-knowledge-representation"><span class="header-section-number">4.7</span> Specialized graph types for knowledge representation</a>
+  <ul class="collapse">
+  <li><a href="#property-graphs" id="toc-property-graphs" class="nav-link" data-scroll-target="#property-graphs"><span class="header-section-number">4.7.1</span> Property graphs</a></li>
+  <li><a href="#rdf-graphs" id="toc-rdf-graphs" class="nav-link" data-scroll-target="#rdf-graphs"><span class="header-section-number">4.7.2</span> RDF graphs</a></li>
+  <li><a href="#ontology-graphs" id="toc-ontology-graphs" class="nav-link" data-scroll-target="#ontology-graphs"><span class="header-section-number">4.7.3</span> Ontology graphs</a></li>
+  <li><a href="#hypergraphs-in-knowledge-representation" id="toc-hypergraphs-in-knowledge-representation" class="nav-link" data-scroll-target="#hypergraphs-in-knowledge-representation"><span class="header-section-number">4.7.4</span> Hypergraphs in knowledge representation</a></li>
+  <li><a href="#temporal-and-dynamic-graphs" id="toc-temporal-and-dynamic-graphs" class="nav-link" data-scroll-target="#temporal-and-dynamic-graphs"><span class="header-section-number">4.7.5</span> Temporal and dynamic graphs</a></li>
+  <li><a href="#probabilistic-and-uncertain-graphs" id="toc-probabilistic-and-uncertain-graphs" class="nav-link" data-scroll-target="#probabilistic-and-uncertain-graphs"><span class="header-section-number">4.7.6</span> Probabilistic and uncertain graphs</a></li>
+  </ul></li>
+  <li><a href="#applications-of-graph-theory-in-knowledge-graphs" id="toc-applications-of-graph-theory-in-knowledge-graphs" class="nav-link" data-scroll-target="#applications-of-graph-theory-in-knowledge-graphs"><span class="header-section-number">4.8</span> Applications of graph theory in knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#entity-resolution-and-linking" id="toc-entity-resolution-and-linking" class="nav-link" data-scroll-target="#entity-resolution-and-linking"><span class="header-section-number">4.8.1</span> Entity resolution and linking</a></li>
+  <li><a href="#link-prediction" id="toc-link-prediction" class="nav-link" data-scroll-target="#link-prediction"><span class="header-section-number">4.8.2</span> Link prediction</a></li>
+  <li><a href="#path-based-reasoning-and-inference" id="toc-path-based-reasoning-and-inference" class="nav-link" data-scroll-target="#path-based-reasoning-and-inference"><span class="header-section-number">4.8.3</span> Path-based reasoning and inference</a></li>
+  <li><a href="#knowledge-graph-completion" id="toc-knowledge-graph-completion" class="nav-link" data-scroll-target="#knowledge-graph-completion"><span class="header-section-number">4.8.4</span> Knowledge graph completion</a></li>
+  <li><a href="#query-answering-over-knowledge-graphs" id="toc-query-answering-over-knowledge-graphs" class="nav-link" data-scroll-target="#query-answering-over-knowledge-graphs"><span class="header-section-number">4.8.5</span> Query answering over knowledge graphs</a></li>
+  <li><a href="#community-based-knowledge-organization" id="toc-community-based-knowledge-organization" class="nav-link" data-scroll-target="#community-based-knowledge-organization"><span class="header-section-number">4.8.6</span> Community-based knowledge organization</a></li>
+  </ul></li>
+  <li><a href="#graph-theory-extensions-for-knowledge-graphs" id="toc-graph-theory-extensions-for-knowledge-graphs" class="nav-link" data-scroll-target="#graph-theory-extensions-for-knowledge-graphs"><span class="header-section-number">4.9</span> Graph theory extensions for knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#higher-order-graph-analysis" id="toc-higher-order-graph-analysis" class="nav-link" data-scroll-target="#higher-order-graph-analysis"><span class="header-section-number">4.9.1</span> Higher-order graph analysis</a></li>
+  <li><a href="#multilayer-and-multiplex-graphs" id="toc-multilayer-and-multiplex-graphs" class="nav-link" data-scroll-target="#multilayer-and-multiplex-graphs"><span class="header-section-number">4.9.2</span> Multilayer and multiplex graphs</a></li>
+  <li><a href="#heterogeneous-information-networks" id="toc-heterogeneous-information-networks" class="nav-link" data-scroll-target="#heterogeneous-information-networks"><span class="header-section-number">4.9.3</span> Heterogeneous information networks</a></li>
+  <li><a href="#semantic-networks-and-conceptual-graphs" id="toc-semantic-networks-and-conceptual-graphs" class="nav-link" data-scroll-target="#semantic-networks-and-conceptual-graphs"><span class="header-section-number">4.9.4</span> Semantic networks and conceptual graphs</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4.10</span> Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">4.11</span> Exercises</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">4.12</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/foundation/outline.html">Introduction</a></li><li class="breadcrumb-item"><a href="../../contents/foundation/graph-fundamentals.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter introduces the core concepts of graph theory that form the theoretical foundation for knowledge graphs. Graph theory provides the mathematical framework for representing, analyzing, and reasoning about the structure of knowledge graphs. We’ll cover essential graph-theoretic concepts, focusing on their relevance to knowledge graph applications while providing both intuitive understanding and formal definitions.</p>
+<section id="basic-graph-definitions-and-terminology" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="basic-graph-definitions-and-terminology"><span class="header-section-number">4.1</span> Basic graph definitions and terminology</h2>
+<p>Graphs provide a mathematical abstraction for representing relationships between entities. This section introduces the foundational definitions and terminology of graph theory.</p>
+<section id="graphs-vertices-and-edges" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="graphs-vertices-and-edges"><span class="header-section-number">4.1.1</span> Graphs, vertices, and edges</h3>
+<div id="def-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.1 (Graph)</strong></span> A <strong>graph</strong> <span class="math inline">G</span> is an ordered pair <span class="math inline">(V, E)</span> where:</p>
+<ul>
+<li><span class="math inline">V</span> is a set of <strong>vertices</strong> (also called nodes)</li>
+<li><span class="math inline">E</span> is a set of <strong>edges</strong>, where each edge is a connection between two vertices</li>
+</ul>
+<p>In a simple graph, <span class="math inline">E \subseteq \{\{u, v\} \mid u, v \in V, u \neq v\}</span>, meaning edges connect unordered pairs of distinct vertices.</p>
+</div>
+<p>For knowledge graphs, vertices typically represent entities, while edges represent relationships between entities. The basic graph definition provides the foundation for more specialized graph types used in knowledge graph applications.</p>
+<div id="exm-simple-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.1 (Simple graph)</strong></span> Consider a simple graph representing collaborations between researchers:</p>
+<p><span class="math inline">V = \{Alice, Bob, Charlie, Diana\}</span><br>
+<span class="math inline">E = \{\{Alice, Bob\}, \{Alice, Charlie\}, \{Bob, Charlie\}, \{Charlie, Diana\}\}</span></p>
+<p>This graph can be visualized with researchers as vertices and collaborations as edges connecting them.</p>
+</div>
+<p>Graphs can be visualized in multiple ways:</p>
+<ol type="1">
+<li><strong>Graphical representation</strong>: Vertices as points or circles, edges as lines connecting vertices</li>
+<li><strong>Adjacency matrix</strong>: A square matrix where entry <span class="math inline">a_{ij}</span> is 1 if vertices <span class="math inline">i</span> and <span class="math inline">j</span> are connected by an edge, and 0 otherwise</li>
+<li><strong>Adjacency list</strong>: A collection of lists, where the list for vertex <span class="math inline">v</span> contains all vertices adjacent to <span class="math inline">v</span></li>
+</ol>
+</section>
+<section id="directed-and-undirected-graphs" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="directed-and-undirected-graphs"><span class="header-section-number">4.1.2</span> Directed and undirected graphs</h3>
+<p>Knowledge graphs typically employ directed graphs to represent asymmetric relationships between entities.</p>
+<div id="def-directed-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.2 (Directed graph)</strong></span> A <strong>directed graph</strong> (or <strong>digraph</strong>) <span class="math inline">G</span> is an ordered pair <span class="math inline">(V, E)</span> where:</p>
+<ul>
+<li><span class="math inline">V</span> is a set of vertices</li>
+<li><span class="math inline">E \subseteq \{(u, v) \mid u, v \in V\}</span> is a set of <strong>directed edges</strong> or <strong>arcs</strong></li>
+</ul>
+<p>Each directed edge <span class="math inline">(u, v)</span> is an ordered pair, representing a connection from vertex <span class="math inline">u</span> (the <strong>source</strong> or <strong>tail</strong>) to vertex <span class="math inline">v</span> (the <strong>target</strong> or <strong>head</strong>).</p>
+</div>
+<p>In knowledge graphs, directed edges represent directional relationships, such as “authorOf,” “locatedIn,” or “employedBy.”</p>
+<div id="exm-directed-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.2 (Directed graph)</strong></span> Consider a directed graph representing a citation network:</p>
+<p><span class="math inline">V = \{Paper1, Paper2, Paper3, Paper4\}</span><br>
+<span class="math inline">E = \{(Paper2, Paper1), (Paper3, Paper1), (Paper3, Paper2), (Paper4, Paper2)\}</span></p>
+<p>Here, each directed edge <span class="math inline">(Paper_i, Paper_j)</span> indicates that Paper <span class="math inline">i</span> cites Paper <span class="math inline">j</span>. Note the directionality: if Paper2 cites Paper1, this doesn’t imply Paper1 cites Paper2.</p>
+</div>
+<p>Undirected graphs model symmetric relationships, where the connection between two entities has no inherent direction.</p>
+<div id="def-undirected-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.3 (Undirected graph)</strong></span> An <strong>undirected graph</strong> <span class="math inline">G</span> is an ordered pair <span class="math inline">(V, E)</span> where:</p>
+<ul>
+<li><span class="math inline">V</span> is a set of vertices</li>
+<li><span class="math inline">E</span> is a set of unordered pairs of vertices, called <strong>edges</strong></li>
+</ul>
+<p>Each edge <span class="math inline">\{u, v\}</span> represents a bidirectional connection between vertices <span class="math inline">u</span> and <span class="math inline">v</span>.</p>
+</div>
+<div id="exm-undirected-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.3 (Undirected graph)</strong></span> Consider an undirected graph representing geographical adjacency between countries:</p>
+<p><span class="math inline">V = \{France, Germany, Italy, Switzerland\}</span><br>
+<span class="math inline">E = \{\{France, Germany\}, \{France, Italy\}, \{France, Switzerland\}, \{Germany, Switzerland\}, \{Italy, Switzerland\}\}</span></p>
+<p>Each edge represents that two countries share a border, which is inherently symmetric: if Country A shares a border with Country B, then Country B also shares a border with Country A.</p>
+</div>
+</section>
+<section id="graph-terminology" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="graph-terminology"><span class="header-section-number">4.1.3</span> Graph terminology</h3>
+<p>To discuss graphs effectively, we need a common vocabulary for their components and structures.</p>
+<div id="def-adjacency" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.4 (Adjacency and incidence)</strong></span> In a graph <span class="math inline">G = (V, E)</span>:</p>
+<ol type="1">
+<li>Two vertices <span class="math inline">u</span> and <span class="math inline">v</span> are <strong>adjacent</strong> if there is an edge connecting them.</li>
+<li>An edge <span class="math inline">e</span> is <strong>incident</strong> to a vertex <span class="math inline">v</span> if <span class="math inline">v</span> is an endpoint of <span class="math inline">e</span>.</li>
+<li>The <strong>neighborhood</strong> of a vertex <span class="math inline">v</span>, denoted <span class="math inline">N(v)</span>, is the set of all vertices adjacent to <span class="math inline">v</span>.</li>
+</ol>
+</div>
+<div id="def-degree" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.5 (Degree)</strong></span> In an undirected graph, the <strong>degree</strong> of a vertex <span class="math inline">v</span>, denoted <span class="math inline">\deg(v)</span>, is the number of edges incident to <span class="math inline">v</span>.</p>
+<p>In a directed graph:</p>
+<ul>
+<li>The <strong>in-degree</strong> of <span class="math inline">v</span>, denoted <span class="math inline">\deg^-(v)</span>, is the number of edges with <span class="math inline">v</span> as their target.</li>
+<li>The <strong>out-degree</strong> of <span class="math inline">v</span>, denoted <span class="math inline">\deg^+(v)</span>, is the number of edges with <span class="math inline">v</span> as their source.</li>
+<li>The total degree is <span class="math inline">\deg(v) = \deg^-(v) + \deg^+(v)</span>.</li>
+</ul>
+</div>
+<div id="exm-degree" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.4 (Vertex degrees)</strong></span> In the citation network example:</p>
+<ul>
+<li><span class="math inline">\deg^-(Paper1) = 2</span> (cited by 2 papers)</li>
+<li><span class="math inline">\deg^+(Paper1) = 0</span> (cites 0 papers)</li>
+<li><span class="math inline">\deg^-(Paper2) = 2</span> (cited by 2 papers)</li>
+<li><span class="math inline">\deg^+(Paper2) = 1</span> (cites 1 paper)</li>
+<li><span class="math inline">\deg^-(Paper3) = 0</span> (cited by 0 papers)</li>
+<li><span class="math inline">\deg^+(Paper3) = 2</span> (cites 2 papers)</li>
+</ul>
+</div>
+<p>The degree distribution of a graph—the frequency distribution of degrees across all vertices—provides important insights into the graph’s structure. Many real-world networks, including knowledge graphs, exhibit power-law degree distributions, where a small number of vertices have very high degrees while most vertices have low degrees.</p>
+<div id="def-walk-path-cycle" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.6 (Walks, paths, and cycles)</strong></span> In a graph <span class="math inline">G = (V, E)</span>:</p>
+<ol type="1">
+<li><p>A <strong>walk</strong> is a sequence of vertices <span class="math inline">v_1, v_2, \ldots, v_k</span> where consecutive vertices are connected by edges.</p></li>
+<li><p>A <strong>path</strong> is a walk where no vertex appears more than once.</p></li>
+<li><p>A <strong>cycle</strong> is a closed walk (starting and ending at the same vertex) where no vertex except the first/last appears more than once, and the walk has at least three edges.</p></li>
+</ol>
+<p>The <strong>length</strong> of a walk, path, or cycle is the number of edges it contains.</p>
+</div>
+<div id="exm-path-cycle" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.5 (Paths and cycles)</strong></span> In a knowledge graph about historical figures:</p>
+<p>A path: Newton → influencedBy → Descartes → bornIn → France</p>
+<p>This represents a path from Newton to France through their relationships to Descartes.</p>
+<p>A cycle: Einstein → collaboratedWith → Bohr → attendedSameConference → Einstein</p>
+<p>This cycle represents a closed relationship loop between Einstein and Bohr.</p>
+</div>
+</section>
+<section id="weighted-graphs" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="weighted-graphs"><span class="header-section-number">4.1.4</span> Weighted graphs</h3>
+<p>In many applications, including knowledge graphs, relationships may have different strengths, probabilities, or costs, which can be represented using weighted graphs.</p>
+<div id="def-weighted-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.7 (Weighted graph)</strong></span> A <strong>weighted graph</strong> <span class="math inline">G = (V, E, w)</span> is a graph with a weight function <span class="math inline">w: E \rightarrow \mathbb{R}</span> that assigns a real number (weight) to each edge.</p>
+</div>
+<p>In knowledge graphs, weights might represent:</p>
+<ul>
+<li>Confidence scores for extracted relationships</li>
+<li>Strength of association between entities</li>
+<li>Costs or distances in physical networks</li>
+<li>Probabilities of relationships</li>
+</ul>
+<div id="exm-weighted-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.6 (Weighted knowledge graph)</strong></span> In a medical knowledge graph:</p>
+<p><span class="math inline">V = \{Diabetes, Obesity, HeartDisease, Exercise\}</span><br>
+<span class="math inline">E = \{(Obesity, Diabetes), (Obesity, HeartDisease), (Exercise, Obesity), (Exercise, HeartDisease)\}</span><br>
+<span class="math inline">w(Obesity, Diabetes) = 0.85</span> (strong correlation)<br>
+<span class="math inline">w(Obesity, HeartDisease) = 0.7</span> (moderate correlation)<br>
+<span class="math inline">w(Exercise, Obesity) = -0.6</span> (negative correlation, meaning exercise reduces obesity)<br>
+<span class="math inline">w(Exercise, HeartDisease) = -0.5</span> (negative correlation)</p>
+<p>These weights quantify the strength and direction of relationships between medical conditions and factors.</p>
+</div>
+</section>
+<section id="multigraphs-and-hypergraphs" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="multigraphs-and-hypergraphs"><span class="header-section-number">4.1.5</span> Multigraphs and hypergraphs</h3>
+<p>Standard graphs allow at most one edge between any pair of vertices. However, knowledge representation often requires more flexible structures.</p>
+<div id="def-multigraph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.8 (Multigraph)</strong></span> A <strong>multigraph</strong> is a graph that allows multiple edges (also called parallel edges) between the same pair of vertices.</p>
+<p>Formally, a multigraph <span class="math inline">G = (V, E, f)</span> consists of:</p>
+<ul>
+<li>A set <span class="math inline">V</span> of vertices</li>
+<li>A set <span class="math inline">E</span> of edges</li>
+<li>A function <span class="math inline">f: E \rightarrow \{\{u, v\} \mid u, v \in V\}</span> that maps each edge to an unordered pair of vertices</li>
+</ul>
+</div>
+<p>In knowledge graphs, multigraphs can represent multiple different relationships between the same entities.</p>
+<div id="exm-multigraph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.7 (Multigraph)</strong></span> In a social network knowledge graph:</p>
+<p><span class="math inline">V = \{Alice, Bob\}</span><br>
+<span class="math inline">E = \{e_1, e_2, e_3\}</span><br>
+<span class="math inline">f(e_1) = \{Alice, Bob\}</span> with type “colleague”<br>
+<span class="math inline">f(e_2) = \{Alice, Bob\}</span> with type “friendOf”<br>
+<span class="math inline">f(e_3) = \{Alice, Bob\}</span> with type “collaborator”</p>
+<p>This multigraph captures that Alice and Bob have multiple types of relationships simultaneously.</p>
+</div>
+<p>Hypergraphs extend graphs by allowing edges to connect more than two vertices, which is useful for representing higher-order relationships.</p>
+<div id="def-hypergraph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.9 (Hypergraph)</strong></span> A <strong>hypergraph</strong> <span class="math inline">H = (V, E)</span> consists of:</p>
+<ul>
+<li>A set <span class="math inline">V</span> of vertices</li>
+<li>A set <span class="math inline">E</span> of hyperedges, where each hyperedge is a non-empty subset of <span class="math inline">V</span></li>
+</ul>
+</div>
+<p>Hypergraphs can represent relationships that inherently involve more than two entities, which occur frequently in knowledge representation.</p>
+<div id="exm-hypergraph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.8 (Hypergraph)</strong></span> In a movie knowledge graph:</p>
+<p><span class="math inline">V = \{TheGodfather, MarlonBrando, AlPacino, FrancisFordCoppola\}</span><br>
+<span class="math inline">E = \{\{TheGodfather, MarlonBrando, AlPacino, FrancisFordCoppola\}\}</span></p>
+<p>This single hyperedge represents the collaborative relationship between a movie, its director, and its main actors—a relationship that naturally involves more than two entities.</p>
+</div>
+</section>
+</section>
+<section id="special-graph-structures" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="special-graph-structures"><span class="header-section-number">4.2</span> Special graph structures</h2>
+<p>Certain graph structures appear frequently in knowledge representation and have special properties that make them useful for specific applications.</p>
+<section id="bipartite-graphs" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="bipartite-graphs"><span class="header-section-number">4.2.1</span> Bipartite graphs</h3>
+<p>Bipartite graphs divide vertices into two disjoint sets, with edges only connecting vertices from different sets.</p>
+<div id="def-bipartite-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.10 (Bipartite graph)</strong></span> A <strong>bipartite graph</strong> is a graph <span class="math inline">G = (V, E)</span> where the vertex set <span class="math inline">V</span> can be partitioned into two disjoint subsets <span class="math inline">V_1</span> and <span class="math inline">V_2</span> such that every edge in <span class="math inline">E</span> connects a vertex in <span class="math inline">V_1</span> to a vertex in <span class="math inline">V_2</span>.</p>
+<p>Formally, <span class="math inline">V = V_1 \cup V_2</span> with <span class="math inline">V_1 \cap V_2 = \emptyset</span>, and for every edge <span class="math inline">\{u, v\} \in E</span>, either <span class="math inline">u \in V_1</span> and <span class="math inline">v \in V_2</span> or <span class="math inline">u \in V_2</span> and <span class="math inline">v \in V_1</span>.</p>
+</div>
+<p>In knowledge graphs, bipartite structures naturally emerge when representing relationships between two distinct entity types.</p>
+<div id="exm-bipartite-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.9 (Bipartite graph)</strong></span> In a bibliographic knowledge graph:</p>
+<p><span class="math inline">V_1 = \{Paper1, Paper2, Paper3\}</span> (papers)<br>
+<span class="math inline">V_2 = \{Author1, Author2, Author3\}</span> (authors)<br>
+<span class="math inline">E = \{\{Paper1, Author1\}, \{Paper1, Author2\}, \{Paper2, Author2\}, \{Paper2, Author3\}, \{Paper3, Author1\}, \{Paper3, Author3\}\}</span></p>
+<p>This bipartite graph represents the authorship relationships between papers and authors, where edges only connect papers to authors, never papers to papers or authors to authors.</p>
+</div>
+</section>
+<section id="complete-graphs" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="complete-graphs"><span class="header-section-number">4.2.2</span> Complete graphs</h3>
+<p>Complete graphs represent the maximum possible connectivity between vertices.</p>
+<div id="def-complete-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.11 (Complete graph)</strong></span> A <strong>complete graph</strong> on <span class="math inline">n</span> vertices, denoted <span class="math inline">K_n</span>, is an undirected graph where every pair of distinct vertices is connected by a unique edge.</p>
+<p>A complete graph with <span class="math inline">n</span> vertices has <span class="math inline">\frac{n(n-1)}{2}</span> edges.</p>
+</div>
+<p>In knowledge graphs, complete subgraphs (cliques) often represent tightly interconnected communities or fully specified relationships within a group.</p>
+<div id="exm-complete-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.10 (Complete graph)</strong></span> In a collaboration network:</p>
+<p><span class="math inline">V = \{Researcher1, Researcher2, Researcher3, Researcher4\}</span><br>
+<span class="math inline">E = \{\{Researcher1, Researcher2\}, \{Researcher1, Researcher3\}, \{Researcher1, Researcher4\}, \{Researcher2, Researcher3\}, \{Researcher2, Researcher4\}, \{Researcher3, Researcher4\}\}</span></p>
+<p>This <span class="math inline">K_4</span> complete graph represents a research team where every member has collaborated with every other member.</p>
+</div>
+</section>
+<section id="trees-and-forests" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="trees-and-forests"><span class="header-section-number">4.2.3</span> Trees and forests</h3>
+<p>Trees are connected graphs without cycles, which makes them useful for representing hierarchical relationships.</p>
+<div id="def-tree" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.12 (Tree)</strong></span> A <strong>tree</strong> is a connected, undirected graph with no cycles.</p>
+<p>Equivalent characterizations of a tree:</p>
+<ol type="1">
+<li>A connected graph with <span class="math inline">n</span> vertices and <span class="math inline">n-1</span> edges</li>
+<li>A graph where any two vertices are connected by exactly one path</li>
+<li>A connected graph that becomes disconnected if any edge is removed</li>
+<li>An acyclic graph that becomes cyclic if any edge is added</li>
+</ol>
+</div>
+<div id="def-forest" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.13 (Forest)</strong></span> A <strong>forest</strong> is an undirected graph where each connected component is a tree.</p>
+</div>
+<p>Trees are particularly important for representing taxonomies, hierarchies, and organizational structures in knowledge graphs.</p>
+<div id="exm-tree" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.11 (Tree structure)</strong></span> In a taxonomic knowledge graph:</p>
+<p><span class="math inline">V = \{Animal, Mammal, Bird, Dog, Cat, Eagle, Sparrow\}</span><br>
+<span class="math inline">E = \{\{Animal, Mammal\}, \{Animal, Bird\}, \{Mammal, Dog\}, \{Mammal, Cat\}, \{Bird, Eagle\}, \{Bird, Sparrow\}\}</span></p>
+<p>This tree represents a biological classification where each edge connects a more general category to a more specific one.</p>
+</div>
+</section>
+<section id="directed-acyclic-graphs-dags" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="directed-acyclic-graphs-dags"><span class="header-section-number">4.2.4</span> Directed acyclic graphs (DAGs)</h3>
+<p>Directed acyclic graphs combine direction with the absence of cycles, making them suitable for representing dependencies and partial orderings.</p>
+<div id="def-dag" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.14 (Directed acyclic graph)</strong></span> A <strong>directed acyclic graph</strong> (DAG) is a directed graph that contains no directed cycles.</p>
+</div>
+<p>DAGs are fundamental structures in knowledge graphs, representing hierarchies, dependencies, causal relationships, and processes.</p>
+<div id="exm-dag" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.12 (Directed acyclic graph)</strong></span> In a knowledge graph representing prerequisite relationships between courses:</p>
+<p><span class="math inline">V = \{Calculus1, Calculus2, LinearAlgebra, DifferentialEquations, RealAnalysis\}</span><br>
+<span class="math inline">E = \{(Calculus2, Calculus1), (DifferentialEquations, Calculus2), (DifferentialEquations, LinearAlgebra), (RealAnalysis, Calculus2)\}</span></p>
+<p>This DAG represents that Calculus1 is a prerequisite for Calculus2, which in turn is a prerequisite for both DifferentialEquations and RealAnalysis, and LinearAlgebra is also a prerequisite for DifferentialEquations.</p>
+</div>
+</section>
+<section id="regular-graphs" class="level3" data-number="4.2.5">
+<h3 data-number="4.2.5" class="anchored" data-anchor-id="regular-graphs"><span class="header-section-number">4.2.5</span> Regular graphs</h3>
+<p>Regular graphs have a uniform degree across all vertices, providing a structured pattern of connectivity.</p>
+<div id="def-regular-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.15 (Regular graph)</strong></span> A <strong><span class="math inline">k</span>-regular graph</strong> is an undirected graph where every vertex has the same degree <span class="math inline">k</span>.</p>
+</div>
+<p>While perfect regularity is rare in real-world knowledge graphs, near-regular substructures can reveal standardized patterns of relationships.</p>
+<div id="exm-regular-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.13 (Regular graph)</strong></span> In a molecular knowledge graph representing carbon structures:</p>
+<p><span class="math inline">V = \{C1, C2, C3, C4, C5, C6\}</span> (carbon atoms)<br>
+<span class="math inline">E = \{\{C1, C2\}, \{C2, C3\}, \{C3, C4\}, \{C4, C5\}, \{C5, C6\}, \{C6, C1\}\}</span></p>
+<p>This 2-regular graph (every vertex has degree 2) represents a simple carbon ring, such as benzene without hydrogen atoms.</p>
+</div>
+</section>
+</section>
+<section id="graph-properties-and-measures" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="graph-properties-and-measures"><span class="header-section-number">4.3</span> Graph properties and measures</h2>
+<p>Graph properties and measures help us analyze the structure and characteristics of knowledge graphs, enabling comparison, classification, and inference about their behavior.</p>
+<section id="connectivity" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="connectivity"><span class="header-section-number">4.3.1</span> Connectivity</h3>
+<p>Connectivity measures how well vertices in a graph are connected to each other.</p>
+<div id="def-connectivity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.16 (Connectivity)</strong></span> A graph is <strong>connected</strong> if there is a path between every pair of vertices.</p>
+<p>In a directed graph:</p>
+<ol type="1">
+<li>A graph is <strong>weakly connected</strong> if its underlying undirected graph is connected.</li>
+<li>A graph is <strong>strongly connected</strong> if there is a directed path from every vertex to every other vertex.</li>
+</ol>
+<p>A <strong>connected component</strong> is a maximal connected subgraph of a graph.</p>
+</div>
+<p>Connectivity analysis in knowledge graphs helps identify isolated clusters of knowledge and ensure proper integration of information.</p>
+<div id="exm-connectivity" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.14 (Connectivity in a knowledge graph)</strong></span> Consider a knowledge graph with two connected components:</p>
+<p>Component 1: {Computer Science, Algorithms, Data Structures, Complexity Theory}<br>
+Component 2: {Sociology, Social Networks, Group Dynamics}</p>
+<p>If there are no paths between these components, they represent isolated domains of knowledge. Adding cross-disciplinary relationships, such as (Social Networks, Algorithms), would connect these components, enabling cross-domain inference.</p>
+</div>
+</section>
+<section id="distance-measures" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="distance-measures"><span class="header-section-number">4.3.2</span> Distance measures</h3>
+<p>Distance measures quantify how far apart vertices are in a graph.</p>
+<div id="def-distance-measures" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.17 (Distance measures)</strong></span> In a graph <span class="math inline">G</span>:</p>
+<ol type="1">
+<li><p>The <strong>distance</strong> between vertices <span class="math inline">u</span> and <span class="math inline">v</span>, denoted <span class="math inline">d(u, v)</span>, is the length of the shortest path between them.</p></li>
+<li><p>The <strong>diameter</strong> of <span class="math inline">G</span> is the maximum distance between any pair of vertices: <span class="math inline">\text{diam}(G) = \max_{u, v \in V} d(u, v)</span>.</p></li>
+<li><p>The <strong>average path length</strong> is the average of all shortest path lengths between all pairs of vertices.</p></li>
+</ol>
+</div>
+<p>Distance measures in knowledge graphs help understand the overall structure and the ease of navigating between different domains of knowledge.</p>
+<div id="exm-distance-measures" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.15 (Distance measures in a knowledge graph)</strong></span> In a scientific collaboration network:</p>
+<ul>
+<li><span class="math inline">d(\text{Einstein}, \text{Bohr}) = 1</span> (direct collaborators)</li>
+<li><span class="math inline">d(\text{Einstein}, \text{Feynman}) = 2</span> (connected through a mutual collaborator)</li>
+<li><span class="math inline">d(\text{Einstein}, \text{Hawking}) = 3</span> (three steps of collaboration connections)</li>
+</ul>
+<p>If the diameter of this network is 6, this indicates that any two scientists in the network can be connected through at most 6 collaboration links—an example of the “small world” phenomenon.</p>
+</div>
+</section>
+<section id="centrality-measures" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="centrality-measures"><span class="header-section-number">4.3.3</span> Centrality measures</h3>
+<p>Centrality measures identify the most important or influential vertices in a graph according to various criteria.</p>
+<div id="def-centrality-measures" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.18 (Centrality measures)</strong></span> Common centrality measures include:</p>
+<ol type="1">
+<li><p><strong>Degree centrality</strong>: The degree of a vertex (normalized by the maximum possible degree).</p>
+<ul>
+<li>In directed graphs: in-degree, out-degree, or total degree centrality.</li>
+</ul></li>
+<li><p><strong>Closeness centrality</strong>: The reciprocal of the sum of the shortest path distances from a vertex to all other vertices. <span class="math inline">C_C(v) = \frac{n-1}{\sum_{u \neq v} d(v, u)}</span></p></li>
+<li><p><strong>Betweenness centrality</strong>: The number of shortest paths between other vertices that pass through a given vertex. <span class="math inline">C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}</span> where <span class="math inline">\sigma_{st}</span> is the number of shortest paths from <span class="math inline">s</span> to <span class="math inline">t</span>, and <span class="math inline">\sigma_{st}(v)</span> is the number of those paths that pass through <span class="math inline">v</span>.</p></li>
+<li><p><strong>Eigenvector centrality</strong>: A measure where the centrality of a vertex is proportional to the sum of the centralities of its neighbors. Defined by the eigenvector equation: <span class="math inline">\lambda \mathbf{c} = A \mathbf{c}</span> where <span class="math inline">A</span> is the adjacency matrix, <span class="math inline">\lambda</span> is the largest eigenvalue, and <span class="math inline">\mathbf{c}</span> is the centrality vector.</p></li>
+</ol>
+</div>
+<p>Centrality measures help identify key entities, concepts, or relationships in knowledge graphs.</p>
+<div id="exm-centrality" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.16 (Centrality in a knowledge graph)</strong></span> In a drug interaction knowledge graph:</p>
+<ul>
+<li><p><strong>Degree centrality</strong>: Identifies drugs that interact with many other drugs, potentially indicating broad pharmacological activity.</p></li>
+<li><p><strong>Betweenness centrality</strong>: Identifies drugs that frequently act as bridges between different pharmacological classes, potentially with unique mechanistic properties.</p></li>
+<li><p><strong>Eigenvector centrality</strong>: Identifies drugs that interact with other highly interactive drugs, potentially representing central nodes in medication cascades.</p></li>
+</ul>
+<p>For example, warfarin might have high betweenness centrality because it bridges between anticoagulants, cardiovascular drugs, and dietary supplements, serving as a key intermediary in many drug interaction paths.</p>
+</div>
+</section>
+<section id="clustering-coefficient" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="clustering-coefficient"><span class="header-section-number">4.3.4</span> Clustering coefficient</h3>
+<p>The clustering coefficient measures the degree to which vertices in a graph tend to cluster together.</p>
+<div id="def-clustering-coefficient" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.19 (Clustering coefficient)</strong></span> The <strong>local clustering coefficient</strong> for a vertex <span class="math inline">v</span> is the proportion of connections among its neighbors relative to the maximum possible number:</p>
+<p><span class="math inline">C(v) = \frac{2|\{e_{ij} : v_i, v_j \in N(v), e_{ij} \in E\}|}{k_v(k_v-1)}</span></p>
+<p>where <span class="math inline">k_v</span> is the degree of vertex <span class="math inline">v</span> and <span class="math inline">N(v)</span> is the neighborhood of <span class="math inline">v</span>.</p>
+<p>The <strong>global clustering coefficient</strong> (or transitivity) is the ratio of closed triplets to the total number of triplets (both open and closed).</p>
+</div>
+<p>In knowledge graphs, clustering coefficients help identify tightly connected communities or domains with high internal connectivity.</p>
+<div id="exm-clustering" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.17 (Clustering in a knowledge graph)</strong></span> In an academic co-authorship network:</p>
+<ul>
+<li><p>Research labs or close-knit research communities typically have high clustering coefficients, as collaborators of a researcher often collaborate with each other.</p></li>
+<li><p>Interdisciplinary researchers might have lower clustering coefficients, as their collaborators from different fields may not work together.</p></li>
+</ul>
+<p>For instance, if Alice collaborates with 10 researchers, and among those 10 researchers there are 30 collaborative pairs, Alice’s local clustering coefficient would be: <span class="math inline">C(\text{Alice}) = \frac{2 \times 30}{10 \times 9} = \frac{60}{90} = 0.67</span></p>
+<p>This relatively high coefficient suggests Alice works within a fairly cohesive research community.</p>
+</div>
+</section>
+<section id="assortativity" class="level3" data-number="4.3.5">
+<h3 data-number="4.3.5" class="anchored" data-anchor-id="assortativity"><span class="header-section-number">4.3.5</span> Assortativity</h3>
+<p>Assortativity measures the tendency of vertices to connect with similar vertices.</p>
+<div id="def-assortativity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.20 (Assortativity)</strong></span> <strong>Assortativity</strong> (or assortative mixing) is the preference for vertices to attach to others that are similar in some way.</p>
+<p>Degree assortativity is measured by the Pearson correlation coefficient of the degrees at either ends of an edge:</p>
+<p><span class="math inline">r = \frac{\sum_{ij} (e_{ij} - a_i b_j)}{\sigma_a \sigma_b}</span></p>
+<p>where <span class="math inline">e_{ij}</span> is the fraction of edges connecting vertices of degrees <span class="math inline">i</span> and <span class="math inline">j</span>, and <span class="math inline">a_i</span> and <span class="math inline">b_j</span> are the fraction of edges with one end having degree <span class="math inline">i</span> and <span class="math inline">j</span> respectively.</p>
+</div>
+<p>Assortativity in knowledge graphs can reveal patterns in how different types of entities relate to each other.</p>
+<div id="exm-assortativity" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.18 (Assortativity in a knowledge graph)</strong></span> In a scholarly knowledge graph:</p>
+<ul>
+<li><p><strong>Positive assortativity</strong> by field of study would indicate that researchers primarily cite work within their own field.</p></li>
+<li><p><strong>Negative assortativity</strong> by publication date would indicate that newer papers tend to cite older papers rather than other new papers.</p></li>
+<li><p><strong>Neutral assortativity</strong> by institution would indicate that citation patterns are not influenced by institutional affiliation.</p></li>
+</ul>
+<p>These patterns help understand the flow of information and the structure of academic disciplines within the knowledge graph.</p>
+</div>
+</section>
+</section>
+<section id="graph-representations-and-data-structures" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="graph-representations-and-data-structures"><span class="header-section-number">4.4</span> Graph representations and data structures</h2>
+<p>The choice of graph representation affects the efficiency of operations and queries on knowledge graphs. This section covers common representations and their trade-offs.</p>
+<section id="adjacency-matrix" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="adjacency-matrix"><span class="header-section-number">4.4.1</span> Adjacency matrix</h3>
+<div id="def-adjacency-matrix" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.21 (Adjacency matrix)</strong></span> The <strong>adjacency matrix</strong> of a graph <span class="math inline">G</span> with <span class="math inline">n</span> vertices is an <span class="math inline">n \times n</span> matrix <span class="math inline">A</span> where:</p>
+<p><span class="math inline">A_{ij} = \begin{cases}
+1 &amp; \text{if there is an edge from vertex } i \text{ to vertex } j \\
+0 &amp; \text{otherwise}
+\end{cases}</span></p>
+<p>For weighted graphs, <span class="math inline">A_{ij}</span> contains the weight of the edge from <span class="math inline">i</span> to <span class="math inline">j</span> (or infinity/zero if no edge exists).</p>
+</div>
+<p>Adjacency matrices provide constant-time edge lookups but require <span class="math inline">\Theta(n^2)</span> space regardless of the number of edges.</p>
+<div id="exm-adjacency-matrix" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.19 (Adjacency matrix representation)</strong></span> For the directed graph with vertices {A, B, C, D} and edges {(A, B), (B, C), (C, A), (B, D)}:</p>
+<p><span class="math display">
+A = \begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 1 \\
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+</span></p>
+<p>This representation makes it easy to check if two vertices are connected (O(1) time) but requires O(n²) space even for sparse graphs.</p>
+</div>
+</section>
+<section id="adjacency-list" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="adjacency-list"><span class="header-section-number">4.4.2</span> Adjacency list</h3>
+<div id="def-adjacency-list" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.22 (Adjacency list)</strong></span> An <strong>adjacency list</strong> representation of a graph <span class="math inline">G</span> consists of an array or list of the vertices, where each vertex has a linked list of its adjacent vertices.</p>
+<p>For each vertex <span class="math inline">v</span>, the adjacency list contains only the vertices that are adjacent to <span class="math inline">v</span>.</p>
+</div>
+<p>Adjacency lists are space-efficient for sparse graphs, using <span class="math inline">\Theta(|V| + |E|)</span> space.</p>
+<div id="exm-adjacency-list" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.20 (Adjacency list representation)</strong></span> For the same directed graph as in the previous example:</p>
+<p>A → [B]<br>
+B → [C, D]<br>
+C → [A]<br>
+D → []</p>
+<p>This representation is more space-efficient for sparse graphs (where |E| &lt;&lt; |V|²) and makes it easy to iterate through neighbors, but requires O(degree(v)) time to check if two vertices are connected.</p>
+</div>
+</section>
+<section id="incidence-matrix" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="incidence-matrix"><span class="header-section-number">4.4.3</span> Incidence matrix</h3>
+<div id="def-incidence-matrix" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.23 (Incidence matrix)</strong></span> The <strong>incidence matrix</strong> of a directed graph with <span class="math inline">n</span> vertices and <span class="math inline">m</span> edges is an <span class="math inline">n \times m</span> matrix <span class="math inline">B</span> where:</p>
+<p><span class="math inline">B_{ij} = \begin{cases}
+-1 &amp; \text{if vertex } i \text{ is the source of edge } j \\
+1 &amp; \text{if vertex } i \text{ is the target of edge } j \\
+0 &amp; \text{otherwise}
+\end{cases}</span></p>
+<p>For undirected graphs, the non-zero entries are typically all 1.</p>
+</div>
+<p>Incidence matrices are useful for certain graph algorithms and when analyzing the relationship between vertices and edges.</p>
+<div id="exm-incidence-matrix" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.21 (Incidence matrix representation)</strong></span> For the directed graph with vertices {A, B, C, D} and edges {e₁:(A, B), e₂:(B, C), e₃:(C, A), e₄:(B, D)}:</p>
+<p><span class="math display">
+B = \begin{pmatrix}
+-1 &amp; 0 &amp; 1 &amp; 0 \\
+1 &amp; -1 &amp; 0 &amp; -1 \\
+0 &amp; 1 &amp; -1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+</span></p>
+<p>This representation makes it easy to determine the endpoints of an edge and is useful for certain graph algorithms like finding Eulerian paths.</p>
+</div>
+</section>
+<section id="edge-list" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="edge-list"><span class="header-section-number">4.4.4</span> Edge list</h3>
+<div id="def-edge-list" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.24 (Edge list)</strong></span> An <strong>edge list</strong> representation simply stores a collection of all edges in the graph, each edge represented as a pair (or triple, if weighted) of vertices.</p>
+</div>
+<p>Edge lists are simple but inefficient for many operations. However, they’re useful for certain algorithms and as input/output formats.</p>
+<div id="exm-edge-list" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.22 (Edge list representation)</strong></span> For our example directed graph:</p>
+<p>[(A, B), (B, C), (C, A), (B, D)]</p>
+<p>This representation is simple and useful for storing or transmitting graph data, but inefficient for most graph operations and queries.</p>
+</div>
+</section>
+<section id="advanced-representations-for-knowledge-graphs" class="level3" data-number="4.4.5">
+<h3 data-number="4.4.5" class="anchored" data-anchor-id="advanced-representations-for-knowledge-graphs"><span class="header-section-number">4.4.5</span> Advanced representations for knowledge graphs</h3>
+<p>Knowledge graphs often require specialized representations that can efficiently handle heterogeneous relationships, attributes, and large-scale data.</p>
+<div id="def-property-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.25 (Property graph)</strong></span> A <strong>property graph</strong> is a graph data model where:</p>
+<ol type="1">
+<li>Vertices and edges have unique identifiers</li>
+<li>Both vertices and edges can have a set of properties (key-value pairs)</li>
+<li>Edges have a directed relationship type</li>
+</ol>
+<p>This model extends basic graph representations to capture the rich structure of knowledge graphs.</p>
+</div>
+<div id="exm-property-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.23 (Property graph representation)</strong></span> In a bibliographic knowledge graph:</p>
+<p>Vertices:</p>
+<ul>
+<li>(id: 1, type: “Person”, properties: {name: “Alice Smith”, affiliation: “University X”})</li>
+<li>(id: 2, type: “Paper”, properties: {title: “Graph Neural Networks”, year: 2020})</li>
+</ul>
+<p>Edges:</p>
+<ul>
+<li>(source: 1, target: 2, type: “authored”, properties: {order: “first author”, contribution: “methodology”})</li>
+</ul>
+<p>This representation captures both the graph structure and the detailed attributes of entities and relationships.</p>
+</div>
+<div id="def-rdf-triple" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.26 (RDF triple store)</strong></span> An <strong>RDF triple store</strong> is a specialized database for storing and retrieving RDF triples through semantic queries.</p>
+<p>Each RDF triple has the form (subject, predicate, object), where:</p>
+<ul>
+<li>Subject: A resource (entity), typically identified by a URI</li>
+<li>Predicate: A relationship type or property, identified by a URI</li>
+<li>Object: Either another resource or a literal value</li>
+</ul>
+<p>Triple stores often use specialized indexing schemes like SPO, OSP, and POS to efficiently query different patterns.</p>
+</div>
+<div id="exm-rdf-triple" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.24 (RDF triple store representation)</strong></span> In an RDF knowledge graph:</p>
+<pre><code>(ex:Einstein, ex:discoveredTheory, ex:Relativity)
+(ex:Einstein, ex:bornIn, ex:Germany)
+(ex:Relativity, ex:publishedIn, "1905"^^xsd:integer)
+(ex:Relativity, rdf:type, ex:ScientificTheory)</code></pre>
+<p>These triples form a connected graph where URIs act as global identifiers, enabling integration across datasets.</p>
+</div>
+</section>
+</section>
+<section id="graph-algorithms-fundamentals" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="graph-algorithms-fundamentals"><span class="header-section-number">4.5</span> Graph algorithms fundamentals</h2>
+<p>Graph algorithms provide systematic methods for navigating, analyzing, and manipulating knowledge graphs. This section introduces fundamental graph algorithms relevant to knowledge graph applications.</p>
+<section id="graph-traversal-algorithms" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="graph-traversal-algorithms"><span class="header-section-number">4.5.1</span> Graph traversal algorithms</h3>
+<p>Graph traversal algorithms systematically explore a graph, visiting each vertex and/or edge exactly once.</p>
+<div id="def-bfs" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.27 (Breadth-first search (BFS))</strong></span> <strong>Breadth-first search</strong> explores a graph level by level, visiting all neighbors of a vertex before moving to the next level.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Uses a queue data structure</li>
+<li>Finds shortest paths in unweighted graphs</li>
+<li>Runs in O(|V| + |E|) time</li>
+</ol>
+<p>BFS starts from a source vertex and explores vertices in increasing order of their distance from the source.</p>
+</div>
+<div id="exm-bfs" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.25 (BFS traversal)</strong></span> In a knowledge graph representing disease-gene associations:</p>
+<p>Starting BFS from “Diabetes”:</p>
+<ul>
+<li>Level 0: Diabetes</li>
+<li>Level 1: Gene1, Gene2, Gene3 (genes directly associated with Diabetes)</li>
+<li>Level 2: Obesity, HeartDisease, Cancer (other diseases associated with those genes)</li>
+<li>Level 3: Gene4, Gene5 (genes associated with level 2 diseases but not directly with Diabetes)</li>
+<li>Level 4: KidneyDisease, Hypertension (other diseases associated with level 3 genes)</li>
+</ul>
+<p>This BFS traversal identifies diseases that are progressively more distant from Diabetes in terms of shared genetic pathways.</p>
+</div>
+<div id="def-dfs" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.28 (Depth-first search (DFS))</strong></span> <strong>Depth-first search</strong> explores a graph by going as deep as possible along each branch before backtracking.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Uses a stack data structure (or recursion)</li>
+<li>Can identify connected components</li>
+<li>Runs in O(|V| + |E|) time</li>
+</ol>
+<p>DFS is particularly useful for exploring paths, detecting cycles, and identifying strongly connected components.</p>
+</div>
+<div id="exm-dfs" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.26 (DFS traversal)</strong></span> In a knowledge graph representing historical influence between philosophers:</p>
+<p>DFS starting from “Plato” might follow:</p>
+<ul>
+<li>Plato → Aristotle → Alexander → Ptolemy (backtrack)</li>
+<li>Aristotle → Thomas Aquinas → Descartes → Kant (backtrack)</li>
+<li>Aristotle → Averroes (backtrack)</li>
+<li>Plato → Plotinus → Augustine → Anselm (backtrack)</li>
+</ul>
+<p>This DFS traversal explores complete chains of influence before moving to alternative branches.</p>
+</div>
+</section>
+<section id="shortest-path-algorithms" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="shortest-path-algorithms"><span class="header-section-number">4.5.2</span> Shortest path algorithms</h3>
+<p>Shortest path algorithms find the most efficient ways to navigate between entities in a knowledge graph.</p>
+<div id="def-dijkstra" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.29 (Dijkstra’s algorithm)</strong></span> <strong>Dijkstra’s algorithm</strong> finds the shortest path from a source vertex to all other vertices in a graph with non-negative edge weights.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Uses a priority queue (min-heap)</li>
+<li>Greedy algorithm that always selects the vertex with the minimum distance</li>
+<li>Time complexity: O(|E| + |V| log |V|) with binary heaps</li>
+<li>Does not work with negative edge weights</li>
+</ol>
+</div>
+<div id="exm-dijkstra" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.27 (Dijkstra’s algorithm in a knowledge graph)</strong></span> In a transportation knowledge graph where:</p>
+<ul>
+<li>Vertices represent cities</li>
+<li>Edges represent flights</li>
+<li>Weights represent either travel time, cost, or distance</li>
+</ul>
+<p>Dijkstra’s algorithm can find the fastest/cheapest/shortest route from New York to Tokyo by:</p>
+<ol type="1">
+<li>Starting with distance 0 to New York and infinity to all other cities</li>
+<li>Repeatedly selecting the unvisited city with the smallest known distance</li>
+<li>Updating distances to its neighbors if a shorter path is found</li>
+<li>Terminating when Tokyo is reached or all cities are visited</li>
+</ol>
+<p>The result might be: New York → Chicago → San Francisco → Tokyo, with a total cost of $850.</p>
+</div>
+<div id="def-bellman-ford" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.30 (Bellman-Ford algorithm)</strong></span> The <strong>Bellman-Ford algorithm</strong> finds shortest paths from a source vertex to all other vertices, even in graphs with negative edge weights (but no negative cycles).</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Can detect negative cycles</li>
+<li>Time complexity: O(|V| × |E|)</li>
+<li>More versatile than Dijkstra’s but slower</li>
+</ol>
+</div>
+<div id="exm-bellman-ford" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.28 (Bellman-Ford in a knowledge graph)</strong></span> In a financial knowledge graph where:</p>
+<ul>
+<li>Vertices represent currencies</li>
+<li>Edges represent exchange rates</li>
+<li>Weights represent log(exchange rate)</li>
+</ul>
+<p>Negative weights occur naturally, and negative cycles represent arbitrage opportunities.</p>
+<p>Bellman-Ford can:</p>
+<ol type="1">
+<li>Find the most favorable sequence of currency conversions</li>
+<li>Detect arbitrage opportunities (negative cycles)</li>
+<li>Determine the optimal trading path from USD to EUR</li>
+</ol>
+<p>For example, it might identify: USD → JPY → GBP → EUR as the most favorable conversion path.</p>
+</div>
+<div id="def-floyd-warshall" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.31 (Floyd-Warshall algorithm)</strong></span> The <strong>Floyd-Warshall algorithm</strong> finds shortest paths between all pairs of vertices in a graph.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Dynamic programming approach</li>
+<li>Can handle negative edge weights (but no negative cycles)</li>
+<li>Time complexity: O(|V|³)</li>
+<li>Space complexity: O(|V|²)</li>
+</ol>
+</div>
+<div id="exm-floyd-warshall" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.29 (Floyd-Warshall in a knowledge graph)</strong></span> In a protein interaction knowledge graph where:</p>
+<ul>
+<li>Vertices represent proteins</li>
+<li>Edges represent known interactions</li>
+<li>Weights represent interaction strength or confidence</li>
+</ul>
+<p>Floyd-Warshall can create a complete distance matrix showing the shortest path distance between every pair of proteins, enabling:</p>
+<ol type="1">
+<li>Identification of protein clusters</li>
+<li>Discovery of potential indirect interactions</li>
+<li>Ranking of proteins by their centrality in the interaction network</li>
+</ol>
+<p>This comprehensive analysis reveals the overall structure of the protein interaction network, not just paths from a single source.</p>
+</div>
+</section>
+<section id="minimum-spanning-tree-algorithms" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="minimum-spanning-tree-algorithms"><span class="header-section-number">4.5.3</span> Minimum spanning tree algorithms</h3>
+<p>Minimum spanning tree (MST) algorithms find a subset of edges that connect all vertices with minimum total weight.</p>
+<div id="def-mst" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.32 (Minimum spanning tree)</strong></span> A <strong>minimum spanning tree</strong> (MST) of a connected, undirected, weighted graph is a tree that includes all vertices and a subset of edges with minimum total weight.</p>
+</div>
+<div id="def-kruskal" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.33 (Kruskal’s algorithm)</strong></span> <strong>Kruskal’s algorithm</strong> builds an MST by adding edges in order of increasing weight, skipping edges that would create cycles.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Uses a disjoint-set data structure</li>
+<li>Greedy algorithm</li>
+<li>Time complexity: O(|E| log |E|) or O(|E| log |V|)</li>
+</ol>
+</div>
+<div id="exm-kruskal" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.30 (Kruskal’s algorithm in a knowledge graph)</strong></span> In a social network knowledge graph where:</p>
+<ul>
+<li>Vertices represent people</li>
+<li>Edges represent relationships</li>
+<li>Weights represent relationship strength (lower = stronger)</li>
+</ul>
+<p>Kruskal’s algorithm can identify the minimum spanning tree by:</p>
+<ol type="1">
+<li>Sorting all relationships by strength</li>
+<li>Adding the strongest relationships first</li>
+<li>Avoiding redundant connections (cycles)</li>
+</ol>
+<p>The resulting MST represents the strongest set of relationships that connect everyone in the network with minimal total “social distance.”</p>
+</div>
+<div id="def-prim" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.34 (Prim’s algorithm)</strong></span> <strong>Prim’s algorithm</strong> builds an MST by starting from a vertex and repeatedly adding the lowest-weight edge that connects a vertex in the tree to a vertex outside the tree.</p>
+<p>Key properties:</p>
+<ol type="1">
+<li>Uses a priority queue</li>
+<li>Grows the tree from a single starting point</li>
+<li>Time complexity: O(|E| + |V| log |V|) with binary heaps</li>
+</ol>
+</div>
+<div id="exm-prim" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.31 (Prim’s algorithm in a knowledge graph)</strong></span> In a network infrastructure knowledge graph where:</p>
+<ul>
+<li>Vertices represent data centers</li>
+<li>Edges represent potential connection lines</li>
+<li>Weights represent installation costs</li>
+</ul>
+<p>Prim’s algorithm can design a minimum-cost network by:</p>
+<ol type="1">
+<li>Starting from a designated main data center</li>
+<li>Repeatedly connecting the closest unconnected data center</li>
+<li>Building an optimal spanning tree that minimizes total cable installation costs</li>
+</ol>
+<p>The resulting MST represents the most cost-effective way to connect all data centers.</p>
+</div>
+</section>
+<section id="connected-components-algorithms" class="level3" data-number="4.5.4">
+<h3 data-number="4.5.4" class="anchored" data-anchor-id="connected-components-algorithms"><span class="header-section-number">4.5.4</span> Connected components algorithms</h3>
+<p>Connected components algorithms identify cohesive subgraphs within larger graphs.</p>
+<div id="def-connected-components" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.35 (Connected components algorithm)</strong></span> The <strong>connected components algorithm</strong> identifies all connected components in an undirected graph using DFS or BFS.</p>
+<p>Time complexity: O(|V| + |E|)</p>
+</div>
+<div id="exm-connected-components" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.32 (Connected components in a knowledge graph)</strong></span> In a scientific knowledge graph:</p>
+<p>Connected components might represent distinct scientific disciplines if there are few cross-disciplinary connections:</p>
+<ul>
+<li>Component 1: {Physics, Quantum Mechanics, Relativity, String Theory}</li>
+<li>Component 2: {Biology, Genetics, Ecology, Evolution}</li>
+<li>Component 3: {Computer Science, Algorithms, Machine Learning}</li>
+</ul>
+<p>Identifying these components helps understand the structure of scientific knowledge and potential gaps in interdisciplinary research.</p>
+</div>
+<div id="def-strongly-connected-components" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.36 (Strongly connected components algorithm)</strong></span> The <strong>strongly connected components (SCC) algorithm</strong> identifies maximal strongly connected subgraphs in a directed graph, where every vertex is reachable from every other vertex within the component.</p>
+<p>Tarjan’s algorithm and Kosaraju’s algorithm are common implementations with O(|V| + |E|) time complexity.</p>
+</div>
+<div id="exm-strongly-connected-components" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.33 (Strongly connected components in a knowledge graph)</strong></span> In a citation knowledge graph:</p>
+<p>Strongly connected components might represent research clusters with high internal citation density:</p>
+<ul>
+<li>SCC 1: {Paper1, Paper2, Paper3} (all papers cite each other)</li>
+<li>SCC 2: {Paper4, Paper5} (these papers cite each other)</li>
+<li>Paper6 (not in any non-trivial SCC)</li>
+</ul>
+<p>These SCCs reveal cohesive research communities where ideas and citations flow in multiple directions within the group.</p>
+</div>
+</section>
+<section id="graph-coloring-and-matching-algorithms" class="level3" data-number="4.5.5">
+<h3 data-number="4.5.5" class="anchored" data-anchor-id="graph-coloring-and-matching-algorithms"><span class="header-section-number">4.5.5</span> Graph coloring and matching algorithms</h3>
+<p>Graph coloring and matching algorithms solve various assignment and partitioning problems on graphs.</p>
+<div id="def-graph-coloring" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.37 (Graph coloring)</strong></span> <strong>Graph coloring</strong> assigns colors to vertices such that no adjacent vertices share the same color, using the minimum number of colors possible.</p>
+<p>Finding the optimal coloring (minimum number of colors) is NP-hard, but practical algorithms exist for approximate solutions.</p>
+</div>
+<div id="exm-graph-coloring" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.34 (Graph coloring in a knowledge graph)</strong></span> In a knowledge graph representing potential conflicts:</p>
+<ul>
+<li>Vertices represent tasks or events</li>
+<li>Edges connect tasks that cannot occur simultaneously</li>
+</ul>
+<p>Graph coloring can:</p>
+<ol type="1">
+<li>Assign time slots (colors) to events</li>
+<li>Ensure conflicting events don’t share time slots</li>
+<li>Minimize the total number of time slots needed</li>
+</ol>
+<p>For example, in exam scheduling, coloring can assign days to exams while ensuring no student has two exams on the same day.</p>
+</div>
+<div id="def-bipartite-matching" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.38 (Bipartite matching)</strong></span> <strong>Bipartite matching</strong> finds a subset of edges in a bipartite graph such that no two edges share a common vertex, maximizing the number of matches.</p>
+<p>The Hungarian algorithm or Ford-Fulkerson algorithm can solve this problem in polynomial time.</p>
+</div>
+<div id="exm-bipartite-matching" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.35 (Bipartite matching in a knowledge graph)</strong></span> In a job market knowledge graph:</p>
+<ul>
+<li>Left vertices represent job seekers</li>
+<li>Right vertices represent job openings</li>
+<li>Edges represent qualifications (a person is qualified for a job)</li>
+</ul>
+<p>Maximum bipartite matching can:</p>
+<ol type="1">
+<li>Assign job seekers to jobs they’re qualified for</li>
+<li>Ensure each person gets at most one job and each job is filled by at most one person</li>
+<li>Maximize the total number of successful job placements</li>
+</ol>
+<p>The resulting matching represents an optimal job assignment strategy.</p>
+</div>
+</section>
+</section>
+<section id="graph-decomposition-and-community-detection" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="graph-decomposition-and-community-detection"><span class="header-section-number">4.6</span> Graph decomposition and community detection</h2>
+<p>Graph decomposition and community detection methods identify the structural components and natural groupings within knowledge graphs.</p>
+<section id="graph-partitioning" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="graph-partitioning"><span class="header-section-number">4.6.1</span> Graph partitioning</h3>
+<div id="def-graph-partitioning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.39 (Graph partitioning)</strong></span> <strong>Graph partitioning</strong> divides a graph into smaller components with specific properties, typically minimizing the number of edges between different components while keeping components relatively balanced in size.</p>
+<p>Finding the optimal partition is NP-hard, but heuristic algorithms like Kernighan-Lin and spectral partitioning provide practical solutions.</p>
+</div>
+<div id="exm-graph-partitioning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.36 (Graph partitioning in a knowledge graph)</strong></span> In a large-scale distributed knowledge graph:</p>
+<p>Graph partitioning can divide the knowledge graph across multiple servers by:</p>
+<ol type="1">
+<li>Grouping related entities together on the same server</li>
+<li>Minimizing cross-server relationships to reduce communication overhead</li>
+<li>Balancing the number of entities per server for load balancing</li>
+</ol>
+<p>For example, a social network knowledge graph might be partitioned geographically, with users from the same region stored on the same server.</p>
+</div>
+</section>
+<section id="community-detection" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="community-detection"><span class="header-section-number">4.6.2</span> Community detection</h3>
+<div id="def-community-detection" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.40 (Community detection)</strong></span> <strong>Community detection</strong> identifies groups of vertices that are more densely connected internally than with the rest of the graph.</p>
+<p>Common approaches include:</p>
+<ol type="1">
+<li>Modularity optimization</li>
+<li>Label propagation</li>
+<li>Clique percolation</li>
+<li>Louvain method</li>
+<li>Infomap algorithm</li>
+</ol>
+</div>
+<div id="exm-community-detection" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.37 (Community detection in a knowledge graph)</strong></span> In a scientific collaboration knowledge graph:</p>
+<p>Community detection can identify research communities by:</p>
+<ol type="1">
+<li>Analyzing patterns of co-authorship</li>
+<li>Finding groups of researchers who frequently collaborate</li>
+<li>Distinguishing separate fields and subfields based on collaboration density</li>
+</ol>
+<p>The resulting communities might correspond to research fields like “quantum computing,” “natural language processing,” or “climate modeling,” even without explicit field labels.</p>
+</div>
+</section>
+<section id="core-periphery-structure" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="core-periphery-structure"><span class="header-section-number">4.6.3</span> Core-periphery structure</h3>
+<div id="def-core-periphery" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.41 (Core-periphery structure)</strong></span> A <strong>core-periphery structure</strong> divides a graph into two parts:</p>
+<ol type="1">
+<li>A densely connected <strong>core</strong> of central vertices</li>
+<li>A sparsely connected <strong>periphery</strong> of peripheral vertices that are primarily connected to the core</li>
+</ol>
+<p>Various algorithms identify this structure by maximizing the density within the core and minimizing it within the periphery.</p>
+</div>
+<div id="exm-core-periphery" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.38 (Core-periphery in a knowledge graph)</strong></span> In a corporate knowledge graph:</p>
+<p>Core-periphery analysis can reveal organizational structure by:</p>
+<ol type="1">
+<li>Identifying a core of central entities (key executives, major departments, flagship products)</li>
+<li>Distinguishing the periphery (supporting roles, minor products, external contractors)</li>
+<li>Understanding information flow patterns between core and periphery</li>
+</ol>
+<p>The core might consist of the executive team and major product lines, while the periphery includes supporting services and regional operations.</p>
+</div>
+</section>
+<section id="hierarchical-clustering" class="level3" data-number="4.6.4">
+<h3 data-number="4.6.4" class="anchored" data-anchor-id="hierarchical-clustering"><span class="header-section-number">4.6.4</span> Hierarchical clustering</h3>
+<div id="def-hierarchical-clustering" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.42 (Hierarchical clustering)</strong></span> <strong>Hierarchical clustering</strong> creates a tree of clusters by either:</p>
+<ol type="1">
+<li><strong>Agglomerative</strong> (bottom-up): Starting with each vertex as its own cluster and iteratively merging the closest clusters</li>
+<li><strong>Divisive</strong> (top-down): Starting with all vertices in one cluster and recursively splitting clusters</li>
+</ol>
+<p>The result is a dendrogram showing clusters at multiple levels of granularity.</p>
+</div>
+<div id="exm-hierarchical-clustering" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.39 (Hierarchical clustering in a knowledge graph)</strong></span> In a product knowledge graph:</p>
+<p>Hierarchical clustering can create a taxonomy of products by:</p>
+<ol type="1">
+<li>Grouping products based on feature similarity</li>
+<li>Forming a multilevel hierarchy from specific product variants to general categories</li>
+<li>Allowing exploration at different levels of specificity</li>
+</ol>
+<p>The resulting hierarchy might show smartphones grouped by brand at one level, by operating system at a higher level, and with all electronics at an even higher level.</p>
+</div>
+</section>
+</section>
+<section id="specialized-graph-types-for-knowledge-representation" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="specialized-graph-types-for-knowledge-representation"><span class="header-section-number">4.7</span> Specialized graph types for knowledge representation</h2>
+<p>Knowledge graphs often employ specialized graph types that extend standard graphs to better represent complex knowledge.</p>
+<section id="property-graphs" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="property-graphs"><span class="header-section-number">4.7.1</span> Property graphs</h3>
+<div id="def-property-graph-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.43 (Property graph model)</strong></span> The <strong>property graph model</strong> extends the basic graph model with:</p>
+<ol type="1">
+<li>Labeled vertices and edges</li>
+<li>Properties (key-value pairs) on both vertices and edges</li>
+<li>Multiple edges allowed between the same vertices, distinguished by different labels</li>
+</ol>
+<p>This model provides rich expressivity for knowledge representation.</p>
+</div>
+<div id="exm-property-graph-model" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.40 (Property graph model in practice)</strong></span> In a biomedical knowledge graph:</p>
+<p>Vertices:</p>
+<ul>
+<li>(id: 1, label: “Drug”, properties: {name: “Aspirin”, formula: “C9H8O4”})</li>
+<li>(id: 2, label: “Disease”, properties: {name: “Headache”, ICD10: “R51”})</li>
+<li>(id: 3, label: “Protein”, properties: {name: “COX-2”, uniprotID: “P35354”})</li>
+</ul>
+<p>Edges:</p>
+<ul>
+<li>(source: 1, target: 2, label: “treats”, properties: {efficacy: 0.78, mechanism: “direct”})</li>
+<li>(source: 1, target: 3, label: “inhibits”, properties: {strength: “high”, reversible: true})</li>
+<li>(source: 3, target: 2, label: “implicated_in”, properties: {evidence: “strong”, pathway: “inflammatory”})</li>
+</ul>
+<p>This rich structure captures both the connections between entities and detailed information about each entity and relationship.</p>
+</div>
+</section>
+<section id="rdf-graphs" class="level3" data-number="4.7.2">
+<h3 data-number="4.7.2" class="anchored" data-anchor-id="rdf-graphs"><span class="header-section-number">4.7.2</span> RDF graphs</h3>
+<div id="def-rdf-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.44 (RDF graph)</strong></span> The <strong>Resource Description Framework (RDF)</strong> represents knowledge as a graph of triples in the form (subject, predicate, object), where:</p>
+<ul>
+<li>Subjects are resources (entities)</li>
+<li>Predicates are properties or relationships</li>
+<li>Objects are either resources or literal values</li>
+</ul>
+<p>RDF uses URIs (Uniform Resource Identifiers) as global identifiers, enabling cross-dataset knowledge integration.</p>
+</div>
+<div id="exm-rdf-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.41 (RDF graph example)</strong></span> A fragment of an RDF knowledge graph about Albert Einstein:</p>
+<pre><code>ex:Einstein rdf:type ex:Scientist .
+ex:Einstein ex:birthDate "1879-03-14"^^xsd:date .
+ex:Einstein ex:won ex:NobelPrize .
+ex:Einstein ex:developedTheory ex:Relativity .
+ex:Relativity ex:publishedYear "1905"^^xsd:integer .</code></pre>
+<p>These triples form a connected graph, with Einstein as a central node connected to various attributes and related entities.</p>
+</div>
+</section>
+<section id="ontology-graphs" class="level3" data-number="4.7.3">
+<h3 data-number="4.7.3" class="anchored" data-anchor-id="ontology-graphs"><span class="header-section-number">4.7.3</span> Ontology graphs</h3>
+<div id="def-ontology-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.45 (Ontology graph)</strong></span> An <strong>ontology graph</strong> extends knowledge graphs with formal semantics, typically using description logics, to represent:</p>
+<ol type="1">
+<li>Classes and class hierarchies</li>
+<li>Properties and property hierarchies</li>
+<li>Constraints and axioms</li>
+<li>Logic-based inference rules</li>
+</ol>
+<p>Ontology graphs enable automated reasoning and inference beyond explicit statements.</p>
+</div>
+<div id="exm-ontology-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.42 (Ontology graph example)</strong></span> A biological ontology fragment:</p>
+<pre><code>ex:Mammal rdfs:subClassOf ex:Animal .
+ex:Dog rdfs:subClassOf ex:Mammal .
+ex:Cat rdfs:subClassOf ex:Mammal .
+ex:hasPart rdf:type owl:TransitiveProperty .
+ex:Animal owl:disjointWith ex:Plant .
+ex:Dog owl:equivalentClass [
+    owl:intersectionOf (
+        ex:Mammal
+        [ owl:onProperty ex:hasBehavior ; owl:hasValue ex:Barking ]
+    )
+] .</code></pre>
+<p>This ontology defines a hierarchy of animal classes, specifies that hasPart is transitive, declares that animals and plants are disjoint, and provides a complex class definition for dogs.</p>
+</div>
+</section>
+<section id="hypergraphs-in-knowledge-representation" class="level3" data-number="4.7.4">
+<h3 data-number="4.7.4" class="anchored" data-anchor-id="hypergraphs-in-knowledge-representation"><span class="header-section-number">4.7.4</span> Hypergraphs in knowledge representation</h3>
+<div id="def-hypergraph-representation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.46 (Hypergraph representation)</strong></span> A <strong>hypergraph representation</strong> of knowledge uses hyperedges to connect multiple entities simultaneously, suitable for representing higher-order relationships that inherently involve more than two entities.</p>
+<p>Formally, a hypergraph <span class="math inline">H = (V, E)</span> consists of a set of vertices <span class="math inline">V</span> and a set of hyperedges <span class="math inline">E</span>, where each hyperedge is a non-empty subset of <span class="math inline">V</span>.</p>
+</div>
+<div id="exm-hypergraph-representation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.43 (Hypergraph representation example)</strong></span> In a biomedical knowledge graph:</p>
+<p>A metabolic reaction might be represented as a hyperedge connecting multiple molecules:</p>
+<p><span class="math inline">e_1 = \{Glucose, ATP, Glucose-6-phosphate, ADP\}</span></p>
+<p>This single hyperedge represents the reaction: Glucose + ATP → Glucose-6-phosphate + ADP</p>
+<p>Similarly, a clinical trial might be represented as a hyperedge connecting multiple entities:</p>
+<p><span class="math inline">e_2 = \{DrugX, ConditionY, Hospital1, EfficacyZ, SideEffectW\}</span></p>
+<p>Hyperedges naturally represent these multi-entity relationships that would be awkward to decompose into binary relationships.</p>
+</div>
+</section>
+<section id="temporal-and-dynamic-graphs" class="level3" data-number="4.7.5">
+<h3 data-number="4.7.5" class="anchored" data-anchor-id="temporal-and-dynamic-graphs"><span class="header-section-number">4.7.5</span> Temporal and dynamic graphs</h3>
+<div id="def-temporal-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.47 (Temporal graph)</strong></span> A <strong>temporal graph</strong> (or dynamic graph) extends standard graphs by incorporating time:</p>
+<p><span class="math inline">G_{temp} = (V, E, T)</span></p>
+<p>where <span class="math inline">T</span> is a time domain, and edges (and possibly vertices) have associated time intervals indicating when they are valid.</p>
+</div>
+<div id="exm-temporal-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.44 (Temporal graph example)</strong></span> In a historical knowledge graph:</p>
+<p>Temporal edges capture changing relationships over time:</p>
+<ul>
+<li>(Napoleon, rulerOf, France, [1804-1814, 1815])</li>
+<li>(France, politicalSystem, Empire, [1804-1814, 1815])</li>
+<li>(France, politicalSystem, Republic, [1792-1804, 1848-1852])</li>
+</ul>
+<p>Temporal vertices might represent entities that exist only during specific time periods:</p>
+<ul>
+<li>(GrandArmy, type, MilitaryUnit, [1805-1815])</li>
+</ul>
+<p>These temporal annotations enable queries about the state of knowledge at particular points in time, such as “Who ruled France in 1810?” or “What was France’s political system in 1820?”</p>
+</div>
+</section>
+<section id="probabilistic-and-uncertain-graphs" class="level3" data-number="4.7.6">
+<h3 data-number="4.7.6" class="anchored" data-anchor-id="probabilistic-and-uncertain-graphs"><span class="header-section-number">4.7.6</span> Probabilistic and uncertain graphs</h3>
+<div id="def-probabilistic-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.48 (Probabilistic graph)</strong></span> A <strong>probabilistic graph</strong> associates probabilities with vertices, edges, or subgraphs to represent uncertain knowledge:</p>
+<p><span class="math inline">G_{prob} = (V, E, P)</span></p>
+<p>where <span class="math inline">P</span> assigns probability values to elements of the graph, reflecting confidence, uncertainty, or statistical likelihood.</p>
+</div>
+<div id="exm-probabilistic-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.45 (Probabilistic graph example)</strong></span> In a medical knowledge graph:</p>
+<p>Edges with probabilities represent uncertain relationships:</p>
+<ul>
+<li>(Smoking, causes, LungCancer, 0.85)</li>
+<li>(Asbestos, causes, LungCancer, 0.70)</li>
+<li>(GeneMutation, causes, LungCancer, 0.55)</li>
+</ul>
+<p>These probabilities might represent the strength of evidence, the relative risk contribution, or the confidence in the causal relationship.</p>
+<p>Probabilistic inference can then answer questions like:</p>
+<ul>
+<li>What is the probability of developing lung cancer given both smoking and asbestos exposure?</li>
+<li>What is the most likely cause of lung cancer in a specific population?</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="applications-of-graph-theory-in-knowledge-graphs" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="applications-of-graph-theory-in-knowledge-graphs"><span class="header-section-number">4.8</span> Applications of graph theory in knowledge graphs</h2>
+<p>This section explores how the graph-theoretic concepts and algorithms introduced earlier apply to specific knowledge graph tasks and applications.</p>
+<section id="entity-resolution-and-linking" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="entity-resolution-and-linking"><span class="header-section-number">4.8.1</span> Entity resolution and linking</h3>
+<div id="def-entity-resolution" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.49 (Entity resolution)</strong></span> <strong>Entity resolution</strong> (or entity linking, record linkage) is the process of identifying and combining different references to the same real-world entity in a knowledge graph.</p>
+<p>Graph-theoretic approaches leverage the network structure to improve entity resolution beyond simple attribute matching.</p>
+</div>
+<div id="exm-entity-resolution" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.46 (Entity resolution example)</strong></span> In a bibliographic knowledge graph:</p>
+<p>The system needs to determine if “J. Smith from MIT” and “John Smith from Massachusetts Institute of Technology” refer to the same person.</p>
+<p>Graph-based entity resolution might:</p>
+<ol type="1">
+<li>Analyze the neighborhood structure (co-authors, publications, citations)</li>
+<li>Apply similarity metrics to the subgraphs surrounding each entity</li>
+<li>Use transitivity to propagate identity information</li>
+</ol>
+<p>If both entities have similar patterns of collaboration with the same set of other researchers, the system might conclude they are likely the same person, despite differences in how the name and affiliation are recorded.</p>
+</div>
+</section>
+<section id="link-prediction" class="level3" data-number="4.8.2">
+<h3 data-number="4.8.2" class="anchored" data-anchor-id="link-prediction"><span class="header-section-number">4.8.2</span> Link prediction</h3>
+<div id="def-link-prediction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.50 (Link prediction)</strong></span> <strong>Link prediction</strong> aims to predict missing edges or future connections in a graph based on observed graph structure.</p>
+<p>Common approaches use:</p>
+<ol type="1">
+<li>Neighborhood-based metrics (common neighbors, Jaccard coefficient)</li>
+<li>Path-based metrics (shortest path, Katz index)</li>
+<li>Random walk methods</li>
+<li>Graph neural networks</li>
+</ol>
+</div>
+<div id="exm-link-prediction" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.47 (Link prediction example)</strong></span> In a drug discovery knowledge graph:</p>
+<p>Link prediction can identify potential drug-target interactions by:</p>
+<ol type="1">
+<li>Analyzing patterns in known drug-target interactions</li>
+<li>Considering the chemical similarity between drugs (graph structure in chemical space)</li>
+<li>Incorporating protein similarity (graph structure in protein space)</li>
+<li>Predicting missing edges between drugs and targets</li>
+</ol>
+<p>For example, if Drug A and Drug B are structurally similar, and Drug A is known to interact with Protein X, link prediction might suggest that Drug B also interacts with Protein X, prioritizing this for experimental validation.</p>
+</div>
+</section>
+<section id="path-based-reasoning-and-inference" class="level3" data-number="4.8.3">
+<h3 data-number="4.8.3" class="anchored" data-anchor-id="path-based-reasoning-and-inference"><span class="header-section-number">4.8.3</span> Path-based reasoning and inference</h3>
+<div id="def-path-reasoning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.51 (Path-based reasoning)</strong></span> <strong>Path-based reasoning</strong> uses paths in a knowledge graph to infer new relationships or answer complex queries.</p>
+<p>Approaches include:</p>
+<ol type="1">
+<li>Path ranking algorithms</li>
+<li>Meta-path analysis</li>
+<li>Composition of relation patterns</li>
+</ol>
+</div>
+<div id="exm-path-reasoning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.48 (Path-based reasoning example)</strong></span> In a biomedical knowledge graph, path-based reasoning might identify drug repurposing opportunities:</p>
+<ol type="1">
+<li>Identify a path: Drug A → inhibits → Protein X → regulates → Gene Y → associated with → Disease B</li>
+<li>Infer a potential relationship: Drug A might treat Disease B</li>
+</ol>
+<p>By systematically analyzing such paths across the knowledge graph, the system can generate hypotheses about drug repurposing opportunities, even when direct evidence is absent.</p>
+<p>Similarly, in a financial knowledge graph, path analysis might detect:</p>
+<ol type="1">
+<li>Company A → subsidiary of → Company B → headquartered in → Country C → has tax treaty with → Country D</li>
+<li>Inferring potential tax optimization strategies based on these indirect relationships</li>
+</ol>
+</div>
+</section>
+<section id="knowledge-graph-completion" class="level3" data-number="4.8.4">
+<h3 data-number="4.8.4" class="anchored" data-anchor-id="knowledge-graph-completion"><span class="header-section-number">4.8.4</span> Knowledge graph completion</h3>
+<div id="def-kg-completion" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.52 (Knowledge graph completion)</strong></span> <strong>Knowledge graph completion</strong> aims to infer missing facts in a knowledge graph, combining:</p>
+<ol type="1">
+<li>Link prediction (predicting missing edges)</li>
+<li>Node prediction (inferring missing entities)</li>
+<li>Type prediction (determining entity types)</li>
+<li>Value prediction (filling in missing attributes)</li>
+</ol>
+</div>
+<div id="exm-kg-completion" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.49 (Knowledge graph completion example)</strong></span> In a geographic knowledge graph:</p>
+<p>The system might complete missing information about cities:</p>
+<ol type="1">
+<li>Predict population for cities with unknown population based on patterns of similar cities</li>
+<li>Infer climate classifications for regions without explicit climate data</li>
+<li>Complete missing “located in” relationships for suburbs or districts</li>
+<li>Predict typical temperature ranges based on latitude, elevation, and proximity to oceans</li>
+</ol>
+<p>These predictions leverage both the explicit graph structure and implicit patterns in the existing knowledge.</p>
+</div>
+</section>
+<section id="query-answering-over-knowledge-graphs" class="level3" data-number="4.8.5">
+<h3 data-number="4.8.5" class="anchored" data-anchor-id="query-answering-over-knowledge-graphs"><span class="header-section-number">4.8.5</span> Query answering over knowledge graphs</h3>
+<div id="def-kg-query" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.53 (Knowledge graph querying)</strong></span> <strong>Knowledge graph querying</strong> uses graph patterns to retrieve information, typically through languages like SPARQL or Cypher.</p>
+<p>Graph algorithms support efficient query processing through:</p>
+<ol type="1">
+<li>Query planning and optimization</li>
+<li>Index-based access</li>
+<li>Parallel and distributed processing</li>
+</ol>
+</div>
+<div id="exm-kg-query" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.50 (Knowledge graph query example)</strong></span> A SPARQL query to find medications that treat both diabetes and hypertension:</p>
+<pre class="sparql"><code>SELECT ?medication WHERE {
+  ?medication rdf:type ex:Medication .
+  ?medication ex:treats ex:Diabetes .
+  ?medication ex:treats ex:Hypertension .
+}</code></pre>
+<p>This query finds all medications connected by “treats” edges to both diabetes and hypertension. Efficient processing might use:</p>
+<ol type="1">
+<li>Index lookups to find medications treating diabetes</li>
+<li>Index lookups to find medications treating hypertension</li>
+<li>Set intersection to find medications in both sets</li>
+</ol>
+</div>
+</section>
+<section id="community-based-knowledge-organization" class="level3" data-number="4.8.6">
+<h3 data-number="4.8.6" class="anchored" data-anchor-id="community-based-knowledge-organization"><span class="header-section-number">4.8.6</span> Community-based knowledge organization</h3>
+<div id="def-community-organization" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.54 (Community-based knowledge organization)</strong></span> <strong>Community-based knowledge organization</strong> applies community detection algorithms to identify coherent domains, topics, or subject areas within knowledge graphs.</p>
+</div>
+<div id="exm-community-organization" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.51 (Community organization example)</strong></span> In a scientific knowledge graph:</p>
+<p>Community detection can automatically organize research into coherent fields and subfields by:</p>
+<ol type="1">
+<li>Analyzing patterns of citation</li>
+<li>Identifying clusters of densely interconnected papers</li>
+<li>Extracting key terms or concepts from each cluster</li>
+</ol>
+<p>This organization might reveal:</p>
+<ul>
+<li>A machine learning community with subcommunities for neural networks, Bayesian methods, and reinforcement learning</li>
+<li>A medical community with subcommunities for cardiology, oncology, and neurology</li>
+<li>Interdisciplinary bridges between communities, such as computational biology</li>
+</ul>
+<p>This automated organization can help with literature discovery, trend analysis, and identifying emerging research areas.</p>
+</div>
+</section>
+</section>
+<section id="graph-theory-extensions-for-knowledge-graphs" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="graph-theory-extensions-for-knowledge-graphs"><span class="header-section-number">4.9</span> Graph theory extensions for knowledge graphs</h2>
+<p>This section explores theoretical extensions to standard graph theory that address the specific needs and challenges of knowledge graphs.</p>
+<section id="higher-order-graph-analysis" class="level3" data-number="4.9.1">
+<h3 data-number="4.9.1" class="anchored" data-anchor-id="higher-order-graph-analysis"><span class="header-section-number">4.9.1</span> Higher-order graph analysis</h3>
+<div id="def-higher-order" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.55 (Higher-order graph analysis)</strong></span> <strong>Higher-order graph analysis</strong> extends beyond pairwise relationships to examine patterns involving multiple entities simultaneously, including:</p>
+<ol type="1">
+<li>Motif analysis (recurring subgraph patterns)</li>
+<li>Graphlet analysis (small induced subgraphs)</li>
+<li>Clique analysis (completely connected subgraphs)</li>
+<li>Simplicial complex representations (higher-dimensional relationships)</li>
+</ol>
+</div>
+<div id="exm-higher-order" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.52 (Higher-order analysis example)</strong></span> In a social knowledge graph:</p>
+<p>Motif analysis might reveal common relationship patterns:</p>
+<ul>
+<li>Triadic closure: If A is friends with B and C, then B and C are likely to become friends</li>
+<li>Authority structures: A central person connected to many others who aren’t connected to each other</li>
+<li>Cliques: Groups where everyone knows everyone else</li>
+</ul>
+<p>These higher-order patterns provide insights beyond what individual edges can reveal, identifying characteristic structures that shape how knowledge is organized.</p>
+</div>
+</section>
+<section id="multilayer-and-multiplex-graphs" class="level3" data-number="4.9.2">
+<h3 data-number="4.9.2" class="anchored" data-anchor-id="multilayer-and-multiplex-graphs"><span class="header-section-number">4.9.2</span> Multilayer and multiplex graphs</h3>
+<div id="def-multilayer-graph" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.56 (Multilayer graph)</strong></span> A <strong>multilayer graph</strong> represents multiple types of relationships or interaction contexts as separate layers in a unified framework:</p>
+<p><span class="math inline">M = (V, E_1, E_2, ..., E_L)</span></p>
+<p>where each <span class="math inline">E_i</span> represents edges of a particular type or layer.</p>
+</div>
+<div id="exm-multilayer-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.53 (Multilayer graph example)</strong></span> In a comprehensive social knowledge graph:</p>
+<p>Different layers might represent distinct relationship types:</p>
+<ul>
+<li>Layer 1: Professional relationships (collaborates with, reports to)</li>
+<li>Layer 2: Social relationships (friends with, family member of)</li>
+<li>Layer 3: Communication patterns (emails, messages, calls)</li>
+<li>Layer 4: Physical proximity (co-located, neighbors)</li>
+</ul>
+<p>Multilayer analysis can reveal:</p>
+<ul>
+<li>How relationships in one layer influence those in another</li>
+<li>Different centrality of individuals across layers</li>
+<li>Community structures that span multiple layers</li>
+<li>Discrepancies between formal and informal relationship networks</li>
+</ul>
+</div>
+</section>
+<section id="heterogeneous-information-networks" class="level3" data-number="4.9.3">
+<h3 data-number="4.9.3" class="anchored" data-anchor-id="heterogeneous-information-networks"><span class="header-section-number">4.9.3</span> Heterogeneous information networks</h3>
+<div id="def-heterogeneous-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.57 (Heterogeneous information network)</strong></span> A <strong>heterogeneous information network</strong> (HIN) is a graph with multiple types of vertices and edges, formally defined as:</p>
+<p><span class="math inline">G = (V, E, T_V, T_E, \phi_V, \phi_E)</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">T_V</span> is a set of vertex types</li>
+<li><span class="math inline">T_E</span> is a set of edge types</li>
+<li><span class="math inline">\phi_V: V \rightarrow T_V</span> maps vertices to their types</li>
+<li><span class="math inline">\phi_E: E \rightarrow T_E</span> maps edges to their types</li>
+</ul>
+</div>
+<div id="exm-heterogeneous-network" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.54 (Heterogeneous network example)</strong></span> In an academic knowledge graph:</p>
+<p>Vertex types might include:</p>
+<ul>
+<li>Authors</li>
+<li>Papers</li>
+<li>Conferences</li>
+<li>Institutions</li>
+<li>Research topics</li>
+</ul>
+<p>Edge types might include:</p>
+<ul>
+<li>authorOf (Author → Paper)</li>
+<li>publishedIn (Paper → Conference)</li>
+<li>affiliatedWith (Author → Institution)</li>
+<li>cites (Paper → Paper)</li>
+<li>hasTopic (Paper → Topic)</li>
+</ul>
+<p>This heterogeneity enables rich queries and analyses that consider the semantics of different entity and relationship types, such as finding authors who frequently publish on specific topics at particular conferences.</p>
+</div>
+</section>
+<section id="semantic-networks-and-conceptual-graphs" class="level3" data-number="4.9.4">
+<h3 data-number="4.9.4" class="anchored" data-anchor-id="semantic-networks-and-conceptual-graphs"><span class="header-section-number">4.9.4</span> Semantic networks and conceptual graphs</h3>
+<div id="def-semantic-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4.58 (Semantic network)</strong></span> A <strong>semantic network</strong> is a graph structure that represents semantic relationships between concepts, focusing on the meaning of information rather than just structure.</p>
+<p>Semantic networks typically include:</p>
+<ol type="1">
+<li>Hierarchical relationships (is-a, part-of)</li>
+<li>Semantic relations (causes, enables, contradicts)</li>
+<li>Modifiers and attributes</li>
+</ol>
+</div>
+<div id="exm-semantic-network" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.55 (Semantic network example)</strong></span> In a cognitive linguistics knowledge graph:</p>
+<p>A semantic network might represent conceptual relationships:</p>
+<ul>
+<li>(Bird, is-a, Animal)</li>
+<li>(Wing, part-of, Bird)</li>
+<li>(Flying, capability-of, Bird)</li>
+<li>(Flying, requires, Wing)</li>
+<li>(Penguin, is-a, Bird)</li>
+<li>(Penguin, cannot, Flying)</li>
+<li>(Water, habitat-of, Penguin)</li>
+</ul>
+<p>This network captures not just factual relationships but semantic knowledge about capabilities, requirements, and exceptions, supporting more human-like reasoning about concepts.</p>
+</div>
+</section>
+</section>
+<section id="summary" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">4.10</span> Summary</h2>
+<p>This chapter has provided a comprehensive introduction to graph theory fundamentals as they apply to knowledge graphs. We’ve covered:</p>
+<ol type="1">
+<li><p><strong>Basic graph definitions and terminology</strong>: The essential vocabulary and concepts for discussing graph structures.</p></li>
+<li><p><strong>Special graph structures</strong>: Important graph types like bipartite graphs, directed acyclic graphs, and trees that frequently appear in knowledge representation.</p></li>
+<li><p><strong>Graph properties and measures</strong>: Quantitative tools for analyzing graph structure, including connectivity, centrality, and clustering.</p></li>
+<li><p><strong>Graph representations and data structures</strong>: Ways to computationally represent graphs, from adjacency matrices to specialized knowledge graph formats.</p></li>
+<li><p><strong>Graph algorithms fundamentals</strong>: Core algorithms for traversing, searching, and analyzing graphs, including BFS, DFS, and shortest path algorithms.</p></li>
+<li><p><strong>Graph decomposition and community detection</strong>: Methods for identifying the natural divisions and groupings within graphs.</p></li>
+<li><p><strong>Specialized graph types for knowledge representation</strong>: Extensions to the basic graph model that better capture the complexity of knowledge, including property graphs, RDF graphs, and temporal graphs.</p></li>
+<li><p><strong>Applications of graph theory in knowledge graphs</strong>: Practical tasks that leverage graph theory, such as entity resolution, link prediction, and query answering.</p></li>
+<li><p><strong>Graph theory extensions for knowledge graphs</strong>: Advanced theoretical frameworks that address the unique challenges of knowledge graphs, including higher-order analysis and heterogeneous networks.</p></li>
+</ol>
+<p>This foundation in graph theory provides the theoretical tools necessary for understanding, designing, and working with knowledge graphs across various domains and applications. As we proceed to subsequent chapters, we’ll build on these concepts to explore more specialized aspects of knowledge graph construction, analysis, and application.</p>
+</section>
+<section id="exercises" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.11</span> Exercises</h2>
+<div id="exr-graph-representation" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.1 (Graph representation)</strong></span> Consider a small knowledge graph about scientists and their discoveries:</p>
+<p>Entities: Einstein, Bohr, Newton, TheoryOfRelativity, QuantumMechanics, LawsOfMotion Relationships:</p>
+<ul>
+<li>(Einstein, developed, TheoryOfRelativity)</li>
+<li>(Einstein, influencedBy, Newton)</li>
+<li>(Bohr, developed, QuantumMechanics)</li>
+<li>(Bohr, influencedBy, Einstein)</li>
+<li>(Newton, developed, LawsOfMotion)</li>
+</ul>
+<ol type="1">
+<li>Represent this knowledge graph as an adjacency matrix.</li>
+<li>Represent it as an adjacency list.</li>
+<li>Represent it as a property graph with appropriate node and edge properties.</li>
+<li>Convert it to a set of RDF triples.</li>
+<li>Draw the directed graph representation.</li>
+<li>Discuss the advantages and disadvantages of each representation for different types of queries or operations on this knowledge graph.</li>
+</ol>
+</div>
+<div id="exr-graph-algorithms" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.2 (Graph algorithms)</strong></span> Using the scientists knowledge graph from the previous exercise:</p>
+<ol type="1">
+<li>Trace the steps of a BFS traversal starting from Einstein.</li>
+<li>Trace the steps of a DFS traversal starting from Einstein.</li>
+<li>Identify all paths from Newton to QuantumMechanics, if any.</li>
+<li>Calculate the in-degree and out-degree of each entity.</li>
+<li>If we added a confidence weight to each relationship (0-1 scale), describe how Dijkstra’s algorithm could be modified to find the most reliable path between two entities.</li>
+<li>Discuss how you would identify the most central entity in this knowledge graph using different centrality measures.</li>
+</ol>
+</div>
+<div id="exr-community-detection" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.3 (Community detection and graph partitioning)</strong></span> Consider an expanded version of the scientists knowledge graph that includes 30 scientists, their discoveries, publications, and institutions, with approximately 100 relationships between them.</p>
+<ol type="1">
+<li>Describe a methodology for detecting scientific communities in this knowledge graph.</li>
+<li>If you needed to partition this knowledge graph across three servers while minimizing cross-server relationships, outline your approach.</li>
+<li>How would you identify the core-periphery structure in this scientific collaboration network?</li>
+<li>Explain how hierarchical clustering could be applied to create a taxonomy of scientific fields.</li>
+<li>Discuss how temporal information (publication dates, lifespans of scientists) could be incorporated into the community detection process.</li>
+</ol>
+</div>
+<div id="exr-specialized-graphs" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.4 (Specialized graph types)</strong></span> Design a knowledge graph for representing a university with departments, professors, students, courses, and research projects.</p>
+<ol type="1">
+<li>Create a property graph schema with appropriate vertex and edge types, and properties.</li>
+<li>Design an RDF schema for the same domain.</li>
+<li>Identify relationships that might be better represented as hyperedges and explain why.</li>
+<li>Describe how you would incorporate temporal aspects (enrollment periods, course offerings by semester, faculty appointments).</li>
+<li>Discuss how uncertainty might be represented in this knowledge graph (e.g., uncertain course prerequisites, potential research collaborations).</li>
+</ol>
+</div>
+<div id="exr-graph-operations" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.5 (Graph operations and analysis)</strong></span> Consider a knowledge graph representing a healthcare system with patients, doctors, diseases, treatments, and medications.</p>
+<ol type="1">
+<li>Formulate a path query to find all potential treatments for a specific disease.</li>
+<li>Design an algorithm to identify doctors who frequently prescribe similar medications.</li>
+<li>Describe how you would use link prediction to suggest potential drug interactions.</li>
+<li>Outline a community detection approach to identify disease clusters with similar treatment patterns.</li>
+<li>Discuss how centrality measures could help identify key medications that are essential to the treatment of multiple conditions.</li>
+<li>Explain how you would evaluate the quality of your knowledge graph using graph-theoretic metrics.</li>
+</ol>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="4.12">
+<h2 data-number="4.12" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">4.12</span> Further reading</h2>
+<ol type="1">
+<li><p>Bang-Jensen, J., &amp; Gutin, G. Z. (2008). <em>Digraphs: Theory, Algorithms and Applications</em>. Springer Science &amp; Business Media.</p></li>
+<li><p>Bondy, J. A., &amp; Murty, U. S. R. (2008). <em>Graph Theory</em>. Springer.</p></li>
+<li><p>Fortunato, S. (2010). Community detection in graphs. <em>Physics Reports</em>, 486(3-5), 75-174.</p></li>
+<li><p>Goyal, P., &amp; Ferrara, E. (2018). Graph embedding techniques, applications, and performance: A survey. <em>Knowledge-Based Systems</em>, 151, 78-94.</p></li>
+<li><p>Leskovec, J., Rajaraman, A., &amp; Ullman, J. D. (2020). <em>Mining of Massive Datasets</em>. Cambridge University Press. (Chapter 10: Analysis of Social Networks)</p></li>
+<li><p>Newman, M. (2018). <em>Networks</em>. Oxford University Press.</p></li>
+<li><p>Robinson, I., Webber, J., &amp; Eifrem, E. (2015). <em>Graph Databases: New Opportunities for Connected Data</em>. O’Reilly Media.</p></li>
+<li><p>Shi, C., Li, Y., Zhang, J., Sun, Y., &amp; Philip, S. Y. (2017). A survey of heterogeneous information network analysis. <em>IEEE Transactions on Knowledge and Data Engineering</em>, 29(1), 17-37.</p></li>
+<li><p>West, D. B. (2001). <em>Introduction to Graph Theory</em>. Prentice Hall.</p></li>
+<li><p>Zhang, C., Yao, X., &amp; Sun, J. (2020). Representation Learning for Heterogeneous Information Networks. <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, 34(5), 9330-9337.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/foundation/math-fundamentals.html" class="pagination-link" aria-label="Mathematical fundamentals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../contents/foundation/knowledge-representation.html" class="pagination-link" aria-label="Knowledge Representation and Ontologies">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
