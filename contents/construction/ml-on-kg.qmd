@@ -1,0 +1,2133 @@
+# Machine Learning on Knowledge Graphs
+
+## Introduction to machine learning for knowledge graphs
+
+Knowledge graphs have emerged as powerful representations of interconnected information, capturing complex relationships between entities across diverse domains. While previous chapters explored graph algorithms and statistical methods for analyzing knowledge graphs, this chapter introduces machine learning techniques specifically designed for knowledge graph data.
+
+Machine learning offers transformative capabilities for knowledge graphs, enabling the extraction of patterns, prediction of missing information, and identification of insights that may not be immediately apparent through traditional analysis. The intersection of machine learning and knowledge graphs represents a particularly fruitful research area, as it combines the expressive power of graph representations with the predictive capabilities of modern machine learning.
+
+::: {#def-machine-learning-on-knowledge-graphs}
+
+## Machine learning on knowledge graphs
+
+**Machine learning on knowledge graphs** refers to the application of machine learning algorithms and models to extract patterns, make predictions, or derive insights from knowledge graph data. This typically involves learning from the graph structure, node attributes, edge types, and other semantic information encoded in the knowledge graph.
+
+:::
+
+The goals of applying machine learning to knowledge graphs typically include:
+
+1. **Prediction**: Forecasting missing links, node attributes, or future graph evolution
+2. **Classification**: Assigning labels to nodes, edges, or subgraphs
+3. **Clustering**: Identifying groups of similar entities or relationships
+4. **Representation learning**: Transforming graph elements into vector representations that preserve structural and semantic information
+5. **Anomaly detection**: Identifying unusual patterns or outliers in the graph
+6. **Knowledge discovery**: Uncovering new, non-obvious insights from the graph structure
+
+This chapter will explore the theoretical foundations, methodologies, and applications of machine learning on knowledge graphs, with a focus on techniques that accommodate the unique characteristics of graph-structured data and the semantic richness of knowledge representations.
+
+## Representation learning fundamentals
+
+A core challenge in applying machine learning to knowledge graphs is transforming graph-structured data into formats amenable to machine learning algorithms. Representation learning addresses this challenge by learning vector embeddings that capture the essential properties of graph elements.
+
+::: {#def-representation-learning}
+
+## Representation learning
+
+**Representation learning** (or feature learning) is a set of techniques that automatically discover useful representations of data for tasks like classification or prediction, without requiring manual feature engineering. In the context of knowledge graphs, representation learning typically involves mapping nodes, edges, or subgraphs to low-dimensional vector spaces.
+
+:::
+
+### Objective functions for graph representation learning
+
+Representation learning models for knowledge graphs are typically trained using objective functions that capture various aspects of graph structure and semantics.
+
+Common principles for designing these objective functions include:
+
+1. **Proximity preservation**: Nodes that are connected or structurally similar in the graph should have similar embeddings.
+2. **Structural role preservation**: Nodes with similar local network structures should have similar embeddings, even if they are distant in the graph.
+3. **Community awareness**: Embeddings should capture community structure in the graph.
+4. **Attribute incorporation**: Node and edge attributes should influence the learned representations.
+5. **Semantic consistency**: The semantic meaning of different relationship types should be preserved in the embedding space.
+
+::: {#exm-representation-objective}
+
+## Objective function design
+
+Consider a simple objective function for learning node embeddings based on network proximity:
+
+$$\mathcal{L} = \sum_{(u,v) \in E} \| \mathbf{z}_u - \mathbf{z}_v \|_2^2$$
+
+This objective encourages connected nodes to have similar embeddings by minimizing the Euclidean distance between them. However, this simple approach doesn't distinguish between different types of relationships, which is crucial for knowledge graphs.
+
+A more suitable objective for knowledge graphs might incorporate relationship types:
+
+$$\mathcal{L} = \sum_{(u,r,v) \in E} \| \mathbf{z}_u + \mathbf{z}_r - \mathbf{z}_v \|_2^2$$
+
+where $\mathbf{z}_r$ represents the embedding for relationship type $r$, and the objective encourages that adding the relationship vector to the head entity should approximately yield the tail entity.
+
+:::
+
+### Evaluation of learned representations
+
+The quality of learned representations can be evaluated based on their performance on downstream tasks:
+
+1. **Link prediction**: How well do the embeddings predict missing or future links?
+2. **Node classification**: How accurately can node labels be predicted from embeddings?
+3. **Entity resolution**: Can embeddings identify when different nodes represent the same real-world entity?
+4. **Clustering**: Do embeddings produce meaningful clusters when grouped?
+5. **Visualization**: Do two-dimensional projections of the embeddings reveal interpretable patterns?
+
+::: {#exm-embedding-evaluation}
+
+## Evaluating knowledge graph embeddings
+
+To evaluate embeddings of a biomedical knowledge graph:
+
+1. **Task selection**: Define a link prediction task to predict drug-disease treatments
+2. **Dataset preparation**: Randomly remove 20% of "treats" relationships to create a test set
+3. **Evaluation metrics**: Measure performance using:
+   - Mean Reciprocal Rank (MRR): The average of the reciprocal ranks of the correct entities
+   - Hits@k: The proportion of test cases where the correct entity is among the top k predictions
+   - Area Under the ROC Curve (AUC): Measures the model's ability to discriminate between positive and negative examples
+
+Comparing different embedding methods might yield results like:
+
+| Method  | MRR  | Hits@10 | AUC  |
+| ------- | ---- | ------- | ---- |
+| TransE  | 0.45 | 0.67    | 0.83 |
+| ComplEx | 0.51 | 0.72    | 0.87 |
+| RotatE  | 0.53 | 0.75    | 0.89 |
+
+These results suggest that RotatE captures the semantic relationships most effectively for this particular task.
+
+:::
+
+## Node and edge embeddings
+
+### Traditional node embedding approaches
+
+Early approaches to node embedding focused on preserving various notions of node similarity in the embedding space.
+
+::: {#def-node-embedding}
+
+## Node embedding
+
+A **node embedding** is a function $f: V \rightarrow \mathbb{R}^d$ that maps each node $v \in V$ in a graph to a low-dimensional vector while preserving relevant structural and semantic information about the node.
+
+:::
+
+Notable node embedding methods include:
+
+1. **DeepWalk**: Learns embeddings by treating random walks on the graph as sentences and applying word embedding techniques.
+2. **node2vec**: Extends DeepWalk with a biased random walk strategy that balances between exploration of global structure and preservation of local neighborhoods.
+3. **LINE**: Preserves both first-order proximity (direct connections) and second-order proximity (shared neighborhoods).
+4. **SDNE**: Uses autoencoders to capture non-linear relationships between nodes.
+
+::: {#exm-node2vec-implementation}
+
+## node2vec algorithm
+
+The node2vec procedure:
+
+1. For each node $u$ in the graph: a. Generate $r$ random walks of length $l$ starting from $u$ b. The walks are biased by parameters $p$ and $q$ that control the exploration-exploitation tradeoff
+   - $p$ controls the likelihood of returning to the previous node
+   - $q$ controls the likelihood of exploring outward vs. staying local
+2. Treat the walks as sentences and apply the Skip-gram model to learn embeddings: a. For each node in a walk, predict its context nodes within a window b. Optimize the objective: $$\max_\Theta \sum_{u \in V} \sum_{v \in N(u)} \log P(v|u; \Theta)$$ where $N(u)$ is the network neighborhood of node $u$ generated through the random walks
+
+The resulting embeddings place nodes with similar network contexts nearby in the vector space.
+
+:::
+
+While these methods were developed for homogeneous graphs, they can be adapted to knowledge graphs by considering different relationship types as separate graphs or by weighting relationships differently in the random walk process.
+
+### Knowledge graph embedding models
+
+Knowledge graph embedding (KGE) models specifically account for the heterogeneous and multi-relational nature of knowledge graphs. They typically represent entities (nodes) and relationships (edge types) as vectors, matrices, or higher-order tensors in a low-dimensional space.
+
+::: {#def-knowledge-graph-embedding}
+
+## Knowledge graph embedding
+
+A **knowledge graph embedding** is a representation of entities and relationships in a knowledge graph in a low-dimensional vector space, such that the semantic structure of the graph is preserved. Formally, it consists of an entity embedding function $f_e: E \rightarrow \mathbb{R}^d$ and a relation embedding function $f_r: R \rightarrow \mathbb{R}^d$ (or to a more complex mathematical structure).
+
+:::
+
+#### Translational distance models
+
+Translational distance models represent relationships as translations in the vector space.
+
+::: {#def-transe-model}
+
+## TransE model
+
+**TransE** represents each entity $e$ as a vector $\mathbf{e} \in \mathbb{R}^d$ and each relationship $r$ as a translation vector $\mathbf{r} \in \mathbb{R}^d$. For a true triplet $(h, r, t)$, the model encourages $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$.
+
+The score function is defined as:
+
+$$f_r(h, t) = -\|\mathbf{h} + \mathbf{r} - \mathbf{t}\|_{1/2}$$
+
+A higher score indicates a more plausible triplet.
+
+:::
+
+While simple and efficient, TransE has limitations in handling one-to-many, many-to-one, and many-to-many relationships. Extensions like TransH, TransR, and TransD address these limitations by projecting entities into relationship-specific spaces.
+
+::: {#exm-transe-limitation}
+
+## TransE limitation with one-to-many relationships
+
+Consider a knowledge graph with triplets:
+
+- (Paris, isCapitalOf, France)
+- (Rome, isCapitalOf, Italy)
+- (Berlin, isCapitalOf, Germany)
+
+TransE would embed these such that: $\mathbf{Paris} + \mathbf{isCapitalOf} \approx \mathbf{France}$ $\mathbf{Rome} + \mathbf{isCapitalOf} \approx \mathbf{Italy}$ $\mathbf{Berlin} + \mathbf{isCapitalOf} \approx \mathbf{Germany}$
+
+But this creates a conflicting constraint: the cities must be embedded such that adding the same $\mathbf{isCapitalOf}$ vector leads to their respective countries, implying that the difference between any two city vectors should equal the difference between their country vectors:
+
+$\mathbf{Paris} - \mathbf{Rome} \approx \mathbf{France} - \mathbf{Italy}$
+
+This constraint becomes problematic with one-to-many relationships. For instance, if we add:
+
+- (Paris, hasAttraction, EiffelTower)
+- (Paris, hasAttraction, Louvre)
+
+TransE would require: $\mathbf{Paris} + \mathbf{hasAttraction} \approx \mathbf{EiffelTower}$ $\mathbf{Paris} + \mathbf{hasAttraction} \approx \mathbf{Louvre}$
+
+This implies $\mathbf{EiffelTower} \approx \mathbf{Louvre}$, which is clearly undesirable.
+
+:::
+
+#### Semantic matching models
+
+Semantic matching models measure plausibility of knowledge graph triplets through similarity-based matching functions.
+
+::: {#def-distmult-model}
+
+## DistMult model
+
+**DistMult** represents entities and relationships as vectors in $\mathbb{R}^d$. The score function is a bilinear form:
+
+$$f_r(h, t) = \mathbf{h}^\top \text{diag}(\mathbf{r}) \mathbf{t} = \sum_{i=1}^d \mathbf{h}_i \mathbf{r}_i \mathbf{t}_i$$
+
+where $\text{diag}(\mathbf{r})$ is a diagonal matrix with $\mathbf{r}$ on the diagonal.
+
+:::
+
+DistMult is computationally efficient but limited to modeling symmetric relationships. ComplEx extends DistMult to the complex domain to model asymmetric relationships:
+
+::: {#def-complex-model}
+
+## ComplEx model
+
+**ComplEx** embeds entities and relationships in complex space $\mathbb{C}^d$. The score function is:
+
+$$f_r(h, t) = \text{Re}(\langle\mathbf{h}, \mathbf{r}, \mathbf{\bar{t}}\rangle) = \text{Re}\left(\sum_{i=1}^d \mathbf{h}_i \mathbf{r}_i \mathbf{\bar{t}}_i\right)$$
+
+where $\mathbf{\bar{t}}$ is the complex conjugate of $\mathbf{t}$ and $\text{Re}(\cdot)$ takes the real part of a complex number.
+
+:::
+
+#### Neural network-based models
+
+Neural networks can model more complex interaction patterns between entities and relationships.
+
+::: {#def-neural-kge-models}
+
+## Neural KGE models
+
+**Neural knowledge graph embedding models** use neural networks to compute the plausibility of triplets. For example, the ConvE model uses convolutional neural networks:
+
+1. Reshape and concatenate head entity and relationship embeddings
+2. Apply 2D convolution followed by non-linear activation
+3. Project to entity embedding dimension through a linear transformation
+4. Compute similarity with all possible tail entities
+
+The score function can be expressed as:
+
+$$f_r(h, t) = \mathbf{t}^\top g(\text{vec}(g([\mathbf{h}; \mathbf{r}] * \Omega)) W)$$
+
+where $*$ is the convolution operator, $\Omega$ is a set of filters, $g$ is a non-linear activation, and $W$ is a linear projection matrix.
+
+:::
+
+::: {#exm-kge-comparison}
+
+## Comparison of KGE models
+
+For a subset of the Freebase knowledge graph focused on movie relationships:
+
+| Model    | MRR  | Hits@1 | Hits@10 | Parameters | Training Time |
+| -------- | ---- | ------ | ------- | ---------- | ------------- |
+| TransE   | 0.32 | 0.22   | 0.51    | 5M         | 2.5 hours     |
+| DistMult | 0.35 | 0.25   | 0.55    | 5M         | 2 hours       |
+| ComplEx  | 0.37 | 0.27   | 0.58    | 10M        | 3 hours       |
+| ConvE    | 0.39 | 0.29   | 0.62    | 12M        | 4 hours       |
+
+The neural models achieve higher accuracy but require more parameters and training time. The choice of model depends on the specific requirements of the application, including performance needs, computational constraints, and the nature of the relationships in the knowledge graph.
+
+:::
+
+### Edge embeddings and relationship prediction
+
+While most KGE methods focus on predicting missing links, specific techniques have been developed for embedding and analyzing the relationships themselves.
+
+::: {#def-edge-embedding}
+
+## Edge embedding
+
+An **edge embedding** is a low-dimensional representation of an edge or relationship in a graph, capturing both the structural context and the semantic meaning of the relationship.
+
+:::
+
+Edge embeddings can be derived in several ways:
+
+1. **Explicit modeling**: Some KGE models like TransE directly represent relationships as vectors
+2. **Composition functions**: Combining embeddings of the connected entities, e.g., $\mathbf{e}_{(u,v)} = f(\mathbf{u}, \mathbf{v})$
+3. **Context-based approaches**: Embedding the local subgraph around an edge
+4. **Relation path embeddings**: Representing multi-hop relationship paths
+
+::: {#exm-edge-feature-learning}
+
+## Learning edge features for relationship typing
+
+To predict the type of an untyped relationship between two entities in a biomedical knowledge graph:
+
+1. Extract features from endpoint entities:
+
+   - Entity type embeddings
+   - Textual description embeddings
+   - Structural role embeddings
+
+2. Extract features from the relationship context:
+
+   - Common neighbors of the connected entities
+   - Paths between the entities
+   - Local subgraph patterns
+
+3. Combine features through a neural network:
+
+   ```
+   function RelationClassifier(entity1, entity2, graph):
+       # Extract entity features
+       e1_features = extractEntityFeatures(entity1)
+       e2_features = extractEntityFeatures(entity2)
+
+       # Extract relationship context features
+       context_features = extractContextFeatures(entity1, entity2, graph)
+
+       # Combine features
+       combined = concatenate([e1_features, e2_features, context_features])
+
+       # Multi-layer classification
+       hidden = ReLU(LinearLayer(combined))
+       logits = LinearLayer(hidden)
+
+       # Return probability for each relationship type
+       return softmax(logits)
+   ```
+
+4. Evaluate on a test set of relationships with known types
+
+This approach achieved 87% accuracy in distinguishing between 12 relationship types in a biomedical knowledge graph, significantly outperforming methods that considered only entity types or only graph structure.
+
+:::
+
+## Graph neural networks
+
+Graph neural networks (GNNs) extend deep learning to graph-structured data by operating directly on the graph, enabling powerful representational learning for knowledge graphs.
+
+::: {#def-graph-neural-network}
+
+## Graph neural network
+
+A **graph neural network (GNN)** is a neural network architecture designed to process graph-structured data by iteratively updating node representations based on their neighborhoods. GNNs typically follow a message-passing paradigm where nodes exchange information with their neighbors to compute their representations.
+
+:::
+
+### Message passing framework
+
+Most GNNs follow a message passing framework that consists of iteratively aggregating information from node neighborhoods.
+
+::: {#def-message-passing}
+
+## Message passing in GNNs
+
+The **message passing** framework for GNNs consists of iteratively updating node representations over $K$ layers:
+
+1. **Message computation**: Each node computes messages to send to its neighbors based on the current representation and edge features.
+2. **Message aggregation**: Each node aggregates messages from its neighbors using a permutation-invariant function.
+3. **Node update**: Each node updates its representation based on the aggregated message and its current representation.
+
+Formally, the $k$-th layer update for node $v$ can be written as:
+
+$$\mathbf{h}_v^{(k)} = \text{UPDATE}^{(k)} \left( \mathbf{h}_v^{(k-1)}, \text{AGGREGATE}^{(k)} \left( \{ \text{MESSAGE}^{(k)}(\mathbf{h}_v^{(k-1)}, \mathbf{h}_u^{(k-1)}, \mathbf{e}_{vu}) : u \in \mathcal{N}(v) \} \right) \right)$$
+
+where $\mathbf{h}_v^{(k)}$ is the representation of node $v$ at layer $k$, $\mathcal{N}(v)$ is the neighborhood of node $v$, and $\mathbf{e}_{vu}$ represents edge features.
+
+:::
+
+### Popular GNN architectures
+
+Several GNN architectures have been developed, each with different design choices for the message, aggregate, and update functions.
+
+::: {#def-graph-convolutional-network}
+
+## Graph convolutional network
+
+A **graph convolutional network (GCN)** is a simplified GNN that uses a specific form of message passing:
+
+$$\mathbf{h}_v^{(k)} = \sigma \left( W^{(k)} \sum_{u \in \mathcal{N}(v) \cup \{v\}} \frac{1}{\sqrt{|\mathcal{N}(v)|} \cdot \sqrt{|\mathcal{N}(u)|}} \mathbf{h}_u^{(k-1)} \right)$$
+
+where $W^{(k)}$ is a learnable weight matrix and $\sigma$ is a non-linear activation function.
+
+:::
+
+::: {#def-graph-attention-network}
+
+## Graph attention network
+
+A **graph attention network (GAT)** introduces attention mechanisms to weight the importance of different neighbors during aggregation:
+
+$$\mathbf{h}_v^{(k)} = \sigma \left( \sum_{u \in \mathcal{N}(v) \cup \{v\}} \alpha_{vu}^{(k)} W^{(k)} \mathbf{h}_u^{(k-1)} \right)$$
+
+where $\alpha_{vu}^{(k)}$ are attention coefficients computed as:
+
+$$\alpha_{vu}^{(k)} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^{(k)T} [W^{(k)}\mathbf{h}_v^{(k-1)} \| W^{(k)}\mathbf{h}_u^{(k-1)}]\right)\right)}{\sum_{w \in \mathcal{N}(v) \cup \{v\}} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^{(k)T} [W^{(k)}\mathbf{h}_v^{(k-1)} \| W^{(k)}\mathbf{h}_w^{(k-1)}]\right)\right)}$$
+
+with $\mathbf{a}^{(k)}$ being a learnable attention vector and $\|$ denoting concatenation.
+
+:::
+
+Other popular GNN architectures include GraphSAGE, which samples a fixed number of neighbors for scalability, and Graph Isomorphism Network (GIN), which maximizes the discriminative power of GNNs.
+
+### Applying GNNs to knowledge graphs
+
+Adapting GNNs to knowledge graphs requires handling the heterogeneity of node and edge types.
+
+::: {#def-relational-gnn}
+
+## Relational graph neural network
+
+A **relational graph neural network** extends GNNs to knowledge graphs by incorporating relationship information into the message passing framework. The update for a node $v$ may be written as:
+
+$$\mathbf{h}_v^{(k)} = \text{UPDATE}^{(k)} \left( \mathbf{h}_v^{(k-1)}, \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} \text{MESSAGE}_r^{(k)}(\mathbf{h}_v^{(k-1)}, \mathbf{h}_u^{(k-1)}) \right)$$
+
+where $\mathcal{R}$ is the set of relationship types and $\mathcal{N}_r(v)$ is the set of neighbors connected to $v$ via relationship type $r$.
+
+:::
+
+::: {#exm-rgcn-implementation}
+
+## Relational graph convolutional networks (R-GCN)
+
+R-GCN extends GCN to handle multiple relationship types:
+
+$$\mathbf{h}_v^{(k)} = \sigma \left( W_0^{(k)} \mathbf{h}_v^{(k-1)} + \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} \frac{1}{|\mathcal{N}_r(v)|} W_r^{(k)} \mathbf{h}_u^{(k-1)} \right)$$
+
+where $W_0^{(k)}$ is a self-connection weight matrix and $W_r^{(k)}$ is a relation-specific weight matrix.
+
+To reduce the number of parameters, R-GCN often employs weight sharing through basis decomposition:
+
+$$W_r^{(k)} = \sum_{b=1}^B a_{rb}^{(k)} V_b^{(k)}$$
+
+where $B$ is the number of basis matrices, $V_b^{(k)}$ are basis matrices, and $a_{rb}^{(k)}$ are relation-specific coefficients.
+
+:::
+
+### GNN architectures for knowledge graph completion
+
+GNNs can be specifically designed for knowledge graph completion tasks.
+
+::: {#exm-compgcn}
+
+## CompGCN for knowledge graph completion
+
+CompGCN incorporates both entity and relation embeddings in the message passing:
+
+1. Initialize entity embeddings $\mathbf{e}_v$ and relation embeddings $\mathbf{r}$
+2. For each GNN layer: a. Compute messages using relation-specific transformations: $$\mathbf{m}_{u \rightarrow v} = \phi(\mathbf{e}_u, \mathbf{r}_{uv})$$ where $\phi$ is a composition operation like subtraction, multiplication, or circular correlation b. Aggregate messages from neighbors: $$\mathbf{e}_v' = W_O \mathbf{e}_v + \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} W_r \mathbf{m}_{u \rightarrow v}$$ c. Update relation embeddings: $$\mathbf{r}' = W_R \mathbf{r}$$
+3. Use final embeddings for link prediction with a scoring function
+
+CompGCN achieved state-of-the-art performance on the FB15k-237 dataset with an MRR of 0.355, improving over R-GCN's 0.318.
+
+:::
+
+## Knowledge graph embeddings
+
+Knowledge graph embeddings (KGEs) translate the symbolic representations of entities and relationships in knowledge graphs into continuous vector spaces, enabling a wide range of applications including link prediction, entity resolution, and knowledge graph completion.
+
+### Theoretical foundations
+
+KGE models can be understood through several theoretical frameworks:
+
+::: {#def-tensor-factorization}
+
+## Tensor factorization interpretation
+
+Knowledge graphs can be represented as a third-order binary tensor $\mathcal{X} \in \{0,1\}^{n \times n \times m}$, where $n$ is the number of entities and $m$ is the number of relationship types. The tensor element $\mathcal{X}_{ijk} = 1$ if the $i$-th entity has the $k$-th relationship with the $j$-th entity, and 0 otherwise.
+
+From this perspective, knowledge graph embedding can be viewed as a tensor factorization problem, where we approximate $\mathcal{X}$ using low-rank factors.
+
+:::
+
+::: {#def-statistical-relational-learning}
+
+## Statistical relational learning perspective
+
+Knowledge graph embedding can also be framed as a statistical relational learning problem, where we model the probability of a relationship triplet being true:
+
+$$P((h, r, t) \text{ is true}) = \sigma(f_r(h, t))$$
+
+where $\sigma$ is a sigmoid function and $f_r(h, t)$ is a scoring function based on the embeddings.
+
+:::
+
+::: {#def-geometric-interpretation}
+
+## Geometric interpretation
+
+Many KGE models have intuitive geometric interpretations:
+
+- **TransE**: Relationships are translations in vector space
+- **RotatE**: Relationships are rotations in complex space
+- **QuatE**: Relationships are rotations in quaternion space
+- **HolE**: Entity interactions are modeled through circular correlation
+
+:::
+
+### Advanced KGE models
+
+Beyond the basic models discussed earlier, several advanced KGE approaches have been developed to address specific challenges.
+
+::: {#def-rotate-model}
+
+## RotatE model
+
+**RotatE** embeds entities and relationships in complex space $\mathbb{C}^d$. Each relationship is modeled as a rotation in the complex plane:
+
+$$\mathbf{h} \circ \mathbf{r} = \mathbf{t}$$
+
+where $\circ$ denotes Hadamard (element-wise) product. For each dimension $i$, this can be written as:
+
+$$h_i r_i = t_i \quad \text{where } |r_i| = 1$$
+
+This formulation allows RotatE to model symmetric, antisymmetric, and composition patterns.
+
+:::
+
+::: {#def-poincare-embeddings}
+
+## Poincaré embeddings
+
+**Poincaré embeddings** represent hierarchical structures in hyperbolic space rather than Euclidean space. The Poincaré ball model has a distance metric:
+
+$$d(u, v) = \cosh^{-1}\left(1 + 2\frac{\|u - v\|^2}{(1 - \|u\|^2)(1 - \|v\|^2)}\right)$$
+
+This distance grows exponentially as points move toward the boundary of the ball, making it well-suited for embedding hierarchical structures like taxonomies in knowledge graphs.
+
+:::
+
+::: {#exm-kge-capabilities}
+
+## Modeling relationship patterns with KGEs
+
+Different KGE models can capture different logical patterns:
+
+1. **Symmetry**: $r(h, t) \Rightarrow r(t, h)$
+
+   - DistMult inherently models symmetric relationships
+   - TransE and RotatE can learn symmetry by setting $\mathbf{r} \approx -\mathbf{r}$ or $\mathbf{r} \approx \mathbf{r}^{-1}$ respectively
+
+2. **Antisymmetry**: $r(h, t) \Rightarrow \neg r(t, h)$
+
+   - TransE can model this with $\mathbf{r} \neq -\mathbf{r}$
+   - RotatE captures this well with rotations that are not 180°
+
+3. **Inversion**: $r_1(h, t) \Rightarrow r_2(t, h)$
+
+   - TransE: $\mathbf{r}_1 \approx -\mathbf{r}_2$
+   - RotatE: $\mathbf{r}_1 \approx \mathbf{r}_2^{-1}$
+
+4. **Composition**: $r_1(h, m) \land r_2(m, t) \Rightarrow r_3(h, t)$
+   - TransE: $\mathbf{r}_1 + \mathbf{r}_2 \approx \mathbf{r}_3$
+   - RotatE: $\mathbf{r}_1 \circ \mathbf{r}_2 \approx \mathbf{r}_3$
+
+Comparison on FB15k-237 dataset for capturing compositions:
+
+- TransE accuracy: 84%
+- RotatE accuracy: 88%
+- ComplEx accuracy: 81%
+
+:::
+
+### Training strategies for KGE models
+
+Effective training of KGE models involves several key considerations:
+
+1. **Loss functions**: Popular choices include:
+
+   - Margin-based ranking loss: $\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}^+} \sum_{(h',r',t') \in \mathcal{S}^-} \max(0, \gamma + f_r(h', t') - f_r(h, t))$
+   - Negative log-likelihood loss: $\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}} -\log \sigma(\text{sign}(h,r,t) \cdot f_r(h, t))$
+   - Self-adversarial loss: $\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}^+} -\log \sigma(f_r(h, t)) - \sum_{(h',r,t') \in \mathcal{S}^-} p(h',r,t') \log \sigma(-f_r(h', t'))$
+
+2. **Negative sampling strategies**:
+
+   - Random sampling: Replace either the head or tail with a random entity
+   - Adversarial sampling: Generate hard negative samples during training
+   - Self-adversarial sampling: Weight negative samples by their current score
+
+3. **Regularization techniques**:
+   - L2 regularization: $\lambda \sum_{\theta \in \Theta} \|\theta\|_2^2$
+   - Normalization: Constraining embeddings to unit norm
+   - Dropout: Randomly zeroing elements of embeddings during training
+
+::: {#exm-negative-sampling}
+
+## Impact of negative sampling strategies
+
+For TransE trained on the WN18RR dataset:
+
+| Negative Sampling Strategy | MRR   | Hits@10 | Training Time |
+| -------------------------- | ----- | ------- | ------------- |
+| Uniform random             | 0.186 | 0.426   | 1x            |
+| Frequency-based            | 0.201 | 0.445   | 1.1x          |
+| Self-adversarial           | 0.223 | 0.472   | 1.3x          |
+| Hard negative mining       | 0.231 | 0.488   | 2.5x          |
+
+Hard negative mining yielded the best performance but at a significant computational cost. Self-adversarial sampling provides a good balance between performance and efficiency by automatically focusing on challenging negative samples without explicit mining.
+
+:::
+
+### Implementation considerations
+
+Implementing KGE models efficiently requires attention to computational aspects:
+
+1. **Batch processing**: Organize triplets into batches for parallel processing
+2. **GPU acceleration**: Utilize tensor operations for significant speedup
+3. **Sparse gradient updates**: Only update embeddings for entities in the current batch
+4. **Early stopping**: Monitor validation performance to prevent overfitting
+5. **Distributed training**: For very large knowledge graphs, distribute the embedding computation across multiple devices
+
+::: {#exm-kge-implementation}
+
+## Efficient KGE implementation
+
+For a knowledge graph with millions of entities, a scalable TransE implementation might:
+
+1. Use entity embedding lookups rather than full embedding matrices:
+
+   ```
+   # Instead of:
+   score = all_entity_embeddings @ (head_embedding + relation_embedding).T
+
+   # Use:
+   batch_head_ids = batch[:, 0]
+   batch_rel_ids = batch[:, 1]
+   batch_tail_ids = batch[:, 2]
+
+   head_embeds = entity_embeddings[batch_head_ids]
+   rel_embeds = relation_embeddings[batch_rel_ids]
+   tail_embeds = entity_embeddings[batch_tail_ids]
+
+   # Compute scores only for necessary entities
+   pos_scores = score_func(head_embeds, rel_embeds, tail_embeds)
+   ```
+
+2. Implement efficient negative sampling:
+
+   ```
+   # Generate corruption indices (replace either head or tail)
+   corrupt_head = np.random.random(batch_size) < 0.5
+   head_neg_ids = np.random.randint(0, num_entities, batch_size)
+   tail_neg_ids = np.random.randint(0, num_entities, batch_size)
+
+   neg_head_ids = np.where(corrupt_head, head_neg_ids, batch_head_ids)
+   neg_tail_ids = np.where(corrupt_head, batch_tail_ids, tail_neg_ids)
+   ```
+
+3. Use sparse parameter updates:
+
+   ```
+   # Only update embeddings for entities in this batch
+   unique_entities = np.unique(np.concatenate([
+       batch_head_ids, batch_tail_ids, neg_head_ids, neg_tail_ids
+   ]))
+
+   # After gradient computation, only apply updates to these entities
+   entity_embeddings[unique_entities] = updated_embeddings
+   ```
+
+This implementation achieved a 5x speedup compared to a naive approach, enabling training on a knowledge graph with 5 million entities in under 24 hours on a single GPU.
+
+:::
+
+## Knowledge graph embeddings for link prediction
+
+Link prediction is one of the most common applications of machine learning on knowledge graphs, aiming to infer missing relationships between entities.
+
+::: {#def-link-prediction}
+
+## Link prediction in knowledge graphs
+
+**Link prediction** in knowledge graphs is the task of predicting missing relationships between entities. Formally, given a knowledge graph $G = (E, R, T)$ where $T \subset E \times R \times E$ is the set of observed triplets, the goal is to predict the likelihood of unobserved triplets $(h, r, t) \notin T$.
+
+:::
+
+### Evaluation protocols
+
+Standard evaluation protocols for link prediction include:
+
+1. **Dataset splitting**: Randomly dividing triplets into training, validation, and test sets (e.g., 80%/10%/10%)
+
+2. **Filtered setting**: When ranking a correct triplet $(h, r, t)$, remove other known correct triplets $(h, r, t')$ and $(h', r, t)$ from the candidates to avoid penalizing correct predictions
+
+3. **Metrics**:
+
+   - Mean Reciprocal Rank (MRR): The average of the reciprocal ranks of the correct entities
+   - Hits@k: The proportion of test cases where the correct entity is among the top k predictions
+   - Mean Rank: The average rank of the correct entities (lower is better)
+
+4. **Evaluation procedure**:
+   - For each test triplet $(h, r, t)$:
+     - Generate corrupted triplets by replacing either $h$ or $t$ with all possible entities
+     - Rank all triplets (including the correct one) by their scores
+     - Compute the rank of the correct triplet
+
+::: {#exm-link-prediction-evaluation}
+
+## Link prediction evaluation
+
+For the WN18RR dataset (a subset of WordNet with 40,943 entities and 11 relationship types):
+
+| Model    | MRR   | Hits@1 | Hits@3 | Hits@10 | Mean Rank |
+| -------- | ----- | ------ | ------ | ------- | --------- |
+| TransE   | 0.226 | 0.017  | 0.401  | 0.501   | 3384      |
+| DistMult | 0.430 | 0.390  | 0.440  | 0.490   | 5110      |
+| ComplEx  | 0.440 | 0.410  | 0.460  | 0.510   | 5261      |
+| RotatE   | 0.476 | 0.428  | 0.492  | 0.571   | 3340      |
+
+The results show that:
+
+- RotatE performs best overall, likely due to its ability to model various relationship patterns
+- TransE struggles with Hits@1 but performs reasonably well on Hits@10
+- DistMult and ComplEx have similar performance, with ComplEx slightly better
+- Mean Rank values are high, indicating that all models still struggle with some difficult cases
+
+:::
+
+### Incorporating additional information
+
+Performance can be improved by incorporating additional information beyond the graph structure:
+
+1. **Textual descriptions**: Integrate entity and relationship descriptions through text encoders
+2. **Numerical attributes**: Include entity attributes as additional features
+3. **Image data**: For entities with visual representations, incorporate image embeddings
+4. **Temporal information**: Model how relationships evolve over time
+5. **Uncertainty information**: Incorporate confidence scores for triplets
+
+::: {#exm-multimodal-link-prediction}
+
+## Multimodal link prediction
+
+A multimodal approach for predicting drug-protein interactions in a biomedical knowledge graph:
+
+1. **Graph structure embeddings**: TransE embeddings of the knowledge graph
+2. **Molecular structure**: Graph neural networks encoding the molecular structure of drugs
+3. **Protein sequence**: Convolutional neural networks encoding protein sequences
+4. **Text descriptions**: BERT embeddings of drug and protein descriptions
+
+Model architecture:
+
+```
+function MultimodalLinkPredictor(drug, protein, relation):
+    # Extract multimodal features
+    graph_drug_emb = knowledge_graph_embeddings[drug]
+    graph_protein_emb = knowledge_graph_embeddings[protein]
+    graph_rel_emb = relation_embeddings[relation]
+
+    mol_structure_emb = MoleculeGNN(drug.structure)
+    protein_seq_emb = ProteinCNN(protein.sequence)
+
+    drug_text_emb = BERT(drug.description)
+    protein_text_emb = BERT(protein.description)
+
+    # Combine multimodal features
+    drug_combined = concatenate([graph_drug_emb, mol_structure_emb, drug_text_emb])
+    protein_combined = concatenate([graph_protein_emb, protein_seq_emb, protein_text_emb])
+
+    # Project to common space
+    drug_projected = Dense(256)(drug_combined)
+    protein_projected = Dense(256)(protein_combined)
+    relation_projected = Dense(256)(graph_rel_emb)
+
+    # Score the triplet
+    score = TransE_score(drug_projected, relation_projected, protein_projected)
+
+    return score
+```
+
+This multimodal approach improved the AUC for drug-protein interaction prediction from 0.85 (graph-only) to 0.92 (multimodal).
+
+:::
+
+## Graph neural networks for node classification
+
+Node classification aims to predict labels or properties of entities in a knowledge graph based on their connections and attributes.
+
+::: {#def-node-classification}
+
+## Node classification
+
+**Node classification** is the task of predicting labels for nodes in a graph. In the context of knowledge graphs, this corresponds to predicting properties or types of entities based on their relationships and attributes.
+
+:::
+
+### Semi-supervised learning framework
+
+Node classification often follows a semi-supervised learning framework, where only a small portion of nodes have labels.
+
+::: {#def-semi-supervised-learning}
+
+## Semi-supervised node classification
+
+In **semi-supervised node classification**, we are given a graph $G = (V, E)$ with node features $X$, and labels $Y_L$ for a subset of nodes $V_L \subset V$. The task is to predict labels for the unlabeled nodes $V_U = V \setminus V_L$.
+
+:::
+
+GNNs are particularly well-suited for this task as they can propagate information from labeled to unlabeled nodes through the graph structure.
+
+::: {#exm-gcn-node-classification}
+
+## GCN for node classification
+
+For classifying research papers into topics in a citation network:
+
+1. **Node features**: TF-IDF vectors of paper abstracts
+2. **Graph structure**: Citation links between papers
+3. **Labels**: Research topics for a subset of papers
+
+GCN implementation:
+
+```
+function GCN_layer(H, A_hat, W):
+    return ReLU(A_hat @ H @ W)
+
+function NodeClassifier(features, adj_matrix, labels_known, mask_train):
+    # Normalize adjacency matrix with self-loops
+    A_tilde = adj_matrix + identity_matrix
+    D_tilde = diagonal_degree_matrix(A_tilde)
+    A_hat = D_tilde^(-0.5) @ A_tilde @ D_tilde^(-0.5)
+
+    # Two-layer GCN
+    H0 = features
+    W1 = initialize_weights(input_dim, hidden_dim)
+    H1 = GCN_layer(H0, A_hat, W1)
+
+    W2 = initialize_weights(hidden_dim, num_classes)
+    logits = A_hat @ H1 @ W2  # Final layer without ReLU
+
+    # Apply softmax for prediction
+    predictions = softmax(logits)
+
+    # Compute loss on labeled nodes
+    loss = cross_entropy(predictions[mask_train], labels_known)
+
+    # Update weights through backpropagation
+    update_weights(loss)
+
+    return predictions
+```
+
+Results on the Cora dataset (2708 papers, 7 topics):
+
+- GCN accuracy: 81.5%
+- MLP (features only): 55.1%
+- Label propagation (structure only): 68.0%
+
+The GCN substantially outperforms methods that use only features or only structure, demonstrating the value of combining both sources of information.
+
+:::
+
+### Handling heterogeneity in knowledge graphs
+
+Standard GNNs assume homogeneous graphs, but knowledge graphs contain different types of entities and relationships. Several approaches address this challenge:
+
+1. **Relation-specific transformations**: Use different weight matrices for different relationship types
+2. **Attention mechanisms**: Learn to weight different relationships differently
+3. **Meta-path based approaches**: Define type-aware node neighborhoods
+4. **Subgraph extraction**: Process relevant subgraphs around target nodes
+
+::: {#exm-han-knowledge-graph}
+
+## Hierarchical attention networks for knowledge graphs
+
+The Hierarchical Attention Network (HAN) approach for heterogeneous knowledge graphs:
+
+1. **Node-level attention**: For each meta-path (e.g., Author-Paper-Author), compute:
+
+   ```
+   # For each neighbor j of node i along meta-path p
+   e_ijp = attention_p(h_i, h_j)
+   α_ijp = softmax_j(e_ijp)  # Normalize across neighbors
+
+   # Aggregate neighbors with attention weights
+   z_ip = sum_j(α_ijp * h_j)
+   ```
+
+2. **Semantic-level attention**: Weight the importance of different meta-paths:
+
+   ```
+   # For each meta-path p
+   w_p = q^T * tanh(W * z_ip + b)
+   β_p = softmax_p(w_p)  # Normalize across meta-paths
+
+   # Aggregate meta-path embeddings
+   h_i' = sum_p(β_p * z_ip)
+   ```
+
+3. **Classification**: Feed the final node embeddings to a classifier
+
+HAN achieved 87.5% accuracy on the DBLP dataset (authors classified by research area), compared to 79.2% for a homogeneous GCN.
+
+:::
+
+### Inductive and transductive learning
+
+Node classification approaches can be categorized as transductive or inductive:
+
+::: {#def-transductive-learning}
+
+## Transductive learning
+
+In **transductive learning**, the model is trained on a graph where all nodes (both labeled and unlabeled) are observed during training. The model learns to make predictions specifically for the unlabeled nodes in the training graph.
+
+:::
+
+::: {#def-inductive-learning}
+
+## Inductive learning
+
+In **inductive learning**, the model learns a general function that can generate embeddings and predictions for previously unseen nodes based on their features and local neighborhood structure.
+
+:::
+
+Inductive learning is particularly important for dynamic knowledge graphs where new entities are continuously added.
+
+::: {#exm-graphsage-inductive}
+
+## GraphSAGE for inductive learning
+
+GraphSAGE (SAmple and aggreGatE) enables inductive learning by learning how to generate embeddings based on local neighborhood sampling:
+
+```
+function GraphSAGE_forward(G, features):
+    h0 = features
+    for layer in 1...K:
+        for node v in G:
+            # Sample neighbors
+            N_v = sample_neighbors(G, v, sample_size)
+
+            # Aggregate neighbor features
+            h_N = aggregate({h_{layer-1}[u] for u in N_v})
+
+            # Combine with self features and apply non-linearity
+            h_layer[v] = ReLU(W_layer * concat(h_{layer-1}[v], h_N))
+
+            # Normalize
+            h_layer[v] = h_layer[v] / ||h_layer[v]||
+
+    return h_K
+```
+
+Aggregation functions can include:
+
+- Mean aggregator: `h_N = mean({h[u] for u in N_v})`
+- LSTM aggregator: `h_N = LSTM({h[u] for u in N_v})`
+- Pooling aggregator: `h_N = max({ReLU(W_pool * h[u]) for u in N_v})`
+
+When tested on a protein-protein interaction network with proteins continually being added:
+
+- Transductive GCN: Could not generalize to new proteins
+- Inductive GraphSAGE: 77.2% accuracy on previously unseen proteins
+- GraphSAGE with domain-specific features: 82.4% accuracy
+
+:::
+
+## Entity resolution and disambiguation
+
+Entity resolution (also known as entity matching, record linkage, or deduplication) is the task of identifying when different references correspond to the same real-world entity.
+
+::: {#def-entity-resolution}
+
+## Entity resolution
+
+**Entity resolution** is the process of determining whether two entity references in a knowledge graph refer to the same real-world entity, despite having different identifiers or representations.
+
+:::
+
+### Graph-based approaches to entity resolution
+
+Knowledge graph structures provide valuable context for entity resolution:
+
+1. **Neighborhood similarity**: Entities with similar connections are more likely to be the same
+2. **Path-based features**: Characteristic paths between entities can indicate identity
+3. **Graph embedding approaches**: Embed entities in a vector space where similar entities are close
+4. **Collective entity resolution**: Jointly resolve multiple entities by considering their interdependencies
+
+::: {#exm-collective-entity-resolution}
+
+## Collective entity resolution algorithm
+
+For resolving author entities in a publication knowledge graph:
+
+```
+function CollectiveEntityResolution(G1, G2):
+    # Initial matching based on string similarity
+    candidate_pairs = generate_candidates(G1, G2)
+
+    # Score initial pairs based on attributes
+    for (e1, e2) in candidate_pairs:
+        sim_attr = attribute_similarity(e1, e2)
+        if sim_attr > threshold_initial:
+            initial_matches.add((e1, e2, sim_attr))
+
+    # Iterative collective resolution
+    current_matches = initial_matches
+    while not converged:
+        # Update neighborhood features based on current matches
+        update_neighborhood_mappings(current_matches)
+
+        # Re-score all candidates with neighborhood information
+        for (e1, e2) in candidate_pairs:
+            sim_attr = attribute_similarity(e1, e2)
+            sim_rel = relational_similarity(e1, e2, current_matches)
+            combined_sim = combine_similarities(sim_attr, sim_rel)
+
+            new_matches.add((e1, e2, combined_sim))
+
+        # Filter matches above threshold
+        current_matches = filter(new_matches, threshold_final)
+
+        # Check convergence
+        if matches_stable(current_matches, previous_matches):
+            break
+
+    return current_matches
+```
+
+Relational similarity can be computed as the Jaccard similarity of the neighborhoods, weighted by the current match confidence:
+
+$$\text{sim}_{\text{rel}}(e_1, e_2) = \frac{\sum_{(n_1, n_2) \in \text{matches}} w(n_1, n_2) \cdot \mathbf{1}_{n_1 \in N(e_1) \land n_2 \in N(e_2)}}{\sum_{n_1 \in N(e_1)} \max_{n_2} w(n_1, n_2) + \sum_{n_2 \in N(e_2)} \max_{n_1} w(n_1, n_2) - \sum_{(n_1, n_2) \in \text{matches}} w(n_1, n_2) \cdot \mathbf{1}_{n_1 \in N(e_1) \land n_2 \in N(e_2)}}$$
+
+where $w(n_1, n_2)$ is the current match confidence between entities $n_1$ and $n_2$.
+
+This collective approach improved precision from 85.3% (attribute-only) to 93.7% (collective) on a dataset of academic publications from different sources.
+
+:::
+
+### Deep learning for entity resolution
+
+Deep learning models can learn complex similarity functions for entity resolution:
+
+1. **Siamese networks**: Train neural networks to predict if two entities are the same
+2. **Graph neural networks**: Use GNNs to incorporate neighborhood information
+3. **Attention mechanisms**: Focus on the most relevant features for matching
+4. **Contrastive learning**: Learn embeddings that minimize distance between same entities and maximize distance between different entities
+
+::: {#exm-deep-entity-resolution}
+
+## Deep learning model for entity resolution
+
+A GNN-based entity resolution architecture:
+
+```
+function GNN_EntityMatcher(entity1, entity2, graph1, graph2):
+    # Extract local subgraphs around entities
+    subgraph1 = extract_k_hop_subgraph(graph1, entity1, k=2)
+    subgraph2 = extract_k_hop_subgraph(graph2, entity2, k=2)
+
+    # Encode entity attributes
+    attr_emb1 = AttributeEncoder(entity1.attributes)
+    attr_emb2 = AttributeEncoder(entity2.attributes)
+
+    # Encode subgraph structures using GNN
+    graph_emb1 = GraphEncoder(subgraph1, attr_emb1)
+    graph_emb2 = GraphEncoder(subgraph2, attr_emb2)
+
+    # Compute similarity
+    sim_vector = [
+        cosine_similarity(attr_emb1, attr_emb2),
+        cosine_similarity(graph_emb1, graph_emb2),
+        L1_distance(attr_emb1, attr_emb2),
+        L1_distance(graph_emb1, graph_emb2)
+    ]
+
+    # Final prediction
+    match_probability = SimilarityClassifier(sim_vector)
+
+    return match_probability
+```
+
+The model achieved 96.2% F1-score on a product matching dataset, outperforming traditional methods (89.7%) and attribute-only deep learning (93.1%).
+
+:::
+
+### Entity disambiguation in knowledge graphs
+
+Entity disambiguation (also known as entity linking) involves linking entity mentions in text to their corresponding entities in a knowledge graph.
+
+::: {#def-entity-disambiguation}
+
+## Entity disambiguation
+
+**Entity disambiguation** is the task of mapping ambiguous entity mentions in text to their corresponding entities in a knowledge graph. For example, mapping the mention "Paris" to either Paris (the city in France), Paris (the character in Greek mythology), or Paris Hilton (the person).
+
+:::
+
+::: {#exm-deep-ed}
+
+## Deep learning for entity disambiguation
+
+A typical deep entity disambiguation pipeline:
+
+1. **Mention detection**: Identify spans in text that refer to entities
+
+   ```
+   mentions = named_entity_recognizer(text)
+   ```
+
+2. **Candidate generation**: For each mention, retrieve potential knowledge graph entities
+
+   ```
+   for mention in mentions:
+       candidates[mention] = retrieve_candidates(mention, knowledge_graph, k=100)
+   ```
+
+3. **Local context matching**: Compare the mention's textual context with entity descriptions
+
+   ```
+   for mention in mentions:
+       context_emb = BERT_encoder(mention_with_context)
+
+       for candidate in candidates[mention]:
+           entity_emb = BERT_encoder(candidate.description)
+           local_score = cosine_similarity(context_emb, entity_emb)
+   ```
+
+4. **Graph-based refinement**: Use knowledge graph structure to improve disambiguation
+
+   ```
+   # Build a disambiguation graph
+   G_disambig = create_graph()
+
+   # Add nodes for each candidate
+   for mention in mentions:
+       for candidate in candidates[mention]:
+           G_disambig.add_node(mention, candidate, score=local_score)
+
+   # Add edges between candidates based on knowledge graph connections
+   for mention1 in mentions:
+       for mention2 in mentions:
+           for cand1 in candidates[mention1]:
+               for cand2 in candidates[mention2]:
+                   if knowledge_graph.has_path(cand1, cand2, max_hops=2):
+                       G_disambig.add_edge(
+                           (mention1, cand1),
+                           (mention2, cand2),
+                           weight=compute_coherence(cand1, cand2)
+                       )
+
+   # Run collective optimization (e.g., PageRank or belief propagation)
+   final_scores = collective_optimization(G_disambig)
+   ```
+
+5. **Final entity selection**: Choose the highest-scoring candidate for each mention
+   ```
+   for mention in mentions:
+       best_candidate = argmax(final_scores[mention])
+       result[mention] = best_candidate
+   ```
+
+This approach improved accuracy from 82.4% (context-only) to 91.8% (with graph refinement) on a benchmark dataset.
+
+:::
+
+## Semi-supervised learning on graphs
+
+Semi-supervised learning leverages a small amount of labeled data along with a large amount of unlabeled data to improve learning performance. Knowledge graphs provide an ideal structure for semi-supervised learning, as the graph connections can propagate label information.
+
+### Label propagation and random walk methods
+
+Label propagation algorithms spread labels from labeled to unlabeled nodes based on graph connectivity.
+
+::: {#def-label-propagation}
+
+## Label propagation
+
+**Label propagation** is a semi-supervised learning algorithm that assigns labels to previously unlabeled nodes by propagating label information through the graph structure. The basic algorithm iteratively updates each node's label to be the most common label among its neighbors.
+
+:::
+
+::: {#exm-label-propagation-algorithm}
+
+## Label propagation algorithm
+
+```
+function LabelPropagation(graph, labeled_nodes, labels, max_iterations):
+    # Initialize labels for all nodes
+    for node in graph.nodes:
+        if node in labeled_nodes:
+            node.label = labels[node]
+            node.fixed = True
+        else:
+            node.label = random_initialization()
+            node.fixed = False
+
+    # Propagate labels
+    for iteration in 1...max_iterations:
+        # Shuffle nodes
+        nodes = shuffle(graph.nodes)
+
+        # Update labels
+        for node in nodes:
+            if not node.fixed:
+                # Count neighbor labels
+                label_counts = {}
+                for neighbor in graph.neighbors(node):
+                    if neighbor.label in label_counts:
+                        label_counts[neighbor.label] += 1
+                    else:
+                        label_counts[neighbor.label] = 1
+
+                # Set label to most frequent neighbor label
+                node.label = argmax(label_counts)
+
+        # Check for convergence
+        if labels_converged():
+            break
+
+    return {node: node.label for node in graph.nodes}
+```
+
+In a product categorization task with 10,000 products and only 2% labeled data, label propagation achieved 78.3% accuracy, compared to 59.1% for a supervised classifier using only the labeled data.
+
+:::
+
+Random walk methods model the probability of reaching labeled nodes through random traversal of the graph.
+
+::: {#def-personalized-pagerank}
+
+## Personalized PageRank for semi-supervised learning
+
+**Personalized PageRank (PPR)** can be used for semi-supervised learning by:
+
+1. Creating a "teleport set" consisting of nodes with the same label
+2. Computing PPR scores for unlabeled nodes with respect to each label's teleport set
+3. Assigning each unlabeled node to the label with the highest PPR score
+
+For a label class $c$, the PPR score of node $v$ is:
+
+$$\text{PPR}_c(v) = \alpha \sum_{u \in S_c} \frac{1}{|S_c|} + (1-\alpha) \sum_{u \in V} \text{PPR}_c(u) \cdot \frac{A_{uv}}{d_u}$$
+
+where $S_c$ is the set of nodes with label $c$, $A$ is the adjacency matrix, $d_u$ is the degree of node $u$, and $\alpha$ is the teleport probability.
+
+:::
+
+### Graph regularization methods
+
+Graph regularization incorporates graph structure as a regularization term in the learning objective.
+
+::: {#def-graph-regularization}
+
+## Graph regularization
+
+**Graph regularization** assumes that connected nodes should have similar labels or representations. This is often formalized as minimizing a loss function with a graph Laplacian regularization term:
+
+$$\mathcal{L} = \mathcal{L}_{supervised} + \lambda \sum_{(i,j) \in E} w_{ij} \|f(x_i) - f(x_j)\|^2$$
+
+where $\mathcal{L}_{supervised}$ is a standard supervised loss, $w_{ij}$ is the weight of the edge between nodes $i$ and $j$, and $f(x_i)$ is the model's output for node $i$.
+
+This can be rewritten using the graph Laplacian matrix $L = D - A$, where $D$ is the degree matrix and $A$ is the adjacency matrix:
+
+$$\mathcal{L} = \mathcal{L}_{supervised} + \lambda \text{trace}(F^T L F)$$
+
+where $F$ is the matrix of model outputs for all nodes.
+
+:::
+
+::: {#exm-manifold-regularization}
+
+## Manifold regularization for knowledge graph completion
+
+For a knowledge graph completion task using a neural network model:
+
+```
+function train_with_graph_regularization(knowledge_graph, labeled_triplets):
+    # Create a node proximity graph based on knowledge graph structure
+    proximity_graph = create_proximity_graph(knowledge_graph)
+    L = compute_laplacian(proximity_graph)
+
+    # Initialize entity and relation embeddings
+    entity_embeddings = initialize_embeddings(num_entities, embedding_dim)
+    relation_embeddings = initialize_embeddings(num_relations, embedding_dim)
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        # Compute supervised loss on labeled triplets
+        for (h, r, t) in labeled_triplets:
+            h_emb = entity_embeddings[h]
+            r_emb = relation_embeddings[r]
+            t_emb = entity_embeddings[t]
+
+            score = scoring_function(h_emb, r_emb, t_emb)
+            supervised_loss = cross_entropy(score, 1)  # Positive example
+
+            # Generate negative examples
+            for neg_sample in generate_negative_samples(h, r, t):
+                neg_h, neg_r, neg_t = neg_sample
+                neg_h_emb = entity_embeddings[neg_h]
+                neg_r_emb = relation_embeddings[neg_r]
+                neg_t_emb = entity_embeddings[neg_t]
+
+                neg_score = scoring_function(neg_h_emb, neg_r_emb, neg_t_emb)
+                supervised_loss += cross_entropy(neg_score, 0)  # Negative example
+
+        # Compute graph regularization loss
+        reg_loss = trace(entity_embeddings.T @ L @ entity_embeddings)
+
+        # Total loss
+        total_loss = supervised_loss + lambda * reg_loss
+
+        # Update embeddings
+        update_parameters(total_loss)
+
+    return entity_embeddings, relation_embeddings
+```
+
+Adding graph regularization improved the MRR from 0.34 to 0.39 on the FB15k dataset with 50% of triplets used as labeled data.
+
+:::
+
+## Inductive and transductive learning
+
+As mentioned earlier, learning approaches for knowledge graphs can be categorized as transductive or inductive based on whether they can generalize to unseen entities.
+
+### Transductive methods
+
+Transductive methods learn representations specific to the observed graph and cannot naturally generalize to new entities without retraining.
+
+::: {#exm-transductive-limitations}
+
+## Limitations of transductive methods
+
+Consider a TransE model trained on a product knowledge graph:
+
+```
+# Training phase
+entity_embeddings = random_initialization(num_entities, dim)
+relation_embeddings = random_initialization(num_relations, dim)
+
+for epoch in 1...num_epochs:
+    for (h, r, t) in training_triplets:
+        h_emb = entity_embeddings[h]
+        r_emb = relation_embeddings[r]
+        t_emb = entity_embeddings[t]
+
+        loss = max(0, margin + score(h_emb, r_emb, corrupt_t_emb) - score(h_emb, r_emb, t_emb))
+        update_embeddings(loss)
+```
+
+When a new product is added to the knowledge graph:
+
+1. The model has no embedding for this entity
+2. Without retraining, no predictions can be made involving the new entity
+3. Retraining from scratch is computationally expensive
+4. Incremental training may suffer from catastrophic forgetting
+
+This issue becomes critical in dynamic knowledge graphs where entities are frequently added.
+
+:::
+
+### Inductive methods
+
+Inductive methods learn functions that can generate embeddings for new entities based on their features and neighborhood structure.
+
+::: {#exm-inductive-kge}
+
+## Inductive knowledge graph embedding
+
+An inductive approach to knowledge graph embedding:
+
+```
+function train_inductive_kge(knowledge_graph):
+    # Extract entity features (e.g., textual descriptions, attributes)
+    entity_features = extract_features(knowledge_graph.entities)
+
+    # Define encoder architecture
+    function entity_encoder(entity_id, neighborhood):
+        # Extract local subgraph
+        subgraph = k_hop_subgraph(knowledge_graph, entity_id, k=2)
+
+        # Initial node features
+        node_features = {}
+        for node in subgraph:
+            node_features[node] = entity_features[node]
+
+        # Message passing
+        for layer in 1...num_layers:
+            new_features = {}
+            for node in subgraph:
+                # Aggregate messages from neighbors
+                messages = []
+                for neighbor, rel_type in subgraph.neighbors_with_relations(node):
+                    rel_emb = relation_encoder(rel_type)
+                    transformed = transform(node_features[neighbor], rel_emb)
+                    messages.append(transformed)
+
+                # Update node representation
+                if messages:
+                    aggregated = aggregate_function(messages)
+                    new_features[node] = update_function(node_features[node], aggregated)
+                else:
+                    new_features[node] = node_features[node]
+
+               # Update features for next layer
+               node_features = new_features
+
+           # Return embedding for the target entity
+           return node_features[entity_id]
+
+       # Train the model
+       for epoch in 1...num_epochs:
+           for (h, r, t) in training_triplets:
+               # Generate embeddings inductively
+               h_emb = entity_encoder(h, knowledge_graph)
+               t_emb = entity_encoder(t, knowledge_graph)
+               r_emb = relation_encoder(r)
+
+               # Compute score and loss
+               score_positive = scoring_function(h_emb, r_emb, t_emb)
+
+               # Generate negative samples
+               h_neg, r_neg, t_neg = sample_negative(h, r, t)
+               h_neg_emb = entity_encoder(h_neg, knowledge_graph)
+               t_neg_emb = entity_encoder(t_neg, knowledge_graph)
+
+               score_negative = scoring_function(h_neg_emb, r_emb, t_neg_emb)
+
+               loss = max(0, margin + score_negative - score_positive)
+               update_parameters(loss)
+
+       return entity_encoder, relation_encoder
+```
+
+This inductive approach was tested on a benchmark dataset where 25% of entities in the test set were unseen during training:
+
+- Transductive TransE: Unable to make predictions for new entities
+- Inductive GNN model: 67.3% accuracy on triplets involving new entities
+- Inductive GNN with attribute information: 72.8% accuracy
+
+:::
+
+### Hybrid approaches
+
+Hybrid approaches combine the strengths of both transductive and inductive methods.
+
+::: {#exm-hybrid-approach}
+
+## Hybrid transductive-inductive approach
+
+A hybrid approach for a dynamic knowledge graph:
+
+```
+function hybrid_knowledge_graph_embedding(knowledge_graph):
+    # Initialize transductive embeddings for existing entities
+    entity_embeddings = initialize_embeddings(knowledge_graph.num_entities, dim)
+    relation_embeddings = initialize_embeddings(knowledge_graph.num_relations, dim)
+
+    # Train transductive model
+    train_transductive_model(knowledge_graph, entity_embeddings, relation_embeddings)
+
+    # Train inductive model to approximate transductive embeddings
+    function inductive_encoder(entity, neighborhood):
+        # GNN-based encoder
+        features = extract_features(entity)
+        subgraph = extract_local_subgraph(knowledge_graph, entity)
+        return GNN_encoder(features, subgraph)
+
+    # Train inductive model to predict transductive embeddings
+    for entity in knowledge_graph.entities:
+        inductive_emb = inductive_encoder(entity, knowledge_graph)
+        transductive_emb = entity_embeddings[entity]
+        loss = distance(inductive_emb, transductive_emb)
+        update_inductive_parameters(loss)
+
+    # For inference:
+    function predict_link(head, relation, tail):
+        # For existing entities, use stored transductive embeddings
+        if head in entity_embeddings:
+            h_emb = entity_embeddings[head]
+        else:
+            # For new entities, use inductive encoder
+            h_emb = inductive_encoder(head, knowledge_graph)
+
+        if tail in entity_embeddings:
+            t_emb = entity_embeddings[tail]
+        else:
+            t_emb = inductive_encoder(tail, knowledge_graph)
+
+        r_emb = relation_embeddings[relation]
+        return scoring_function(h_emb, r_emb, t_emb)
+
+    return predict_link
+```
+
+This hybrid approach combines the accuracy of transductive methods for existing entities with the flexibility of inductive methods for new entities. On a dynamic e-commerce knowledge graph, it achieved:
+
+- 94.5% accuracy for triplets between existing entities (vs. 94.8% for pure transductive)
+- 83.2% accuracy for triplets involving new entities (vs. 0% for pure transductive and 81.5% for pure inductive)
+
+:::
+
+## Reasoning and inference with machine learning
+
+Machine learning approaches can enable various forms of reasoning and inference on knowledge graphs, ranging from deductive reasoning to more complex forms of inductive and abductive reasoning.
+
+### Path-based reasoning
+
+Path-based reasoning leverages paths in the knowledge graph to infer new relationships or answer complex queries.
+
+::: {#def-path-based-reasoning}
+
+## Path-based reasoning
+
+**Path-based reasoning** infers new relationships between entities based on paths of existing relationships in the knowledge graph. For example, if entity A is related to B through relation r1, and B is related to C through relation r2, then A may be related to C through some composition of r1 and r2.
+
+:::
+
+::: {#exm-path-ranking-algorithm}
+
+## Path Ranking Algorithm (PRA)
+
+The Path Ranking Algorithm uses logistic regression to weight different path types for relationship prediction:
+
+```
+function PathRankingAlgorithm(knowledge_graph, relation_to_predict):
+    # Extract path features
+    paths = {}  # Dictionary: (source, target) -> list of path features
+
+    for (source, target) in entity_pairs:
+        paths[(source, target)] = []
+
+        # Find paths of length up to k between source and target
+        for path in find_paths(knowledge_graph, source, target, max_length=3):
+            path_type = extract_path_type(path)  # Sequence of relation types
+            paths[(source, target)].append(path_type)
+
+    # Convert to feature vectors
+    X = []  # Feature matrix
+    y = []  # Target labels
+
+    for (source, target) in entity_pairs:
+        # One-hot encoding of path types
+        feature_vector = one_hot_encode(paths[(source, target)], all_path_types)
+        X.append(feature_vector)
+
+        # Label: 1 if the relation exists, 0 otherwise
+        y.append(1 if knowledge_graph.has_relation(source, relation_to_predict, target) else 0)
+
+    # Train logistic regression
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    # Get path type weights
+    path_weights = {}
+    for i, path_type in enumerate(all_path_types):
+        path_weights[path_type] = model.coefficients[i]
+
+    # Function for prediction
+    function predict(source, target):
+        feature_vector = one_hot_encode(paths.get((source, target), []), all_path_types)
+        return model.predict_proba(feature_vector)[1]  # Probability of class 1
+
+    return predict, path_weights
+```
+
+PRA identified meaningful path patterns in a biomedical knowledge graph:
+
+- For predicting "treats" relation between drugs and diseases:
+  - High weight (0.85): drug → targets → gene → associated_with → disease
+  - High weight (0.72): drug → similar_to → drug → treats → disease
+  - Low weight (0.11): drug → has_side_effect → symptom → presents_in → disease
+
+This provides interpretable rules for the relationship between drugs and diseases.
+
+:::
+
+### Neural multi-hop reasoning
+
+Neural approaches to multi-hop reasoning learn to traverse the knowledge graph to answer complex queries.
+
+::: {#def-neural-multi-hop-reasoning}
+
+## Neural multi-hop reasoning
+
+**Neural multi-hop reasoning** uses neural networks to learn how to traverse a knowledge graph to answer complex queries that require multiple reasoning steps.
+
+:::
+
+::: {#exm-neural-lp}
+
+## Neural Logic Programming
+
+Neural Logic Programming (NeuralLP) learns logical rules in a differentiable manner:
+
+```
+function NeuralLP(knowledge_graph, relation_to_predict, max_steps):
+    # Initialize relation embeddings
+    relation_embeddings = initialize_embeddings(knowledge_graph.num_relations, dim)
+
+    # Initialize attention weights for path steps
+    attention_weights = initialize_weights(max_steps, knowledge_graph.num_relations)
+
+    # Define differentiable path-finding operation
+    function differentiable_path(source_entities, step, previous_attention):
+        # Represent source entities as a vector
+        source_vector = one_hot_encode(source_entities, all_entities)
+
+        # Compute attention for this step
+        step_attention = softmax(attention_weights[step])
+
+        # For each relation, compute next entities
+        next_entities = zeros(num_entities)
+        for relation in all_relations:
+            # Adjacency matrix for this relation
+            relation_matrix = knowledge_graph.get_adjacency_matrix(relation)
+
+            # Follow this relation from source entities
+            relation_contribution = source_vector @ relation_matrix
+
+            # Weight by attention
+            next_entities += step_attention[relation] * relation_contribution
+
+        return next_entities, step_attention
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        for (source, target) in training_pairs:
+            # Starting from source entity
+            current_entities = one_hot_encode([source], all_entities)
+            path_attentions = []
+
+            # Multi-step reasoning
+            for step in 0...max_steps-1:
+                current_entities, step_attention = differentiable_path(
+                    current_entities, step, path_attentions[-1] if path_attentions else None
+                )
+                path_attentions.append(step_attention)
+
+            # Probability of reaching target
+            target_prob = current_entities[target]
+
+            # Optimization objective
+            loss = binary_cross_entropy(target_prob, 1)  # 1 for positive examples
+            update_parameters(loss)
+
+    # Extract logical rules from learned weights
+    rules = []
+    for step in 0...max_steps-1:
+        step_attention = softmax(attention_weights[step])
+        top_relations = get_top_relations(step_attention)
+        rules.append(top_relations)
+
+    return rules
+```
+
+NeuralLP discovered interpretable multi-hop reasoning patterns:
+
+- "nationality" relation: person → born_in → located_in → country
+- "works_for" relation: person → graduated_from → affiliated_with → organization
+
+:::
+
+### Knowledge graph neural networks for reasoning
+
+Knowledge graph neural networks (KGNNs) adapt GNNs specifically for reasoning tasks on knowledge graphs.
+
+::: {#exm-kgnn-reasoning}
+
+## Knowledge Graph Neural Networks for reasoning
+
+```
+function KGNN_Reasoning(knowledge_graph, query_relation):
+    # For a query (head, relation, ?), predict the tail entity
+    function predict_tail(head_entity, query_relation):
+        # Extract relevant subgraph
+        subgraph = extract_query_subgraph(knowledge_graph, head_entity)
+
+        # Initial entity representations
+        entity_features = {}
+        for entity in subgraph.entities:
+            entity_features[entity] = entity_embeddings[entity]
+
+        # Run message passing
+        for layer in 1...num_layers:
+            new_features = {}
+
+            for entity in subgraph.entities:
+                # Aggregate messages from neighbors
+                incoming_messages = []
+                for neighbor, relation in subgraph.incoming_neighbors(entity):
+                    # Relation-specific transformation
+                    message = W_relation[relation] @ entity_features[neighbor]
+                    incoming_messages.append(message)
+
+                outgoing_messages = []
+                for neighbor, relation in subgraph.outgoing_neighbors(entity):
+                    # Inverse relation transformation
+                    message = W_relation_inv[relation] @ entity_features[neighbor]
+                    outgoing_messages.append(message)
+
+                # Combine messages
+                if incoming_messages or outgoing_messages:
+                    all_messages = incoming_messages + outgoing_messages
+                    aggregated = sum(all_messages) / len(all_messages)
+                    new_features[entity] = ReLU(W_self @ entity_features[entity] + W_neighbor @ aggregated)
+                else:
+                    new_features[entity] = entity_features[entity]
+
+            entity_features = new_features
+
+        # Query-specific scoring
+        scores = {}
+        for candidate in all_entities:
+            # Query-specific transformation
+            query_vector = W_query[query_relation] @ entity_features[head_entity]
+
+            # Score based on similarity to candidate
+            scores[candidate] = cosine_similarity(query_vector, entity_features.get(candidate, entity_embeddings[candidate]))
+
+        return scores
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        for (head, relation, tail) in training_triplets:
+            # Predict scores
+            scores = predict_tail(head, relation)
+
+            # Compute loss (e.g., margin ranking loss)
+            positive_score = scores[tail]
+            negative_score = scores[sample_negative_tail(head, relation, tail)]
+
+            loss = max(0, margin - positive_score + negative_score)
+            update_parameters(loss)
+
+    return predict_tail
+```
+
+KGNN achieved 88.5% accuracy on multi-hop reasoning queries on the FB15k dataset, compared to 83.2% for NeuralLP and 79.7% for traditional path-based methods.
+
+:::
+
+## Applications of machine learning on knowledge graphs
+
+Machine learning on knowledge graphs has numerous real-world applications across different domains.
+
+### Recommendation systems
+
+Knowledge graphs provide rich contextual information for recommendation systems, enabling more accurate and explainable recommendations.
+
+::: {#exm-kgnn-recommendation}
+
+## Knowledge Graph Neural Network for Recommendations
+
+A two-stage recommendation approach using knowledge graphs:
+
+```
+function KG_Recommender(user_item_interactions, knowledge_graph):
+    # Stage 1: Enrich user-item graph with knowledge graph information
+    augmented_graph = user_item_interactions.copy()
+
+    # Add knowledge graph entities and relations
+    for item in user_item_interactions.items:
+        if item in knowledge_graph.entities:
+            # Add k-hop neighborhood from the knowledge graph
+            neighborhood = extract_k_hop_neighborhood(knowledge_graph, item, k=2)
+            augmented_graph.add_subgraph(neighborhood)
+
+    # Stage 2: Learn representations with a relational GCN
+    entity_embeddings = {}
+    relation_embeddings = {}
+
+    # Initialize embeddings
+    for entity in augmented_graph.entities:
+        entity_embeddings[entity] = initialize_embedding(dim)
+
+    for relation in augmented_graph.relations:
+        relation_embeddings[relation] = initialize_embedding(dim)
+
+    # Train RGCN on augmented graph
+    for epoch in 1...num_epochs:
+        new_embeddings = {}
+
+        for entity in augmented_graph.entities:
+            # Self-loop message
+            self_message = W_0 @ entity_embeddings[entity]
+
+            # Relation-specific messages
+            relation_messages = {}
+            for relation in augmented_graph.relations:
+                relation_neighbors = augmented_graph.get_neighbors(entity, relation)
+
+                if relation_neighbors:
+                    # Aggregate neighbors
+                    neighbor_message = sum([entity_embeddings[neighbor] for neighbor in relation_neighbors])
+                    neighbor_message = neighbor_message / len(relation_neighbors)
+
+                    # Relation-specific transformation
+                    transformed = W_r[relation] @ neighbor_message
+                    relation_messages[relation] = transformed
+
+            # Combine messages
+            combined = self_message
+            for relation, message in relation_messages.items():
+                combined += message
+
+            new_embeddings[entity] = ReLU(combined)
+
+        entity_embeddings = new_embeddings
+
+    # Generate recommendations
+    function recommend_items(user, top_k=10):
+        user_embedding = entity_embeddings[user]
+
+        # Compute scores for all items
+        scores = {}
+        for item in augmented_graph.items:
+            item_embedding = entity_embeddings[item]
+            scores[item] = user_embedding.dot(item_embedding)
+
+        # Filter out already interacted items
+        for item in augmented_graph.get_neighbors(user, "interacted_with"):
+            scores.pop(item, None)
+
+        # Return top-k items
+        return sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_k]
+
+    return recommend_items
+```
+
+Evaluation on a movie recommendation dataset:
+
+- Collaborative filtering baseline: Precision@10 = 0.224, Recall@10 = 0.108
+- Knowledge graph-enhanced model: Precision@10 = 0.287, Recall@10 = 0.142
+- Knowledge graph model with user reviews: Precision@10 = 0.312, Recall@10 = 0.156
+
+The knowledge graph approach provided not only better recommendations but also enabled explanation through the paths connecting users to recommended items.
+
+:::
+
+### Question answering over knowledge graphs
+
+Knowledge graph-based question answering systems answer natural language questions by translating them into graph queries.
+
+::: {#exm-kgqa-system}
+
+## Knowledge Graph Question Answering System
+
+A neural approach to question answering over knowledge graphs:
+
+```
+function KGQA_System(knowledge_graph, question):
+    # Step 1: Entity linking - identify entities in the question
+    entities = entity_linker(question, knowledge_graph)
+
+    # Step 2: Relation prediction - identify the intent of the question
+    relation_predictor = train_relation_classifier(training_questions, relations)
+    relations = relation_predictor(question)
+
+    # Step 3: Query construction
+    function construct_query(question, entities, relations):
+        # Encode question
+        question_embedding = BERT_encoder(question)
+
+        # Encode entities and relations
+        entity_embeddings = [entity_encoder(e) for e in entities]
+        relation_embeddings = [relation_encoder(r) for r in relations]
+
+        # Score potential query patterns
+        query_patterns = [
+            (e, r, "?"),  # Single-hop query
+            (e, r1, "?", r2, e2),  # Two-hop query
+            # More complex patterns...
+        ]
+
+        scores = {}
+        for pattern in query_patterns:
+            pattern_embedding = encode_pattern(pattern, entity_embeddings, relation_embeddings)
+            scores[pattern] = cosine_similarity(question_embedding, pattern_embedding)
+
+        best_pattern = argmax(scores)
+
+        # Fill in the pattern with actual entities and relations
+        instantiated_query = instantiate_pattern(best_pattern, entities, relations)
+        return instantiated_query
+
+    # Step 4: Query execution
+    query = construct_query(question, entities, relations)
+    answers = execute_query(query, knowledge_graph)
+
+    # Step 5: Answer ranking
+    ranked_answers = rank_answers(answers, question)
+
+    return ranked_answers
+```
+
+Performance on the WebQuestionsSP dataset:
+
+- F1 score = 0.72
+- Precision = 0.77
+- Recall = 0.68
+- Examples of correctly answered questions:
+  - "Who is the CEO of Apple?"
+  - "What movies did Christopher Nolan direct?"
+  - "Which universities are located in Boston?"
+
+:::
+
+### Drug discovery and repurposing
+
+Knowledge graph approaches can accelerate drug discovery by identifying potential drug-target interactions and drug repurposing opportunities.
+
+::: {#exm-drug-discovery}
+
+## Knowledge Graph-based Drug Discovery
+
+A pipeline for drug repurposing using knowledge graphs:
+
+```
+function DrugRepurposingSystem(biomedical_kg, disease_target):
+    # Step 1: Extract disease module
+    disease_module = extract_disease_neighborhood(biomedical_kg, disease_target)
+
+    # Step 2: Identify potential targets
+    function identify_targets(disease_module):
+        # Use centrality measures to rank proteins in the disease module
+        protein_centrality = {}
+        for protein in disease_module.get_entities_by_type("Protein"):
+            protein_centrality[protein] = betweenness_centrality(disease_module, protein)
+
+        # Select top proteins as potential targets
+        potential_targets = sorted(protein_centrality.items(), key=lambda x: x[1], reverse=True)[:100]
+        return [protein for protein, _ in potential_targets]
+
+    # Step 3: Score existing drugs for the targets
+    function score_drugs_for_targets(targets):
+        # GNN-based link prediction model
+        gnn_model = train_drug_target_prediction(biomedical_kg)
+
+        # Score all drugs for the targets
+        drug_scores = {}
+        for drug in biomedical_kg.get_entities_by_type("Drug"):
+            drug_scores[drug] = 0
+            for target in targets:
+                # Predict binding probability
+                score = gnn_model.predict_link(drug, "binds_to", target)
+                drug_scores[drug] += score * target_weights[target]
+
+        return drug_scores
+
+    # Step 4: Filter for safety and pharmacological properties
+    function filter_drugs(drug_scores):
+        filtered_drugs = {}
+        for drug, score in drug_scores.items():
+            # Check for FDA approval status
+            if biomedical_kg.has_relation(drug, "is_approved", "FDA"):
+                # Check for adverse effects related to the disease
+                adverse_effects = biomedical_kg.get_neighbors(drug, "has_side_effect")
+                contraindicated = any(biomedical_kg.has_path(effect, disease_target, max_length=2) for effect in adverse_effects)
+
+                if not contraindicated:
+                    filtered_drugs[drug] = score
+
+        return filtered_drugs
+
+    # Execute pipeline
+    targets = identify_targets(disease_module)
+    drug_scores = score_drugs_for_targets(targets)
+    repurposing_candidates = filter_drugs(drug_scores)
+
+    return sorted(repurposing_candidates.items(), key=lambda x: x[1], reverse=True)
+```
+
+This approach identified five FDA-approved drugs for potential repurposing against COVID-19, three of which were subsequently validated in laboratory experiments.
+
+:::
+
+### Fraud detection and risk assessment
+
+Knowledge graphs can help detect fraudulent activities and assess risks by finding suspicious patterns in the relationships between entities.
+
+::: {#exm-fraud-detection}
+
+## Graph Neural Networks for Fraud Detection
+
+A GNN-based approach for financial fraud detection:
+
+```
+function FraudDetectionGNN(financial_transactions, entity_information):
+    # Step 1: Construct a financial knowledge graph
+    financial_kg = construct_knowledge_graph()
+
+    # Add entities
+    for entity, info in entity_information.items():
+        financial_kg.add_entity(entity, type=info["type"], attributes=info["attributes"])
+
+    # Add transactions as relationships
+    for transaction in financial_transactions:
+        financial_kg.add_relationship(
+            transaction["source"],
+            "transferred_to",
+            transaction["destination"],
+            attributes={
+                "amount": transaction["amount"],
+                "timestamp": transaction["timestamp"],
+                "currency": transaction["currency"]
+            }
+        )
+
+    # Add other relationships
+    add_entity_relationships(financial_kg, entity_information)
+
+    # Step 2: Feature engineering
+    function engineer_features(financial_kg):
+        features = {}
+
+        for entity in financial_kg.entities:
+            # Basic features
+            entity_features = financial_kg.get_entity_attributes(entity)
+
+            # Structural features
+            entity_features.update({
+                "degree": financial_kg.get_degree(entity),
+                "clustering_coefficient": financial_kg.get_clustering_coefficient(entity),
+                "pagerank": financial_kg.get_pagerank(entity)
+            })
+
+            # Temporal features
+            if financial_kg.get_entity_type(entity) in ["Person", "Organization"]:
+                transactions = financial_kg.get_relationships(entity, "transferred_to")
+                if transactions:
+                    transaction_amounts = [t["amount"] for t in transactions]
+                    transaction_times = [t["timestamp"] for t in transactions]
+
+                    entity_features.update({
+                        "avg_transaction_amount": statistics.mean(transaction_amounts),
+                        "std_transaction_amount": statistics.stdev(transaction_amounts) if len(transaction_amounts) > 1 else 0,
+                        "transaction_frequency": len(transactions) / (max(transaction_times) - min(transaction_times) + 1)
+                    })
+
+            features[entity] = entity_features
+
+        return features
+
+    # Step 3: Train a GraphSAGE model for fraud detection
+    function train_fraud_detection_model(financial_kg, features, labels):
+        # Initialize model
+        graphsage = GraphSAGE(
+            input_dim=len(features[list(features.keys())[0]]),
+            hidden_dim=64,
+            output_dim=2,  # Binary classification
+            num_layers=3
+        )
+
+        # Train model
+        for epoch in 1...num_epochs:
+            for entity in financial_kg.entities:
+                if entity in labels:  # Only for labeled entities
+                    # Generate node embedding
+                    embedding = graphsage.forward(entity, financial_kg, features)
+
+                    # Loss computation
+                    loss = cross_entropy(embedding, labels[entity])
+                    update_parameters(loss)
+
+        return graphsage
+
+    # Generate features
+    features = engineer_features(financial_kg)
+
+    # Get known fraud labels
+    labels = get_fraud_labels(entity_information)
+
+    # Train model
+    model = train_fraud_detection_model(financial_kg, features, labels)
+
+    # Function for fraud prediction
+    function predict_fraud(entity):
+        embedding = model.forward(entity, financial_kg, features)
+        return softmax(embedding)[1]  # Probability of fraud class
+
+    return predict_fraud
+```
+
+This approach achieved an F1-score of 0.92 for fraud detection, significantly outperforming traditional rule-based systems (F1 = 0.76) and non-graph machine learning approaches (F1 = 0.84).
+
+:::
+
+## Conclusion
+
+This chapter has explored the integration of machine learning techniques with knowledge graphs, revealing the powerful capabilities that emerge from this combination. We've covered fundamental representation learning approaches, including node embeddings and knowledge graph embeddings, which transform the symbolic structure of knowledge graphs into vector spaces amenable to machine learning. We've also examined graph neural networks, which operate directly on the graph structure to capture complex patterns.
+
+The intersection of machine learning and knowledge graphs enables a wide range of applications, from link prediction and entity resolution to complex reasoning tasks and domain-specific applications like drug discovery and fraud detection. Both transductive and inductive approaches offer different trade-offs, with hybrid methods emerging to combine their strengths.
+
+As knowledge graphs continue to grow in size and complexity, machine learning approaches will become increasingly important for extracting insights, making predictions, and enabling reasoning at scale. The field is rapidly evolving, with new architectures and techniques being developed to address specific challenges in knowledge graph learning.
+
+Future research directions include developing more efficient methods for large-scale knowledge graphs, improving the interpretability of learned representations, integrating multimodal information, handling dynamic and temporal knowledge graphs, and developing more sophisticated reasoning capabilities. The synergy between structured knowledge representation and machine learning promises to drive advances in artificial intelligence by combining the advantages of symbolic and statistical approaches.
+
+## Further reading
+
+For readers interested in exploring machine learning on knowledge graphs in more depth, the following resources provide valuable additional information and insights:
+
+1. Hamilton, W. L. (2020). _Graph Representation Learning_. Morgan & Claypool Publishers.
+
+   - A comprehensive overview of graph representation learning techniques, including those applicable to knowledge graphs.
+
+2. Nickel, M., Murphy, K., Tresp, V., & Gabrilovich, E. (2016). A review of relational machine learning for knowledge graphs. _Proceedings of the IEEE, 104_(1), 11-33.
+
+   - An excellent review paper covering foundational approaches to statistical relational learning on knowledge graphs.
+
+3. Ji, S., Pan, S., Cambria, E., Marttinen, P., & Yu, P. S. (2021). A survey on knowledge graphs: Representation, acquisition, and applications. _IEEE Transactions on Neural Networks and Learning Systems, 33_(2), 494-514.
+
+   - A comprehensive survey covering knowledge graph representation, acquisition, and applications, with a focus on machine learning approaches.
+
+4. Wang, Q., Mao, Z., Wang, B., & Guo, L. (2017). Knowledge graph embedding: A survey of approaches and applications. _IEEE Transactions on Knowledge and Data Engineering, 29_(12), 2724-2743.
+
+   - A thorough survey of knowledge graph embedding techniques and their applications.
+
+5. Wu, Z., Pan, S., Chen, F., Long, G., Zhang, C., & Philip, S. Y. (2020). A comprehensive survey on graph neural networks. _IEEE Transactions on Neural Networks and Learning Systems, 32_(1), 4-24.
+
+   - An extensive overview of graph neural network architectures and applications, many of which are relevant to knowledge graphs.
+
+6. Huang, X., Zhang, J., Li, D., & Li, P. (2019). Knowledge graph embedding based question answering. _Proceedings of the Twelfth ACM International Conference on Web Search and Data Mining_, 105-113.
+
+   - A focused look at how knowledge graph embeddings can be applied to question answering systems.
+
+7. Monti, F., Boscaini, D., Masci, J., Rodola, E., Svoboda, J., & Bronstein, M. M. (2017). Geometric deep learning on graphs and manifolds using mixture model CNNs. _Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition_, 5115-5124.
+
+   - Provides theoretical foundations for deep learning on non-Euclidean domains like graphs.
+
+8. Bordes, A., Usunier, N., Garcia-Duran, A., Weston, J., & Yakhnenko, O. (2013). Translating embeddings for modeling multi-relational data. _Advances in Neural Information Processing Systems 26_, 2787-2795.
+
+   - The original TransE paper, a foundational work in knowledge graph embeddings.
+
+9. Das, R., Dhuliawala, S., Zaheer, M., Vilnis, L., Durugkar, I., Krishnamurthy, A., Smola, A., & McCallum, A. (2018). Go for a walk and arrive at the answer: Reasoning over paths in knowledge bases using reinforcement learning. _International Conference on Learning Representations (ICLR)_.
+
+   - Presents innovative approaches to path-based reasoning in knowledge graphs using reinforcement learning.
+
+10. Lao, N., Mitchell, T., & Cohen, W. W. (2011). Random walk inference and learning in a large scale knowledge base. _Proceedings of the 2011 Conference on Empirical Methods in Natural Language Processing_, 529-539.
+    - The original Path Ranking Algorithm paper, introducing principled approaches to path-based inference in knowledge graphs.
+
+These resources span theoretical foundations, algorithms, applications, and emerging trends in machine learning on knowledge graphs, providing a comprehensive basis for further exploration of this exciting field.

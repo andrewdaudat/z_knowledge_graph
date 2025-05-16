@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Statistical Analysis of Knowledge Graphs – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/construction/ml-on-kg.html" rel="next">
+<link href="../../contents/construction/kg-algorithms.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/construction/kg-construction.html">Construction and processing</a></li><li class="breadcrumb-item"><a href="../../contents/construction/stat-analysis-of-kg.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Graph Algorithms and Traversal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/stat-analysis-of-kg.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/ml-on-kg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-statistical-network-analysis" id="toc-introduction-to-statistical-network-analysis" class="nav-link active" data-scroll-target="#introduction-to-statistical-network-analysis"><span class="header-section-number">8.1</span> Introduction to statistical network analysis</a></li>
+  <li><a href="#degree-distributions-and-power-laws" id="toc-degree-distributions-and-power-laws" class="nav-link" data-scroll-target="#degree-distributions-and-power-laws"><span class="header-section-number">8.2</span> Degree distributions and power laws</a>
+  <ul class="collapse">
+  <li><a href="#testing-for-power-law-distributions" id="toc-testing-for-power-law-distributions" class="nav-link" data-scroll-target="#testing-for-power-law-distributions"><span class="header-section-number">8.2.1</span> Testing for power law distributions</a></li>
+  <li><a href="#implications-of-power-law-distributions" id="toc-implications-of-power-law-distributions" class="nav-link" data-scroll-target="#implications-of-power-law-distributions"><span class="header-section-number">8.2.2</span> Implications of power law distributions</a></li>
+  </ul></li>
+  <li><a href="#clustering-coefficients-and-transitivity" id="toc-clustering-coefficients-and-transitivity" class="nav-link" data-scroll-target="#clustering-coefficients-and-transitivity"><span class="header-section-number">8.3</span> Clustering coefficients and transitivity</a>
+  <ul class="collapse">
+  <li><a href="#relationship-between-clustering-and-degree" id="toc-relationship-between-clustering-and-degree" class="nav-link" data-scroll-target="#relationship-between-clustering-and-degree"><span class="header-section-number">8.3.1</span> Relationship between clustering and degree</a></li>
+  <li><a href="#transitivity-and-knowledge-representation" id="toc-transitivity-and-knowledge-representation" class="nav-link" data-scroll-target="#transitivity-and-knowledge-representation"><span class="header-section-number">8.3.2</span> Transitivity and knowledge representation</a></li>
+  </ul></li>
+  <li><a href="#centrality-measures" id="toc-centrality-measures" class="nav-link" data-scroll-target="#centrality-measures"><span class="header-section-number">8.4</span> Centrality measures</a>
+  <ul class="collapse">
+  <li><a href="#practical-considerations-for-centrality-computation" id="toc-practical-considerations-for-centrality-computation" class="nav-link" data-scroll-target="#practical-considerations-for-centrality-computation"><span class="header-section-number">8.4.1</span> Practical considerations for centrality computation</a></li>
+  </ul></li>
+  <li><a href="#structural-balance-and-social-network-analysis" id="toc-structural-balance-and-social-network-analysis" class="nav-link" data-scroll-target="#structural-balance-and-social-network-analysis"><span class="header-section-number">8.5</span> Structural balance and social network analysis</a>
+  <ul class="collapse">
+  <li><a href="#measuring-structural-balance" id="toc-measuring-structural-balance" class="nav-link" data-scroll-target="#measuring-structural-balance"><span class="header-section-number">8.5.1</span> Measuring structural balance</a></li>
+  </ul></li>
+  <li><a href="#random-graph-models" id="toc-random-graph-models" class="nav-link" data-scroll-target="#random-graph-models"><span class="header-section-number">8.6</span> Random graph models</a>
+  <ul class="collapse">
+  <li><a href="#erdősrényi-model" id="toc-erdősrényi-model" class="nav-link" data-scroll-target="#erdősrényi-model"><span class="header-section-number">8.6.1</span> Erdős–Rényi model</a></li>
+  <li><a href="#barabásialbert-model" id="toc-barabásialbert-model" class="nav-link" data-scroll-target="#barabásialbert-model"><span class="header-section-number">8.6.2</span> Barabási–Albert model</a></li>
+  <li><a href="#stochastic-block-models" id="toc-stochastic-block-models" class="nav-link" data-scroll-target="#stochastic-block-models"><span class="header-section-number">8.6.3</span> Stochastic block models</a></li>
+  </ul></li>
+  <li><a href="#statistical-inference-on-graphs" id="toc-statistical-inference-on-graphs" class="nav-link" data-scroll-target="#statistical-inference-on-graphs"><span class="header-section-number">8.7</span> Statistical inference on graphs</a>
+  <ul class="collapse">
+  <li><a href="#parameter-estimation" id="toc-parameter-estimation" class="nav-link" data-scroll-target="#parameter-estimation"><span class="header-section-number">8.7.1</span> Parameter estimation</a></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing"><span class="header-section-number">8.7.2</span> Hypothesis testing</a></li>
+  <li><a href="#link-prediction" id="toc-link-prediction" class="nav-link" data-scroll-target="#link-prediction"><span class="header-section-number">8.7.3</span> Link prediction</a></li>
+  </ul></li>
+  <li><a href="#network-motifs-and-graphlets" id="toc-network-motifs-and-graphlets" class="nav-link" data-scroll-target="#network-motifs-and-graphlets"><span class="header-section-number">8.8</span> Network motifs and graphlets</a>
+  <ul class="collapse">
+  <li><a href="#motif-detection-and-significance" id="toc-motif-detection-and-significance" class="nav-link" data-scroll-target="#motif-detection-and-significance"><span class="header-section-number">8.8.1</span> Motif detection and significance</a></li>
+  <li><a href="#graphlet-based-network-comparison" id="toc-graphlet-based-network-comparison" class="nav-link" data-scroll-target="#graphlet-based-network-comparison"><span class="header-section-number">8.8.2</span> Graphlet-based network comparison</a></li>
+  </ul></li>
+  <li><a href="#multilayer-and-heterogeneous-network-analysis" id="toc-multilayer-and-heterogeneous-network-analysis" class="nav-link" data-scroll-target="#multilayer-and-heterogeneous-network-analysis"><span class="header-section-number">8.9</span> Multilayer and heterogeneous network analysis</a>
+  <ul class="collapse">
+  <li><a href="#metrics-for-multilayer-networks" id="toc-metrics-for-multilayer-networks" class="nav-link" data-scroll-target="#metrics-for-multilayer-networks"><span class="header-section-number">8.9.1</span> Metrics for multilayer networks</a></li>
+  <li><a href="#metapath-analysis" id="toc-metapath-analysis" class="nav-link" data-scroll-target="#metapath-analysis"><span class="header-section-number">8.9.2</span> Metapath analysis</a></li>
+  </ul></li>
+  <li><a href="#temporal-network-analysis" id="toc-temporal-network-analysis" class="nav-link" data-scroll-target="#temporal-network-analysis"><span class="header-section-number">8.10</span> Temporal network analysis</a>
+  <ul class="collapse">
+  <li><a href="#metrics-for-temporal-networks" id="toc-metrics-for-temporal-networks" class="nav-link" data-scroll-target="#metrics-for-temporal-networks"><span class="header-section-number">8.10.1</span> Metrics for temporal networks</a></li>
+  <li><a href="#change-point-detection" id="toc-change-point-detection" class="nav-link" data-scroll-target="#change-point-detection"><span class="header-section-number">8.10.2</span> Change point detection</a></li>
+  </ul></li>
+  <li><a href="#applications-of-statistical-network-analysis" id="toc-applications-of-statistical-network-analysis" class="nav-link" data-scroll-target="#applications-of-statistical-network-analysis"><span class="header-section-number">8.11</span> Applications of statistical network analysis</a>
+  <ul class="collapse">
+  <li><a href="#anomaly-detection" id="toc-anomaly-detection" class="nav-link" data-scroll-target="#anomaly-detection"><span class="header-section-number">8.11.1</span> Anomaly detection</a></li>
+  <li><a href="#domain-specific-insights" id="toc-domain-specific-insights" class="nav-link" data-scroll-target="#domain-specific-insights"><span class="header-section-number">8.11.2</span> Domain-specific insights</a></li>
+  <li><a href="#comparative-network-analysis" id="toc-comparative-network-analysis" class="nav-link" data-scroll-target="#comparative-network-analysis"><span class="header-section-number">8.11.3</span> Comparative network analysis</a></li>
+  </ul></li>
+  <li><a href="#limitations-and-challenges" id="toc-limitations-and-challenges" class="nav-link" data-scroll-target="#limitations-and-challenges"><span class="header-section-number">8.12</span> Limitations and challenges</a></li>
+  <li><a href="#machine-learning-approaches-to-statistical-analysis" id="toc-machine-learning-approaches-to-statistical-analysis" class="nav-link" data-scroll-target="#machine-learning-approaches-to-statistical-analysis"><span class="header-section-number">8.13</span> Machine learning approaches to statistical analysis</a>
+  <ul class="collapse">
+  <li><a href="#graph-embeddings-for-statistical-analysis" id="toc-graph-embeddings-for-statistical-analysis" class="nav-link" data-scroll-target="#graph-embeddings-for-statistical-analysis"><span class="header-section-number">8.13.1</span> Graph embeddings for statistical analysis</a></li>
+  </ul></li>
+  <li><a href="#bayesian-approaches-to-network-analysis" id="toc-bayesian-approaches-to-network-analysis" class="nav-link" data-scroll-target="#bayesian-approaches-to-network-analysis"><span class="header-section-number">8.14</span> Bayesian approaches to network analysis</a>
+  <ul class="collapse">
+  <li><a href="#uncertainty-quantification" id="toc-uncertainty-quantification" class="nav-link" data-scroll-target="#uncertainty-quantification"><span class="header-section-number">8.14.1</span> Uncertainty quantification</a></li>
+  </ul></li>
+  <li><a href="#information-theoretic-approaches" id="toc-information-theoretic-approaches" class="nav-link" data-scroll-target="#information-theoretic-approaches"><span class="header-section-number">8.15</span> Information-theoretic approaches</a></li>
+  <li><a href="#statistical-validation-and-reliability" id="toc-statistical-validation-and-reliability" class="nav-link" data-scroll-target="#statistical-validation-and-reliability"><span class="header-section-number">8.16</span> Statistical validation and reliability</a></li>
+  <li><a href="#practical-considerations-for-large-scale-knowledge-graphs" id="toc-practical-considerations-for-large-scale-knowledge-graphs" class="nav-link" data-scroll-target="#practical-considerations-for-large-scale-knowledge-graphs"><span class="header-section-number">8.17</span> Practical considerations for large-scale knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#sampling-strategies" id="toc-sampling-strategies" class="nav-link" data-scroll-target="#sampling-strategies"><span class="header-section-number">8.17.1</span> Sampling strategies</a></li>
+  <li><a href="#distributed-and-parallel-computation" id="toc-distributed-and-parallel-computation" class="nav-link" data-scroll-target="#distributed-and-parallel-computation"><span class="header-section-number">8.17.2</span> Distributed and parallel computation</a></li>
+  <li><a href="#incremental-and-streaming-approaches" id="toc-incremental-and-streaming-approaches" class="nav-link" data-scroll-target="#incremental-and-streaming-approaches"><span class="header-section-number">8.17.3</span> Incremental and streaming approaches</a></li>
+  </ul></li>
+  <li><a href="#case-studies-in-knowledge-graph-statistics" id="toc-case-studies-in-knowledge-graph-statistics" class="nav-link" data-scroll-target="#case-studies-in-knowledge-graph-statistics"><span class="header-section-number">8.18</span> Case studies in knowledge graph statistics</a>
+  <ul class="collapse">
+  <li><a href="#case-study-scientific-collaboration-networks" id="toc-case-study-scientific-collaboration-networks" class="nav-link" data-scroll-target="#case-study-scientific-collaboration-networks"><span class="header-section-number">8.18.1</span> Case study: Scientific collaboration networks</a></li>
+  <li><a href="#case-study-biomedical-knowledge-integration" id="toc-case-study-biomedical-knowledge-integration" class="nav-link" data-scroll-target="#case-study-biomedical-knowledge-integration"><span class="header-section-number">8.18.2</span> Case study: Biomedical knowledge integration</a></li>
+  </ul></li>
+  <li><a href="#integrating-domain-knowledge-with-statistical-analysis" id="toc-integrating-domain-knowledge-with-statistical-analysis" class="nav-link" data-scroll-target="#integrating-domain-knowledge-with-statistical-analysis"><span class="header-section-number">8.19</span> Integrating domain knowledge with statistical analysis</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">8.20</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/construction/kg-construction.html">Construction and processing</a></li><li class="breadcrumb-item"><a href="../../contents/construction/stat-analysis-of-kg.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-statistical-network-analysis" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="introduction-to-statistical-network-analysis"><span class="header-section-number">8.1</span> Introduction to statistical network analysis</h2>
+<p>Knowledge graphs, as structured representations of information, can be analyzed from multiple perspectives. While the previous chapter focused on algorithmic approaches to traverse and manipulate graphs, this chapter introduces statistical methods for understanding and characterizing knowledge graph properties. Statistical approaches provide quantitative insights into the structure and patterns within knowledge graphs, enabling systematic analysis of complex networks.</p>
+<p>Statistical analysis of knowledge graphs serves several important purposes:</p>
+<ol type="1">
+<li>Characterizing global and local network properties</li>
+<li>Identifying statistically significant patterns and anomalies</li>
+<li>Building probabilistic models to describe graph formation and evolution</li>
+<li>Making predictions about missing or future connections</li>
+<li>Understanding the underlying processes that generate the observed network structure</li>
+</ol>
+<p>Before diving into specific techniques, it’s worth noting the distinction between descriptive statistics (which summarize observed properties) and inferential statistics (which draw conclusions about the underlying processes) in the context of knowledge graphs.</p>
+<div id="def-network-statistics" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.1 (Network statistics)</strong></span> <strong>Network statistics</strong> are quantitative measures that summarize structural properties of a graph, either globally (characterizing the entire network) or locally (characterizing individual nodes or subgraphs).</p>
+</div>
+</section>
+<section id="degree-distributions-and-power-laws" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="degree-distributions-and-power-laws"><span class="header-section-number">8.2</span> Degree distributions and power laws</h2>
+<p>One of the most fundamental properties of a network is how connections are distributed among nodes. The degree distribution provides insights into the connectivity patterns of a knowledge graph.</p>
+<div id="def-degree-distribution" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.2 (Degree distribution)</strong></span> The <strong>degree distribution</strong> <span class="math inline">P(k)</span> of a graph is the probability that a randomly selected node has exactly <span class="math inline">k</span> connections. In directed graphs, we distinguish between the in-degree distribution <span class="math inline">P_{in}(k)</span> and the out-degree distribution <span class="math inline">P_{out}(k)</span>.</p>
+</div>
+<p>In many real-world networks, including knowledge graphs, the degree distribution often follows a power law.</p>
+<div id="def-power-law" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.3 (Power law)</strong></span> A <strong>power law distribution</strong> has the form <span class="math inline">P(k) \propto k^{-\gamma}</span>, where <span class="math inline">\gamma</span> is a constant parameter typically in the range <span class="math inline">2 &lt; \gamma &lt; 3</span> for real-world networks. When plotted on a log-log scale, a power law appears as a straight line.</p>
+</div>
+<div id="exm-power-law-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.1 (Power law in a knowledge graph)</strong></span> Consider a knowledge graph of scientific publications where nodes represent papers and edges represent citations. Analysis of this network might reveal that the number of papers with <span class="math inline">k</span> citations follows a power law distribution with <span class="math inline">\gamma \approx 2.5</span>. This means that while most papers receive few citations, a small number of highly influential papers receive a disproportionately large number of citations.</p>
+<p>If we plot the frequency of papers against the number of citations on a log-log scale, we would observe an approximately linear relationship:</p>
+<p><span class="math display">\log(P(k)) \approx -2.5 \log(k) + c</span></p>
+<p>where <span class="math inline">c</span> is a constant.</p>
+</div>
+<section id="testing-for-power-law-distributions" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="testing-for-power-law-distributions"><span class="header-section-number">8.2.1</span> Testing for power law distributions</h3>
+<p>To determine whether a degree distribution follows a power law, several statistical tests can be applied:</p>
+<ol type="1">
+<li><strong>Log-log plot visualization</strong>: A straight line on a log-log plot suggests a power law, but is not definitive.</li>
+<li><strong>Maximum likelihood estimation</strong> of the power law exponent <span class="math inline">\gamma</span>: <span class="math display">\gamma \approx 1 + n\left[\sum_{i=1}^{n} \ln \frac{k_i}{k_{min}}\right]^{-1}</span> where <span class="math inline">k_i</span> are the observed degrees and <span class="math inline">k_{min}</span> is the minimum degree for which the power law holds.</li>
+<li><strong>Kolmogorov-Smirnov test</strong> to compare the observed distribution with a fitted power law.</li>
+</ol>
+<div id="exm-power-law-test" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.2 (Testing for power law in citation networks)</strong></span> For a citation network with 10,000 papers, we observe the following:</p>
+<ul>
+<li>The log-log plot shows a nearly linear relationship for papers with more than 5 citations</li>
+<li>Maximum likelihood estimation gives <span class="math inline">\gamma = 2.7</span></li>
+<li>The Kolmogorov-Smirnov test yields a p-value of 0.08, suggesting that a power law is a plausible fit</li>
+</ul>
+<p>Based on these results, we can conclude that the citation pattern in this knowledge graph likely follows a power law distribution for papers with more than 5 citations.</p>
+</div>
+</section>
+<section id="implications-of-power-law-distributions" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="implications-of-power-law-distributions"><span class="header-section-number">8.2.2</span> Implications of power law distributions</h3>
+<p>The presence of a power law degree distribution has significant implications for knowledge graph analysis:</p>
+<ol type="1">
+<li><strong>Scale-free property</strong>: Networks with power law distributions are often called “scale-free” because their structure looks similar at different scales.</li>
+<li><strong>Robustness to random failures</strong>: Scale-free networks are resilient against random node removals but vulnerable to targeted attacks on high-degree nodes.</li>
+<li><strong>Information diffusion</strong>: Information spreads rapidly in scale-free networks due to the presence of highly connected hubs.</li>
+<li><strong>Preferential attachment</strong>: Power laws often emerge from “rich-get-richer” processes where new nodes preferentially connect to already well-connected nodes.</li>
+</ol>
+<p>For knowledge graphs, these properties can inform strategies for network maintenance, information retrieval, and resilience planning.</p>
+</section>
+</section>
+<section id="clustering-coefficients-and-transitivity" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="clustering-coefficients-and-transitivity"><span class="header-section-number">8.3</span> Clustering coefficients and transitivity</h2>
+<p>While degree distributions describe the number of connections, clustering coefficients measure how nodes tend to cluster together, forming tightly-knit groups.</p>
+<div id="def-clustering-coefficient" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.4 (Clustering coefficient)</strong></span> The <strong>local clustering coefficient</strong> <span class="math inline">C_i</span> for a node <span class="math inline">i</span> is the proportion of actual connections among its neighbors relative to the potential connections:</p>
+<p><span class="math display">C_i = \frac{2|\{e_{jk}: v_j, v_k \in N_i, e_{jk} \in E\}|}{k_i(k_i-1)}</span></p>
+<p>where <span class="math inline">N_i</span> is the neighborhood of node <span class="math inline">i</span>, <span class="math inline">k_i</span> is the degree of node <span class="math inline">i</span>, and <span class="math inline">E</span> is the set of edges.</p>
+<p>The <strong>global clustering coefficient</strong> (or <strong>transitivity</strong>) is the ratio of closed triplets to the total number of triplets (both open and closed) in the network:</p>
+<p><span class="math display">C = \frac{3 \times \text{number of triangles}}{\text{number of connected triplets of vertices}}</span></p>
+</div>
+<p>In knowledge graphs, high clustering coefficients often indicate the presence of specialized domains or communities of closely related entities.</p>
+<div id="exm-clustering-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.3 (Clustering in a social knowledge graph)</strong></span> Consider a knowledge graph representing social relationships where nodes are individuals and edges represent “knows” relationships. A high clustering coefficient would indicate that people tend to form close-knit social groups—if person A knows persons B and C, then B and C are also likely to know each other.</p>
+<p>For instance, in an academic collaboration network, we might find:</p>
+<ul>
+<li>The local clustering coefficient for a professor node is 0.75, indicating that 75% of possible connections exist among their collaborators.</li>
+<li>The global clustering coefficient is 0.45, suggesting a moderate overall tendency for researchers to collaborate in groups.</li>
+</ul>
+</div>
+<section id="relationship-between-clustering-and-degree" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="relationship-between-clustering-and-degree"><span class="header-section-number">8.3.1</span> Relationship between clustering and degree</h3>
+<p>In many real-world networks, the local clustering coefficient depends on the node degree, often following a relationship:</p>
+<p><span class="math display">C(k) \sim k^{-\beta}</span></p>
+<p>where <span class="math inline">\beta</span> is typically around 1 for many social and information networks. This relationship indicates that high-degree nodes (hubs) tend to have lower clustering coefficients than low-degree nodes.</p>
+</section>
+<section id="transitivity-and-knowledge-representation" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="transitivity-and-knowledge-representation"><span class="header-section-number">8.3.2</span> Transitivity and knowledge representation</h3>
+<p>In knowledge graphs, transitivity has particular relevance for certain relationship types:</p>
+<ol type="1">
+<li><strong>Transitive relationships</strong>: Some semantic relationships, like “is-a” or “part-of,” are inherently transitive (if A is-a B and B is-a C, then A is-a C).</li>
+<li><strong>Non-transitive relationships</strong>: Other relationships, like “interacts-with” or “cites,” are not necessarily transitive.</li>
+</ol>
+<p>Understanding the transitivity properties of different relationship types can inform knowledge graph completion and inference tasks.</p>
+</section>
+</section>
+<section id="centrality-measures" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="centrality-measures"><span class="header-section-number">8.4</span> Centrality measures</h2>
+<p>Centrality measures identify the most important or influential nodes in a knowledge graph based on their position in the network structure.</p>
+<div id="def-degree-centrality" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.5 (Degree centrality)</strong></span> <strong>Degree centrality</strong> is the simplest centrality measure, defined as the number of connections a node has, normalized by the maximum possible connections:</p>
+<p><span class="math display">C_D(v) = \frac{deg(v)}{n-1}</span></p>
+<p>where <span class="math inline">deg(v)</span> is the degree of node <span class="math inline">v</span> and <span class="math inline">n</span> is the total number of nodes in the network.</p>
+</div>
+<p>While degree centrality is easy to compute, it only accounts for direct connections and not a node’s position in the overall network structure.</p>
+<div id="def-betweenness-centrality" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.6 (Betweenness centrality)</strong></span> <strong>Betweenness centrality</strong> measures the extent to which a node lies on paths between other nodes. It is defined as:</p>
+<p><span class="math display">C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}</span></p>
+<p>where <span class="math inline">\sigma_{st}</span> is the total number of shortest paths from node <span class="math inline">s</span> to node <span class="math inline">t</span>, and <span class="math inline">\sigma_{st}(v)</span> is the number of those paths that pass through node <span class="math inline">v</span>.</p>
+</div>
+<p>Nodes with high betweenness centrality often serve as bridges between different communities or domains in a knowledge graph.</p>
+<div id="def-closeness-centrality" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.7 (Closeness centrality)</strong></span> <strong>Closeness centrality</strong> measures how close a node is to all other nodes in the network. It is defined as the reciprocal of the sum of the shortest path distances from a node to all other nodes:</p>
+<p><span class="math display">C_C(v) = \frac{n-1}{\sum_{u \neq v} d(v, u)}</span></p>
+<p>where <span class="math inline">d(v, u)</span> is the shortest path distance between nodes <span class="math inline">v</span> and <span class="math inline">u</span>.</p>
+</div>
+<p>Nodes with high closeness centrality can efficiently disseminate information to the rest of the network.</p>
+<div id="def-eigenvector-centrality" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.8 (Eigenvector centrality)</strong></span> <strong>Eigenvector centrality</strong> assigns importance to nodes based on the importance of their neighbors. It is defined as the principal eigenvector of the adjacency matrix <span class="math inline">A</span> of the graph:</p>
+<p><span class="math display">Ax = \lambda x</span></p>
+<p>where <span class="math inline">\lambda</span> is the largest eigenvalue of <span class="math inline">A</span> and <span class="math inline">x</span> is the corresponding eigenvector. The eigenvector centrality of node <span class="math inline">i</span> is given by the <span class="math inline">i</span>-th element of <span class="math inline">x</span>.</p>
+</div>
+<p>Eigenvector centrality captures the intuition that connections to important nodes contribute more to a node’s importance than connections to less important nodes.</p>
+<div id="exm-centrality-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.4 (Centrality in a biomedical knowledge graph)</strong></span> In a biomedical knowledge graph with entities such as diseases, symptoms, genes, and drugs:</p>
+<ul>
+<li>A disease node with high <strong>degree centrality</strong> might be a complex disorder with many associated symptoms, genes, and treatments.</li>
+<li>A gene node with high <strong>betweenness centrality</strong> might be a key regulator involved in multiple biological pathways, connecting otherwise disparate areas of biology.</li>
+<li>A drug node with high <strong>closeness centrality</strong> might be a broad-spectrum agent that can quickly impact many different biological systems.</li>
+<li>A disease node with high <strong>eigenvector centrality</strong> might be a central disorder connected to many other high-impact diseases, genes, and biological processes.</li>
+</ul>
+<p>These centrality measures provide complementary views of importance in the knowledge graph, useful for identifying key entities for further research.</p>
+</div>
+<section id="practical-considerations-for-centrality-computation" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="practical-considerations-for-centrality-computation"><span class="header-section-number">8.4.1</span> Practical considerations for centrality computation</h3>
+<p>Computing centrality measures for large knowledge graphs presents several challenges:</p>
+<ol type="1">
+<li><p><strong>Computational complexity</strong>:</p>
+<ul>
+<li>Degree centrality: <span class="math inline">O(|V|)</span></li>
+<li>Closeness centrality: <span class="math inline">O(|V||E|)</span></li>
+<li>Betweenness centrality: <span class="math inline">O(|V||E|)</span> with approximation algorithms, <span class="math inline">O(|V|^3)</span> for exact computation</li>
+<li>Eigenvector centrality: <span class="math inline">O(|E|k)</span> where <span class="math inline">k</span> is the number of iterations until convergence</li>
+</ul></li>
+<li><p><strong>Approximation algorithms</strong> are often necessary for large graphs, particularly for betweenness centrality.</p></li>
+<li><p><strong>Domain-specific interpretations</strong> of centrality may require customized measures that account for semantic information in knowledge graphs.</p></li>
+</ol>
+</section>
+</section>
+<section id="structural-balance-and-social-network-analysis" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="structural-balance-and-social-network-analysis"><span class="header-section-number">8.5</span> Structural balance and social network analysis</h2>
+<p>Structural balance theory, originating from social psychology, provides insights into the stability of relationship patterns, particularly in signed networks where relationships can be positive or negative.</p>
+<div id="def-structural-balance" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.9 (Structural balance)</strong></span> A signed graph is <strong>structurally balanced</strong> if it can be partitioned into two subsets such that all edges within each subset are positive, and all edges between the subsets are negative. Equivalently, a graph is structurally balanced if all cycles have an even number of negative edges.</p>
+</div>
+<p>The concept can be extended to knowledge graphs that incorporate sentiment or opposition relationships.</p>
+<div id="exm-structural-balance-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.5 (Structural balance in a political knowledge graph)</strong></span> Consider a knowledge graph representing political entities (politicians, parties, organizations) with signed relationships indicating support (+) or opposition (-). Structural balance would predict that “the enemy of my enemy is my friend” – if politician A opposes politician B, and politician B opposes policy C, then politician A is likely to support policy C.</p>
+<p>Analysis of such a knowledge graph might reveal that it’s nearly structurally balanced, with only a small number of “unstable” triads, suggesting predictable political alignments.</p>
+</div>
+<section id="measuring-structural-balance" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="measuring-structural-balance"><span class="header-section-number">8.5.1</span> Measuring structural balance</h3>
+<p>To quantify the degree of structural balance in a signed network, we can use:</p>
+<ol type="1">
+<li><strong>Balance ratio</strong>: The ratio of balanced triads to the total number of triads in the network.</li>
+<li><strong>Frustration index</strong>: The minimum number of edges whose removal (or sign change) would make the network structurally balanced.</li>
+</ol>
+<p>These measures help identify how close a knowledge graph is to perfect structural balance and which relationships contribute most to imbalance.</p>
+</section>
+</section>
+<section id="random-graph-models" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="random-graph-models"><span class="header-section-number">8.6</span> Random graph models</h2>
+<p>Random graph models provide a foundation for statistical inference on knowledge graphs by establishing null models against which observed network properties can be compared.</p>
+<div id="def-random-graph-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.10 (Random graph model)</strong></span> A <strong>random graph model</strong> is a probability distribution over graphs, typically parameterized to match certain properties of observed networks.</p>
+</div>
+<section id="erdősrényi-model" class="level3" data-number="8.6.1">
+<h3 data-number="8.6.1" class="anchored" data-anchor-id="erdősrényi-model"><span class="header-section-number">8.6.1</span> Erdős–Rényi model</h3>
+<p>The simplest random graph model is the Erdős–Rényi model, which assigns equal probability to all graphs with a fixed number of nodes and edges.</p>
+<div id="def-erdos-renyi-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.11 (Erdős–Rényi model)</strong></span> The <strong>Erdős–Rényi model</strong> generates random graphs where each possible edge between <span class="math inline">n</span> nodes exists with a fixed probability <span class="math inline">p</span>, independent of other edges. The model is denoted as <span class="math inline">G(n, p)</span>.</p>
+</div>
+<p>Properties of Erdős–Rényi graphs include:</p>
+<ol type="1">
+<li>The degree distribution follows a binomial distribution, approaching Poisson for large graphs and small <span class="math inline">p</span>.</li>
+<li>The average clustering coefficient is <span class="math inline">p</span>, which is often much smaller than in real-world networks.</li>
+<li>The average path length is approximately <span class="math inline">\log(n)/\log(np)</span>.</li>
+</ol>
+<div id="exm-erdos-renyi-comparison" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.6 (Comparing a knowledge graph to an Erdős–Rényi model)</strong></span> For a knowledge graph with 10,000 nodes and 50,000 edges, we can compare its properties with an Erdős–Rényi random graph <span class="math inline">G(10000, 0.001)</span> where <span class="math inline">p = 50000/\binom{10000}{2} \approx 0.001</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Knowledge Graph</th>
+<th>Erdős–Rényi Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Clustering coefficient</td>
+<td>0.15</td>
+<td>0.001</td>
+</tr>
+<tr class="even">
+<td>Average path length</td>
+<td>5.2</td>
+<td>8.4</td>
+</tr>
+<tr class="odd">
+<td>Degree distribution</td>
+<td>Power law (<span class="math inline">\gamma = 2.4</span>)</td>
+<td>Poisson (<span class="math inline">\lambda = 10</span>)</td>
+</tr>
+</tbody>
+</table>
+<p>The significant differences indicate that the knowledge graph has structural properties that cannot be explained by random connections alone.</p>
+</div>
+</section>
+<section id="barabásialbert-model" class="level3" data-number="8.6.2">
+<h3 data-number="8.6.2" class="anchored" data-anchor-id="barabásialbert-model"><span class="header-section-number">8.6.2</span> Barabási–Albert model</h3>
+<p>To better model the power law degree distributions observed in many real networks, the Barabási–Albert model incorporates preferential attachment.</p>
+<div id="def-barabasi-albert-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.12 (Barabási–Albert model)</strong></span> The <strong>Barabási–Albert model</strong> generates random scale-free networks using preferential attachment. Starting with a small connected graph, new nodes are added sequentially, each connecting to <span class="math inline">m</span> existing nodes with probability proportional to their degree.</p>
+</div>
+<p>Properties of Barabási–Albert graphs include:</p>
+<ol type="1">
+<li>The degree distribution follows a power law with exponent <span class="math inline">\gamma = 3</span>.</li>
+<li>The average clustering coefficient is higher than in Erdős–Rényi graphs but still lower than in many real networks.</li>
+<li>The average path length grows logarithmically with network size, similar to Erdős–Rényi graphs.</li>
+</ol>
+<div id="exm-barabasi-albert-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.7 (Modeling citation patterns with Barabási–Albert)</strong></span> In a citation knowledge graph, the Barabási–Albert model captures the “rich get richer” phenomenon where highly cited papers are more likely to receive additional citations. By fitting the model parameter <span class="math inline">m</span> (the number of connections each new node makes), we can simulate the growth of the citation network and predict future citation patterns.</p>
+<p>For a citation network with 50,000 papers and a power law exponent of <span class="math inline">\gamma = 2.8</span>, we might find that a Barabási–Albert model with <span class="math inline">m = 4</span> provides a reasonable approximation of the degree distribution, though other properties like clustering might still differ.</p>
+</div>
+</section>
+<section id="stochastic-block-models" class="level3" data-number="8.6.3">
+<h3 data-number="8.6.3" class="anchored" data-anchor-id="stochastic-block-models"><span class="header-section-number">8.6.3</span> Stochastic block models</h3>
+<p>To model community structure in networks, stochastic block models extend random graph models by incorporating group membership.</p>
+<div id="def-stochastic-block-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.13 (Stochastic block model)</strong></span> A <strong>stochastic block model</strong> partitions nodes into <span class="math inline">k</span> groups and defines a <span class="math inline">k \times k</span> matrix <span class="math inline">P</span> where <span class="math inline">P_{rs}</span> is the probability of an edge between a node in group <span class="math inline">r</span> and a node in group <span class="math inline">s</span>.</p>
+</div>
+<div id="exm-stochastic-block-model-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.8 (Community structure in a knowledge graph)</strong></span> Consider a knowledge graph of musical entities (artists, albums, songs, genres) that appears to have distinct communities. A stochastic block model might identify 5 communities corresponding to major music genres, with higher connection probabilities within genres than between them.</p>
+<p>By fitting a stochastic block model, we can:</p>
+<ol type="1">
+<li>Identify the optimal number of communities</li>
+<li>Assign entities to their most likely community</li>
+<li>Characterize the connection patterns between different communities</li>
+<li>Predict missing links based on community membership</li>
+</ol>
+</div>
+</section>
+</section>
+<section id="statistical-inference-on-graphs" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="statistical-inference-on-graphs"><span class="header-section-number">8.7</span> Statistical inference on graphs</h2>
+<p>Statistical inference methods allow us to draw conclusions about the underlying processes that generate knowledge graphs and to make predictions about unobserved properties.</p>
+<div id="def-statistical-inference" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.14 (Statistical inference on graphs)</strong></span> <strong>Statistical inference on graphs</strong> involves estimating parameters of probabilistic models from observed graph data and using these models to test hypotheses or make predictions about graph properties.</p>
+</div>
+<section id="parameter-estimation" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="parameter-estimation"><span class="header-section-number">8.7.1</span> Parameter estimation</h3>
+<p>Fitting random graph models to observed knowledge graphs involves estimating model parameters that maximize the likelihood of observing the given network structure.</p>
+<div id="exm-parameter-estimation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.9 (Estimating parameters of a stochastic block model)</strong></span> For a knowledge graph with apparent community structure, we can estimate:</p>
+<ol type="1">
+<li>The optimal number of communities <span class="math inline">k</span> using methods like the Bayesian Information Criterion (BIC)</li>
+<li>The community assignments of each node using maximum likelihood or Bayesian inference</li>
+<li>The inter-community connection probabilities <span class="math inline">P_{rs}</span></li>
+</ol>
+<p>These estimated parameters provide insights into the community structure and connection patterns in the knowledge graph.</p>
+</div>
+</section>
+<section id="hypothesis-testing" class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="hypothesis-testing"><span class="header-section-number">8.7.2</span> Hypothesis testing</h3>
+<p>Statistical tests can determine whether observed network properties deviate significantly from what would be expected under null models.</p>
+<div id="exm-hypothesis-testing" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.10 (Testing for assortative mixing in a knowledge graph)</strong></span> <strong>Assortative mixing</strong> (or homophily) refers to the tendency of nodes to connect with similar nodes. To test whether a knowledge graph exhibits assortative mixing by node degree:</p>
+<ol type="1">
+<li>Calculate the Pearson correlation coefficient <span class="math inline">r</span> between the degrees of connected nodes</li>
+<li>Generate many random networks with the same degree sequence using configuration models</li>
+<li>Calculate the p-value as the proportion of random networks with correlation coefficients at least as extreme as the observed value</li>
+</ol>
+<p>If p &lt; 0.05, we can reject the null hypothesis and conclude that the knowledge graph exhibits significant degree assortativity or disassortativity.</p>
+</div>
+</section>
+<section id="link-prediction" class="level3" data-number="8.7.3">
+<h3 data-number="8.7.3" class="anchored" data-anchor-id="link-prediction"><span class="header-section-number">8.7.3</span> Link prediction</h3>
+<p>Statistical models can predict missing or future links in knowledge graphs based on observed network structure.</p>
+<div id="def-link-prediction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.15 (Link prediction)</strong></span> <strong>Link prediction</strong> is the task of predicting the likelihood of a future or missing connection between two nodes in a network based on the observed network structure and possibly node attributes.</p>
+</div>
+<p>Common approaches to link prediction include:</p>
+<ol type="1">
+<li><p><strong>Similarity-based methods</strong> that calculate scores based on the neighborhood of two nodes:</p>
+<ul>
+<li>Common neighbors: <span class="math inline">|N(u) \cap N(v)|</span></li>
+<li>Jaccard coefficient: <span class="math inline">\frac{|N(u) \cap N(v)|}{|N(u) \cup N(v)|}</span></li>
+<li>Adamic-Adar index: <span class="math inline">\sum_{w \in N(u) \cap N(v)} \frac{1}{\log(|N(w)|)}</span></li>
+</ul></li>
+<li><p><strong>Path-based methods</strong> that consider paths between nodes:</p>
+<ul>
+<li>Katz index: <span class="math inline">\sum_{l=1}^{\infty} \beta^l |paths^{(l)}_{u,v}|</span></li>
+<li>Random walk methods</li>
+</ul></li>
+<li><p><strong>Probabilistic models</strong> that explicitly model the link formation process:</p>
+<ul>
+<li>Stochastic block models</li>
+<li>Latent space models</li>
+<li>Exponential random graph models (ERGMs)</li>
+</ul></li>
+</ol>
+<div id="exm-link-prediction-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.11 (Link prediction in a drug-target knowledge graph)</strong></span> In a biomedical knowledge graph connecting drugs to their target proteins, link prediction can identify potential new drug-target interactions for experimental validation.</p>
+<p>Evaluation of different link prediction methods on a subset of known interactions held out for testing might yield:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>AUC</th>
+<th>Precision@10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Common neighbors</td>
+<td>0.72</td>
+<td>0.45</td>
+</tr>
+<tr class="even">
+<td>Jaccard coefficient</td>
+<td>0.75</td>
+<td>0.50</td>
+</tr>
+<tr class="odd">
+<td>Adamic-Adar index</td>
+<td>0.78</td>
+<td>0.55</td>
+</tr>
+<tr class="even">
+<td>Katz index</td>
+<td>0.81</td>
+<td>0.60</td>
+</tr>
+<tr class="odd">
+<td>Stochastic block model</td>
+<td>0.84</td>
+<td>0.65</td>
+</tr>
+</tbody>
+</table>
+<p>The results suggest that considering both local neighborhood structure and global community patterns provides the best predictive performance for this particular knowledge graph.</p>
+</div>
+</section>
+</section>
+<section id="network-motifs-and-graphlets" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="network-motifs-and-graphlets"><span class="header-section-number">8.8</span> Network motifs and graphlets</h2>
+<p>Network motifs are recurring, statistically significant subgraph patterns that may represent fundamental building blocks of complex networks.</p>
+<div id="def-network-motif" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.16 (Network motif)</strong></span> A <strong>network motif</strong> is a subgraph pattern that occurs significantly more frequently in a real network than would be expected in randomized networks with the same degree distribution.</p>
+</div>
+<div id="def-graphlet" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.17 (Graphlet)</strong></span> A <strong>graphlet</strong> is a small, connected, non-isomorphic induced subgraph of a larger network. Unlike motifs, graphlets are not necessarily overrepresented in the network.</p>
+</div>
+<section id="motif-detection-and-significance" class="level3" data-number="8.8.1">
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="motif-detection-and-significance"><span class="header-section-number">8.8.1</span> Motif detection and significance</h3>
+<p>Detecting network motifs involves:</p>
+<ol type="1">
+<li>Enumerating all subgraphs of a specific size (typically 3-5 nodes) in the network</li>
+<li>Classifying these subgraphs into isomorphism classes</li>
+<li>Generating random networks with the same degree sequence</li>
+<li>Comparing the frequency of each subgraph in the real network to its frequency in the random networks</li>
+</ol>
+<p>The statistical significance of a motif is typically measured using the Z-score:</p>
+<p><span class="math display">Z_i = \frac{N_i^{real} - \bar{N}_i^{rand}}{\sigma_i^{rand}}</span></p>
+<p>where <span class="math inline">N_i^{real}</span> is the frequency of subgraph <span class="math inline">i</span> in the real network, and <span class="math inline">\bar{N}_i^{rand}</span> and <span class="math inline">\sigma_i^{rand}</span> are the mean and standard deviation of its frequency in randomized networks.</p>
+<div id="exm-motifs-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.12 (Motifs in a gene regulatory knowledge graph)</strong></span> In a gene regulatory network, where nodes represent genes and directed edges represent regulatory interactions, motif analysis might reveal:</p>
+<ol type="1">
+<li>Feed-forward loops (A → B, B → C, A → C) are significantly overrepresented (Z-score = 12.5)</li>
+<li>Feedback loops (A → B, B → C, C → A) are underrepresented (Z-score = -3.2)</li>
+<li>Bi-fan motifs (A → C, A → D, B → C, B → D) occur at expected frequencies (Z-score = 0.8)</li>
+</ol>
+<p>These motif patterns suggest that the gene regulatory network favors unidirectional information flow and avoids circular regulation, which aligns with the need for stable and responsive regulatory systems.</p>
+</div>
+</section>
+<section id="graphlet-based-network-comparison" class="level3" data-number="8.8.2">
+<h3 data-number="8.8.2" class="anchored" data-anchor-id="graphlet-based-network-comparison"><span class="header-section-number">8.8.2</span> Graphlet-based network comparison</h3>
+<p>Graphlets provide a way to compare network structures and characterize the local network environment of nodes.</p>
+<div id="def-graphlet-degree-vector" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.18 (Graphlet degree vector)</strong></span> The <strong>graphlet degree vector (GDV)</strong> of a node is a vector whose elements count the number of times the node appears in each position (orbit) of all possible graphlets up to a certain size.</p>
+</div>
+<p>The similarity between nodes or networks can be measured using the correlation between their graphlet degree vectors, providing a more comprehensive comparison than simple degree-based measures.</p>
+<div id="exm-graphlet-comparison" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.13 (Comparing protein interaction networks using graphlets)</strong></span> To compare protein interaction networks from different species, we can:</p>
+<ol type="1">
+<li>Compute the graphlet frequency distribution for each network (the frequency of each graphlet type)</li>
+<li>Calculate the relative graphlet frequency distance (RGF-distance) between networks</li>
+<li>Identify evolutionarily conserved network patterns across species</li>
+</ol>
+<p>This analysis might reveal that certain graphlet patterns are evolutionarily conserved, suggesting fundamental organizational principles in protein interaction networks across species.</p>
+</div>
+</section>
+</section>
+<section id="multilayer-and-heterogeneous-network-analysis" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="multilayer-and-heterogeneous-network-analysis"><span class="header-section-number">8.9</span> Multilayer and heterogeneous network analysis</h2>
+<p>Knowledge graphs often contain multiple types of nodes and relationships, requiring specialized analytical approaches.</p>
+<div id="def-multilayer-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.19 (Multilayer network)</strong></span> A <strong>multilayer network</strong> is a network with multiple layers, where each layer represents a different type of relationship between the same set of nodes. Formally, it can be represented as <span class="math inline">M = (V, E, L)</span> where <span class="math inline">V</span> is the set of nodes, <span class="math inline">L</span> is the set of layers, and <span class="math inline">E \subseteq V \times V \times L</span> is the set of edges.</p>
+</div>
+<div id="def-heterogeneous-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.20 (Heterogeneous network)</strong></span> A <strong>heterogeneous network</strong> (or heterogeneous information network) is a network with multiple types of nodes and/or multiple types of edges. Formally, it can be represented as <span class="math inline">G = (V, E, \phi, \psi)</span> where <span class="math inline">\phi: V \rightarrow T_V</span> maps nodes to node types and <span class="math inline">\psi: E \rightarrow T_E</span> maps edges to edge types.</p>
+</div>
+<p>Knowledge graphs are typically heterogeneous networks, with entities of various types connected by different semantic relationships.</p>
+<section id="metrics-for-multilayer-networks" class="level3" data-number="8.9.1">
+<h3 data-number="8.9.1" class="anchored" data-anchor-id="metrics-for-multilayer-networks"><span class="header-section-number">8.9.1</span> Metrics for multilayer networks</h3>
+<p>Several metrics have been extended to multilayer and heterogeneous networks:</p>
+<ol type="1">
+<li><p><strong>Multilayer clustering coefficient</strong>: <span class="math display">C_i^{multi} = \frac{2\sum_{j,h} \sum_{\alpha, \beta} a_{ij}^{\alpha} a_{ih}^{\beta} a_{jh}^{\gamma}}{k_i(k_i-1)}</span> where <span class="math inline">a_{ij}^{\alpha}</span> indicates the presence of an edge between nodes <span class="math inline">i</span> and <span class="math inline">j</span> in layer <span class="math inline">\alpha</span>.</p></li>
+<li><p><strong>Heterogeneous centrality measures</strong> that account for different node and edge types, often incorporating semantic information.</p></li>
+</ol>
+<div id="exm-multilayer-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.14 (Multilayer analysis of an academic knowledge graph)</strong></span> An academic knowledge graph might contain multiple relationship types between researchers:</p>
+<ul>
+<li>Co-authorship relationships</li>
+<li>Citation relationships</li>
+<li>Institutional affiliations</li>
+<li>Research topic similarities</li>
+</ul>
+<p>Multilayer analysis could reveal:</p>
+<ul>
+<li>Researchers who are central in one layer (e.g., highly cited) but peripheral in another (e.g., few collaborations)</li>
+<li>Communities that are strongly connected across multiple layers, indicating robust research groups</li>
+<li>Patterns of influence that spread across different types of academic relationships</li>
+</ul>
+</div>
+</section>
+<section id="metapath-analysis" class="level3" data-number="8.9.2">
+<h3 data-number="8.9.2" class="anchored" data-anchor-id="metapath-analysis"><span class="header-section-number">8.9.2</span> Metapath analysis</h3>
+<p>In heterogeneous networks, paths that follow a specific sequence of node and edge types (metapaths) provide semantic context for relationships.</p>
+<div id="def-metapath" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.21 (Metapath)</strong></span> A <strong>metapath</strong> is a path defined on a network schema <span class="math inline">S = (A, R)</span> and is denoted by a sequence of node types and edge types: <span class="math inline">A_1 \xrightarrow{R_1} A_2 \xrightarrow{R_2} ... \xrightarrow{R_{l-1}} A_l</span>.</p>
+</div>
+<p>Metapath-based similarity measures can capture complex semantic relationships in knowledge graphs.</p>
+<div id="exm-metapath-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.15 (Metapaths in a movie knowledge graph)</strong></span> In a movie knowledge graph with entity types {Movie, Actor, Director, Genre}, different metapaths capture different semantic relationships:</p>
+<ol type="1">
+<li>Movie → Actor → Movie: Movies connected by common actors</li>
+<li>Movie → Director → Movie: Movies by the same director</li>
+<li>Movie → Genre → Movie: Movies in the same genre</li>
+<li>Movie → Actor → Director → Movie: More complex relationships</li>
+</ol>
+<p>By analyzing the frequency and importance of different metapaths, we can understand which types of relationships most strongly influence the structure of the knowledge graph.</p>
+</div>
+</section>
+</section>
+<section id="temporal-network-analysis" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="temporal-network-analysis"><span class="header-section-number">8.10</span> Temporal network analysis</h2>
+<p>Many knowledge graphs include temporal information, requiring methods that can analyze how network structure evolves over time.</p>
+<div id="def-temporal-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.22 (Temporal network)</strong></span> A <strong>temporal network</strong> (or time-varying network) is a network whose structure changes over time. It can be represented as a sequence of static networks <span class="math inline">G(t) = (V(t), E(t))</span> for discrete time points <span class="math inline">t</span>, or as a graph with time-stamped edges <span class="math inline">G = (V, E, T)</span> where <span class="math inline">T: E \rightarrow \mathbb{R}</span> assigns timestamps to edges.</p>
+</div>
+<section id="metrics-for-temporal-networks" class="level3" data-number="8.10.1">
+<h3 data-number="8.10.1" class="anchored" data-anchor-id="metrics-for-temporal-networks"><span class="header-section-number">8.10.1</span> Metrics for temporal networks</h3>
+<p>Several metrics capture the dynamic properties of temporal networks:</p>
+<ol type="1">
+<li><strong>Temporal path length</strong>: The minimum time required to travel from one node to another, respecting the temporal ordering of edges.</li>
+<li><strong>Temporal betweenness centrality</strong>: The number of shortest temporal paths passing through a node.</li>
+<li><strong>Temporal motifs</strong>: Small, recurring, statistically significant temporal subgraph patterns.</li>
+</ol>
+<div id="exm-temporal-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.16 (Temporal analysis of a news knowledge graph)</strong></span> A news knowledge graph might connect entities (people, organizations, locations) mentioned in news articles, with edges time-stamped by article publication dates.</p>
+<p>Temporal analysis might reveal:</p>
+<ul>
+<li>How the prominence of entities (measured by centrality) changes over time in response to events</li>
+<li>The evolution of community structures as new topics emerge and old ones fade</li>
+<li>Temporal motifs corresponding to recurring news patterns (e.g., announcement → reaction → analysis)</li>
+<li>Early indicators of emerging trends or issues based on temporal network patterns</li>
+</ul>
+</div>
+</section>
+<section id="change-point-detection" class="level3" data-number="8.10.2">
+<h3 data-number="8.10.2" class="anchored" data-anchor-id="change-point-detection"><span class="header-section-number">8.10.2</span> Change point detection</h3>
+<p>Change point detection identifies significant structural changes in temporal networks.</p>
+<div id="def-change-point-detection" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.23 (Change point detection)</strong></span> <strong>Change point detection</strong> in temporal networks aims to identify time points <span class="math inline">t</span> where the network structure <span class="math inline">G(t)</span> undergoes significant changes relative to <span class="math inline">G(t-1)</span>.</p>
+</div>
+<p>Methods for change point detection include:</p>
+<ol type="1">
+<li>Monitoring global network statistics (density, clustering, diameter) over time</li>
+<li>Detecting significant changes in community structure</li>
+<li>Using statistical tests to identify when the network generating process changes</li>
+</ol>
+<div id="exm-change-point-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.17 (Change points in a financial knowledge graph)</strong></span> In a financial knowledge graph connecting companies through various relationships (ownership, supply chain, joint ventures), change point detection might identify:</p>
+<ul>
+<li>Major market disruptions reflected in rapid structural changes</li>
+<li>Industry reorganizations following regulatory changes</li>
+<li>Merger and acquisition waves that reshape industry structure</li>
+<li>Financial crises that alter the pattern of financial relationships</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="applications-of-statistical-network-analysis" class="level2" data-number="8.11">
+<h2 data-number="8.11" class="anchored" data-anchor-id="applications-of-statistical-network-analysis"><span class="header-section-number">8.11</span> Applications of statistical network analysis</h2>
+<p>Statistical analysis of knowledge graphs enables numerous applications across different domains.</p>
+<section id="anomaly-detection" class="level3" data-number="8.11.1">
+<h3 data-number="8.11.1" class="anchored" data-anchor-id="anomaly-detection"><span class="header-section-number">8.11.1</span> Anomaly detection</h3>
+<p>Statistical methods can identify entities or relationships that deviate significantly from expected patterns.</p>
+<div id="exm-anomaly-detection" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.18 (Fraud detection in a financial knowledge graph)</strong></span> In a financial transaction knowledge graph, statistical anomaly detection might flag:</p>
+<ul>
+<li>Accounts with unusual connection patterns based on degree distribution analysis</li>
+<li>Transaction cycles that violate structural balance principles</li>
+<li>Temporal motifs associated with known fraud schemes</li>
+<li>Entities with centrality measures that change abruptly over time</li>
+</ul>
+</div>
+</section>
+<section id="domain-specific-insights" class="level3" data-number="8.11.2">
+<h3 data-number="8.11.2" class="anchored" data-anchor-id="domain-specific-insights"><span class="header-section-number">8.11.2</span> Domain-specific insights</h3>
+<p>Statistical analysis can reveal domain-specific patterns and characteristics in specialized knowledge graphs.</p>
+<div id="exm-domain-insights" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.19 (Statistical insights from a healthcare knowledge graph)</strong></span> Analysis of a healthcare knowledge graph connecting patients, diagnoses, procedures, and medications might reveal:</p>
+<ul>
+<li>Comorbidity patterns through community detection</li>
+<li>Critical medical entities through centrality analysis</li>
+<li>Typical treatment pathways through temporal motif analysis</li>
+<li>Unusual patient trajectories through anomaly detection</li>
+</ul>
+</div>
+</section>
+<section id="comparative-network-analysis" class="level3" data-number="8.11.3">
+<h3 data-number="8.11.3" class="anchored" data-anchor-id="comparative-network-analysis"><span class="header-section-number">8.11.3</span> Comparative network analysis</h3>
+<p>Statistical methods enable systematic comparison of knowledge graphs across different domains, time periods, or sources.</p>
+<div id="exm-comparative-analysis" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.20 (Comparing scientific knowledge graphs over time)</strong></span> Statistical comparison of biomedical knowledge graphs from different decades might reveal:</p>
+<ul>
+<li>Changes in the power law exponent of citation distributions</li>
+<li>Evolution of research communities detected through stochastic block models</li>
+<li>Increasing or decreasing clustering coefficients reflecting specialization patterns</li>
+<li>Changes in characteristic path lengths as fields become more integrated or fragmented</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="limitations-and-challenges" class="level2" data-number="8.12">
+<h2 data-number="8.12" class="anchored" data-anchor-id="limitations-and-challenges"><span class="header-section-number">8.12</span> Limitations and challenges</h2>
+<p>Statistical analysis of knowledge graphs faces several challenges:</p>
+<ol type="1">
+<li><strong>Scale</strong>: Large knowledge graphs may contain billions of entities and relationships, requiring efficient algorithms and sampling approaches.</li>
+<li><strong>Heterogeneity</strong>: Multiple node and edge types complicate the application of traditional network statistics.</li>
+<li><strong>Incompleteness</strong>: Missing data can significantly bias statistical measures and inferences.</li>
+<li><strong>Temporal dynamics</strong>: Capturing the evolving nature of knowledge graphs requires specialized temporal statistics.</li>
+<li><strong>Semantic context</strong>: Pure topological analysis may miss important semantic aspects of knowledge graphs.</li>
+</ol>
+<p>Addressing these challenges requires combining statistical approaches with domain knowledge and semantic understanding.</p>
+</section>
+<section id="machine-learning-approaches-to-statistical-analysis" class="level2" data-number="8.13">
+<h2 data-number="8.13" class="anchored" data-anchor-id="machine-learning-approaches-to-statistical-analysis"><span class="header-section-number">8.13</span> Machine learning approaches to statistical analysis</h2>
+<p>Machine learning techniques increasingly complement traditional statistical methods for knowledge graph analysis.</p>
+<div id="exm-ml-statistical-analysis" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.21 (Combining statistics and machine learning)</strong></span> Deep learning models can be used to:</p>
+<ul>
+<li>Learn latent representations (embeddings) that capture both structural and semantic aspects of knowledge graphs</li>
+<li>Predict network statistics for large graphs where direct computation is infeasible</li>
+<li>Detect complex patterns that might not be captured by predefined statistical measures</li>
+<li>Integrate heterogeneous information types in a unified framework</li>
+</ul>
+<p>For example, a graph neural network trained on a subset of a large biomedical knowledge graph could predict centrality measures for the entire graph, or identify communities that align with clinical disease classifications.</p>
+</div>
+<section id="graph-embeddings-for-statistical-analysis" class="level3" data-number="8.13.1">
+<h3 data-number="8.13.1" class="anchored" data-anchor-id="graph-embeddings-for-statistical-analysis"><span class="header-section-number">8.13.1</span> Graph embeddings for statistical analysis</h3>
+<p>Graph embedding techniques map nodes, edges, or subgraphs to low-dimensional vector spaces, enabling efficient statistical analysis.</p>
+<div id="def-graph-embedding" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.24 (Graph embedding)</strong></span> A <strong>graph embedding</strong> is a mapping <span class="math inline">f: V \rightarrow \mathbb{R}^d</span> that transforms nodes (or other graph elements) into low-dimensional vectors while preserving relevant structural and semantic information.</p>
+</div>
+<p>Embeddings can be used to:</p>
+<ol type="1">
+<li>Visualize network structure in 2D or 3D spaces</li>
+<li>Apply traditional statistical methods to vectorized representations</li>
+<li>Cluster nodes based on structural similarity</li>
+<li>Predict statistical properties of new or unobserved nodes</li>
+</ol>
+<div id="exm-embedding-statistical-analysis" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.22 (Using embeddings for knowledge graph statistics)</strong></span> After embedding a scientific knowledge graph using a method like TransE or node2vec:</p>
+<ul>
+<li>The distribution of embedding vectors might reveal inherent dimensionality of the knowledge domain</li>
+<li>Clusters in the embedding space might correspond to scientific disciplines or research areas</li>
+<li>Distances in the embedding space might correlate with semantic similarity or influence relationships</li>
+<li>Outliers in the embedding space might represent interdisciplinary entities that bridge multiple research areas</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="bayesian-approaches-to-network-analysis" class="level2" data-number="8.14">
+<h2 data-number="8.14" class="anchored" data-anchor-id="bayesian-approaches-to-network-analysis"><span class="header-section-number">8.14</span> Bayesian approaches to network analysis</h2>
+<p>Bayesian methods provide a principled framework for incorporating prior knowledge and quantifying uncertainty in network analysis.</p>
+<div id="def-bayesian-network-analysis" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.25 (Bayesian network analysis)</strong></span> <strong>Bayesian network analysis</strong> applies Bayesian statistical methods to network data, treating network structures and parameters as random variables with prior and posterior distributions.</p>
+</div>
+<p>Key Bayesian approaches include:</p>
+<ol type="1">
+<li><strong>Bayesian community detection</strong>: Inferring community structure with uncertainty quantification</li>
+<li><strong>Bayesian exponential random graph models (BERGMs)</strong>: Modeling network formation processes with prior knowledge</li>
+<li><strong>Nonparametric Bayesian models</strong>: Allowing the number of communities or other structural features to be learned from data</li>
+</ol>
+<div id="exm-bayesian-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.23 (Bayesian analysis of a citation knowledge graph)</strong></span> For a citation network of scientific papers:</p>
+<ul>
+<li>A Bayesian stochastic block model might infer the most likely community structure along with the probability of alternative structures</li>
+<li>A Bayesian approach to link prediction would provide not just predicted links but confidence intervals for these predictions</li>
+<li>Nonparametric Bayesian models could determine the optimal number of research communities without pre-specifying this parameter</li>
+<li>Incorporating prior knowledge about established research fields could improve community detection in emerging interdisciplinary areas</li>
+</ul>
+</div>
+<section id="uncertainty-quantification" class="level3" data-number="8.14.1">
+<h3 data-number="8.14.1" class="anchored" data-anchor-id="uncertainty-quantification"><span class="header-section-number">8.14.1</span> Uncertainty quantification</h3>
+<p>A key advantage of Bayesian approaches is explicit quantification of uncertainty in network statistics and inferences.</p>
+<div id="exm-uncertainty-quantification" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.24 (Uncertainty in centrality measures)</strong></span> Instead of a single centrality value for each node, Bayesian approaches provide a distribution of possible values:</p>
+<ul>
+<li>The mean represents the expected centrality</li>
+<li>The variance captures uncertainty due to network sampling, missing data, or model assumptions</li>
+<li>Credible intervals provide a range of plausible values</li>
+</ul>
+<p>This uncertainty quantification is particularly valuable for knowledge graphs with incomplete information or when making high-stakes decisions based on network analysis.</p>
+</div>
+</section>
+</section>
+<section id="information-theoretic-approaches" class="level2" data-number="8.15">
+<h2 data-number="8.15" class="anchored" data-anchor-id="information-theoretic-approaches"><span class="header-section-number">8.15</span> Information-theoretic approaches</h2>
+<p>Information theory provides powerful tools for analyzing the complexity and information content of knowledge graphs.</p>
+<div id="def-graph-entropy" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.26 (Graph entropy)</strong></span> <strong>Graph entropy</strong> measures the amount of information contained in a graph structure. For a graph with adjacency matrix <span class="math inline">A</span>, one definition of entropy is:</p>
+<p><span class="math display">H(G) = -\sum_{i,j} p_{ij} \log p_{ij}</span></p>
+<p>where <span class="math inline">p_{ij}</span> is the normalized edge weight between nodes <span class="math inline">i</span> and <span class="math inline">j</span>.</p>
+</div>
+<p>Information-theoretic measures can quantify:</p>
+<ol type="1">
+<li>The complexity of knowledge graph structure</li>
+<li>The information gain from adding new entities or relationships</li>
+<li>The mutual information between different layers or aspects of the knowledge graph</li>
+<li>The minimum description length of the graph, which relates to its compressibility</li>
+</ol>
+<div id="exm-information-theory-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.25 (Information theory in knowledge graph analysis)</strong></span> For a knowledge graph representing product-customer relationships:</p>
+<ul>
+<li>Entropy analysis might reveal which product categories contribute most to the structural complexity of the network</li>
+<li>Mutual information between purchase patterns and demographic layers could quantify which customer attributes best predict purchasing behavior</li>
+<li>Minimum description length principles could identify the optimal community structure that balances model complexity with explanatory power</li>
+<li>Information gain analysis could prioritize which missing relationships would most increase the information content of the knowledge graph if discovered</li>
+</ul>
+</div>
+</section>
+<section id="statistical-validation-and-reliability" class="level2" data-number="8.16">
+<h2 data-number="8.16" class="anchored" data-anchor-id="statistical-validation-and-reliability"><span class="header-section-number">8.16</span> Statistical validation and reliability</h2>
+<p>Ensuring the reliability of statistical analyses is crucial, particularly for knowledge graphs that inform decision-making processes.</p>
+<div id="def-statistical-validation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 8.27 (Statistical validation)</strong></span> <strong>Statistical validation</strong> in network analysis refers to the process of assessing the reliability, significance, and robustness of network statistics and inferences.</p>
+</div>
+<p>Key validation approaches include:</p>
+<ol type="1">
+<li><strong>Bootstrapping</strong>: Resampling edges or nodes to estimate the variability of network statistics</li>
+<li><strong>Permutation tests</strong>: Generating null distributions by randomly rewiring the network while preserving certain properties</li>
+<li><strong>Cross-validation</strong>: Holding out portions of the network to assess predictive performance</li>
+<li><strong>Sensitivity analysis</strong>: Examining how network statistics change when small perturbations are applied to the graph</li>
+</ol>
+<div id="exm-validation-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.26 (Validating community detection in a social knowledge graph)</strong></span> To validate communities detected in a social knowledge graph:</p>
+<ol type="1">
+<li><strong>Bootstrapping</strong>: Generate 1000 resampled networks by randomly removing 10% of edges and rerunning the community detection algorithm</li>
+<li><strong>Stability assessment</strong>: Calculate the adjusted Rand index between community assignments in the original and resampled networks</li>
+<li><strong>Significance testing</strong>: Compare the modularity of detected communities to a null distribution from configuration model random graphs</li>
+<li><strong>External validation</strong>: Correlate community assignments with known attributes (e.g., demographic information, interests) to assess real-world relevance</li>
+<li><strong>Robustness check</strong>: Test whether similar communities are detected with different algorithms (e.g., Louvain, InfoMap, spectral clustering)</li>
+</ol>
+<p>Results might show that certain communities are highly stable and statistically significant, while others are sensitive to small perturbations in the network, suggesting caution in interpretation.</p>
+</div>
+</section>
+<section id="practical-considerations-for-large-scale-knowledge-graphs" class="level2" data-number="8.17">
+<h2 data-number="8.17" class="anchored" data-anchor-id="practical-considerations-for-large-scale-knowledge-graphs"><span class="header-section-number">8.17</span> Practical considerations for large-scale knowledge graphs</h2>
+<p>Applying statistical analysis to large-scale knowledge graphs involves several practical considerations:</p>
+<section id="sampling-strategies" class="level3" data-number="8.17.1">
+<h3 data-number="8.17.1" class="anchored" data-anchor-id="sampling-strategies"><span class="header-section-number">8.17.1</span> Sampling strategies</h3>
+<p>For massive knowledge graphs, analyzing a representative sample can provide accurate statistical estimates more efficiently.</p>
+<div id="exm-sampling-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.27 (Sampling strategies for a web-scale knowledge graph)</strong></span> For a web-scale knowledge graph with billions of entities and relationships:</p>
+<ol type="1">
+<li><strong>Random node sampling</strong>: Select a random subset of entities and their immediate connections</li>
+<li><strong>Random edge sampling</strong>: Select a random subset of relationships</li>
+<li><strong>Forest fire sampling</strong>: Start from seed nodes and probabilistically “burn” to neighboring nodes</li>
+<li><strong>Metropolis-Hastings Random Walk (MHRW)</strong>: Use a Markov Chain Monte Carlo approach to sample nodes with probability proportional to a target distribution</li>
+</ol>
+<p>Evaluation might show that forest fire sampling preserves degree distribution and clustering properties better than random sampling, while MHRW provides the most accurate estimates of global network statistics.</p>
+</div>
+</section>
+<section id="distributed-and-parallel-computation" class="level3" data-number="8.17.2">
+<h3 data-number="8.17.2" class="anchored" data-anchor-id="distributed-and-parallel-computation"><span class="header-section-number">8.17.2</span> Distributed and parallel computation</h3>
+<p>Large-scale statistical analysis often requires distributed computing frameworks.</p>
+<div id="exm-distributed-computation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.28 (Computing centrality measures at scale)</strong></span> For a knowledge graph with hundreds of millions of nodes:</p>
+<ol type="1">
+<li><strong>Graph partitioning</strong>: Divide the graph into overlapping subgraphs</li>
+<li><strong>Parallel processing</strong>: Compute local statistics for each subgraph</li>
+<li><strong>Aggregation</strong>: Combine local statistics to estimate global measures</li>
+<li><strong>Approximation algorithms</strong>: Use approximate algorithms with theoretical error bounds</li>
+</ol>
+<p>Using a distributed framework like Apache Spark GraphX, approximate betweenness centrality computation that would take weeks on a single machine can be completed in hours on a cluster.</p>
+</div>
+</section>
+<section id="incremental-and-streaming-approaches" class="level3" data-number="8.17.3">
+<h3 data-number="8.17.3" class="anchored" data-anchor-id="incremental-and-streaming-approaches"><span class="header-section-number">8.17.3</span> Incremental and streaming approaches</h3>
+<p>For continuously evolving knowledge graphs, incremental approaches maintain up-to-date statistics without full recomputation.</p>
+<div id="exm-incremental-statistics" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.29 (Incremental clustering coefficient computation)</strong></span> For a dynamic knowledge graph that receives millions of updates daily:</p>
+<ol type="1">
+<li><strong>Delta maintenance</strong>: Update only the statistics affected by new or removed edges</li>
+<li><strong>Sliding window analysis</strong>: Compute statistics over recent time windows</li>
+<li><strong>Sketch-based approximation</strong>: Maintain probabilistic data structures that approximate statistics</li>
+<li><strong>Online algorithms</strong>: Update statistics as new data arrives without storing the entire history</li>
+</ol>
+<p>An evaluation might show that delta maintenance approaches provide exact results but scale linearly with update frequency, while sketch-based methods offer constant-time updates with a small approximation error.</p>
+</div>
+</section>
+</section>
+<section id="case-studies-in-knowledge-graph-statistics" class="level2" data-number="8.18">
+<h2 data-number="8.18" class="anchored" data-anchor-id="case-studies-in-knowledge-graph-statistics"><span class="header-section-number">8.18</span> Case studies in knowledge graph statistics</h2>
+<section id="case-study-scientific-collaboration-networks" class="level3" data-number="8.18.1">
+<h3 data-number="8.18.1" class="anchored" data-anchor-id="case-study-scientific-collaboration-networks"><span class="header-section-number">8.18.1</span> Case study: Scientific collaboration networks</h3>
+<div id="exm-science-network-case-study" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.30 (Statistical analysis of scientific collaboration)</strong></span> Analysis of a scientific collaboration knowledge graph connecting researchers, institutions, publications, and research topics revealed:</p>
+<ol type="1">
+<li><p><strong>Power law analysis</strong>: The distribution of publications per researcher followed a power law with exponent <span class="math inline">\gamma = 2.4</span>, indicating substantial inequality in scientific productivity.</p></li>
+<li><p><strong>Small-world properties</strong>: Despite containing over 5 million researchers, the network had an average path length of 5.9 and a clustering coefficient of 0.24, confirming the “small world” nature of scientific collaboration.</p></li>
+<li><p><strong>Community detection</strong>: Stochastic block modeling identified 87 distinct research communities, broadly aligned with traditional academic disciplines but with significant interdisciplinary bridges.</p></li>
+<li><p><strong>Temporal evolution</strong>: Time-series analysis of centrality measures identified emerging research areas before they became widely recognized, based on rapid increases in the betweenness centrality of certain topics.</p></li>
+<li><p><strong>Link prediction</strong>: A supervised machine learning approach incorporating network statistics achieved 78% accuracy in predicting future collaborations, significantly outperforming models based solely on topic similarity or institutional proximity.</p></li>
+</ol>
+</div>
+</section>
+<section id="case-study-biomedical-knowledge-integration" class="level3" data-number="8.18.2">
+<h3 data-number="8.18.2" class="anchored" data-anchor-id="case-study-biomedical-knowledge-integration"><span class="header-section-number">8.18.2</span> Case study: Biomedical knowledge integration</h3>
+<div id="exm-biomedical-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.31 (Statistical analysis for biomedical discovery)</strong></span> A comprehensive biomedical knowledge graph integrating data from genomics, proteomics, drug databases, and clinical records was analyzed to identify potential drug repurposing candidates:</p>
+<ol type="1">
+<li><p><strong>Metapath analysis</strong>: The metapath “Drug → Protein → Disease” was found to be highly predictive of therapeutic relationships, with a precision of 0.72 at detecting known treatments.</p></li>
+<li><p><strong>Motif analysis</strong>: Three-node motifs containing both positive and negative regulatory relationships were significantly overrepresented around successful drug targets compared to random expectation (Z-score = 8.3).</p></li>
+<li><p><strong>Centrality analysis</strong>: Proteins with high betweenness centrality but moderate degree centrality were found to be ideal drug targets, balancing system-wide influence with limited side effects.</p></li>
+<li><p><strong>Community detection</strong>: Bayesian community detection with domain-specific priors identified functional modules corresponding to biological pathways with 89% alignment to expert-curated pathway databases.</p></li>
+<li><p><strong>Anomaly detection</strong>: Statistical outliers in the graph structure successfully flagged data integration errors in approximately 0.5% of the knowledge graph, improving overall data quality.</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="integrating-domain-knowledge-with-statistical-analysis" class="level2" data-number="8.19">
+<h2 data-number="8.19" class="anchored" data-anchor-id="integrating-domain-knowledge-with-statistical-analysis"><span class="header-section-number">8.19</span> Integrating domain knowledge with statistical analysis</h2>
+<p>The most effective analyses of knowledge graphs combine statistical methods with domain-specific knowledge.</p>
+<div id="exm-domain-integration" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8.32 (Integrating domain knowledge in financial network analysis)</strong></span> For a financial knowledge graph representing corporate relationships:</p>
+<ol type="1">
+<li><p><strong>Semantically weighted edges</strong>: Edge weights incorporate domain knowledge about the strength of different relationship types (ownership &gt; board membership &gt; business partnership)</p></li>
+<li><p><strong>Domain-informed null models</strong>: Random graph models preserve industry-specific structural features rather than just degree distributions</p></li>
+<li><p><strong>Hybrid centrality measures</strong>: Custom centrality metrics combine structural importance with domain-specific importance factors like market capitalization or regulatory significance</p></li>
+<li><p><strong>Constrained community detection</strong>: Community detection algorithms incorporate known constraints like regulatory categories or geographic limitations</p></li>
+<li><p><strong>Interpretability enhancement</strong>: Statistical results are automatically annotated with domain-specific explanations to facilitate understanding by financial experts</p></li>
+</ol>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="8.20">
+<h2 data-number="8.20" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">8.20</span> Further reading</h2>
+<p>For readers interested in delving deeper into statistical analysis of knowledge graphs and network science, the following resources provide valuable extensions to the concepts covered in this chapter:</p>
+<ol type="1">
+<li><p>Barabási, A.-L. (2016). <em>Network Science</em>. Cambridge University Press.</p>
+<ul>
+<li>A comprehensive introduction to network science fundamentals, covering many of the statistical methods discussed in this chapter.</li>
+</ul></li>
+<li><p>Newman, M. (2018). <em>Networks</em> (2nd ed.). Oxford University Press.</p>
+<ul>
+<li>An excellent reference for mathematical and statistical methods in network analysis, including detailed derivations and algorithms.</li>
+</ul></li>
+<li><p>Getoor, L., &amp; Diehl, C. P. (2005). Link mining: A survey. <em>ACM SIGKDD Explorations Newsletter, 7</em>(2), 3-12.</p>
+<ul>
+<li>Provides an overview of statistical and machine learning methods for analyzing linked data, with relevance to knowledge graphs.</li>
+</ul></li>
+<li><p>Goldenberg, A., Zheng, A. X., Fienberg, S. E., &amp; Airoldi, E. M. (2010). A survey of statistical network models. <em>Foundations and Trends in Machine Learning, 2</em>(2), 129-233.</p>
+<ul>
+<li>A thorough survey of statistical models for networks, including random graph models and latent variable approaches.</li>
+</ul></li>
+<li><p>Dong, X., Gabrilovich, E., Heitz, G., Horn, W., Lao, N., Murphy, K., Strohmann, T., Sun, S., &amp; Zhang, W. (2014). Knowledge vault: A web-scale approach to probabilistic knowledge fusion. <em>Proceedings of the 20th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 601-610.</p>
+<ul>
+<li>Describes statistical approaches to knowledge graph construction and evaluation at web scale.</li>
+</ul></li>
+<li><p>Holme, P., &amp; Saramäki, J. (2012). Temporal networks. <em>Physics Reports, 519</em>(3), 97-125.</p>
+<ul>
+<li>Comprehensive review of methods for analyzing dynamic networks, applicable to temporal knowledge graphs.</li>
+</ul></li>
+<li><p>Kolaczyk, E. D., &amp; Csárdi, G. (2014). <em>Statistical Analysis of Network Data with R</em>. Springer.</p>
+<ul>
+<li>Practical guide to implementing network statistics, with code examples and case studies.</li>
+</ul></li>
+<li><p>Leskovec, J., Lang, K. J., Dasgupta, A., &amp; Mahoney, M. W. (2009). Community structure in large networks: Natural cluster sizes and the absence of large well-defined clusters. <em>Internet Mathematics, 6</em>(1), 29-123.</p>
+<ul>
+<li>Detailed study of community structure in large-scale networks with important implications for knowledge graph analysis.</li>
+</ul></li>
+<li><p>Milo, R., Shen-Orr, S., Itzkovitz, S., Kashtan, N., Chklovskii, D., &amp; Alon, U. (2002). Network motifs: Simple building blocks of complex networks. <em>Science, 298</em>(5594), 824-827.</p>
+<ul>
+<li>Foundational paper on network motifs, introducing concepts and analytical approaches.</li>
+</ul></li>
+<li><p>Kivelä, M., Arenas, A., Barthelemy, M., Gleeson, J. P., Moreno, Y., &amp; Porter, M. A. (2014). Multilayer networks. <em>Journal of Complex Networks, 2</em>(3), 203-271.</p>
+<ul>
+<li>Comprehensive review of methods for analyzing multilayer networks, with applications to heterogeneous knowledge graphs.</li>
+</ul></li>
+</ol>
+<p>These resources span from theoretical foundations to practical applications, providing readers with both breadth and depth in the field of statistical network analysis as applied to knowledge graphs.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation column-body">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/construction/kg-algorithms.html" class="pagination-link" aria-label="Graph Algorithms and Traversal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Graph Algorithms and Traversal</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../contents/construction/ml-on-kg.html" class="pagination-link" aria-label="Machine Learning on Knowledge Graphs">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

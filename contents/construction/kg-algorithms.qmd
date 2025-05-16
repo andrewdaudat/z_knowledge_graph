@@ -14,7 +14,9 @@ Before diving into specific algorithms, let's establish why graph algorithms are
 
 ## Graph algorithm
 
-A **graph algorithm** is a well-defined computational procedure that takes a graph $G = (V, E)$ as input (possibly with additional parameters) and produces an output related to the structure or properties of the graph. :::
+A **graph algorithm** is a well-defined computational procedure that takes a graph $G = (V, E)$ as input (possibly with additional parameters) and produces an output related to the structure or properties of the graph.
+
+:::
 
 ## Graph traversal fundamentals
 
@@ -24,7 +26,9 @@ Graph traversal refers to the process of visiting (examining or updating) each v
 
 ## Graph traversal
 
-A **graph traversal** is a systematic procedure for visiting every vertex and/or edge in a graph exactly once. :::
+A **graph traversal** is a systematic procedure for visiting every vertex and/or edge in a graph exactly once.
+
+:::
 
 When applied to knowledge graphs, traversal becomes a mechanism for knowledge exploration and discovery. For example, a traversal might help identify all entities connected to a particular concept within three relationship hops.
 
@@ -36,7 +40,9 @@ Breadth-first search (BFS) is one of the most fundamental graph traversal algori
 
 ## Breadth-first search
 
-**Breadth-first search (BFS)** is a traversal algorithm that explores a graph by visiting all neighbors of a vertex before proceeding to neighbors of neighbors. Formally, given a graph $G = (V, E)$ and a source vertex $s \in V$, BFS explores all vertices at distance $k$ from $s$ before exploring any vertex at distance $k+1$. :::
+**Breadth-first search (BFS)** is a traversal algorithm that explores a graph by visiting all neighbors of a vertex before proceeding to neighbors of neighbors. Formally, given a graph $G = (V, E)$ and a source vertex $s \in V$, BFS explores all vertices at distance $k$ from $s$ before exploring any vertex at distance $k+1$.
+
+:::
 
 ::: {#exm-bfs-algorithm}
 
@@ -68,7 +74,10 @@ In this algorithm:
 
 - WHITE: vertex has not been discovered
 - GRAY: vertex has been discovered but not all its neighbors have been explored
-- BLACK: vertex and all its neighbors have been explored :::
+
+- BLACK: vertex and all its neighbors have been explored
+
+:::
 
 ::: {#exm-bfs-knowledge-graph}
 
@@ -80,7 +89,10 @@ For example, starting with the entity "Resource Description Framework" (RDF):
 
 - Level 0: "Resource Description Framework"
 - Level 1: "Web Ontology Language", "RDF Schema", "Semantic Web"
-- Level 2: "Description Logic", "Knowledge Representation", "Linked Data" :::
+
+- Level 2: "Description Logic", "Knowledge Representation", "Linked Data"
+
+:::
 
 The time complexity of BFS is $O(|V| + |E|)$ where $|V|$ is the number of vertices and $|E|$ is the number of edges. In knowledge graphs, where the number of relationships can be very large, this linear complexity is crucial for practical applications.
 
@@ -92,7 +104,9 @@ While BFS explores breadth-wise, depth-first search (DFS) dives deeper into the 
 
 ## Depth-first search
 
-**Depth-first search (DFS)** is a traversal algorithm that explores as far as possible along each branch before backtracking. Given a graph $G = (V, E)$ and a source vertex, DFS first visits a neighbor of the source, then a neighbor of that neighbor, and so on, backtracking only when necessary. :::
+**Depth-first search (DFS)** is a traversal algorithm that explores as far as possible along each branch before backtracking. Given a graph $G = (V, E)$ and a source vertex, DFS first visits a neighbor of the source, then a neighbor of that neighbor, and so on, backtracking only when necessary.
+
+:::
 
 ::: {#exm-dfs-algorithm}
 
@@ -129,7 +143,9 @@ DFS has the same time complexity as BFS: $O(|V| + |E|)$. However, its space comp
 
 ## DFS in a knowledge graph
 
-In a knowledge graph representing organizational hierarchy, DFS can trace complete reporting chains from top management to individual contributors. Starting from the CEO node, DFS would first explore one complete branch of the organization (e.g., CEO → VP of Engineering → Engineering Director → Engineering Manager → Engineer) before exploring other branches. :::
+In a knowledge graph representing organizational hierarchy, DFS can trace complete reporting chains from top management to individual contributors. Starting from the CEO node, DFS would first explore one complete branch of the organization (e.g., CEO → VP of Engineering → Engineering Director → Engineering Manager → Engineer) before exploring other branches.
+
+:::
 
 One important application of DFS in knowledge graphs is cycle detection. In a directed knowledge graph, cycles might represent inconsistencies or circular dependencies in knowledge representation.
 
@@ -157,7 +173,9 @@ Finding shortest paths in knowledge graphs has numerous applications, from ident
 
 ## Shortest path
 
-A **shortest path** between vertices $u$ and $v$ in a weighted graph $G = (V, E, w)$ is a path $P = (v_0, v_1, ..., v_k)$ where $v_0 = u$, $v_k = v$, and the sum of edge weights $\sum_{i=1}^{k} w(v_{i-1}, v_i)$ is minimized. :::
+A **shortest path** between vertices $u$ and $v$ in a weighted graph $G = (V, E, w)$ is a path $P = (v_0, v_1, ..., v_k)$ where $v_0 = u$, $v_k = v$, and the sum of edge weights $\sum_{i=1}^{k} w(v_{i-1}, v_i)$ is minimized.
+
+:::
 
 In knowledge graphs, edge weights might represent relationship strength, confidence scores, or semantic distance between concepts.
 
@@ -169,7 +187,9 @@ Dijkstra's algorithm finds the shortest path from a single source vertex to all 
 
 ## Dijkstra's algorithm
 
-**Dijkstra's algorithm** finds the shortest paths from a source vertex $s$ to all other vertices in a weighted graph $G = (V, E, w)$ with non-negative edge weights. :::
+**Dijkstra's algorithm** finds the shortest paths from a source vertex $s$ to all other vertices in a weighted graph $G = (V, E, w)$ with non-negative edge weights.
+
+:::
 
 ::: {#exm-dijkstra-algorithm}
 
@@ -201,7 +221,10 @@ The time complexity of Dijkstra's algorithm using a binary heap is $O((|V| + |E|
 
 Consider a biomedical knowledge graph where nodes represent diseases, symptoms, and treatments. Edges might be weighted by the strength of evidence supporting the relationship.
 
-If we run Dijkstra's algorithm from a disease node (e.g., "Type 2 Diabetes"), we can find the most strongly supported pathways to potential treatments. Edge weights could be computed as $w(u,v) = -\log(evidence\_strength(u,v))$, so that stronger evidence results in smaller weights. :::
+If we run Dijkstra's algorithm from a disease node (e.g., "Type 2 Diabetes"), we can find the most strongly supported pathways to potential treatments. Edge weights could be computed as $w(u,v) = -\log(
+evidence\_strength(u,v))$, so that stronger evidence results in smaller weights.
+
+:::
 
 ### A\* algorithm
 
@@ -211,7 +234,9 @@ While Dijkstra's algorithm is powerful, it explores in all directions equally. T
 
 ## A\* algorithm
 
-The **A\* algorithm** is an informed search algorithm that finds the shortest path from a source vertex $s$ to a target vertex $t$ using a heuristic function $h$ that estimates the distance from any vertex to $t$. A\* maintains a priority queue of vertices based on the value $f(v) = g(v) + h(v)$, where $g(v)$ is the known distance from $s$ to $v$, and $h(v)$ is the estimated distance from $v$ to $t$. :::
+The **A\* algorithm** is an informed search algorithm that finds the shortest path from a source vertex $s$ to a target vertex $t$ using a heuristic function $h$ that estimates the distance from any vertex to $t$. A\* maintains a priority queue of vertices based on the value $f(v) = g(v) + h(v)$, where $g(v)$ is the known distance from $s$ to $v$, and $h(v)$ is the estimated distance from $v$ to $t$.
+
+:::
 
 The heuristic function $h(v)$ must be admissible, meaning it never overestimates the actual cost to reach the goal. If $h(v)$ is admissible, A\* is guaranteed to find the optimal path.
 
@@ -219,7 +244,9 @@ The heuristic function $h(v)$ must be admissible, meaning it never overestimates
 
 ## A\* in a knowledge graph
 
-In a geographical knowledge graph where entities represent locations and relationships represent connections (roads, flights, etc.), A\* can find the shortest route between two locations using straight-line distance as the heuristic. This focuses the search in the general direction of the destination, making it more efficient than Dijkstra's algorithm. :::
+In a geographical knowledge graph where entities represent locations and relationships represent connections (roads, flights, etc.), A\* can find the shortest route between two locations using straight-line distance as the heuristic. This focuses the search in the general direction of the destination, making it more efficient than Dijkstra's algorithm.
+
+:::
 
 ### Bellman-Ford algorithm
 
@@ -229,7 +256,9 @@ Unlike Dijkstra's algorithm, the Bellman-Ford algorithm can handle graphs with n
 
 ## Bellman-Ford algorithm
 
-The **Bellman-Ford algorithm** computes shortest paths from a single source vertex to all other vertices in a weighted graph that may contain negative weight edges. It can also detect negative weight cycles. :::
+The **Bellman-Ford algorithm** computes shortest paths from a single source vertex to all other vertices in a weighted graph that may contain negative weight edges. It can also detect negative weight cycles.
+
+:::
 
 ::: {#exm-bellman-ford-algorithm}
 
@@ -265,7 +294,9 @@ Minimum spanning trees (MSTs) identify the essential structure of a graph while 
 
 ## Minimum spanning tree
 
-A **minimum spanning tree (MST)** of a connected, undirected, weighted graph $G = (V, E, w)$ is a subgraph that is a tree and includes all vertices of $G$, with minimum possible total edge weight. :::
+A **minimum spanning tree (MST)** of a connected, undirected, weighted graph $G = (V, E, w)$ is a subgraph that is a tree and includes all vertices of $G$, with minimum possible total edge weight.
+
+:::
 
 In knowledge graphs, MSTs can help identify the core structure of relationships while minimizing redundancy or maximizing overall relationship strength.
 
@@ -298,7 +329,9 @@ The time complexity of Kruskal's algorithm is $O(|E| \log |E|)$, dominated by th
 
 ## Kruskal's algorithm in a knowledge graph
 
-Consider a knowledge graph representing scientific concepts, where edge weights represent the semantic distance between concepts. An MST would provide a minimal structure that connects all concepts while minimizing the total semantic distance. This could be useful for creating a simplified concept map for educational purposes. :::
+Consider a knowledge graph representing scientific concepts, where edge weights represent the semantic distance between concepts. An MST would provide a minimal structure that connects all concepts while minimizing the total semantic distance. This could be useful for creating a simplified concept map for educational purposes.
+
+:::
 
 ### Prim's algorithm
 
@@ -336,7 +369,9 @@ Topological sorting is particularly relevant for directed acyclic graphs (DAGs),
 
 ## Topological sort
 
-A **topological sort** of a directed acyclic graph $G = (V, E)$ is a linear ordering of all vertices such that for every directed edge $(u, v)$, vertex $u$ comes before vertex $v$ in the ordering. :::
+A **topological sort** of a directed acyclic graph $G = (V, E)$ is a linear ordering of all vertices such that for every directed edge $(u, v)$, vertex $u$ comes before vertex $v$ in the ordering.
+
+:::
 
 ::: {#exm-topological-sort-algorithm}
 
@@ -367,7 +402,9 @@ Input: Directed edges representing prerequisites
 - (Geometry → Calculus)
 - (Calculus → Differential Equations)
 
-Output Topological Sort: Arithmetic, Algebra, Geometry, Calculus, Differential Equations :::
+Output Topological Sort: Arithmetic, Algebra, Geometry, Calculus, Differential Equations
+
+:::
 
 ## Graph coloring and matching problems
 
@@ -377,19 +414,25 @@ Graph coloring assigns labels (colors) to vertices or edges subject to certain c
 
 ## Graph coloring
 
-A **graph coloring** is an assignment of labels (colors) to the vertices of a graph such that no adjacent vertices share the same color. The **chromatic number** of a graph is the minimum number of colors needed for a valid coloring. :::
+A **graph coloring** is an assignment of labels (colors) to the vertices of a graph such that no adjacent vertices share the same color. The **chromatic number** of a graph is the minimum number of colors needed for a valid coloring.
+
+:::
 
 ::: {#def-matching}
 
 ## Matching
 
-A **matching** in a graph is a set of edges without common vertices. A **maximum matching** is a matching with the largest possible number of edges. :::
+A **matching** in a graph is a set of edges without common vertices. A **maximum matching** is a matching with the largest possible number of edges.
+
+:::
 
 ::: {#exm-bipartite-matching-knowledge-graph}
 
 ## Bipartite matching in a knowledge graph
 
-Consider a knowledge graph representing job applicants and positions, where edges indicate suitability for a position. A maximum bipartite matching would identify the optimal assignment of applicants to positions, maximizing the number of suitable placements. :::
+Consider a knowledge graph representing job applicants and positions, where edges indicate suitability for a position. A maximum bipartite matching would identify the optimal assignment of applicants to positions, maximizing the number of suitable placements.
+
+:::
 
 ## Algorithm complexity analysis for graph operations
 
@@ -399,7 +442,9 @@ Understanding the computational complexity of graph algorithms is crucial for wo
 
 ## Computational complexity
 
-The **computational complexity** of an algorithm is a measure of the amount of computational resources (typically time and space) required by the algorithm as a function of the size of the input. :::
+The **computational complexity** of an algorithm is a measure of the amount of computational resources ( typically time and space) required by the algorithm as a function of the size of the input.
+
+:::
 
 ### Time complexity
 
@@ -438,7 +483,9 @@ Consider a knowledge graph with 1 billion nodes and 10 billion edges:
 
 - A naive adjacency matrix representation would require approximately 10^18 bits or 125,000 terabytes of storage, which is impractical.
 - Using an adjacency list representation reduces the space requirement to approximately 10 billion edge entries.
-- For such a graph, even linear-time algorithms like BFS would be challenging to run on a single machine, necessitating distributed processing techniques. :::
+- For such a graph, even linear-time algorithms like BFS would be challenging to run on a single machine, necessitating distributed processing techniques.
+
+:::
 
 ## Applications in knowledge graph analysis
 
@@ -457,7 +504,10 @@ In a biomedical knowledge graph:
 - If drug A treats disease X
 - And disease X has symptom Y
 - And disease Z also has symptom Y
-- Path-based inference might suggest investigating drug A for disease Z :::
+
+- Path-based inference might suggest investigating drug A for disease Z
+
+:::
 
 ### Community detection
 
@@ -467,7 +517,9 @@ Community detection algorithms identify clusters of densely connected entities i
 
 ## Community detection
 
-**Community detection** is the process of identifying groups of nodes in a graph that are more densely connected internally than with the rest of the graph. :::
+**Community detection** is the process of identifying groups of nodes in a graph that are more densely connected internally than with the rest of the graph.
+
+:::
 
 Algorithms for community detection include:
 
@@ -484,7 +536,9 @@ Centrality measures help identify the most important entities in a knowledge gra
 
 ## Centrality measures
 
-**Centrality measures** quantify the importance of vertices in a graph based on their position in the network structure. :::
+**Centrality measures** quantify the importance of vertices in a graph based on their position in the network structure.
+
+:::
 
 Common centrality measures include:
 
@@ -502,7 +556,10 @@ In a knowledge graph of scientific citations:
 - Papers with high degree centrality are frequently cited (or cite many others)
 - Papers with high betweenness centrality connect different research areas
 - Papers with high closeness centrality have rapid influence across the network
-- Papers with high eigenvector centrality are cited by other important papers :::
+
+- Papers with high eigenvector centrality are cited by other important papers
+
+:::
 
 ## Recursive and iterative approaches
 

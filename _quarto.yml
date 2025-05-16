@@ -35,14 +35,17 @@ book:
         - contents/construction/kg-construction.qmd
         - contents/construction/kg-algorithms.qmd
         - contents/construction/stat-analysis-of-kg.qmd
+        - contents/construction/ml-on-kg.qmd
 
 format:
   html:
+    page-layout: full
     # TOC
     toc: true
     toc-location: right
     smooth-scroll: true
     toc-title: On this page
+    toc-expand: false
     # toc-expand: 1
     toc-depth: 3
     # Numbering

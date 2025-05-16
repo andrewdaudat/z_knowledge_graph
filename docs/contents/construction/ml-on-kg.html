@@ -1,0 +1,2754 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; Machine Learning on Knowledge Graphs – Knowledge Graphs: Foundations, Applications, and Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../contents/construction/stat-analysis-of-kg.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-bdec3157979715d7154bb60f5aa24e58.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4104e206323135730aa08c3113d84ebc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/construction/kg-construction.html">Construction and processing</a></li><li class="breadcrumb-item"><a href="../../contents/construction/ml-on-kg.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Knowledge Graphs: Foundations, Applications, and Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/outline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Outline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to knowledge graphs and network science</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/math-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematical fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/graph-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Theory Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/foundation/knowledge-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Knowledge Representation and Ontologies</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Construction and processing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-construction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Knowledge Graph Construction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/kg-algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Graph Algorithms and Traversal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/stat-analysis-of-kg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../contents/construction/ml-on-kg.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-machine-learning-for-knowledge-graphs" id="toc-introduction-to-machine-learning-for-knowledge-graphs" class="nav-link active" data-scroll-target="#introduction-to-machine-learning-for-knowledge-graphs"><span class="header-section-number">9.1</span> Introduction to machine learning for knowledge graphs</a></li>
+  <li><a href="#representation-learning-fundamentals" id="toc-representation-learning-fundamentals" class="nav-link" data-scroll-target="#representation-learning-fundamentals"><span class="header-section-number">9.2</span> Representation learning fundamentals</a>
+  <ul class="collapse">
+  <li><a href="#objective-functions-for-graph-representation-learning" id="toc-objective-functions-for-graph-representation-learning" class="nav-link" data-scroll-target="#objective-functions-for-graph-representation-learning"><span class="header-section-number">9.2.1</span> Objective functions for graph representation learning</a></li>
+  <li><a href="#evaluation-of-learned-representations" id="toc-evaluation-of-learned-representations" class="nav-link" data-scroll-target="#evaluation-of-learned-representations"><span class="header-section-number">9.2.2</span> Evaluation of learned representations</a></li>
+  </ul></li>
+  <li><a href="#node-and-edge-embeddings" id="toc-node-and-edge-embeddings" class="nav-link" data-scroll-target="#node-and-edge-embeddings"><span class="header-section-number">9.3</span> Node and edge embeddings</a>
+  <ul class="collapse">
+  <li><a href="#traditional-node-embedding-approaches" id="toc-traditional-node-embedding-approaches" class="nav-link" data-scroll-target="#traditional-node-embedding-approaches"><span class="header-section-number">9.3.1</span> Traditional node embedding approaches</a></li>
+  <li><a href="#knowledge-graph-embedding-models" id="toc-knowledge-graph-embedding-models" class="nav-link" data-scroll-target="#knowledge-graph-embedding-models"><span class="header-section-number">9.3.2</span> Knowledge graph embedding models</a></li>
+  <li><a href="#edge-embeddings-and-relationship-prediction" id="toc-edge-embeddings-and-relationship-prediction" class="nav-link" data-scroll-target="#edge-embeddings-and-relationship-prediction"><span class="header-section-number">9.3.3</span> Edge embeddings and relationship prediction</a></li>
+  </ul></li>
+  <li><a href="#graph-neural-networks" id="toc-graph-neural-networks" class="nav-link" data-scroll-target="#graph-neural-networks"><span class="header-section-number">9.4</span> Graph neural networks</a>
+  <ul class="collapse">
+  <li><a href="#message-passing-framework" id="toc-message-passing-framework" class="nav-link" data-scroll-target="#message-passing-framework"><span class="header-section-number">9.4.1</span> Message passing framework</a></li>
+  <li><a href="#popular-gnn-architectures" id="toc-popular-gnn-architectures" class="nav-link" data-scroll-target="#popular-gnn-architectures"><span class="header-section-number">9.4.2</span> Popular GNN architectures</a></li>
+  <li><a href="#applying-gnns-to-knowledge-graphs" id="toc-applying-gnns-to-knowledge-graphs" class="nav-link" data-scroll-target="#applying-gnns-to-knowledge-graphs"><span class="header-section-number">9.4.3</span> Applying GNNs to knowledge graphs</a></li>
+  <li><a href="#gnn-architectures-for-knowledge-graph-completion" id="toc-gnn-architectures-for-knowledge-graph-completion" class="nav-link" data-scroll-target="#gnn-architectures-for-knowledge-graph-completion"><span class="header-section-number">9.4.4</span> GNN architectures for knowledge graph completion</a></li>
+  </ul></li>
+  <li><a href="#knowledge-graph-embeddings" id="toc-knowledge-graph-embeddings" class="nav-link" data-scroll-target="#knowledge-graph-embeddings"><span class="header-section-number">9.5</span> Knowledge graph embeddings</a>
+  <ul class="collapse">
+  <li><a href="#theoretical-foundations" id="toc-theoretical-foundations" class="nav-link" data-scroll-target="#theoretical-foundations"><span class="header-section-number">9.5.1</span> Theoretical foundations</a></li>
+  <li><a href="#advanced-kge-models" id="toc-advanced-kge-models" class="nav-link" data-scroll-target="#advanced-kge-models"><span class="header-section-number">9.5.2</span> Advanced KGE models</a></li>
+  <li><a href="#training-strategies-for-kge-models" id="toc-training-strategies-for-kge-models" class="nav-link" data-scroll-target="#training-strategies-for-kge-models"><span class="header-section-number">9.5.3</span> Training strategies for KGE models</a></li>
+  <li><a href="#implementation-considerations" id="toc-implementation-considerations" class="nav-link" data-scroll-target="#implementation-considerations"><span class="header-section-number">9.5.4</span> Implementation considerations</a></li>
+  </ul></li>
+  <li><a href="#knowledge-graph-embeddings-for-link-prediction" id="toc-knowledge-graph-embeddings-for-link-prediction" class="nav-link" data-scroll-target="#knowledge-graph-embeddings-for-link-prediction"><span class="header-section-number">9.6</span> Knowledge graph embeddings for link prediction</a>
+  <ul class="collapse">
+  <li><a href="#evaluation-protocols" id="toc-evaluation-protocols" class="nav-link" data-scroll-target="#evaluation-protocols"><span class="header-section-number">9.6.1</span> Evaluation protocols</a></li>
+  <li><a href="#incorporating-additional-information" id="toc-incorporating-additional-information" class="nav-link" data-scroll-target="#incorporating-additional-information"><span class="header-section-number">9.6.2</span> Incorporating additional information</a></li>
+  </ul></li>
+  <li><a href="#graph-neural-networks-for-node-classification" id="toc-graph-neural-networks-for-node-classification" class="nav-link" data-scroll-target="#graph-neural-networks-for-node-classification"><span class="header-section-number">9.7</span> Graph neural networks for node classification</a>
+  <ul class="collapse">
+  <li><a href="#semi-supervised-learning-framework" id="toc-semi-supervised-learning-framework" class="nav-link" data-scroll-target="#semi-supervised-learning-framework"><span class="header-section-number">9.7.1</span> Semi-supervised learning framework</a></li>
+  <li><a href="#handling-heterogeneity-in-knowledge-graphs" id="toc-handling-heterogeneity-in-knowledge-graphs" class="nav-link" data-scroll-target="#handling-heterogeneity-in-knowledge-graphs"><span class="header-section-number">9.7.2</span> Handling heterogeneity in knowledge graphs</a></li>
+  <li><a href="#inductive-and-transductive-learning" id="toc-inductive-and-transductive-learning" class="nav-link" data-scroll-target="#inductive-and-transductive-learning"><span class="header-section-number">9.7.3</span> Inductive and transductive learning</a></li>
+  </ul></li>
+  <li><a href="#entity-resolution-and-disambiguation" id="toc-entity-resolution-and-disambiguation" class="nav-link" data-scroll-target="#entity-resolution-and-disambiguation"><span class="header-section-number">9.8</span> Entity resolution and disambiguation</a>
+  <ul class="collapse">
+  <li><a href="#graph-based-approaches-to-entity-resolution" id="toc-graph-based-approaches-to-entity-resolution" class="nav-link" data-scroll-target="#graph-based-approaches-to-entity-resolution"><span class="header-section-number">9.8.1</span> Graph-based approaches to entity resolution</a></li>
+  <li><a href="#deep-learning-for-entity-resolution" id="toc-deep-learning-for-entity-resolution" class="nav-link" data-scroll-target="#deep-learning-for-entity-resolution"><span class="header-section-number">9.8.2</span> Deep learning for entity resolution</a></li>
+  <li><a href="#entity-disambiguation-in-knowledge-graphs" id="toc-entity-disambiguation-in-knowledge-graphs" class="nav-link" data-scroll-target="#entity-disambiguation-in-knowledge-graphs"><span class="header-section-number">9.8.3</span> Entity disambiguation in knowledge graphs</a></li>
+  </ul></li>
+  <li><a href="#semi-supervised-learning-on-graphs" id="toc-semi-supervised-learning-on-graphs" class="nav-link" data-scroll-target="#semi-supervised-learning-on-graphs"><span class="header-section-number">9.9</span> Semi-supervised learning on graphs</a>
+  <ul class="collapse">
+  <li><a href="#label-propagation-and-random-walk-methods" id="toc-label-propagation-and-random-walk-methods" class="nav-link" data-scroll-target="#label-propagation-and-random-walk-methods"><span class="header-section-number">9.9.1</span> Label propagation and random walk methods</a></li>
+  <li><a href="#graph-regularization-methods" id="toc-graph-regularization-methods" class="nav-link" data-scroll-target="#graph-regularization-methods"><span class="header-section-number">9.9.2</span> Graph regularization methods</a></li>
+  </ul></li>
+  <li><a href="#inductive-and-transductive-learning-1" id="toc-inductive-and-transductive-learning-1" class="nav-link" data-scroll-target="#inductive-and-transductive-learning-1"><span class="header-section-number">9.10</span> Inductive and transductive learning</a>
+  <ul class="collapse">
+  <li><a href="#transductive-methods" id="toc-transductive-methods" class="nav-link" data-scroll-target="#transductive-methods"><span class="header-section-number">9.10.1</span> Transductive methods</a></li>
+  <li><a href="#inductive-methods" id="toc-inductive-methods" class="nav-link" data-scroll-target="#inductive-methods"><span class="header-section-number">9.10.2</span> Inductive methods</a></li>
+  <li><a href="#hybrid-approaches" id="toc-hybrid-approaches" class="nav-link" data-scroll-target="#hybrid-approaches"><span class="header-section-number">9.10.3</span> Hybrid approaches</a></li>
+  </ul></li>
+  <li><a href="#reasoning-and-inference-with-machine-learning" id="toc-reasoning-and-inference-with-machine-learning" class="nav-link" data-scroll-target="#reasoning-and-inference-with-machine-learning"><span class="header-section-number">9.11</span> Reasoning and inference with machine learning</a>
+  <ul class="collapse">
+  <li><a href="#path-based-reasoning" id="toc-path-based-reasoning" class="nav-link" data-scroll-target="#path-based-reasoning"><span class="header-section-number">9.11.1</span> Path-based reasoning</a></li>
+  <li><a href="#neural-multi-hop-reasoning" id="toc-neural-multi-hop-reasoning" class="nav-link" data-scroll-target="#neural-multi-hop-reasoning"><span class="header-section-number">9.11.2</span> Neural multi-hop reasoning</a></li>
+  <li><a href="#knowledge-graph-neural-networks-for-reasoning" id="toc-knowledge-graph-neural-networks-for-reasoning" class="nav-link" data-scroll-target="#knowledge-graph-neural-networks-for-reasoning"><span class="header-section-number">9.11.3</span> Knowledge graph neural networks for reasoning</a></li>
+  </ul></li>
+  <li><a href="#applications-of-machine-learning-on-knowledge-graphs" id="toc-applications-of-machine-learning-on-knowledge-graphs" class="nav-link" data-scroll-target="#applications-of-machine-learning-on-knowledge-graphs"><span class="header-section-number">9.12</span> Applications of machine learning on knowledge graphs</a>
+  <ul class="collapse">
+  <li><a href="#recommendation-systems" id="toc-recommendation-systems" class="nav-link" data-scroll-target="#recommendation-systems"><span class="header-section-number">9.12.1</span> Recommendation systems</a></li>
+  <li><a href="#question-answering-over-knowledge-graphs" id="toc-question-answering-over-knowledge-graphs" class="nav-link" data-scroll-target="#question-answering-over-knowledge-graphs"><span class="header-section-number">9.12.2</span> Question answering over knowledge graphs</a></li>
+  <li><a href="#drug-discovery-and-repurposing" id="toc-drug-discovery-and-repurposing" class="nav-link" data-scroll-target="#drug-discovery-and-repurposing"><span class="header-section-number">9.12.3</span> Drug discovery and repurposing</a></li>
+  <li><a href="#fraud-detection-and-risk-assessment" id="toc-fraud-detection-and-risk-assessment" class="nav-link" data-scroll-target="#fraud-detection-and-risk-assessment"><span class="header-section-number">9.12.4</span> Fraud detection and risk assessment</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">9.13</span> Conclusion</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">9.14</span> Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../contents/construction/kg-construction.html">Construction and processing</a></li><li class="breadcrumb-item"><a href="../../contents/construction/ml-on-kg.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Machine Learning on Knowledge Graphs</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-machine-learning-for-knowledge-graphs" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introduction-to-machine-learning-for-knowledge-graphs"><span class="header-section-number">9.1</span> Introduction to machine learning for knowledge graphs</h2>
+<p>Knowledge graphs have emerged as powerful representations of interconnected information, capturing complex relationships between entities across diverse domains. While previous chapters explored graph algorithms and statistical methods for analyzing knowledge graphs, this chapter introduces machine learning techniques specifically designed for knowledge graph data.</p>
+<p>Machine learning offers transformative capabilities for knowledge graphs, enabling the extraction of patterns, prediction of missing information, and identification of insights that may not be immediately apparent through traditional analysis. The intersection of machine learning and knowledge graphs represents a particularly fruitful research area, as it combines the expressive power of graph representations with the predictive capabilities of modern machine learning.</p>
+<div id="def-machine-learning-on-knowledge-graphs" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.1 (Machine learning on knowledge graphs)</strong></span> <strong>Machine learning on knowledge graphs</strong> refers to the application of machine learning algorithms and models to extract patterns, make predictions, or derive insights from knowledge graph data. This typically involves learning from the graph structure, node attributes, edge types, and other semantic information encoded in the knowledge graph.</p>
+</div>
+<p>The goals of applying machine learning to knowledge graphs typically include:</p>
+<ol type="1">
+<li><strong>Prediction</strong>: Forecasting missing links, node attributes, or future graph evolution</li>
+<li><strong>Classification</strong>: Assigning labels to nodes, edges, or subgraphs</li>
+<li><strong>Clustering</strong>: Identifying groups of similar entities or relationships</li>
+<li><strong>Representation learning</strong>: Transforming graph elements into vector representations that preserve structural and semantic information</li>
+<li><strong>Anomaly detection</strong>: Identifying unusual patterns or outliers in the graph</li>
+<li><strong>Knowledge discovery</strong>: Uncovering new, non-obvious insights from the graph structure</li>
+</ol>
+<p>This chapter will explore the theoretical foundations, methodologies, and applications of machine learning on knowledge graphs, with a focus on techniques that accommodate the unique characteristics of graph-structured data and the semantic richness of knowledge representations.</p>
+</section>
+<section id="representation-learning-fundamentals" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="representation-learning-fundamentals"><span class="header-section-number">9.2</span> Representation learning fundamentals</h2>
+<p>A core challenge in applying machine learning to knowledge graphs is transforming graph-structured data into formats amenable to machine learning algorithms. Representation learning addresses this challenge by learning vector embeddings that capture the essential properties of graph elements.</p>
+<div id="def-representation-learning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.2 (Representation learning)</strong></span> <strong>Representation learning</strong> (or feature learning) is a set of techniques that automatically discover useful representations of data for tasks like classification or prediction, without requiring manual feature engineering. In the context of knowledge graphs, representation learning typically involves mapping nodes, edges, or subgraphs to low-dimensional vector spaces.</p>
+</div>
+<section id="objective-functions-for-graph-representation-learning" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="objective-functions-for-graph-representation-learning"><span class="header-section-number">9.2.1</span> Objective functions for graph representation learning</h3>
+<p>Representation learning models for knowledge graphs are typically trained using objective functions that capture various aspects of graph structure and semantics.</p>
+<p>Common principles for designing these objective functions include:</p>
+<ol type="1">
+<li><strong>Proximity preservation</strong>: Nodes that are connected or structurally similar in the graph should have similar embeddings.</li>
+<li><strong>Structural role preservation</strong>: Nodes with similar local network structures should have similar embeddings, even if they are distant in the graph.</li>
+<li><strong>Community awareness</strong>: Embeddings should capture community structure in the graph.</li>
+<li><strong>Attribute incorporation</strong>: Node and edge attributes should influence the learned representations.</li>
+<li><strong>Semantic consistency</strong>: The semantic meaning of different relationship types should be preserved in the embedding space.</li>
+</ol>
+<div id="exm-representation-objective" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.1 (Objective function design)</strong></span> Consider a simple objective function for learning node embeddings based on network proximity:</p>
+<p><span class="math display">\mathcal{L} = \sum_{(u,v) \in E} \| \mathbf{z}_u - \mathbf{z}_v \|_2^2</span></p>
+<p>This objective encourages connected nodes to have similar embeddings by minimizing the Euclidean distance between them. However, this simple approach doesn’t distinguish between different types of relationships, which is crucial for knowledge graphs.</p>
+<p>A more suitable objective for knowledge graphs might incorporate relationship types:</p>
+<p><span class="math display">\mathcal{L} = \sum_{(u,r,v) \in E} \| \mathbf{z}_u + \mathbf{z}_r - \mathbf{z}_v \|_2^2</span></p>
+<p>where <span class="math inline">\mathbf{z}_r</span> represents the embedding for relationship type <span class="math inline">r</span>, and the objective encourages that adding the relationship vector to the head entity should approximately yield the tail entity.</p>
+</div>
+</section>
+<section id="evaluation-of-learned-representations" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="evaluation-of-learned-representations"><span class="header-section-number">9.2.2</span> Evaluation of learned representations</h3>
+<p>The quality of learned representations can be evaluated based on their performance on downstream tasks:</p>
+<ol type="1">
+<li><strong>Link prediction</strong>: How well do the embeddings predict missing or future links?</li>
+<li><strong>Node classification</strong>: How accurately can node labels be predicted from embeddings?</li>
+<li><strong>Entity resolution</strong>: Can embeddings identify when different nodes represent the same real-world entity?</li>
+<li><strong>Clustering</strong>: Do embeddings produce meaningful clusters when grouped?</li>
+<li><strong>Visualization</strong>: Do two-dimensional projections of the embeddings reveal interpretable patterns?</li>
+</ol>
+<div id="exm-embedding-evaluation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.2 (Evaluating knowledge graph embeddings)</strong></span> To evaluate embeddings of a biomedical knowledge graph:</p>
+<ol type="1">
+<li><strong>Task selection</strong>: Define a link prediction task to predict drug-disease treatments</li>
+<li><strong>Dataset preparation</strong>: Randomly remove 20% of “treats” relationships to create a test set</li>
+<li><strong>Evaluation metrics</strong>: Measure performance using:
+<ul>
+<li>Mean Reciprocal Rank (MRR): The average of the reciprocal ranks of the correct entities</li>
+<li>Hits@k: The proportion of test cases where the correct entity is among the top k predictions</li>
+<li>Area Under the ROC Curve (AUC): Measures the model’s ability to discriminate between positive and negative examples</li>
+</ul></li>
+</ol>
+<p>Comparing different embedding methods might yield results like:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>MRR</th>
+<th>Hits@10</th>
+<th>AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TransE</td>
+<td>0.45</td>
+<td>0.67</td>
+<td>0.83</td>
+</tr>
+<tr class="even">
+<td>ComplEx</td>
+<td>0.51</td>
+<td>0.72</td>
+<td>0.87</td>
+</tr>
+<tr class="odd">
+<td>RotatE</td>
+<td>0.53</td>
+<td>0.75</td>
+<td>0.89</td>
+</tr>
+</tbody>
+</table>
+<p>These results suggest that RotatE captures the semantic relationships most effectively for this particular task.</p>
+</div>
+</section>
+</section>
+<section id="node-and-edge-embeddings" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="node-and-edge-embeddings"><span class="header-section-number">9.3</span> Node and edge embeddings</h2>
+<section id="traditional-node-embedding-approaches" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="traditional-node-embedding-approaches"><span class="header-section-number">9.3.1</span> Traditional node embedding approaches</h3>
+<p>Early approaches to node embedding focused on preserving various notions of node similarity in the embedding space.</p>
+<div id="def-node-embedding" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.3 (Node embedding)</strong></span> A <strong>node embedding</strong> is a function <span class="math inline">f: V \rightarrow \mathbb{R}^d</span> that maps each node <span class="math inline">v \in V</span> in a graph to a low-dimensional vector while preserving relevant structural and semantic information about the node.</p>
+</div>
+<p>Notable node embedding methods include:</p>
+<ol type="1">
+<li><strong>DeepWalk</strong>: Learns embeddings by treating random walks on the graph as sentences and applying word embedding techniques.</li>
+<li><strong>node2vec</strong>: Extends DeepWalk with a biased random walk strategy that balances between exploration of global structure and preservation of local neighborhoods.</li>
+<li><strong>LINE</strong>: Preserves both first-order proximity (direct connections) and second-order proximity (shared neighborhoods).</li>
+<li><strong>SDNE</strong>: Uses autoencoders to capture non-linear relationships between nodes.</li>
+</ol>
+<div id="exm-node2vec-implementation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.3 (node2vec algorithm)</strong></span> The node2vec procedure:</p>
+<ol type="1">
+<li>For each node <span class="math inline">u</span> in the graph: a. Generate <span class="math inline">r</span> random walks of length <span class="math inline">l</span> starting from <span class="math inline">u</span> b. The walks are biased by parameters <span class="math inline">p</span> and <span class="math inline">q</span> that control the exploration-exploitation tradeoff
+<ul>
+<li><span class="math inline">p</span> controls the likelihood of returning to the previous node</li>
+<li><span class="math inline">q</span> controls the likelihood of exploring outward vs.&nbsp;staying local</li>
+</ul></li>
+<li>Treat the walks as sentences and apply the Skip-gram model to learn embeddings: a. For each node in a walk, predict its context nodes within a window b. Optimize the objective: <span class="math display">\max_\Theta \sum_{u \in V} \sum_{v \in N(u)} \log P(v|u; \Theta)</span> where <span class="math inline">N(u)</span> is the network neighborhood of node <span class="math inline">u</span> generated through the random walks</li>
+</ol>
+<p>The resulting embeddings place nodes with similar network contexts nearby in the vector space.</p>
+</div>
+<p>While these methods were developed for homogeneous graphs, they can be adapted to knowledge graphs by considering different relationship types as separate graphs or by weighting relationships differently in the random walk process.</p>
+</section>
+<section id="knowledge-graph-embedding-models" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="knowledge-graph-embedding-models"><span class="header-section-number">9.3.2</span> Knowledge graph embedding models</h3>
+<p>Knowledge graph embedding (KGE) models specifically account for the heterogeneous and multi-relational nature of knowledge graphs. They typically represent entities (nodes) and relationships (edge types) as vectors, matrices, or higher-order tensors in a low-dimensional space.</p>
+<div id="def-knowledge-graph-embedding" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.4 (Knowledge graph embedding)</strong></span> A <strong>knowledge graph embedding</strong> is a representation of entities and relationships in a knowledge graph in a low-dimensional vector space, such that the semantic structure of the graph is preserved. Formally, it consists of an entity embedding function <span class="math inline">f_e: E \rightarrow \mathbb{R}^d</span> and a relation embedding function <span class="math inline">f_r: R \rightarrow \mathbb{R}^d</span> (or to a more complex mathematical structure).</p>
+</div>
+<section id="translational-distance-models" class="level4">
+<h4 class="anchored" data-anchor-id="translational-distance-models">Translational distance models</h4>
+<p>Translational distance models represent relationships as translations in the vector space.</p>
+<div id="def-transe-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.5 (TransE model)</strong></span> <strong>TransE</strong> represents each entity <span class="math inline">e</span> as a vector <span class="math inline">\mathbf{e} \in \mathbb{R}^d</span> and each relationship <span class="math inline">r</span> as a translation vector <span class="math inline">\mathbf{r} \in \mathbb{R}^d</span>. For a true triplet <span class="math inline">(h, r, t)</span>, the model encourages <span class="math inline">\mathbf{h} + \mathbf{r} \approx \mathbf{t}</span>.</p>
+<p>The score function is defined as:</p>
+<p><span class="math display">f_r(h, t) = -\|\mathbf{h} + \mathbf{r} - \mathbf{t}\|_{1/2}</span></p>
+<p>A higher score indicates a more plausible triplet.</p>
+</div>
+<p>While simple and efficient, TransE has limitations in handling one-to-many, many-to-one, and many-to-many relationships. Extensions like TransH, TransR, and TransD address these limitations by projecting entities into relationship-specific spaces.</p>
+<div id="exm-transe-limitation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.4 (TransE limitation with one-to-many relationships)</strong></span> Consider a knowledge graph with triplets:</p>
+<ul>
+<li>(Paris, isCapitalOf, France)</li>
+<li>(Rome, isCapitalOf, Italy)</li>
+<li>(Berlin, isCapitalOf, Germany)</li>
+</ul>
+<p>TransE would embed these such that: <span class="math inline">\mathbf{Paris} + \mathbf{isCapitalOf} \approx \mathbf{France}</span> <span class="math inline">\mathbf{Rome} + \mathbf{isCapitalOf} \approx \mathbf{Italy}</span> <span class="math inline">\mathbf{Berlin} + \mathbf{isCapitalOf} \approx \mathbf{Germany}</span></p>
+<p>But this creates a conflicting constraint: the cities must be embedded such that adding the same <span class="math inline">\mathbf{isCapitalOf}</span> vector leads to their respective countries, implying that the difference between any two city vectors should equal the difference between their country vectors:</p>
+<p><span class="math inline">\mathbf{Paris} - \mathbf{Rome} \approx \mathbf{France} - \mathbf{Italy}</span></p>
+<p>This constraint becomes problematic with one-to-many relationships. For instance, if we add:</p>
+<ul>
+<li>(Paris, hasAttraction, EiffelTower)</li>
+<li>(Paris, hasAttraction, Louvre)</li>
+</ul>
+<p>TransE would require: <span class="math inline">\mathbf{Paris} + \mathbf{hasAttraction} \approx \mathbf{EiffelTower}</span> <span class="math inline">\mathbf{Paris} + \mathbf{hasAttraction} \approx \mathbf{Louvre}</span></p>
+<p>This implies <span class="math inline">\mathbf{EiffelTower} \approx \mathbf{Louvre}</span>, which is clearly undesirable.</p>
+</div>
+</section>
+<section id="semantic-matching-models" class="level4">
+<h4 class="anchored" data-anchor-id="semantic-matching-models">Semantic matching models</h4>
+<p>Semantic matching models measure plausibility of knowledge graph triplets through similarity-based matching functions.</p>
+<div id="def-distmult-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.6 (DistMult model)</strong></span> <strong>DistMult</strong> represents entities and relationships as vectors in <span class="math inline">\mathbb{R}^d</span>. The score function is a bilinear form:</p>
+<p><span class="math display">f_r(h, t) = \mathbf{h}^\top \text{diag}(\mathbf{r}) \mathbf{t} = \sum_{i=1}^d \mathbf{h}_i \mathbf{r}_i \mathbf{t}_i</span></p>
+<p>where <span class="math inline">\text{diag}(\mathbf{r})</span> is a diagonal matrix with <span class="math inline">\mathbf{r}</span> on the diagonal.</p>
+</div>
+<p>DistMult is computationally efficient but limited to modeling symmetric relationships. ComplEx extends DistMult to the complex domain to model asymmetric relationships:</p>
+<div id="def-complex-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.7 (ComplEx model)</strong></span> <strong>ComplEx</strong> embeds entities and relationships in complex space <span class="math inline">\mathbb{C}^d</span>. The score function is:</p>
+<p><span class="math display">f_r(h, t) = \text{Re}(\langle\mathbf{h}, \mathbf{r}, \mathbf{\bar{t}}\rangle) = \text{Re}\left(\sum_{i=1}^d \mathbf{h}_i \mathbf{r}_i \mathbf{\bar{t}}_i\right)</span></p>
+<p>where <span class="math inline">\mathbf{\bar{t}}</span> is the complex conjugate of <span class="math inline">\mathbf{t}</span> and <span class="math inline">\text{Re}(\cdot)</span> takes the real part of a complex number.</p>
+</div>
+</section>
+<section id="neural-network-based-models" class="level4">
+<h4 class="anchored" data-anchor-id="neural-network-based-models">Neural network-based models</h4>
+<p>Neural networks can model more complex interaction patterns between entities and relationships.</p>
+<div id="def-neural-kge-models" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.8 (Neural KGE models)</strong></span> <strong>Neural knowledge graph embedding models</strong> use neural networks to compute the plausibility of triplets. For example, the ConvE model uses convolutional neural networks:</p>
+<ol type="1">
+<li>Reshape and concatenate head entity and relationship embeddings</li>
+<li>Apply 2D convolution followed by non-linear activation</li>
+<li>Project to entity embedding dimension through a linear transformation</li>
+<li>Compute similarity with all possible tail entities</li>
+</ol>
+<p>The score function can be expressed as:</p>
+<p><span class="math display">f_r(h, t) = \mathbf{t}^\top g(\text{vec}(g([\mathbf{h}; \mathbf{r}] * \Omega)) W)</span></p>
+<p>where <span class="math inline">*</span> is the convolution operator, <span class="math inline">\Omega</span> is a set of filters, <span class="math inline">g</span> is a non-linear activation, and <span class="math inline">W</span> is a linear projection matrix.</p>
+</div>
+<div id="exm-kge-comparison" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.5 (Comparison of KGE models)</strong></span> For a subset of the Freebase knowledge graph focused on movie relationships:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>MRR</th>
+<th>Hits@1</th>
+<th>Hits@10</th>
+<th>Parameters</th>
+<th>Training Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TransE</td>
+<td>0.32</td>
+<td>0.22</td>
+<td>0.51</td>
+<td>5M</td>
+<td>2.5 hours</td>
+</tr>
+<tr class="even">
+<td>DistMult</td>
+<td>0.35</td>
+<td>0.25</td>
+<td>0.55</td>
+<td>5M</td>
+<td>2 hours</td>
+</tr>
+<tr class="odd">
+<td>ComplEx</td>
+<td>0.37</td>
+<td>0.27</td>
+<td>0.58</td>
+<td>10M</td>
+<td>3 hours</td>
+</tr>
+<tr class="even">
+<td>ConvE</td>
+<td>0.39</td>
+<td>0.29</td>
+<td>0.62</td>
+<td>12M</td>
+<td>4 hours</td>
+</tr>
+</tbody>
+</table>
+<p>The neural models achieve higher accuracy but require more parameters and training time. The choice of model depends on the specific requirements of the application, including performance needs, computational constraints, and the nature of the relationships in the knowledge graph.</p>
+</div>
+</section>
+</section>
+<section id="edge-embeddings-and-relationship-prediction" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="edge-embeddings-and-relationship-prediction"><span class="header-section-number">9.3.3</span> Edge embeddings and relationship prediction</h3>
+<p>While most KGE methods focus on predicting missing links, specific techniques have been developed for embedding and analyzing the relationships themselves.</p>
+<div id="def-edge-embedding" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.9 (Edge embedding)</strong></span> An <strong>edge embedding</strong> is a low-dimensional representation of an edge or relationship in a graph, capturing both the structural context and the semantic meaning of the relationship.</p>
+</div>
+<p>Edge embeddings can be derived in several ways:</p>
+<ol type="1">
+<li><strong>Explicit modeling</strong>: Some KGE models like TransE directly represent relationships as vectors</li>
+<li><strong>Composition functions</strong>: Combining embeddings of the connected entities, e.g., <span class="math inline">\mathbf{e}_{(u,v)} = f(\mathbf{u}, \mathbf{v})</span></li>
+<li><strong>Context-based approaches</strong>: Embedding the local subgraph around an edge</li>
+<li><strong>Relation path embeddings</strong>: Representing multi-hop relationship paths</li>
+</ol>
+<div id="exm-edge-feature-learning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.6 (Learning edge features for relationship typing)</strong></span> To predict the type of an untyped relationship between two entities in a biomedical knowledge graph:</p>
+<ol type="1">
+<li><p>Extract features from endpoint entities:</p>
+<ul>
+<li>Entity type embeddings</li>
+<li>Textual description embeddings</li>
+<li>Structural role embeddings</li>
+</ul></li>
+<li><p>Extract features from the relationship context:</p>
+<ul>
+<li>Common neighbors of the connected entities</li>
+<li>Paths between the entities</li>
+<li>Local subgraph patterns</li>
+</ul></li>
+<li><p>Combine features through a neural network:</p>
+<pre><code>function RelationClassifier(entity1, entity2, graph):
+    # Extract entity features
+    e1_features = extractEntityFeatures(entity1)
+    e2_features = extractEntityFeatures(entity2)
+
+    # Extract relationship context features
+    context_features = extractContextFeatures(entity1, entity2, graph)
+
+    # Combine features
+    combined = concatenate([e1_features, e2_features, context_features])
+
+    # Multi-layer classification
+    hidden = ReLU(LinearLayer(combined))
+    logits = LinearLayer(hidden)
+
+    # Return probability for each relationship type
+    return softmax(logits)</code></pre></li>
+<li><p>Evaluate on a test set of relationships with known types</p></li>
+</ol>
+<p>This approach achieved 87% accuracy in distinguishing between 12 relationship types in a biomedical knowledge graph, significantly outperforming methods that considered only entity types or only graph structure.</p>
+</div>
+</section>
+</section>
+<section id="graph-neural-networks" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="graph-neural-networks"><span class="header-section-number">9.4</span> Graph neural networks</h2>
+<p>Graph neural networks (GNNs) extend deep learning to graph-structured data by operating directly on the graph, enabling powerful representational learning for knowledge graphs.</p>
+<div id="def-graph-neural-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.10 (Graph neural network)</strong></span> A <strong>graph neural network (GNN)</strong> is a neural network architecture designed to process graph-structured data by iteratively updating node representations based on their neighborhoods. GNNs typically follow a message-passing paradigm where nodes exchange information with their neighbors to compute their representations.</p>
+</div>
+<section id="message-passing-framework" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="message-passing-framework"><span class="header-section-number">9.4.1</span> Message passing framework</h3>
+<p>Most GNNs follow a message passing framework that consists of iteratively aggregating information from node neighborhoods.</p>
+<div id="def-message-passing" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.11 (Message passing in GNNs)</strong></span> The <strong>message passing</strong> framework for GNNs consists of iteratively updating node representations over <span class="math inline">K</span> layers:</p>
+<ol type="1">
+<li><strong>Message computation</strong>: Each node computes messages to send to its neighbors based on the current representation and edge features.</li>
+<li><strong>Message aggregation</strong>: Each node aggregates messages from its neighbors using a permutation-invariant function.</li>
+<li><strong>Node update</strong>: Each node updates its representation based on the aggregated message and its current representation.</li>
+</ol>
+<p>Formally, the <span class="math inline">k</span>-th layer update for node <span class="math inline">v</span> can be written as:</p>
+<p><span class="math display">\mathbf{h}_v^{(k)} = \text{UPDATE}^{(k)} \left( \mathbf{h}_v^{(k-1)}, \text{AGGREGATE}^{(k)} \left( \{ \text{MESSAGE}^{(k)}(\mathbf{h}_v^{(k-1)}, \mathbf{h}_u^{(k-1)}, \mathbf{e}_{vu}) : u \in \mathcal{N}(v) \} \right) \right)</span></p>
+<p>where <span class="math inline">\mathbf{h}_v^{(k)}</span> is the representation of node <span class="math inline">v</span> at layer <span class="math inline">k</span>, <span class="math inline">\mathcal{N}(v)</span> is the neighborhood of node <span class="math inline">v</span>, and <span class="math inline">\mathbf{e}_{vu}</span> represents edge features.</p>
+</div>
+</section>
+<section id="popular-gnn-architectures" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="popular-gnn-architectures"><span class="header-section-number">9.4.2</span> Popular GNN architectures</h3>
+<p>Several GNN architectures have been developed, each with different design choices for the message, aggregate, and update functions.</p>
+<div id="def-graph-convolutional-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.12 (Graph convolutional network)</strong></span> A <strong>graph convolutional network (GCN)</strong> is a simplified GNN that uses a specific form of message passing:</p>
+<p><span class="math display">\mathbf{h}_v^{(k)} = \sigma \left( W^{(k)} \sum_{u \in \mathcal{N}(v) \cup \{v\}} \frac{1}{\sqrt{|\mathcal{N}(v)|} \cdot \sqrt{|\mathcal{N}(u)|}} \mathbf{h}_u^{(k-1)} \right)</span></p>
+<p>where <span class="math inline">W^{(k)}</span> is a learnable weight matrix and <span class="math inline">\sigma</span> is a non-linear activation function.</p>
+</div>
+<div id="def-graph-attention-network" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.13 (Graph attention network)</strong></span> A <strong>graph attention network (GAT)</strong> introduces attention mechanisms to weight the importance of different neighbors during aggregation:</p>
+<p><span class="math display">\mathbf{h}_v^{(k)} = \sigma \left( \sum_{u \in \mathcal{N}(v) \cup \{v\}} \alpha_{vu}^{(k)} W^{(k)} \mathbf{h}_u^{(k-1)} \right)</span></p>
+<p>where <span class="math inline">\alpha_{vu}^{(k)}</span> are attention coefficients computed as:</p>
+<p><span class="math display">\alpha_{vu}^{(k)} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^{(k)T} [W^{(k)}\mathbf{h}_v^{(k-1)} \| W^{(k)}\mathbf{h}_u^{(k-1)}]\right)\right)}{\sum_{w \in \mathcal{N}(v) \cup \{v\}} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^{(k)T} [W^{(k)}\mathbf{h}_v^{(k-1)} \| W^{(k)}\mathbf{h}_w^{(k-1)}]\right)\right)}</span></p>
+<p>with <span class="math inline">\mathbf{a}^{(k)}</span> being a learnable attention vector and <span class="math inline">\|</span> denoting concatenation.</p>
+</div>
+<p>Other popular GNN architectures include GraphSAGE, which samples a fixed number of neighbors for scalability, and Graph Isomorphism Network (GIN), which maximizes the discriminative power of GNNs.</p>
+</section>
+<section id="applying-gnns-to-knowledge-graphs" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="applying-gnns-to-knowledge-graphs"><span class="header-section-number">9.4.3</span> Applying GNNs to knowledge graphs</h3>
+<p>Adapting GNNs to knowledge graphs requires handling the heterogeneity of node and edge types.</p>
+<div id="def-relational-gnn" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.14 (Relational graph neural network)</strong></span> A <strong>relational graph neural network</strong> extends GNNs to knowledge graphs by incorporating relationship information into the message passing framework. The update for a node <span class="math inline">v</span> may be written as:</p>
+<p><span class="math display">\mathbf{h}_v^{(k)} = \text{UPDATE}^{(k)} \left( \mathbf{h}_v^{(k-1)}, \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} \text{MESSAGE}_r^{(k)}(\mathbf{h}_v^{(k-1)}, \mathbf{h}_u^{(k-1)}) \right)</span></p>
+<p>where <span class="math inline">\mathcal{R}</span> is the set of relationship types and <span class="math inline">\mathcal{N}_r(v)</span> is the set of neighbors connected to <span class="math inline">v</span> via relationship type <span class="math inline">r</span>.</p>
+</div>
+<div id="exm-rgcn-implementation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.7 (Relational graph convolutional networks (R-GCN))</strong></span> R-GCN extends GCN to handle multiple relationship types:</p>
+<p><span class="math display">\mathbf{h}_v^{(k)} = \sigma \left( W_0^{(k)} \mathbf{h}_v^{(k-1)} + \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} \frac{1}{|\mathcal{N}_r(v)|} W_r^{(k)} \mathbf{h}_u^{(k-1)} \right)</span></p>
+<p>where <span class="math inline">W_0^{(k)}</span> is a self-connection weight matrix and <span class="math inline">W_r^{(k)}</span> is a relation-specific weight matrix.</p>
+<p>To reduce the number of parameters, R-GCN often employs weight sharing through basis decomposition:</p>
+<p><span class="math display">W_r^{(k)} = \sum_{b=1}^B a_{rb}^{(k)} V_b^{(k)}</span></p>
+<p>where <span class="math inline">B</span> is the number of basis matrices, <span class="math inline">V_b^{(k)}</span> are basis matrices, and <span class="math inline">a_{rb}^{(k)}</span> are relation-specific coefficients.</p>
+</div>
+</section>
+<section id="gnn-architectures-for-knowledge-graph-completion" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="gnn-architectures-for-knowledge-graph-completion"><span class="header-section-number">9.4.4</span> GNN architectures for knowledge graph completion</h3>
+<p>GNNs can be specifically designed for knowledge graph completion tasks.</p>
+<div id="exm-compgcn" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.8 (CompGCN for knowledge graph completion)</strong></span> CompGCN incorporates both entity and relation embeddings in the message passing:</p>
+<ol type="1">
+<li>Initialize entity embeddings <span class="math inline">\mathbf{e}_v</span> and relation embeddings <span class="math inline">\mathbf{r}</span></li>
+<li>For each GNN layer: a. Compute messages using relation-specific transformations: <span class="math display">\mathbf{m}_{u \rightarrow v} = \phi(\mathbf{e}_u, \mathbf{r}_{uv})</span> where <span class="math inline">\phi</span> is a composition operation like subtraction, multiplication, or circular correlation b. Aggregate messages from neighbors: <span class="math display">\mathbf{e}_v' = W_O \mathbf{e}_v + \sum_{r \in \mathcal{R}} \sum_{u \in \mathcal{N}_r(v)} W_r \mathbf{m}_{u \rightarrow v}</span> c.&nbsp;Update relation embeddings: <span class="math display">\mathbf{r}' = W_R \mathbf{r}</span></li>
+<li>Use final embeddings for link prediction with a scoring function</li>
+</ol>
+<p>CompGCN achieved state-of-the-art performance on the FB15k-237 dataset with an MRR of 0.355, improving over R-GCN’s 0.318.</p>
+</div>
+</section>
+</section>
+<section id="knowledge-graph-embeddings" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="knowledge-graph-embeddings"><span class="header-section-number">9.5</span> Knowledge graph embeddings</h2>
+<p>Knowledge graph embeddings (KGEs) translate the symbolic representations of entities and relationships in knowledge graphs into continuous vector spaces, enabling a wide range of applications including link prediction, entity resolution, and knowledge graph completion.</p>
+<section id="theoretical-foundations" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="theoretical-foundations"><span class="header-section-number">9.5.1</span> Theoretical foundations</h3>
+<p>KGE models can be understood through several theoretical frameworks:</p>
+<div id="def-tensor-factorization" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.15 (Tensor factorization interpretation)</strong></span> Knowledge graphs can be represented as a third-order binary tensor <span class="math inline">\mathcal{X} \in \{0,1\}^{n \times n \times m}</span>, where <span class="math inline">n</span> is the number of entities and <span class="math inline">m</span> is the number of relationship types. The tensor element <span class="math inline">\mathcal{X}_{ijk} = 1</span> if the <span class="math inline">i</span>-th entity has the <span class="math inline">k</span>-th relationship with the <span class="math inline">j</span>-th entity, and 0 otherwise.</p>
+<p>From this perspective, knowledge graph embedding can be viewed as a tensor factorization problem, where we approximate <span class="math inline">\mathcal{X}</span> using low-rank factors.</p>
+</div>
+<div id="def-statistical-relational-learning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.16 (Statistical relational learning perspective)</strong></span> Knowledge graph embedding can also be framed as a statistical relational learning problem, where we model the probability of a relationship triplet being true:</p>
+<p><span class="math display">P((h, r, t) \text{ is true}) = \sigma(f_r(h, t))</span></p>
+<p>where <span class="math inline">\sigma</span> is a sigmoid function and <span class="math inline">f_r(h, t)</span> is a scoring function based on the embeddings.</p>
+</div>
+<div id="def-geometric-interpretation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.17 (Geometric interpretation)</strong></span> Many KGE models have intuitive geometric interpretations:</p>
+<ul>
+<li><strong>TransE</strong>: Relationships are translations in vector space</li>
+<li><strong>RotatE</strong>: Relationships are rotations in complex space</li>
+<li><strong>QuatE</strong>: Relationships are rotations in quaternion space</li>
+<li><strong>HolE</strong>: Entity interactions are modeled through circular correlation</li>
+</ul>
+</div>
+</section>
+<section id="advanced-kge-models" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="advanced-kge-models"><span class="header-section-number">9.5.2</span> Advanced KGE models</h3>
+<p>Beyond the basic models discussed earlier, several advanced KGE approaches have been developed to address specific challenges.</p>
+<div id="def-rotate-model" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.18 (RotatE model)</strong></span> <strong>RotatE</strong> embeds entities and relationships in complex space <span class="math inline">\mathbb{C}^d</span>. Each relationship is modeled as a rotation in the complex plane:</p>
+<p><span class="math display">\mathbf{h} \circ \mathbf{r} = \mathbf{t}</span></p>
+<p>where <span class="math inline">\circ</span> denotes Hadamard (element-wise) product. For each dimension <span class="math inline">i</span>, this can be written as:</p>
+<p><span class="math display">h_i r_i = t_i \quad \text{where } |r_i| = 1</span></p>
+<p>This formulation allows RotatE to model symmetric, antisymmetric, and composition patterns.</p>
+</div>
+<div id="def-poincare-embeddings" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.19 (Poincaré embeddings)</strong></span> <strong>Poincaré embeddings</strong> represent hierarchical structures in hyperbolic space rather than Euclidean space. The Poincaré ball model has a distance metric:</p>
+<p><span class="math display">d(u, v) = \cosh^{-1}\left(1 + 2\frac{\|u - v\|^2}{(1 - \|u\|^2)(1 - \|v\|^2)}\right)</span></p>
+<p>This distance grows exponentially as points move toward the boundary of the ball, making it well-suited for embedding hierarchical structures like taxonomies in knowledge graphs.</p>
+</div>
+<div id="exm-kge-capabilities" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.9 (Modeling relationship patterns with KGEs)</strong></span> Different KGE models can capture different logical patterns:</p>
+<ol type="1">
+<li><p><strong>Symmetry</strong>: <span class="math inline">r(h, t) \Rightarrow r(t, h)</span></p>
+<ul>
+<li>DistMult inherently models symmetric relationships</li>
+<li>TransE and RotatE can learn symmetry by setting <span class="math inline">\mathbf{r} \approx -\mathbf{r}</span> or <span class="math inline">\mathbf{r} \approx \mathbf{r}^{-1}</span> respectively</li>
+</ul></li>
+<li><p><strong>Antisymmetry</strong>: <span class="math inline">r(h, t) \Rightarrow \neg r(t, h)</span></p>
+<ul>
+<li>TransE can model this with <span class="math inline">\mathbf{r} \neq -\mathbf{r}</span></li>
+<li>RotatE captures this well with rotations that are not 180°</li>
+</ul></li>
+<li><p><strong>Inversion</strong>: <span class="math inline">r_1(h, t) \Rightarrow r_2(t, h)</span></p>
+<ul>
+<li>TransE: <span class="math inline">\mathbf{r}_1 \approx -\mathbf{r}_2</span></li>
+<li>RotatE: <span class="math inline">\mathbf{r}_1 \approx \mathbf{r}_2^{-1}</span></li>
+</ul></li>
+<li><p><strong>Composition</strong>: <span class="math inline">r_1(h, m) \land r_2(m, t) \Rightarrow r_3(h, t)</span></p>
+<ul>
+<li>TransE: <span class="math inline">\mathbf{r}_1 + \mathbf{r}_2 \approx \mathbf{r}_3</span></li>
+<li>RotatE: <span class="math inline">\mathbf{r}_1 \circ \mathbf{r}_2 \approx \mathbf{r}_3</span></li>
+</ul></li>
+</ol>
+<p>Comparison on FB15k-237 dataset for capturing compositions:</p>
+<ul>
+<li>TransE accuracy: 84%</li>
+<li>RotatE accuracy: 88%</li>
+<li>ComplEx accuracy: 81%</li>
+</ul>
+</div>
+</section>
+<section id="training-strategies-for-kge-models" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="training-strategies-for-kge-models"><span class="header-section-number">9.5.3</span> Training strategies for KGE models</h3>
+<p>Effective training of KGE models involves several key considerations:</p>
+<ol type="1">
+<li><p><strong>Loss functions</strong>: Popular choices include:</p>
+<ul>
+<li>Margin-based ranking loss: <span class="math inline">\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}^+} \sum_{(h',r',t') \in \mathcal{S}^-} \max(0, \gamma + f_r(h', t') - f_r(h, t))</span></li>
+<li>Negative log-likelihood loss: <span class="math inline">\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}} -\log \sigma(\text{sign}(h,r,t) \cdot f_r(h, t))</span></li>
+<li>Self-adversarial loss: <span class="math inline">\mathcal{L} = \sum_{(h,r,t) \in \mathcal{S}^+} -\log \sigma(f_r(h, t)) - \sum_{(h',r,t') \in \mathcal{S}^-} p(h',r,t') \log \sigma(-f_r(h', t'))</span></li>
+</ul></li>
+<li><p><strong>Negative sampling strategies</strong>:</p>
+<ul>
+<li>Random sampling: Replace either the head or tail with a random entity</li>
+<li>Adversarial sampling: Generate hard negative samples during training</li>
+<li>Self-adversarial sampling: Weight negative samples by their current score</li>
+</ul></li>
+<li><p><strong>Regularization techniques</strong>:</p>
+<ul>
+<li>L2 regularization: <span class="math inline">\lambda \sum_{\theta \in \Theta} \|\theta\|_2^2</span></li>
+<li>Normalization: Constraining embeddings to unit norm</li>
+<li>Dropout: Randomly zeroing elements of embeddings during training</li>
+</ul></li>
+</ol>
+<div id="exm-negative-sampling" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.10 (Impact of negative sampling strategies)</strong></span> For TransE trained on the WN18RR dataset:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Negative Sampling Strategy</th>
+<th>MRR</th>
+<th>Hits@10</th>
+<th>Training Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Uniform random</td>
+<td>0.186</td>
+<td>0.426</td>
+<td>1x</td>
+</tr>
+<tr class="even">
+<td>Frequency-based</td>
+<td>0.201</td>
+<td>0.445</td>
+<td>1.1x</td>
+</tr>
+<tr class="odd">
+<td>Self-adversarial</td>
+<td>0.223</td>
+<td>0.472</td>
+<td>1.3x</td>
+</tr>
+<tr class="even">
+<td>Hard negative mining</td>
+<td>0.231</td>
+<td>0.488</td>
+<td>2.5x</td>
+</tr>
+</tbody>
+</table>
+<p>Hard negative mining yielded the best performance but at a significant computational cost. Self-adversarial sampling provides a good balance between performance and efficiency by automatically focusing on challenging negative samples without explicit mining.</p>
+</div>
+</section>
+<section id="implementation-considerations" class="level3" data-number="9.5.4">
+<h3 data-number="9.5.4" class="anchored" data-anchor-id="implementation-considerations"><span class="header-section-number">9.5.4</span> Implementation considerations</h3>
+<p>Implementing KGE models efficiently requires attention to computational aspects:</p>
+<ol type="1">
+<li><strong>Batch processing</strong>: Organize triplets into batches for parallel processing</li>
+<li><strong>GPU acceleration</strong>: Utilize tensor operations for significant speedup</li>
+<li><strong>Sparse gradient updates</strong>: Only update embeddings for entities in the current batch</li>
+<li><strong>Early stopping</strong>: Monitor validation performance to prevent overfitting</li>
+<li><strong>Distributed training</strong>: For very large knowledge graphs, distribute the embedding computation across multiple devices</li>
+</ol>
+<div id="exm-kge-implementation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.11 (Efficient KGE implementation)</strong></span> For a knowledge graph with millions of entities, a scalable TransE implementation might:</p>
+<ol type="1">
+<li><p>Use entity embedding lookups rather than full embedding matrices:</p>
+<pre><code># Instead of:
+score = all_entity_embeddings @ (head_embedding + relation_embedding).T
+
+# Use:
+batch_head_ids = batch[:, 0]
+batch_rel_ids = batch[:, 1]
+batch_tail_ids = batch[:, 2]
+
+head_embeds = entity_embeddings[batch_head_ids]
+rel_embeds = relation_embeddings[batch_rel_ids]
+tail_embeds = entity_embeddings[batch_tail_ids]
+
+# Compute scores only for necessary entities
+pos_scores = score_func(head_embeds, rel_embeds, tail_embeds)</code></pre></li>
+<li><p>Implement efficient negative sampling:</p>
+<pre><code># Generate corruption indices (replace either head or tail)
+corrupt_head = np.random.random(batch_size) &lt; 0.5
+head_neg_ids = np.random.randint(0, num_entities, batch_size)
+tail_neg_ids = np.random.randint(0, num_entities, batch_size)
+
+neg_head_ids = np.where(corrupt_head, head_neg_ids, batch_head_ids)
+neg_tail_ids = np.where(corrupt_head, batch_tail_ids, tail_neg_ids)</code></pre></li>
+<li><p>Use sparse parameter updates:</p>
+<pre><code># Only update embeddings for entities in this batch
+unique_entities = np.unique(np.concatenate([
+    batch_head_ids, batch_tail_ids, neg_head_ids, neg_tail_ids
+]))
+
+# After gradient computation, only apply updates to these entities
+entity_embeddings[unique_entities] = updated_embeddings</code></pre></li>
+</ol>
+<p>This implementation achieved a 5x speedup compared to a naive approach, enabling training on a knowledge graph with 5 million entities in under 24 hours on a single GPU.</p>
+</div>
+</section>
+</section>
+<section id="knowledge-graph-embeddings-for-link-prediction" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="knowledge-graph-embeddings-for-link-prediction"><span class="header-section-number">9.6</span> Knowledge graph embeddings for link prediction</h2>
+<p>Link prediction is one of the most common applications of machine learning on knowledge graphs, aiming to infer missing relationships between entities.</p>
+<div id="def-link-prediction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.20 (Link prediction in knowledge graphs)</strong></span> <strong>Link prediction</strong> in knowledge graphs is the task of predicting missing relationships between entities. Formally, given a knowledge graph <span class="math inline">G = (E, R, T)</span> where <span class="math inline">T \subset E \times R \times E</span> is the set of observed triplets, the goal is to predict the likelihood of unobserved triplets <span class="math inline">(h, r, t) \notin T</span>.</p>
+</div>
+<section id="evaluation-protocols" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="evaluation-protocols"><span class="header-section-number">9.6.1</span> Evaluation protocols</h3>
+<p>Standard evaluation protocols for link prediction include:</p>
+<ol type="1">
+<li><p><strong>Dataset splitting</strong>: Randomly dividing triplets into training, validation, and test sets (e.g., 80%/10%/10%)</p></li>
+<li><p><strong>Filtered setting</strong>: When ranking a correct triplet <span class="math inline">(h, r, t)</span>, remove other known correct triplets <span class="math inline">(h, r, t')</span> and <span class="math inline">(h', r, t)</span> from the candidates to avoid penalizing correct predictions</p></li>
+<li><p><strong>Metrics</strong>:</p>
+<ul>
+<li>Mean Reciprocal Rank (MRR): The average of the reciprocal ranks of the correct entities</li>
+<li>Hits@k: The proportion of test cases where the correct entity is among the top k predictions</li>
+<li>Mean Rank: The average rank of the correct entities (lower is better)</li>
+</ul></li>
+<li><p><strong>Evaluation procedure</strong>:</p>
+<ul>
+<li>For each test triplet <span class="math inline">(h, r, t)</span>:
+<ul>
+<li>Generate corrupted triplets by replacing either <span class="math inline">h</span> or <span class="math inline">t</span> with all possible entities</li>
+<li>Rank all triplets (including the correct one) by their scores</li>
+<li>Compute the rank of the correct triplet</li>
+</ul></li>
+</ul></li>
+</ol>
+<div id="exm-link-prediction-evaluation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.12 (Link prediction evaluation)</strong></span> For the WN18RR dataset (a subset of WordNet with 40,943 entities and 11 relationship types):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>MRR</th>
+<th>Hits@1</th>
+<th>Hits@3</th>
+<th>Hits@10</th>
+<th>Mean Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TransE</td>
+<td>0.226</td>
+<td>0.017</td>
+<td>0.401</td>
+<td>0.501</td>
+<td>3384</td>
+</tr>
+<tr class="even">
+<td>DistMult</td>
+<td>0.430</td>
+<td>0.390</td>
+<td>0.440</td>
+<td>0.490</td>
+<td>5110</td>
+</tr>
+<tr class="odd">
+<td>ComplEx</td>
+<td>0.440</td>
+<td>0.410</td>
+<td>0.460</td>
+<td>0.510</td>
+<td>5261</td>
+</tr>
+<tr class="even">
+<td>RotatE</td>
+<td>0.476</td>
+<td>0.428</td>
+<td>0.492</td>
+<td>0.571</td>
+<td>3340</td>
+</tr>
+</tbody>
+</table>
+<p>The results show that:</p>
+<ul>
+<li>RotatE performs best overall, likely due to its ability to model various relationship patterns</li>
+<li>TransE struggles with Hits@1 but performs reasonably well on Hits@10</li>
+<li>DistMult and ComplEx have similar performance, with ComplEx slightly better</li>
+<li>Mean Rank values are high, indicating that all models still struggle with some difficult cases</li>
+</ul>
+</div>
+</section>
+<section id="incorporating-additional-information" class="level3" data-number="9.6.2">
+<h3 data-number="9.6.2" class="anchored" data-anchor-id="incorporating-additional-information"><span class="header-section-number">9.6.2</span> Incorporating additional information</h3>
+<p>Performance can be improved by incorporating additional information beyond the graph structure:</p>
+<ol type="1">
+<li><strong>Textual descriptions</strong>: Integrate entity and relationship descriptions through text encoders</li>
+<li><strong>Numerical attributes</strong>: Include entity attributes as additional features</li>
+<li><strong>Image data</strong>: For entities with visual representations, incorporate image embeddings</li>
+<li><strong>Temporal information</strong>: Model how relationships evolve over time</li>
+<li><strong>Uncertainty information</strong>: Incorporate confidence scores for triplets</li>
+</ol>
+<div id="exm-multimodal-link-prediction" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.13 (Multimodal link prediction)</strong></span> A multimodal approach for predicting drug-protein interactions in a biomedical knowledge graph:</p>
+<ol type="1">
+<li><strong>Graph structure embeddings</strong>: TransE embeddings of the knowledge graph</li>
+<li><strong>Molecular structure</strong>: Graph neural networks encoding the molecular structure of drugs</li>
+<li><strong>Protein sequence</strong>: Convolutional neural networks encoding protein sequences</li>
+<li><strong>Text descriptions</strong>: BERT embeddings of drug and protein descriptions</li>
+</ol>
+<p>Model architecture:</p>
+<pre><code>function MultimodalLinkPredictor(drug, protein, relation):
+    # Extract multimodal features
+    graph_drug_emb = knowledge_graph_embeddings[drug]
+    graph_protein_emb = knowledge_graph_embeddings[protein]
+    graph_rel_emb = relation_embeddings[relation]
+
+    mol_structure_emb = MoleculeGNN(drug.structure)
+    protein_seq_emb = ProteinCNN(protein.sequence)
+
+    drug_text_emb = BERT(drug.description)
+    protein_text_emb = BERT(protein.description)
+
+    # Combine multimodal features
+    drug_combined = concatenate([graph_drug_emb, mol_structure_emb, drug_text_emb])
+    protein_combined = concatenate([graph_protein_emb, protein_seq_emb, protein_text_emb])
+
+    # Project to common space
+    drug_projected = Dense(256)(drug_combined)
+    protein_projected = Dense(256)(protein_combined)
+    relation_projected = Dense(256)(graph_rel_emb)
+
+    # Score the triplet
+    score = TransE_score(drug_projected, relation_projected, protein_projected)
+
+    return score</code></pre>
+<p>This multimodal approach improved the AUC for drug-protein interaction prediction from 0.85 (graph-only) to 0.92 (multimodal).</p>
+</div>
+</section>
+</section>
+<section id="graph-neural-networks-for-node-classification" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="graph-neural-networks-for-node-classification"><span class="header-section-number">9.7</span> Graph neural networks for node classification</h2>
+<p>Node classification aims to predict labels or properties of entities in a knowledge graph based on their connections and attributes.</p>
+<div id="def-node-classification" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.21 (Node classification)</strong></span> <strong>Node classification</strong> is the task of predicting labels for nodes in a graph. In the context of knowledge graphs, this corresponds to predicting properties or types of entities based on their relationships and attributes.</p>
+</div>
+<section id="semi-supervised-learning-framework" class="level3" data-number="9.7.1">
+<h3 data-number="9.7.1" class="anchored" data-anchor-id="semi-supervised-learning-framework"><span class="header-section-number">9.7.1</span> Semi-supervised learning framework</h3>
+<p>Node classification often follows a semi-supervised learning framework, where only a small portion of nodes have labels.</p>
+<div id="def-semi-supervised-learning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.22 (Semi-supervised node classification)</strong></span> In <strong>semi-supervised node classification</strong>, we are given a graph <span class="math inline">G = (V, E)</span> with node features <span class="math inline">X</span>, and labels <span class="math inline">Y_L</span> for a subset of nodes <span class="math inline">V_L \subset V</span>. The task is to predict labels for the unlabeled nodes <span class="math inline">V_U = V \setminus V_L</span>.</p>
+</div>
+<p>GNNs are particularly well-suited for this task as they can propagate information from labeled to unlabeled nodes through the graph structure.</p>
+<div id="exm-gcn-node-classification" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.14 (GCN for node classification)</strong></span> For classifying research papers into topics in a citation network:</p>
+<ol type="1">
+<li><strong>Node features</strong>: TF-IDF vectors of paper abstracts</li>
+<li><strong>Graph structure</strong>: Citation links between papers</li>
+<li><strong>Labels</strong>: Research topics for a subset of papers</li>
+</ol>
+<p>GCN implementation:</p>
+<pre><code>function GCN_layer(H, A_hat, W):
+    return ReLU(A_hat @ H @ W)
+
+function NodeClassifier(features, adj_matrix, labels_known, mask_train):
+    # Normalize adjacency matrix with self-loops
+    A_tilde = adj_matrix + identity_matrix
+    D_tilde = diagonal_degree_matrix(A_tilde)
+    A_hat = D_tilde^(-0.5) @ A_tilde @ D_tilde^(-0.5)
+
+    # Two-layer GCN
+    H0 = features
+    W1 = initialize_weights(input_dim, hidden_dim)
+    H1 = GCN_layer(H0, A_hat, W1)
+
+    W2 = initialize_weights(hidden_dim, num_classes)
+    logits = A_hat @ H1 @ W2  # Final layer without ReLU
+
+    # Apply softmax for prediction
+    predictions = softmax(logits)
+
+    # Compute loss on labeled nodes
+    loss = cross_entropy(predictions[mask_train], labels_known)
+
+    # Update weights through backpropagation
+    update_weights(loss)
+
+    return predictions</code></pre>
+<p>Results on the Cora dataset (2708 papers, 7 topics):</p>
+<ul>
+<li>GCN accuracy: 81.5%</li>
+<li>MLP (features only): 55.1%</li>
+<li>Label propagation (structure only): 68.0%</li>
+</ul>
+<p>The GCN substantially outperforms methods that use only features or only structure, demonstrating the value of combining both sources of information.</p>
+</div>
+</section>
+<section id="handling-heterogeneity-in-knowledge-graphs" class="level3" data-number="9.7.2">
+<h3 data-number="9.7.2" class="anchored" data-anchor-id="handling-heterogeneity-in-knowledge-graphs"><span class="header-section-number">9.7.2</span> Handling heterogeneity in knowledge graphs</h3>
+<p>Standard GNNs assume homogeneous graphs, but knowledge graphs contain different types of entities and relationships. Several approaches address this challenge:</p>
+<ol type="1">
+<li><strong>Relation-specific transformations</strong>: Use different weight matrices for different relationship types</li>
+<li><strong>Attention mechanisms</strong>: Learn to weight different relationships differently</li>
+<li><strong>Meta-path based approaches</strong>: Define type-aware node neighborhoods</li>
+<li><strong>Subgraph extraction</strong>: Process relevant subgraphs around target nodes</li>
+</ol>
+<div id="exm-han-knowledge-graph" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.15 (Hierarchical attention networks for knowledge graphs)</strong></span> The Hierarchical Attention Network (HAN) approach for heterogeneous knowledge graphs:</p>
+<ol type="1">
+<li><p><strong>Node-level attention</strong>: For each meta-path (e.g., Author-Paper-Author), compute:</p>
+<pre><code># For each neighbor j of node i along meta-path p
+e_ijp = attention_p(h_i, h_j)
+α_ijp = softmax_j(e_ijp)  # Normalize across neighbors
+
+# Aggregate neighbors with attention weights
+z_ip = sum_j(α_ijp * h_j)</code></pre></li>
+<li><p><strong>Semantic-level attention</strong>: Weight the importance of different meta-paths:</p>
+<pre><code># For each meta-path p
+w_p = q^T * tanh(W * z_ip + b)
+β_p = softmax_p(w_p)  # Normalize across meta-paths
+
+# Aggregate meta-path embeddings
+h_i' = sum_p(β_p * z_ip)</code></pre></li>
+<li><p><strong>Classification</strong>: Feed the final node embeddings to a classifier</p></li>
+</ol>
+<p>HAN achieved 87.5% accuracy on the DBLP dataset (authors classified by research area), compared to 79.2% for a homogeneous GCN.</p>
+</div>
+</section>
+<section id="inductive-and-transductive-learning" class="level3" data-number="9.7.3">
+<h3 data-number="9.7.3" class="anchored" data-anchor-id="inductive-and-transductive-learning"><span class="header-section-number">9.7.3</span> Inductive and transductive learning</h3>
+<p>Node classification approaches can be categorized as transductive or inductive:</p>
+<div id="def-transductive-learning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.23 (Transductive learning)</strong></span> In <strong>transductive learning</strong>, the model is trained on a graph where all nodes (both labeled and unlabeled) are observed during training. The model learns to make predictions specifically for the unlabeled nodes in the training graph.</p>
+</div>
+<div id="def-inductive-learning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.24 (Inductive learning)</strong></span> In <strong>inductive learning</strong>, the model learns a general function that can generate embeddings and predictions for previously unseen nodes based on their features and local neighborhood structure.</p>
+</div>
+<p>Inductive learning is particularly important for dynamic knowledge graphs where new entities are continuously added.</p>
+<div id="exm-graphsage-inductive" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.16 (GraphSAGE for inductive learning)</strong></span> GraphSAGE (SAmple and aggreGatE) enables inductive learning by learning how to generate embeddings based on local neighborhood sampling:</p>
+<pre><code>function GraphSAGE_forward(G, features):
+    h0 = features
+    for layer in 1...K:
+        for node v in G:
+            # Sample neighbors
+            N_v = sample_neighbors(G, v, sample_size)
+
+            # Aggregate neighbor features
+            h_N = aggregate({h_{layer-1}[u] for u in N_v})
+
+            # Combine with self features and apply non-linearity
+            h_layer[v] = ReLU(W_layer * concat(h_{layer-1}[v], h_N))
+
+            # Normalize
+            h_layer[v] = h_layer[v] / ||h_layer[v]||
+
+    return h_K</code></pre>
+<p>Aggregation functions can include:</p>
+<ul>
+<li>Mean aggregator: <code>h_N = mean({h[u] for u in N_v})</code></li>
+<li>LSTM aggregator: <code>h_N = LSTM({h[u] for u in N_v})</code></li>
+<li>Pooling aggregator: <code>h_N = max({ReLU(W_pool * h[u]) for u in N_v})</code></li>
+</ul>
+<p>When tested on a protein-protein interaction network with proteins continually being added:</p>
+<ul>
+<li>Transductive GCN: Could not generalize to new proteins</li>
+<li>Inductive GraphSAGE: 77.2% accuracy on previously unseen proteins</li>
+<li>GraphSAGE with domain-specific features: 82.4% accuracy</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="entity-resolution-and-disambiguation" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="entity-resolution-and-disambiguation"><span class="header-section-number">9.8</span> Entity resolution and disambiguation</h2>
+<p>Entity resolution (also known as entity matching, record linkage, or deduplication) is the task of identifying when different references correspond to the same real-world entity.</p>
+<div id="def-entity-resolution" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.25 (Entity resolution)</strong></span> <strong>Entity resolution</strong> is the process of determining whether two entity references in a knowledge graph refer to the same real-world entity, despite having different identifiers or representations.</p>
+</div>
+<section id="graph-based-approaches-to-entity-resolution" class="level3" data-number="9.8.1">
+<h3 data-number="9.8.1" class="anchored" data-anchor-id="graph-based-approaches-to-entity-resolution"><span class="header-section-number">9.8.1</span> Graph-based approaches to entity resolution</h3>
+<p>Knowledge graph structures provide valuable context for entity resolution:</p>
+<ol type="1">
+<li><strong>Neighborhood similarity</strong>: Entities with similar connections are more likely to be the same</li>
+<li><strong>Path-based features</strong>: Characteristic paths between entities can indicate identity</li>
+<li><strong>Graph embedding approaches</strong>: Embed entities in a vector space where similar entities are close</li>
+<li><strong>Collective entity resolution</strong>: Jointly resolve multiple entities by considering their interdependencies</li>
+</ol>
+<div id="exm-collective-entity-resolution" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.17 (Collective entity resolution algorithm)</strong></span> For resolving author entities in a publication knowledge graph:</p>
+<pre><code>function CollectiveEntityResolution(G1, G2):
+    # Initial matching based on string similarity
+    candidate_pairs = generate_candidates(G1, G2)
+
+    # Score initial pairs based on attributes
+    for (e1, e2) in candidate_pairs:
+        sim_attr = attribute_similarity(e1, e2)
+        if sim_attr &gt; threshold_initial:
+            initial_matches.add((e1, e2, sim_attr))
+
+    # Iterative collective resolution
+    current_matches = initial_matches
+    while not converged:
+        # Update neighborhood features based on current matches
+        update_neighborhood_mappings(current_matches)
+
+        # Re-score all candidates with neighborhood information
+        for (e1, e2) in candidate_pairs:
+            sim_attr = attribute_similarity(e1, e2)
+            sim_rel = relational_similarity(e1, e2, current_matches)
+            combined_sim = combine_similarities(sim_attr, sim_rel)
+
+            new_matches.add((e1, e2, combined_sim))
+
+        # Filter matches above threshold
+        current_matches = filter(new_matches, threshold_final)
+
+        # Check convergence
+        if matches_stable(current_matches, previous_matches):
+            break
+
+    return current_matches</code></pre>
+<p>Relational similarity can be computed as the Jaccard similarity of the neighborhoods, weighted by the current match confidence:</p>
+<p><span class="math display">\text{sim}_{\text{rel}}(e_1, e_2) = \frac{\sum_{(n_1, n_2) \in \text{matches}} w(n_1, n_2) \cdot \mathbf{1}_{n_1 \in N(e_1) \land n_2 \in N(e_2)}}{\sum_{n_1 \in N(e_1)} \max_{n_2} w(n_1, n_2) + \sum_{n_2 \in N(e_2)} \max_{n_1} w(n_1, n_2) - \sum_{(n_1, n_2) \in \text{matches}} w(n_1, n_2) \cdot \mathbf{1}_{n_1 \in N(e_1) \land n_2 \in N(e_2)}}</span></p>
+<p>where <span class="math inline">w(n_1, n_2)</span> is the current match confidence between entities <span class="math inline">n_1</span> and <span class="math inline">n_2</span>.</p>
+<p>This collective approach improved precision from 85.3% (attribute-only) to 93.7% (collective) on a dataset of academic publications from different sources.</p>
+</div>
+</section>
+<section id="deep-learning-for-entity-resolution" class="level3" data-number="9.8.2">
+<h3 data-number="9.8.2" class="anchored" data-anchor-id="deep-learning-for-entity-resolution"><span class="header-section-number">9.8.2</span> Deep learning for entity resolution</h3>
+<p>Deep learning models can learn complex similarity functions for entity resolution:</p>
+<ol type="1">
+<li><strong>Siamese networks</strong>: Train neural networks to predict if two entities are the same</li>
+<li><strong>Graph neural networks</strong>: Use GNNs to incorporate neighborhood information</li>
+<li><strong>Attention mechanisms</strong>: Focus on the most relevant features for matching</li>
+<li><strong>Contrastive learning</strong>: Learn embeddings that minimize distance between same entities and maximize distance between different entities</li>
+</ol>
+<div id="exm-deep-entity-resolution" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.18 (Deep learning model for entity resolution)</strong></span> A GNN-based entity resolution architecture:</p>
+<pre><code>function GNN_EntityMatcher(entity1, entity2, graph1, graph2):
+    # Extract local subgraphs around entities
+    subgraph1 = extract_k_hop_subgraph(graph1, entity1, k=2)
+    subgraph2 = extract_k_hop_subgraph(graph2, entity2, k=2)
+
+    # Encode entity attributes
+    attr_emb1 = AttributeEncoder(entity1.attributes)
+    attr_emb2 = AttributeEncoder(entity2.attributes)
+
+    # Encode subgraph structures using GNN
+    graph_emb1 = GraphEncoder(subgraph1, attr_emb1)
+    graph_emb2 = GraphEncoder(subgraph2, attr_emb2)
+
+    # Compute similarity
+    sim_vector = [
+        cosine_similarity(attr_emb1, attr_emb2),
+        cosine_similarity(graph_emb1, graph_emb2),
+        L1_distance(attr_emb1, attr_emb2),
+        L1_distance(graph_emb1, graph_emb2)
+    ]
+
+    # Final prediction
+    match_probability = SimilarityClassifier(sim_vector)
+
+    return match_probability</code></pre>
+<p>The model achieved 96.2% F1-score on a product matching dataset, outperforming traditional methods (89.7%) and attribute-only deep learning (93.1%).</p>
+</div>
+</section>
+<section id="entity-disambiguation-in-knowledge-graphs" class="level3" data-number="9.8.3">
+<h3 data-number="9.8.3" class="anchored" data-anchor-id="entity-disambiguation-in-knowledge-graphs"><span class="header-section-number">9.8.3</span> Entity disambiguation in knowledge graphs</h3>
+<p>Entity disambiguation (also known as entity linking) involves linking entity mentions in text to their corresponding entities in a knowledge graph.</p>
+<div id="def-entity-disambiguation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.26 (Entity disambiguation)</strong></span> <strong>Entity disambiguation</strong> is the task of mapping ambiguous entity mentions in text to their corresponding entities in a knowledge graph. For example, mapping the mention “Paris” to either Paris (the city in France), Paris (the character in Greek mythology), or Paris Hilton (the person).</p>
+</div>
+<div id="exm-deep-ed" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.19 (Deep learning for entity disambiguation)</strong></span> A typical deep entity disambiguation pipeline:</p>
+<ol type="1">
+<li><p><strong>Mention detection</strong>: Identify spans in text that refer to entities</p>
+<pre><code>mentions = named_entity_recognizer(text)</code></pre></li>
+<li><p><strong>Candidate generation</strong>: For each mention, retrieve potential knowledge graph entities</p>
+<pre><code>for mention in mentions:
+    candidates[mention] = retrieve_candidates(mention, knowledge_graph, k=100)</code></pre></li>
+<li><p><strong>Local context matching</strong>: Compare the mention’s textual context with entity descriptions</p>
+<pre><code>for mention in mentions:
+    context_emb = BERT_encoder(mention_with_context)
+
+    for candidate in candidates[mention]:
+        entity_emb = BERT_encoder(candidate.description)
+        local_score = cosine_similarity(context_emb, entity_emb)</code></pre></li>
+<li><p><strong>Graph-based refinement</strong>: Use knowledge graph structure to improve disambiguation</p>
+<pre><code># Build a disambiguation graph
+G_disambig = create_graph()
+
+# Add nodes for each candidate
+for mention in mentions:
+    for candidate in candidates[mention]:
+        G_disambig.add_node(mention, candidate, score=local_score)
+
+# Add edges between candidates based on knowledge graph connections
+for mention1 in mentions:
+    for mention2 in mentions:
+        for cand1 in candidates[mention1]:
+            for cand2 in candidates[mention2]:
+                if knowledge_graph.has_path(cand1, cand2, max_hops=2):
+                    G_disambig.add_edge(
+                        (mention1, cand1),
+                        (mention2, cand2),
+                        weight=compute_coherence(cand1, cand2)
+                    )
+
+# Run collective optimization (e.g., PageRank or belief propagation)
+final_scores = collective_optimization(G_disambig)</code></pre></li>
+<li><p><strong>Final entity selection</strong>: Choose the highest-scoring candidate for each mention</p>
+<pre><code>for mention in mentions:
+    best_candidate = argmax(final_scores[mention])
+    result[mention] = best_candidate</code></pre></li>
+</ol>
+<p>This approach improved accuracy from 82.4% (context-only) to 91.8% (with graph refinement) on a benchmark dataset.</p>
+</div>
+</section>
+</section>
+<section id="semi-supervised-learning-on-graphs" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="semi-supervised-learning-on-graphs"><span class="header-section-number">9.9</span> Semi-supervised learning on graphs</h2>
+<p>Semi-supervised learning leverages a small amount of labeled data along with a large amount of unlabeled data to improve learning performance. Knowledge graphs provide an ideal structure for semi-supervised learning, as the graph connections can propagate label information.</p>
+<section id="label-propagation-and-random-walk-methods" class="level3" data-number="9.9.1">
+<h3 data-number="9.9.1" class="anchored" data-anchor-id="label-propagation-and-random-walk-methods"><span class="header-section-number">9.9.1</span> Label propagation and random walk methods</h3>
+<p>Label propagation algorithms spread labels from labeled to unlabeled nodes based on graph connectivity.</p>
+<div id="def-label-propagation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.27 (Label propagation)</strong></span> <strong>Label propagation</strong> is a semi-supervised learning algorithm that assigns labels to previously unlabeled nodes by propagating label information through the graph structure. The basic algorithm iteratively updates each node’s label to be the most common label among its neighbors.</p>
+</div>
+<div id="exm-label-propagation-algorithm" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.20 (Label propagation algorithm)</strong></span> &nbsp;</p>
+<pre><code>function LabelPropagation(graph, labeled_nodes, labels, max_iterations):
+    # Initialize labels for all nodes
+    for node in graph.nodes:
+        if node in labeled_nodes:
+            node.label = labels[node]
+            node.fixed = True
+        else:
+            node.label = random_initialization()
+            node.fixed = False
+
+    # Propagate labels
+    for iteration in 1...max_iterations:
+        # Shuffle nodes
+        nodes = shuffle(graph.nodes)
+
+        # Update labels
+        for node in nodes:
+            if not node.fixed:
+                # Count neighbor labels
+                label_counts = {}
+                for neighbor in graph.neighbors(node):
+                    if neighbor.label in label_counts:
+                        label_counts[neighbor.label] += 1
+                    else:
+                        label_counts[neighbor.label] = 1
+
+                # Set label to most frequent neighbor label
+                node.label = argmax(label_counts)
+
+        # Check for convergence
+        if labels_converged():
+            break
+
+    return {node: node.label for node in graph.nodes}</code></pre>
+<p>In a product categorization task with 10,000 products and only 2% labeled data, label propagation achieved 78.3% accuracy, compared to 59.1% for a supervised classifier using only the labeled data.</p>
+</div>
+<p>Random walk methods model the probability of reaching labeled nodes through random traversal of the graph.</p>
+<div id="def-personalized-pagerank" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.28 (Personalized PageRank for semi-supervised learning)</strong></span> <strong>Personalized PageRank (PPR)</strong> can be used for semi-supervised learning by:</p>
+<ol type="1">
+<li>Creating a “teleport set” consisting of nodes with the same label</li>
+<li>Computing PPR scores for unlabeled nodes with respect to each label’s teleport set</li>
+<li>Assigning each unlabeled node to the label with the highest PPR score</li>
+</ol>
+<p>For a label class <span class="math inline">c</span>, the PPR score of node <span class="math inline">v</span> is:</p>
+<p><span class="math display">\text{PPR}_c(v) = \alpha \sum_{u \in S_c} \frac{1}{|S_c|} + (1-\alpha) \sum_{u \in V} \text{PPR}_c(u) \cdot \frac{A_{uv}}{d_u}</span></p>
+<p>where <span class="math inline">S_c</span> is the set of nodes with label <span class="math inline">c</span>, <span class="math inline">A</span> is the adjacency matrix, <span class="math inline">d_u</span> is the degree of node <span class="math inline">u</span>, and <span class="math inline">\alpha</span> is the teleport probability.</p>
+</div>
+</section>
+<section id="graph-regularization-methods" class="level3" data-number="9.9.2">
+<h3 data-number="9.9.2" class="anchored" data-anchor-id="graph-regularization-methods"><span class="header-section-number">9.9.2</span> Graph regularization methods</h3>
+<p>Graph regularization incorporates graph structure as a regularization term in the learning objective.</p>
+<div id="def-graph-regularization" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.29 (Graph regularization)</strong></span> <strong>Graph regularization</strong> assumes that connected nodes should have similar labels or representations. This is often formalized as minimizing a loss function with a graph Laplacian regularization term:</p>
+<p><span class="math display">\mathcal{L} = \mathcal{L}_{supervised} + \lambda \sum_{(i,j) \in E} w_{ij} \|f(x_i) - f(x_j)\|^2</span></p>
+<p>where <span class="math inline">\mathcal{L}_{supervised}</span> is a standard supervised loss, <span class="math inline">w_{ij}</span> is the weight of the edge between nodes <span class="math inline">i</span> and <span class="math inline">j</span>, and <span class="math inline">f(x_i)</span> is the model’s output for node <span class="math inline">i</span>.</p>
+<p>This can be rewritten using the graph Laplacian matrix <span class="math inline">L = D - A</span>, where <span class="math inline">D</span> is the degree matrix and <span class="math inline">A</span> is the adjacency matrix:</p>
+<p><span class="math display">\mathcal{L} = \mathcal{L}_{supervised} + \lambda \text{trace}(F^T L F)</span></p>
+<p>where <span class="math inline">F</span> is the matrix of model outputs for all nodes.</p>
+</div>
+<div id="exm-manifold-regularization" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.21 (Manifold regularization for knowledge graph completion)</strong></span> For a knowledge graph completion task using a neural network model:</p>
+<pre><code>function train_with_graph_regularization(knowledge_graph, labeled_triplets):
+    # Create a node proximity graph based on knowledge graph structure
+    proximity_graph = create_proximity_graph(knowledge_graph)
+    L = compute_laplacian(proximity_graph)
+
+    # Initialize entity and relation embeddings
+    entity_embeddings = initialize_embeddings(num_entities, embedding_dim)
+    relation_embeddings = initialize_embeddings(num_relations, embedding_dim)
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        # Compute supervised loss on labeled triplets
+        for (h, r, t) in labeled_triplets:
+            h_emb = entity_embeddings[h]
+            r_emb = relation_embeddings[r]
+            t_emb = entity_embeddings[t]
+
+            score = scoring_function(h_emb, r_emb, t_emb)
+            supervised_loss = cross_entropy(score, 1)  # Positive example
+
+            # Generate negative examples
+            for neg_sample in generate_negative_samples(h, r, t):
+                neg_h, neg_r, neg_t = neg_sample
+                neg_h_emb = entity_embeddings[neg_h]
+                neg_r_emb = relation_embeddings[neg_r]
+                neg_t_emb = entity_embeddings[neg_t]
+
+                neg_score = scoring_function(neg_h_emb, neg_r_emb, neg_t_emb)
+                supervised_loss += cross_entropy(neg_score, 0)  # Negative example
+
+        # Compute graph regularization loss
+        reg_loss = trace(entity_embeddings.T @ L @ entity_embeddings)
+
+        # Total loss
+        total_loss = supervised_loss + lambda * reg_loss
+
+        # Update embeddings
+        update_parameters(total_loss)
+
+    return entity_embeddings, relation_embeddings</code></pre>
+<p>Adding graph regularization improved the MRR from 0.34 to 0.39 on the FB15k dataset with 50% of triplets used as labeled data.</p>
+</div>
+</section>
+</section>
+<section id="inductive-and-transductive-learning-1" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="inductive-and-transductive-learning-1"><span class="header-section-number">9.10</span> Inductive and transductive learning</h2>
+<p>As mentioned earlier, learning approaches for knowledge graphs can be categorized as transductive or inductive based on whether they can generalize to unseen entities.</p>
+<section id="transductive-methods" class="level3" data-number="9.10.1">
+<h3 data-number="9.10.1" class="anchored" data-anchor-id="transductive-methods"><span class="header-section-number">9.10.1</span> Transductive methods</h3>
+<p>Transductive methods learn representations specific to the observed graph and cannot naturally generalize to new entities without retraining.</p>
+<div id="exm-transductive-limitations" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.22 (Limitations of transductive methods)</strong></span> Consider a TransE model trained on a product knowledge graph:</p>
+<pre><code># Training phase
+entity_embeddings = random_initialization(num_entities, dim)
+relation_embeddings = random_initialization(num_relations, dim)
+
+for epoch in 1...num_epochs:
+    for (h, r, t) in training_triplets:
+        h_emb = entity_embeddings[h]
+        r_emb = relation_embeddings[r]
+        t_emb = entity_embeddings[t]
+
+        loss = max(0, margin + score(h_emb, r_emb, corrupt_t_emb) - score(h_emb, r_emb, t_emb))
+        update_embeddings(loss)</code></pre>
+<p>When a new product is added to the knowledge graph:</p>
+<ol type="1">
+<li>The model has no embedding for this entity</li>
+<li>Without retraining, no predictions can be made involving the new entity</li>
+<li>Retraining from scratch is computationally expensive</li>
+<li>Incremental training may suffer from catastrophic forgetting</li>
+</ol>
+<p>This issue becomes critical in dynamic knowledge graphs where entities are frequently added.</p>
+</div>
+</section>
+<section id="inductive-methods" class="level3" data-number="9.10.2">
+<h3 data-number="9.10.2" class="anchored" data-anchor-id="inductive-methods"><span class="header-section-number">9.10.2</span> Inductive methods</h3>
+<p>Inductive methods learn functions that can generate embeddings for new entities based on their features and neighborhood structure.</p>
+<div id="exm-inductive-kge" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.23 (Inductive knowledge graph embedding)</strong></span> An inductive approach to knowledge graph embedding:</p>
+<pre><code>function train_inductive_kge(knowledge_graph):
+    # Extract entity features (e.g., textual descriptions, attributes)
+    entity_features = extract_features(knowledge_graph.entities)
+
+    # Define encoder architecture
+    function entity_encoder(entity_id, neighborhood):
+        # Extract local subgraph
+        subgraph = k_hop_subgraph(knowledge_graph, entity_id, k=2)
+
+        # Initial node features
+        node_features = {}
+        for node in subgraph:
+            node_features[node] = entity_features[node]
+
+        # Message passing
+        for layer in 1...num_layers:
+            new_features = {}
+            for node in subgraph:
+                # Aggregate messages from neighbors
+                messages = []
+                for neighbor, rel_type in subgraph.neighbors_with_relations(node):
+                    rel_emb = relation_encoder(rel_type)
+                    transformed = transform(node_features[neighbor], rel_emb)
+                    messages.append(transformed)
+
+                # Update node representation
+                if messages:
+                    aggregated = aggregate_function(messages)
+                    new_features[node] = update_function(node_features[node], aggregated)
+                else:
+                    new_features[node] = node_features[node]
+
+               # Update features for next layer
+               node_features = new_features
+
+           # Return embedding for the target entity
+           return node_features[entity_id]
+
+       # Train the model
+       for epoch in 1...num_epochs:
+           for (h, r, t) in training_triplets:
+               # Generate embeddings inductively
+               h_emb = entity_encoder(h, knowledge_graph)
+               t_emb = entity_encoder(t, knowledge_graph)
+               r_emb = relation_encoder(r)
+
+               # Compute score and loss
+               score_positive = scoring_function(h_emb, r_emb, t_emb)
+
+               # Generate negative samples
+               h_neg, r_neg, t_neg = sample_negative(h, r, t)
+               h_neg_emb = entity_encoder(h_neg, knowledge_graph)
+               t_neg_emb = entity_encoder(t_neg, knowledge_graph)
+
+               score_negative = scoring_function(h_neg_emb, r_emb, t_neg_emb)
+
+               loss = max(0, margin + score_negative - score_positive)
+               update_parameters(loss)
+
+       return entity_encoder, relation_encoder</code></pre>
+<p>This inductive approach was tested on a benchmark dataset where 25% of entities in the test set were unseen during training:</p>
+<ul>
+<li>Transductive TransE: Unable to make predictions for new entities</li>
+<li>Inductive GNN model: 67.3% accuracy on triplets involving new entities</li>
+<li>Inductive GNN with attribute information: 72.8% accuracy</li>
+</ul>
+</div>
+</section>
+<section id="hybrid-approaches" class="level3" data-number="9.10.3">
+<h3 data-number="9.10.3" class="anchored" data-anchor-id="hybrid-approaches"><span class="header-section-number">9.10.3</span> Hybrid approaches</h3>
+<p>Hybrid approaches combine the strengths of both transductive and inductive methods.</p>
+<div id="exm-hybrid-approach" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.24 (Hybrid transductive-inductive approach)</strong></span> A hybrid approach for a dynamic knowledge graph:</p>
+<pre><code>function hybrid_knowledge_graph_embedding(knowledge_graph):
+    # Initialize transductive embeddings for existing entities
+    entity_embeddings = initialize_embeddings(knowledge_graph.num_entities, dim)
+    relation_embeddings = initialize_embeddings(knowledge_graph.num_relations, dim)
+
+    # Train transductive model
+    train_transductive_model(knowledge_graph, entity_embeddings, relation_embeddings)
+
+    # Train inductive model to approximate transductive embeddings
+    function inductive_encoder(entity, neighborhood):
+        # GNN-based encoder
+        features = extract_features(entity)
+        subgraph = extract_local_subgraph(knowledge_graph, entity)
+        return GNN_encoder(features, subgraph)
+
+    # Train inductive model to predict transductive embeddings
+    for entity in knowledge_graph.entities:
+        inductive_emb = inductive_encoder(entity, knowledge_graph)
+        transductive_emb = entity_embeddings[entity]
+        loss = distance(inductive_emb, transductive_emb)
+        update_inductive_parameters(loss)
+
+    # For inference:
+    function predict_link(head, relation, tail):
+        # For existing entities, use stored transductive embeddings
+        if head in entity_embeddings:
+            h_emb = entity_embeddings[head]
+        else:
+            # For new entities, use inductive encoder
+            h_emb = inductive_encoder(head, knowledge_graph)
+
+        if tail in entity_embeddings:
+            t_emb = entity_embeddings[tail]
+        else:
+            t_emb = inductive_encoder(tail, knowledge_graph)
+
+        r_emb = relation_embeddings[relation]
+        return scoring_function(h_emb, r_emb, t_emb)
+
+    return predict_link</code></pre>
+<p>This hybrid approach combines the accuracy of transductive methods for existing entities with the flexibility of inductive methods for new entities. On a dynamic e-commerce knowledge graph, it achieved:</p>
+<ul>
+<li>94.5% accuracy for triplets between existing entities (vs.&nbsp;94.8% for pure transductive)</li>
+<li>83.2% accuracy for triplets involving new entities (vs.&nbsp;0% for pure transductive and 81.5% for pure inductive)</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="reasoning-and-inference-with-machine-learning" class="level2" data-number="9.11">
+<h2 data-number="9.11" class="anchored" data-anchor-id="reasoning-and-inference-with-machine-learning"><span class="header-section-number">9.11</span> Reasoning and inference with machine learning</h2>
+<p>Machine learning approaches can enable various forms of reasoning and inference on knowledge graphs, ranging from deductive reasoning to more complex forms of inductive and abductive reasoning.</p>
+<section id="path-based-reasoning" class="level3" data-number="9.11.1">
+<h3 data-number="9.11.1" class="anchored" data-anchor-id="path-based-reasoning"><span class="header-section-number">9.11.1</span> Path-based reasoning</h3>
+<p>Path-based reasoning leverages paths in the knowledge graph to infer new relationships or answer complex queries.</p>
+<div id="def-path-based-reasoning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.30 (Path-based reasoning)</strong></span> <strong>Path-based reasoning</strong> infers new relationships between entities based on paths of existing relationships in the knowledge graph. For example, if entity A is related to B through relation r1, and B is related to C through relation r2, then A may be related to C through some composition of r1 and r2.</p>
+</div>
+<div id="exm-path-ranking-algorithm" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.25 (Path Ranking Algorithm (PRA))</strong></span> The Path Ranking Algorithm uses logistic regression to weight different path types for relationship prediction:</p>
+<pre><code>function PathRankingAlgorithm(knowledge_graph, relation_to_predict):
+    # Extract path features
+    paths = {}  # Dictionary: (source, target) -&gt; list of path features
+
+    for (source, target) in entity_pairs:
+        paths[(source, target)] = []
+
+        # Find paths of length up to k between source and target
+        for path in find_paths(knowledge_graph, source, target, max_length=3):
+            path_type = extract_path_type(path)  # Sequence of relation types
+            paths[(source, target)].append(path_type)
+
+    # Convert to feature vectors
+    X = []  # Feature matrix
+    y = []  # Target labels
+
+    for (source, target) in entity_pairs:
+        # One-hot encoding of path types
+        feature_vector = one_hot_encode(paths[(source, target)], all_path_types)
+        X.append(feature_vector)
+
+        # Label: 1 if the relation exists, 0 otherwise
+        y.append(1 if knowledge_graph.has_relation(source, relation_to_predict, target) else 0)
+
+    # Train logistic regression
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    # Get path type weights
+    path_weights = {}
+    for i, path_type in enumerate(all_path_types):
+        path_weights[path_type] = model.coefficients[i]
+
+    # Function for prediction
+    function predict(source, target):
+        feature_vector = one_hot_encode(paths.get((source, target), []), all_path_types)
+        return model.predict_proba(feature_vector)[1]  # Probability of class 1
+
+    return predict, path_weights</code></pre>
+<p>PRA identified meaningful path patterns in a biomedical knowledge graph:</p>
+<ul>
+<li>For predicting “treats” relation between drugs and diseases:
+<ul>
+<li>High weight (0.85): drug → targets → gene → associated_with → disease</li>
+<li>High weight (0.72): drug → similar_to → drug → treats → disease</li>
+<li>Low weight (0.11): drug → has_side_effect → symptom → presents_in → disease</li>
+</ul></li>
+</ul>
+<p>This provides interpretable rules for the relationship between drugs and diseases.</p>
+</div>
+</section>
+<section id="neural-multi-hop-reasoning" class="level3" data-number="9.11.2">
+<h3 data-number="9.11.2" class="anchored" data-anchor-id="neural-multi-hop-reasoning"><span class="header-section-number">9.11.2</span> Neural multi-hop reasoning</h3>
+<p>Neural approaches to multi-hop reasoning learn to traverse the knowledge graph to answer complex queries.</p>
+<div id="def-neural-multi-hop-reasoning" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 9.31 (Neural multi-hop reasoning)</strong></span> <strong>Neural multi-hop reasoning</strong> uses neural networks to learn how to traverse a knowledge graph to answer complex queries that require multiple reasoning steps.</p>
+</div>
+<div id="exm-neural-lp" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.26 (Neural Logic Programming)</strong></span> Neural Logic Programming (NeuralLP) learns logical rules in a differentiable manner:</p>
+<pre><code>function NeuralLP(knowledge_graph, relation_to_predict, max_steps):
+    # Initialize relation embeddings
+    relation_embeddings = initialize_embeddings(knowledge_graph.num_relations, dim)
+
+    # Initialize attention weights for path steps
+    attention_weights = initialize_weights(max_steps, knowledge_graph.num_relations)
+
+    # Define differentiable path-finding operation
+    function differentiable_path(source_entities, step, previous_attention):
+        # Represent source entities as a vector
+        source_vector = one_hot_encode(source_entities, all_entities)
+
+        # Compute attention for this step
+        step_attention = softmax(attention_weights[step])
+
+        # For each relation, compute next entities
+        next_entities = zeros(num_entities)
+        for relation in all_relations:
+            # Adjacency matrix for this relation
+            relation_matrix = knowledge_graph.get_adjacency_matrix(relation)
+
+            # Follow this relation from source entities
+            relation_contribution = source_vector @ relation_matrix
+
+            # Weight by attention
+            next_entities += step_attention[relation] * relation_contribution
+
+        return next_entities, step_attention
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        for (source, target) in training_pairs:
+            # Starting from source entity
+            current_entities = one_hot_encode([source], all_entities)
+            path_attentions = []
+
+            # Multi-step reasoning
+            for step in 0...max_steps-1:
+                current_entities, step_attention = differentiable_path(
+                    current_entities, step, path_attentions[-1] if path_attentions else None
+                )
+                path_attentions.append(step_attention)
+
+            # Probability of reaching target
+            target_prob = current_entities[target]
+
+            # Optimization objective
+            loss = binary_cross_entropy(target_prob, 1)  # 1 for positive examples
+            update_parameters(loss)
+
+    # Extract logical rules from learned weights
+    rules = []
+    for step in 0...max_steps-1:
+        step_attention = softmax(attention_weights[step])
+        top_relations = get_top_relations(step_attention)
+        rules.append(top_relations)
+
+    return rules</code></pre>
+<p>NeuralLP discovered interpretable multi-hop reasoning patterns:</p>
+<ul>
+<li>“nationality” relation: person → born_in → located_in → country</li>
+<li>“works_for” relation: person → graduated_from → affiliated_with → organization</li>
+</ul>
+</div>
+</section>
+<section id="knowledge-graph-neural-networks-for-reasoning" class="level3" data-number="9.11.3">
+<h3 data-number="9.11.3" class="anchored" data-anchor-id="knowledge-graph-neural-networks-for-reasoning"><span class="header-section-number">9.11.3</span> Knowledge graph neural networks for reasoning</h3>
+<p>Knowledge graph neural networks (KGNNs) adapt GNNs specifically for reasoning tasks on knowledge graphs.</p>
+<div id="exm-kgnn-reasoning" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.27 (Knowledge Graph Neural Networks for reasoning)</strong></span> &nbsp;</p>
+<pre><code>function KGNN_Reasoning(knowledge_graph, query_relation):
+    # For a query (head, relation, ?), predict the tail entity
+    function predict_tail(head_entity, query_relation):
+        # Extract relevant subgraph
+        subgraph = extract_query_subgraph(knowledge_graph, head_entity)
+
+        # Initial entity representations
+        entity_features = {}
+        for entity in subgraph.entities:
+            entity_features[entity] = entity_embeddings[entity]
+
+        # Run message passing
+        for layer in 1...num_layers:
+            new_features = {}
+
+            for entity in subgraph.entities:
+                # Aggregate messages from neighbors
+                incoming_messages = []
+                for neighbor, relation in subgraph.incoming_neighbors(entity):
+                    # Relation-specific transformation
+                    message = W_relation[relation] @ entity_features[neighbor]
+                    incoming_messages.append(message)
+
+                outgoing_messages = []
+                for neighbor, relation in subgraph.outgoing_neighbors(entity):
+                    # Inverse relation transformation
+                    message = W_relation_inv[relation] @ entity_features[neighbor]
+                    outgoing_messages.append(message)
+
+                # Combine messages
+                if incoming_messages or outgoing_messages:
+                    all_messages = incoming_messages + outgoing_messages
+                    aggregated = sum(all_messages) / len(all_messages)
+                    new_features[entity] = ReLU(W_self @ entity_features[entity] + W_neighbor @ aggregated)
+                else:
+                    new_features[entity] = entity_features[entity]
+
+            entity_features = new_features
+
+        # Query-specific scoring
+        scores = {}
+        for candidate in all_entities:
+            # Query-specific transformation
+            query_vector = W_query[query_relation] @ entity_features[head_entity]
+
+            # Score based on similarity to candidate
+            scores[candidate] = cosine_similarity(query_vector, entity_features.get(candidate, entity_embeddings[candidate]))
+
+        return scores
+
+    # Training loop
+    for epoch in 1...num_epochs:
+        for (head, relation, tail) in training_triplets:
+            # Predict scores
+            scores = predict_tail(head, relation)
+
+            # Compute loss (e.g., margin ranking loss)
+            positive_score = scores[tail]
+            negative_score = scores[sample_negative_tail(head, relation, tail)]
+
+            loss = max(0, margin - positive_score + negative_score)
+            update_parameters(loss)
+
+    return predict_tail</code></pre>
+<p>KGNN achieved 88.5% accuracy on multi-hop reasoning queries on the FB15k dataset, compared to 83.2% for NeuralLP and 79.7% for traditional path-based methods.</p>
+</div>
+</section>
+</section>
+<section id="applications-of-machine-learning-on-knowledge-graphs" class="level2" data-number="9.12">
+<h2 data-number="9.12" class="anchored" data-anchor-id="applications-of-machine-learning-on-knowledge-graphs"><span class="header-section-number">9.12</span> Applications of machine learning on knowledge graphs</h2>
+<p>Machine learning on knowledge graphs has numerous real-world applications across different domains.</p>
+<section id="recommendation-systems" class="level3" data-number="9.12.1">
+<h3 data-number="9.12.1" class="anchored" data-anchor-id="recommendation-systems"><span class="header-section-number">9.12.1</span> Recommendation systems</h3>
+<p>Knowledge graphs provide rich contextual information for recommendation systems, enabling more accurate and explainable recommendations.</p>
+<div id="exm-kgnn-recommendation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.28 (Knowledge Graph Neural Network for Recommendations)</strong></span> A two-stage recommendation approach using knowledge graphs:</p>
+<pre><code>function KG_Recommender(user_item_interactions, knowledge_graph):
+    # Stage 1: Enrich user-item graph with knowledge graph information
+    augmented_graph = user_item_interactions.copy()
+
+    # Add knowledge graph entities and relations
+    for item in user_item_interactions.items:
+        if item in knowledge_graph.entities:
+            # Add k-hop neighborhood from the knowledge graph
+            neighborhood = extract_k_hop_neighborhood(knowledge_graph, item, k=2)
+            augmented_graph.add_subgraph(neighborhood)
+
+    # Stage 2: Learn representations with a relational GCN
+    entity_embeddings = {}
+    relation_embeddings = {}
+
+    # Initialize embeddings
+    for entity in augmented_graph.entities:
+        entity_embeddings[entity] = initialize_embedding(dim)
+
+    for relation in augmented_graph.relations:
+        relation_embeddings[relation] = initialize_embedding(dim)
+
+    # Train RGCN on augmented graph
+    for epoch in 1...num_epochs:
+        new_embeddings = {}
+
+        for entity in augmented_graph.entities:
+            # Self-loop message
+            self_message = W_0 @ entity_embeddings[entity]
+
+            # Relation-specific messages
+            relation_messages = {}
+            for relation in augmented_graph.relations:
+                relation_neighbors = augmented_graph.get_neighbors(entity, relation)
+
+                if relation_neighbors:
+                    # Aggregate neighbors
+                    neighbor_message = sum([entity_embeddings[neighbor] for neighbor in relation_neighbors])
+                    neighbor_message = neighbor_message / len(relation_neighbors)
+
+                    # Relation-specific transformation
+                    transformed = W_r[relation] @ neighbor_message
+                    relation_messages[relation] = transformed
+
+            # Combine messages
+            combined = self_message
+            for relation, message in relation_messages.items():
+                combined += message
+
+            new_embeddings[entity] = ReLU(combined)
+
+        entity_embeddings = new_embeddings
+
+    # Generate recommendations
+    function recommend_items(user, top_k=10):
+        user_embedding = entity_embeddings[user]
+
+        # Compute scores for all items
+        scores = {}
+        for item in augmented_graph.items:
+            item_embedding = entity_embeddings[item]
+            scores[item] = user_embedding.dot(item_embedding)
+
+        # Filter out already interacted items
+        for item in augmented_graph.get_neighbors(user, "interacted_with"):
+            scores.pop(item, None)
+
+        # Return top-k items
+        return sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_k]
+
+    return recommend_items</code></pre>
+<p>Evaluation on a movie recommendation dataset:</p>
+<ul>
+<li>Collaborative filtering baseline: Precision@10 = 0.224, Recall@10 = 0.108</li>
+<li>Knowledge graph-enhanced model: Precision@10 = 0.287, Recall@10 = 0.142</li>
+<li>Knowledge graph model with user reviews: Precision@10 = 0.312, Recall@10 = 0.156</li>
+</ul>
+<p>The knowledge graph approach provided not only better recommendations but also enabled explanation through the paths connecting users to recommended items.</p>
+</div>
+</section>
+<section id="question-answering-over-knowledge-graphs" class="level3" data-number="9.12.2">
+<h3 data-number="9.12.2" class="anchored" data-anchor-id="question-answering-over-knowledge-graphs"><span class="header-section-number">9.12.2</span> Question answering over knowledge graphs</h3>
+<p>Knowledge graph-based question answering systems answer natural language questions by translating them into graph queries.</p>
+<div id="exm-kgqa-system" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.29 (Knowledge Graph Question Answering System)</strong></span> A neural approach to question answering over knowledge graphs:</p>
+<pre><code>function KGQA_System(knowledge_graph, question):
+    # Step 1: Entity linking - identify entities in the question
+    entities = entity_linker(question, knowledge_graph)
+
+    # Step 2: Relation prediction - identify the intent of the question
+    relation_predictor = train_relation_classifier(training_questions, relations)
+    relations = relation_predictor(question)
+
+    # Step 3: Query construction
+    function construct_query(question, entities, relations):
+        # Encode question
+        question_embedding = BERT_encoder(question)
+
+        # Encode entities and relations
+        entity_embeddings = [entity_encoder(e) for e in entities]
+        relation_embeddings = [relation_encoder(r) for r in relations]
+
+        # Score potential query patterns
+        query_patterns = [
+            (e, r, "?"),  # Single-hop query
+            (e, r1, "?", r2, e2),  # Two-hop query
+            # More complex patterns...
+        ]
+
+        scores = {}
+        for pattern in query_patterns:
+            pattern_embedding = encode_pattern(pattern, entity_embeddings, relation_embeddings)
+            scores[pattern] = cosine_similarity(question_embedding, pattern_embedding)
+
+        best_pattern = argmax(scores)
+
+        # Fill in the pattern with actual entities and relations
+        instantiated_query = instantiate_pattern(best_pattern, entities, relations)
+        return instantiated_query
+
+    # Step 4: Query execution
+    query = construct_query(question, entities, relations)
+    answers = execute_query(query, knowledge_graph)
+
+    # Step 5: Answer ranking
+    ranked_answers = rank_answers(answers, question)
+
+    return ranked_answers</code></pre>
+<p>Performance on the WebQuestionsSP dataset:</p>
+<ul>
+<li>F1 score = 0.72</li>
+<li>Precision = 0.77</li>
+<li>Recall = 0.68</li>
+<li>Examples of correctly answered questions:
+<ul>
+<li>“Who is the CEO of Apple?”</li>
+<li>“What movies did Christopher Nolan direct?”</li>
+<li>“Which universities are located in Boston?”</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="drug-discovery-and-repurposing" class="level3" data-number="9.12.3">
+<h3 data-number="9.12.3" class="anchored" data-anchor-id="drug-discovery-and-repurposing"><span class="header-section-number">9.12.3</span> Drug discovery and repurposing</h3>
+<p>Knowledge graph approaches can accelerate drug discovery by identifying potential drug-target interactions and drug repurposing opportunities.</p>
+<div id="exm-drug-discovery" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.30 (Knowledge Graph-based Drug Discovery)</strong></span> A pipeline for drug repurposing using knowledge graphs:</p>
+<pre><code>function DrugRepurposingSystem(biomedical_kg, disease_target):
+    # Step 1: Extract disease module
+    disease_module = extract_disease_neighborhood(biomedical_kg, disease_target)
+
+    # Step 2: Identify potential targets
+    function identify_targets(disease_module):
+        # Use centrality measures to rank proteins in the disease module
+        protein_centrality = {}
+        for protein in disease_module.get_entities_by_type("Protein"):
+            protein_centrality[protein] = betweenness_centrality(disease_module, protein)
+
+        # Select top proteins as potential targets
+        potential_targets = sorted(protein_centrality.items(), key=lambda x: x[1], reverse=True)[:100]
+        return [protein for protein, _ in potential_targets]
+
+    # Step 3: Score existing drugs for the targets
+    function score_drugs_for_targets(targets):
+        # GNN-based link prediction model
+        gnn_model = train_drug_target_prediction(biomedical_kg)
+
+        # Score all drugs for the targets
+        drug_scores = {}
+        for drug in biomedical_kg.get_entities_by_type("Drug"):
+            drug_scores[drug] = 0
+            for target in targets:
+                # Predict binding probability
+                score = gnn_model.predict_link(drug, "binds_to", target)
+                drug_scores[drug] += score * target_weights[target]
+
+        return drug_scores
+
+    # Step 4: Filter for safety and pharmacological properties
+    function filter_drugs(drug_scores):
+        filtered_drugs = {}
+        for drug, score in drug_scores.items():
+            # Check for FDA approval status
+            if biomedical_kg.has_relation(drug, "is_approved", "FDA"):
+                # Check for adverse effects related to the disease
+                adverse_effects = biomedical_kg.get_neighbors(drug, "has_side_effect")
+                contraindicated = any(biomedical_kg.has_path(effect, disease_target, max_length=2) for effect in adverse_effects)
+
+                if not contraindicated:
+                    filtered_drugs[drug] = score
+
+        return filtered_drugs
+
+    # Execute pipeline
+    targets = identify_targets(disease_module)
+    drug_scores = score_drugs_for_targets(targets)
+    repurposing_candidates = filter_drugs(drug_scores)
+
+    return sorted(repurposing_candidates.items(), key=lambda x: x[1], reverse=True)</code></pre>
+<p>This approach identified five FDA-approved drugs for potential repurposing against COVID-19, three of which were subsequently validated in laboratory experiments.</p>
+</div>
+</section>
+<section id="fraud-detection-and-risk-assessment" class="level3" data-number="9.12.4">
+<h3 data-number="9.12.4" class="anchored" data-anchor-id="fraud-detection-and-risk-assessment"><span class="header-section-number">9.12.4</span> Fraud detection and risk assessment</h3>
+<p>Knowledge graphs can help detect fraudulent activities and assess risks by finding suspicious patterns in the relationships between entities.</p>
+<div id="exm-fraud-detection" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9.31 (Graph Neural Networks for Fraud Detection)</strong></span> A GNN-based approach for financial fraud detection:</p>
+<pre><code>function FraudDetectionGNN(financial_transactions, entity_information):
+    # Step 1: Construct a financial knowledge graph
+    financial_kg = construct_knowledge_graph()
+
+    # Add entities
+    for entity, info in entity_information.items():
+        financial_kg.add_entity(entity, type=info["type"], attributes=info["attributes"])
+
+    # Add transactions as relationships
+    for transaction in financial_transactions:
+        financial_kg.add_relationship(
+            transaction["source"],
+            "transferred_to",
+            transaction["destination"],
+            attributes={
+                "amount": transaction["amount"],
+                "timestamp": transaction["timestamp"],
+                "currency": transaction["currency"]
+            }
+        )
+
+    # Add other relationships
+    add_entity_relationships(financial_kg, entity_information)
+
+    # Step 2: Feature engineering
+    function engineer_features(financial_kg):
+        features = {}
+
+        for entity in financial_kg.entities:
+            # Basic features
+            entity_features = financial_kg.get_entity_attributes(entity)
+
+            # Structural features
+            entity_features.update({
+                "degree": financial_kg.get_degree(entity),
+                "clustering_coefficient": financial_kg.get_clustering_coefficient(entity),
+                "pagerank": financial_kg.get_pagerank(entity)
+            })
+
+            # Temporal features
+            if financial_kg.get_entity_type(entity) in ["Person", "Organization"]:
+                transactions = financial_kg.get_relationships(entity, "transferred_to")
+                if transactions:
+                    transaction_amounts = [t["amount"] for t in transactions]
+                    transaction_times = [t["timestamp"] for t in transactions]
+
+                    entity_features.update({
+                        "avg_transaction_amount": statistics.mean(transaction_amounts),
+                        "std_transaction_amount": statistics.stdev(transaction_amounts) if len(transaction_amounts) &gt; 1 else 0,
+                        "transaction_frequency": len(transactions) / (max(transaction_times) - min(transaction_times) + 1)
+                    })
+
+            features[entity] = entity_features
+
+        return features
+
+    # Step 3: Train a GraphSAGE model for fraud detection
+    function train_fraud_detection_model(financial_kg, features, labels):
+        # Initialize model
+        graphsage = GraphSAGE(
+            input_dim=len(features[list(features.keys())[0]]),
+            hidden_dim=64,
+            output_dim=2,  # Binary classification
+            num_layers=3
+        )
+
+        # Train model
+        for epoch in 1...num_epochs:
+            for entity in financial_kg.entities:
+                if entity in labels:  # Only for labeled entities
+                    # Generate node embedding
+                    embedding = graphsage.forward(entity, financial_kg, features)
+
+                    # Loss computation
+                    loss = cross_entropy(embedding, labels[entity])
+                    update_parameters(loss)
+
+        return graphsage
+
+    # Generate features
+    features = engineer_features(financial_kg)
+
+    # Get known fraud labels
+    labels = get_fraud_labels(entity_information)
+
+    # Train model
+    model = train_fraud_detection_model(financial_kg, features, labels)
+
+    # Function for fraud prediction
+    function predict_fraud(entity):
+        embedding = model.forward(entity, financial_kg, features)
+        return softmax(embedding)[1]  # Probability of fraud class
+
+    return predict_fraud</code></pre>
+<p>This approach achieved an F1-score of 0.92 for fraud detection, significantly outperforming traditional rule-based systems (F1 = 0.76) and non-graph machine learning approaches (F1 = 0.84).</p>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="9.13">
+<h2 data-number="9.13" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">9.13</span> Conclusion</h2>
+<p>This chapter has explored the integration of machine learning techniques with knowledge graphs, revealing the powerful capabilities that emerge from this combination. We’ve covered fundamental representation learning approaches, including node embeddings and knowledge graph embeddings, which transform the symbolic structure of knowledge graphs into vector spaces amenable to machine learning. We’ve also examined graph neural networks, which operate directly on the graph structure to capture complex patterns.</p>
+<p>The intersection of machine learning and knowledge graphs enables a wide range of applications, from link prediction and entity resolution to complex reasoning tasks and domain-specific applications like drug discovery and fraud detection. Both transductive and inductive approaches offer different trade-offs, with hybrid methods emerging to combine their strengths.</p>
+<p>As knowledge graphs continue to grow in size and complexity, machine learning approaches will become increasingly important for extracting insights, making predictions, and enabling reasoning at scale. The field is rapidly evolving, with new architectures and techniques being developed to address specific challenges in knowledge graph learning.</p>
+<p>Future research directions include developing more efficient methods for large-scale knowledge graphs, improving the interpretability of learned representations, integrating multimodal information, handling dynamic and temporal knowledge graphs, and developing more sophisticated reasoning capabilities. The synergy between structured knowledge representation and machine learning promises to drive advances in artificial intelligence by combining the advantages of symbolic and statistical approaches.</p>
+</section>
+<section id="further-reading" class="level2" data-number="9.14">
+<h2 data-number="9.14" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">9.14</span> Further reading</h2>
+<p>For readers interested in exploring machine learning on knowledge graphs in more depth, the following resources provide valuable additional information and insights:</p>
+<ol type="1">
+<li><p>Hamilton, W. L. (2020). <em>Graph Representation Learning</em>. Morgan &amp; Claypool Publishers.</p>
+<ul>
+<li>A comprehensive overview of graph representation learning techniques, including those applicable to knowledge graphs.</li>
+</ul></li>
+<li><p>Nickel, M., Murphy, K., Tresp, V., &amp; Gabrilovich, E. (2016). A review of relational machine learning for knowledge graphs. <em>Proceedings of the IEEE, 104</em>(1), 11-33.</p>
+<ul>
+<li>An excellent review paper covering foundational approaches to statistical relational learning on knowledge graphs.</li>
+</ul></li>
+<li><p>Ji, S., Pan, S., Cambria, E., Marttinen, P., &amp; Yu, P. S. (2021). A survey on knowledge graphs: Representation, acquisition, and applications. <em>IEEE Transactions on Neural Networks and Learning Systems, 33</em>(2), 494-514.</p>
+<ul>
+<li>A comprehensive survey covering knowledge graph representation, acquisition, and applications, with a focus on machine learning approaches.</li>
+</ul></li>
+<li><p>Wang, Q., Mao, Z., Wang, B., &amp; Guo, L. (2017). Knowledge graph embedding: A survey of approaches and applications. <em>IEEE Transactions on Knowledge and Data Engineering, 29</em>(12), 2724-2743.</p>
+<ul>
+<li>A thorough survey of knowledge graph embedding techniques and their applications.</li>
+</ul></li>
+<li><p>Wu, Z., Pan, S., Chen, F., Long, G., Zhang, C., &amp; Philip, S. Y. (2020). A comprehensive survey on graph neural networks. <em>IEEE Transactions on Neural Networks and Learning Systems, 32</em>(1), 4-24.</p>
+<ul>
+<li>An extensive overview of graph neural network architectures and applications, many of which are relevant to knowledge graphs.</li>
+</ul></li>
+<li><p>Huang, X., Zhang, J., Li, D., &amp; Li, P. (2019). Knowledge graph embedding based question answering. <em>Proceedings of the Twelfth ACM International Conference on Web Search and Data Mining</em>, 105-113.</p>
+<ul>
+<li>A focused look at how knowledge graph embeddings can be applied to question answering systems.</li>
+</ul></li>
+<li><p>Monti, F., Boscaini, D., Masci, J., Rodola, E., Svoboda, J., &amp; Bronstein, M. M. (2017). Geometric deep learning on graphs and manifolds using mixture model CNNs. <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition</em>, 5115-5124.</p>
+<ul>
+<li>Provides theoretical foundations for deep learning on non-Euclidean domains like graphs.</li>
+</ul></li>
+<li><p>Bordes, A., Usunier, N., Garcia-Duran, A., Weston, J., &amp; Yakhnenko, O. (2013). Translating embeddings for modeling multi-relational data. <em>Advances in Neural Information Processing Systems 26</em>, 2787-2795.</p>
+<ul>
+<li>The original TransE paper, a foundational work in knowledge graph embeddings.</li>
+</ul></li>
+<li><p>Das, R., Dhuliawala, S., Zaheer, M., Vilnis, L., Durugkar, I., Krishnamurthy, A., Smola, A., &amp; McCallum, A. (2018). Go for a walk and arrive at the answer: Reasoning over paths in knowledge bases using reinforcement learning. <em>International Conference on Learning Representations (ICLR)</em>.</p>
+<ul>
+<li>Presents innovative approaches to path-based reasoning in knowledge graphs using reinforcement learning.</li>
+</ul></li>
+<li><p>Lao, N., Mitchell, T., &amp; Cohen, W. W. (2011). Random walk inference and learning in a large scale knowledge base. <em>Proceedings of the 2011 Conference on Empirical Methods in Natural Language Processing</em>, 529-539.</p>
+<ul>
+<li>The original Path Ranking Algorithm paper, introducing principled approaches to path-based inference in knowledge graphs.</li>
+</ul></li>
+</ol>
+<p>These resources span theoretical foundations, algorithms, applications, and emerging trends in machine learning on knowledge graphs, providing a comprehensive basis for further exploration of this exciting field.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation column-body">
+  <div class="nav-page nav-page-previous">
+      <a href="../../contents/construction/stat-analysis-of-kg.html" class="pagination-link" aria-label="Statistical Analysis of Knowledge Graphs">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Analysis of Knowledge Graphs</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://tuedsci.github.io/">© Tue Nguyen</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
