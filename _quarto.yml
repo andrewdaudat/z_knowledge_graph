@@ -65,7 +65,7 @@ format:
     callout-icon: false
     # Theme: cyborg, darkly, solar, superhero, quartz, vapor
     theme:
-      dark: [superhero, assets/style-dark.scss]
+      # dark: [superhero, assets/style-dark.scss]
       light: [flatly, assets/style-light.scss]
     fontsize: 1.1rem
     linestretch: 1.6
