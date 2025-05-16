@@ -33,7 +33,8 @@ book:
     - part: Construction and processing
       chapters:
         - contents/construction/kg-construction.qmd
-        # - contents/construction/knowledge-graph-processing.qmd
+        - contents/construction/kg-algorithms.qmd
+        - contents/construction/stat-analysis-of-kg.qmd
 
 format:
   html:

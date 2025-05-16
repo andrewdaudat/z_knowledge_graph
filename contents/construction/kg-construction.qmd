@@ -451,6 +451,7 @@ Unstructured data sources contain information without explicit organization:
      ```
 
 3. **Audio extraction**:
+
    - Example: Building a knowledge graph from meeting recordings
    - Approach:
      - Apply speech recognition to convert audio to text
@@ -1769,6 +1770,7 @@ Coreference resolution approaches include:
    ```
 
 3. **Custom post-processing for knowledge graph integration**:
+
    ```python
    def integrate_coreferences_into_kg(extracted_entities, coreference_clusters):
        # Group entities by coreference cluster
@@ -2010,6 +2012,7 @@ Entity linking approaches include:
    ```
 
 3. **Collective entity linking**:
+
    ```python
    def collective_entity_linking(entities, context_text, knowledge_graph):
        # Step 1: Generate candidate entities for each mention
@@ -2376,6 +2379,7 @@ Entity resolution approaches include:
    ```
 
 3. **Graph-based collective entity resolution**:
+
    ```python
    def collective_entity_resolution(entities_df, relationships_df):
        """
@@ -2884,6 +2888,7 @@ Key aspects of implementing identity management include:
    ```
 
 3. **Entity reconciliation service**:
+
    ```python
    class EntityReconciliationService:
        def __init__(self, identity_service, db_connection):
@@ -3817,6 +3822,7 @@ Knowledge fusion approaches include:
    ```
 
 3. **Temporal conflict resolution**:
+
    ```python
    def temporal_fusion(entity_references):
        """
