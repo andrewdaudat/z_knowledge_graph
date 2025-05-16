@@ -1,0 +1,2978 @@
+# Knowledge Representation and Ontologies
+
+This chapter explores the foundations of knowledge representation and ontologies, which provide the theoretical and practical framework for structuring knowledge in knowledge graphs. We'll examine how knowledge can be formally represented, the role of ontologies in providing semantic structure, and the various languages and formalisms used for knowledge representation in practice.
+
+## Foundations of knowledge representation
+
+Knowledge representation is concerned with how to formally encode information in a way that enables automated reasoning and effective information management. It serves as the theoretical underpinning for knowledge graphs and other AI systems.
+
+### Knowledge representation approaches
+
+::: {#def-knowledge-representation}
+
+## Knowledge representation
+
+**Knowledge representation** is the field of artificial intelligence dedicated to representing information about the world in a form that can be utilized by computer systems to solve complex tasks. It involves designing data structures and encoding conventions that capture the relevant aspects of knowledge in a domain.
+
+:::
+
+Knowledge representation systems must balance several competing requirements:
+
+1. **Expressivity**: The ability to represent complex and nuanced knowledge
+2. **Computational efficiency**: The ability to reason with knowledge within practical computational constraints
+3. **Inferential adequacy**: The ability to derive new knowledge from existing knowledge
+4. **Acquisitional efficiency**: The ease with which new knowledge can be added to the system
+
+Different approaches to knowledge representation emerge from different weightings of these requirements:
+
+::: {#exm-kr-approaches}
+
+## Knowledge representation approaches
+
+1. **Logic-based approaches** emphasize formal semantics and inference capabilities:
+
+   - First-order logic: "∀x (Researcher(x) → ∃y (Publication(y) ∧ authorOf(x, y)))"
+   - Description logics: "Researcher ⊑ Person ⊓ ∃authorOf.Publication"
+
+2. **Frame-based approaches** organize knowledge around entities and their properties:
+
+   ```
+   Frame: Researcher
+     is-a: Person
+     slots:
+       affiliation: [University]
+       publications: [Publication]
+       research_areas: [Topic]
+   ```
+
+3. **Graph-based approaches** represent knowledge as networks of interconnected entities:
+
+   - Semantic networks: Researcher --authorOf--> Publication --publishedIn--> Conference
+   - Conceptual graphs: [Researcher: #1]←(authorOf)←[Publication: #2]→(publishedIn)→[Conference: #3]
+
+4. **Rule-based approaches** encode knowledge as conditional statements:
+   ```
+   IF Paper(p) AND highCitationCount(p) THEN importantPaper(p)
+   IF authorOf(r, p) AND importantPaper(p) THEN influentialResearcher(r)
+   ```
+
+:::
+
+These approaches are not mutually exclusive; modern knowledge representation systems, including knowledge graphs, often combine aspects of multiple approaches to leverage their respective strengths.
+
+### Knowledge representation primitives
+
+Knowledge representation systems build upon fundamental primitives that provide the basic building blocks for encoding knowledge:
+
+::: {#def-kr-primitives}
+
+## Knowledge representation primitives
+
+1. **Entities**: Objects, concepts, or things that exist in the domain of interest
+2. **Attributes**: Properties or characteristics of entities
+3. **Relationships**: Connections or associations between entities
+4. **Classes**: Categories or types that group similar entities
+5. **Instances**: Specific individual entities belonging to a class
+6. **Assertions**: Statements that declare facts about entities and relationships
+7. **Rules**: Conditional statements that define how to derive new knowledge
+
+:::
+
+::: {#exm-kr-primitives}
+
+## Knowledge representation primitives in a scientific domain
+
+In a scientific knowledge graph:
+
+- **Entities**: Albert Einstein, Theory of Relativity, Princeton University
+- **Attributes**: birthDate(Albert Einstein, "1879-03-14"), fieldOfStudy(Theory of Relativity, "Physics")
+- **Relationships**: developed(Albert Einstein, Theory of Relativity), affiliatedWith(Albert Einstein, Princeton University)
+- **Classes**: Scientist, Theory, University
+- **Instances**: Albert Einstein is an instance of Scientist, Princeton University is an instance of University
+- **Assertions**: "Albert Einstein developed the Theory of Relativity"
+- **Rules**: "If a person developed a scientific theory, then that person is a scientist"
+
+:::
+
+These primitives serve as the foundation for more complex knowledge structures and enable the representation of diverse domains of knowledge in a formal, machine-processable manner.
+
+### Taxonomic relationships
+
+Taxonomic relationships organize entities into hierarchies, providing a fundamental organizational structure for knowledge:
+
+::: {#def-taxonomic-relationships}
+
+## Taxonomic relationships
+
+1. **is-a (subclass-of)**: Defines a specialization relationship between classes, where one class is a more specific type of another.
+
+   - Formally: A ⊑ B means that all instances of class A are also instances of class B.
+
+2. **instance-of**: Defines the relationship between an individual entity and the class(es) it belongs to.
+   - Formally: a ∈ A means that individual a is an instance of class A.
+
+:::
+
+::: {#exm-taxonomic-relationships}
+
+## Taxonomic relationships in a biological domain
+
+**Class hierarchy (is-a relationships):**
+
+- Organism
+  - Animal ⊑ Organism
+    - Vertebrate ⊑ Animal
+      - Mammal ⊑ Vertebrate
+        - Primate ⊑ Mammal
+          - Homo ⊑ Primate
+            - Homo sapiens ⊑ Homo
+  - Plant ⊑ Organism
+    - Flowering Plant ⊑ Plant
+      - Fruit Tree ⊑ Flowering Plant
+
+**Instance relationships:**
+
+- Human1 ∈ Homo sapiens (Jane Doe is an instance of Homo sapiens)
+- AppleTree1 ∈ Fruit Tree (This specific apple tree is an instance of Fruit Tree)
+
+:::
+
+Taxonomic relationships enable important inferential capabilities. If we know that an entity belongs to a specific class, we can infer that it also belongs to all superclasses in the hierarchy and inherits their properties.
+
+### Mereological relationships
+
+While taxonomic relationships deal with classification, mereological relationships concern the composition of entities from parts and their relationship to wholes:
+
+::: {#def-mereological-relationships}
+
+## Mereological relationships
+
+1. **part-of**: Indicates that one entity is a component or constituent of another.
+
+   - Formally: part-of(a, b) means that entity a is a part of entity b.
+
+2. **has-part**: The inverse of part-of, indicating that an entity contains another entity as a component.
+
+   - Formally: has-part(b, a) means that entity b has entity a as a part.
+
+3. **proper-part-of**: A stricter version of part-of, excluding the case where an entity is considered part of itself.
+   - Formally: proper-part-of(a, b) means that a is a part of b and a ≠ b.
+
+:::
+
+::: {#exm-mereological-relationships}
+
+## Mereological relationships in an anatomical domain
+
+**Part-whole relationships:**
+
+- part-of(Heart, Cardiovascular System)
+- part-of(Ventricle, Heart)
+- part-of(Valve, Heart)
+- part-of(Cell, Tissue)
+- part-of(Tissue, Organ)
+- part-of(Organ, Organ System)
+
+**Transitivity of part-of relations:**
+
+- part-of(Ventricle, Heart) ∧ part-of(Heart, Cardiovascular System) ⟹ part-of(Ventricle, Cardiovascular System)
+
+**Different types of part-of relationships:**
+
+- structural-part-of(Engine, Car)
+- functional-part-of(Transmission, Drivetrain)
+- spatial-part-of(Downtown, City)
+- temporal-part-of(Adolescence, Human Life)
+
+:::
+
+Mereological relationships are crucial for representing complex systems, physical objects, and hierarchical structures. They enable reasoning about how components interact and how properties of parts contribute to properties of wholes.
+
+### Non-hierarchical relationships
+
+While taxonomic and mereological relationships form hierarchical structures, many important relationships in knowledge graphs are non-hierarchical:
+
+::: {#def-non-hierarchical-relationships}
+
+## Non-hierarchical relationships
+
+Non-hierarchical relationships connect entities in ways that don't form strict hierarchies. Common types include:
+
+1. **Functional relationships**: Describing how entities interact or affect each other
+
+   - uses(Person, Tool)
+   - produces(Factory, Product)
+
+2. **Spatial relationships**: Describing location and spatial arrangements
+
+   - locatedIn(Building, City)
+   - adjacentTo(Country1, Country2)
+
+3. **Temporal relationships**: Describing time-based connections
+
+   - precedes(Event1, Event2)
+   - during(Meeting, BusinessHours)
+
+4. **Social relationships**: Describing interpersonal connections
+
+   - friendOf(Person1, Person2)
+   - employeeOf(Person, Organization)
+
+5. **Causal relationships**: Describing cause and effect
+   - causes(Smoking, LungCancer)
+   - prevents(Vaccination, Disease)
+
+:::
+
+::: {#exm-non-hierarchical-relationships}
+
+## Non-hierarchical relationships in a historical domain
+
+**Temporal relationships:**
+
+- precedes(World War I, World War II)
+- during(Battle of Gettysburg, American Civil War)
+
+**Causal relationships:**
+
+- contributedTo(Assassination of Archduke Ferdinand, Start of World War I)
+- led-to(Great Depression, Rise of Fascism)
+
+**Spatial relationships:**
+
+- locatedIn(Eiffel Tower, Paris)
+- borderingCountry(France, Germany)
+
+**Social relationships:**
+
+- allies(United States, United Kingdom, World War II)
+- opposedBy(Allied Powers, Axis Powers, World War II)
+
+**Functional relationships:**
+
+- used(Romans, Aqueducts, Water Distribution)
+- resulted-in(Industrial Revolution, Urbanization)
+
+:::
+
+Non-hierarchical relationships capture the rich and diverse ways entities interact in the real world. They are essential for knowledge graphs that aim to represent complex domains with multifaceted relationships between entities.
+
+### Attributes and properties
+
+Attributes and properties describe characteristics of entities, providing essential information about their nature, status, and features:
+
+::: {#def-attributes-properties}
+
+## Attributes and properties
+
+**Attributes** (or **properties**) are characteristics or features associated with entities. They typically consist of:
+
+1. An **entity** that possesses the attribute
+2. An **attribute type** that specifies the kind of characteristic
+3. An **attribute value** that provides the specific information
+
+Attributes can be represented in several ways:
+
+- As binary predicates: hasAge(John, 25)
+- As triples: (John, hasAge, 25)
+- As key-value pairs associated with an entity: John{age: 25, height: 180cm}
+
+:::
+
+Attributes can be categorized based on various properties:
+
+::: {#def-attribute-types}
+
+## Attribute types
+
+1. **Intrinsic vs. extrinsic attributes**:
+
+   - **Intrinsic**: Inherent to the entity (height, color, chemical composition)
+   - **Extrinsic**: Dependent on external context (price, role, address)
+
+2. **Required vs. optional attributes**:
+
+   - **Required**: Must be specified for all instances of a class
+   - **Optional**: May or may not be specified
+
+3. **Single-valued vs. multi-valued attributes**:
+
+   - **Single-valued**: Can have only one value for an entity (birthdate)
+   - **Multi-valued**: Can have multiple values for an entity (skill set)
+
+4. **Simple vs. complex attributes**:
+   - **Simple**: Values are atomic (age as an integer)
+   - **Complex**: Values have internal structure (address as a composite of street, city, etc.)
+
+:::
+
+::: {#exm-attributes}
+
+## Attributes in a product knowledge graph
+
+For a product "Smartphone X":
+
+**Intrinsic attributes:**
+
+- weight: 150g
+- dimensions: [142mm, 70mm, 8mm]
+- screenSize: 6.1 inches
+- batteryCapacity: 3200mAh
+
+**Extrinsic attributes:**
+
+- price: $799
+- availableIn: ["US", "EU", "Asia"]
+- launchDate: "2024-03-15"
+- rating: 4.5
+
+**Complex attributes:**
+
+- camera: {mainSensor: "48MP", ultrawide: "12MP", telephoto: "8MP"}
+- processor: {model: "SnapX 8000", cores: 8, speed: "2.8GHz"}
+
+**Multi-valued attributes:**
+
+- supportedNetworks: ["5G", "LTE", "3G", "2G"]
+- connectivity: ["Bluetooth 5.2", "WiFi 6E", "NFC"]
+
+:::
+
+Attributes provide the detailed information that makes knowledge graphs useful for specific applications. They allow for rich descriptions of entities beyond their relational structure and enable more sophisticated querying and filtering.
+
+## Logic-based knowledge representation
+
+Logic provides a formal foundation for representing and reasoning with knowledge. Various logical formalisms offer different balances of expressivity and computational tractability for knowledge representation.
+
+### Propositional logic
+
+Propositional logic is the simplest form of formal logic, dealing with propositions that can be either true or false:
+
+::: {#def-propositional-logic}
+
+## Propositional logic
+
+**Propositional logic** (or **propositional calculus**) is a formal system where:
+
+1. **Atomic propositions** are statements that cannot be broken down further and are either true or false
+2. **Compound propositions** are formed by combining atomic propositions using logical connectives
+3. **Logical connectives** include:
+   - Negation (¬): "not"
+   - Conjunction (∧): "and"
+   - Disjunction (∨): "or"
+   - Implication (→): "if...then"
+   - Equivalence (↔): "if and only if"
+
+:::
+
+While propositional logic has limited expressivity for knowledge representation, it provides the foundation for more expressive logical formalisms:
+
+::: {#exm-propositional-logic}
+
+## Propositional logic in a medical context
+
+Let's define atomic propositions:
+
+- P: "The patient has a fever"
+- Q: "The patient has a rash"
+- R: "The patient has been diagnosed with measles"
+- S: "The patient requires isolation"
+
+Compound propositions might include:
+
+- P ∧ Q: "The patient has both a fever and a rash"
+- P ∧ Q → R: "If the patient has both a fever and a rash, then the patient has been diagnosed with measles"
+- R → S: "If the patient has been diagnosed with measles, then the patient requires isolation"
+- P ∧ Q → S: "If the patient has both a fever and a rash, then the patient requires isolation"
+
+Through logical inference, we can deduce:
+
+- If we know P ∧ Q (patient has fever and rash) and P ∧ Q → R (this implies measles), we can infer R (patient has measles)
+- If we know R (patient has measles) and R → S (measles requires isolation), we can infer S (patient requires isolation)
+
+:::
+
+Propositional logic's limitations for knowledge graphs include its inability to represent relationships between entities, quantification, or to make general statements about classes of objects.
+
+### First-order logic
+
+First-order logic (FOL) extends propositional logic with variables, quantifiers, and relations, making it much more expressive for knowledge representation:
+
+::: {#def-first-order-logic}
+
+## First-order logic
+
+**First-order logic** (also called **predicate logic**) extends propositional logic with:
+
+1. **Terms**: Variables, constants, and functions that refer to objects in the domain
+2. **Predicates**: Expressions that represent relations or properties and evaluate to true or false
+3. **Quantifiers**:
+   - Universal quantifier (∀): "for all"
+   - Existential quantifier (∃): "there exists"
+
+The syntax of FOL includes:
+
+- Atomic formulas: P(t₁, t₂, ..., tₙ), where P is a predicate and t₁, t₂, ..., tₙ are terms
+- Compound formulas formed with logical connectives (¬, ∧, ∨, →, ↔)
+- Quantified formulas: ∀x Φ(x) or ∃x Φ(x), where Φ(x) is a formula containing the variable x
+
+:::
+
+First-order logic provides the expressivity needed to represent complex knowledge:
+
+::: {#exm-first-order-logic}
+
+## First-order logic in an academic context
+
+**Constants**:
+
+- Individuals: alice, bob, paper1, conference2023
+- Functions: advisor(x) - returns the advisor of person x
+
+**Predicates**:
+
+- Person(x): "x is a person"
+- Paper(x): "x is a paper"
+- Conference(x): "x is a conference"
+- AuthorOf(x, y): "x is an author of y"
+- SubmittedTo(x, y): "x was submitted to y"
+- Accepted(x): "x was accepted"
+
+**FOL statements**:
+
+- Person(alice) ∧ Person(bob): "Alice and Bob are persons"
+- Paper(paper1): "paper1 is a paper"
+- AuthorOf(alice, paper1): "Alice is an author of paper1"
+- SubmittedTo(paper1, conference2023): "paper1 was submitted to conference2023"
+
+**Quantified statements**:
+
+- ∀x (Person(x) → ∃y (Paper(y) ∧ AuthorOf(x, y))): "Every person is an author of at least one paper"
+- ∀x ∀y (Paper(x) ∧ SubmittedTo(x, y) ∧ Accepted(x) → ∃z (Person(z) ∧ AuthorOf(z, x) ∧ Attends(z, y))): "For every paper that is submitted to a conference and accepted, at least one of its authors attends the conference"
+
+:::
+
+First-order logic provides a strong foundation for knowledge representation in knowledge graphs, but its high computational complexity for certain reasoning tasks has led to the development of more tractable fragments and extensions.
+
+### Description logics
+
+Description logics (DLs) are a family of formal knowledge representation languages that are particularly well-suited for defining ontologies. They balance expressivity with computational tractability:
+
+::: {#def-description-logic}
+
+## Description logic
+
+**Description logics** are a family of logical formalisms designed for knowledge representation that:
+
+1. Describe knowledge in terms of **concepts** (classes), **roles** (relationships), and **individuals** (instances)
+2. Provide formal semantics based on interpretations mapping to a domain
+3. Support tractable reasoning for many useful fragments
+4. Form the theoretical foundation for ontology languages like OWL
+
+A DL knowledge base typically consists of:
+
+1. A **TBox** (terminological box) containing concept definitions and axioms
+2. An **ABox** (assertional box) containing facts about individuals
+
+:::
+
+Description logics provide a rich vocabulary for defining concepts, roles, and their relationships:
+
+::: {#def-dl-constructors}
+
+## Description logic constructors
+
+Basic DL constructors include:
+
+1. **Concept constructors**:
+
+   - Intersection (⊓): Scientist ⊓ Professor
+   - Union (⊔): Student ⊔ Faculty
+   - Negation (¬): ¬Student
+   - Universal restriction (∀R.C): ∀teaches.Mathematics
+   - Existential restriction (∃R.C): ∃publishedIn.Journal
+   - Cardinality restrictions (≥n R.C, ≤n R.C): ≥3 authorOf.Paper
+
+2. **Axioms**:
+   - Concept inclusion (⊑): Researcher ⊑ Person
+   - Concept equivalence (≡): Professor ≡ Faculty ⊓ ∃hasRank.ProfessorialRank
+   - Disjointness (⊓ ¬): Student ⊓ Faculty ⊑ ⊥ (empty concept)
+   - Role inclusion (⊑): supervises ⊑ mentors
+   - Role characteristics: transitive(ancestorOf), symmetric(collaboratesWith)
+
+:::
+
+::: {#exm-description-logic}
+
+## Description logic in an academic domain
+
+**TBox (terminological knowledge)**:
+
+- Academic ≡ Person ⊓ (Faculty ⊔ Student ⊔ Researcher)
+- Faculty ⊑ ∃teaches.Course
+- Professor ⊑ Faculty ⊓ ∃hasRank.ProfessorialRank
+- AssistantProfessor ⊑ Professor
+- Course ⊑ ∃offeredBy.Department
+- GraduateCourse ≡ Course ⊓ ∀enrolls.GraduateStudent
+- Researcher ⊑ Person ⊓ ∃authorOf.Publication
+- ActiveResearcher ≡ Researcher ⊓ ≥3 authorOf.(Publication ⊓ ∃publishedIn.Journal)
+
+**ABox (assertional knowledge)**:
+
+- Person(john)
+- Faculty(john)
+- teaches(john, cs101)
+- Course(cs101)
+- Publication(paper1)
+- authorOf(john, paper1)
+
+:::
+
+Description logics provide the logical foundation for Web Ontology Language (OWL) and are widely used for defining ontologies in knowledge graphs. Different description logic variants offer different trade-offs between expressivity and computational complexity.
+
+### Rule-based knowledge representation
+
+Rule-based approaches use conditional statements to express complex relationships and derive new knowledge:
+
+::: {#def-rule-based-knowledge}
+
+## Rule-based knowledge representation
+
+**Rule-based knowledge representation** expresses knowledge in the form of conditional statements (rules) that specify actions or conclusions to be drawn when certain conditions are met.
+
+Rules typically have the form:
+
+- IF condition THEN conclusion
+- condition → conclusion
+- condition ⇒ action
+
+In formal terms, rules are often expressed as Horn clauses or similar logical constructs.
+
+:::
+
+Rules can represent procedural knowledge, heuristics, and complex logical relationships that are difficult to express using other formalisms:
+
+::: {#exm-rule-based-knowledge}
+
+## Rule-based knowledge in a medical domain
+
+**Simple rules**:
+
+- IF hasFever(Patient) AND hasRash(Patient) THEN suspectMeasles(Patient)
+- IF suspectMeasles(Patient) THEN orderTest(Patient, MeaslesAntibodyTest)
+- IF hasPositiveTest(Patient, MeaslesAntibodyTest) THEN diagnose(Patient, Measles)
+- IF diagnose(Patient, Measles) THEN prescribe(Patient, BedRest) AND isolate(Patient, 4days)
+
+**Rules with variables**:
+
+- ∀x, y: prescribe(x, y) ∧ allergicTo(x, y) → contraindicated(x, y)
+- ∀x, d: diagnose(x, d) ∧ requiresSpecialist(d) → refer(x, getSpecialist(d))
+
+**Rules with negation**:
+
+- ∀x: suspectDiabetes(x) ∧ ¬hasPositiveTest(x, GlucoseToleranceTest) → orderTest(x, HbA1cTest)
+
+:::
+
+Rule-based knowledge representation is particularly useful for:
+
+1. Capturing expert knowledge and heuristics
+2. Representing causal relationships and inference patterns
+3. Implementing procedural knowledge and decision-making processes
+4. Handling exceptions and non-monotonic reasoning
+
+Different rule formalisms vary in their treatment of negation, uncertainty, and conflict resolution, leading to systems like Prolog, production rules, and defeasible logic.
+
+### Semantic web rules
+
+The Semantic Web stack includes specialized rule languages designed to work with RDF and OWL:
+
+::: {#def-semantic-web-rules}
+
+## Semantic web rules
+
+**Semantic Web rule languages** extend ontology languages with rule-based capabilities while maintaining compatibility with the underlying semantic web technologies. Key languages include:
+
+1. **Rule Interchange Format (RIF)**: W3C standard for exchanging rules between different rule systems
+2. **Semantic Web Rule Language (SWRL)**: Combines OWL with rule syntax
+3. **SPARQL Inferencing Notation (SPIN)**: Represents SPARQL queries as RDF
+4. **Shapes Constraint Language (SHACL)**: Defines constraints and validation rules for RDF graphs
+
+:::
+
+::: {#exm-semantic-web-rules}
+
+## SWRL rules example
+
+In SWRL (Semantic Web Rule Language), rules combine OWL concepts with Horn-like rules:
+
+```
+Person(?p) ∧ hasParent(?p, ?q) ∧ hasSibling(?q, ?r) → hasAunt(?p, ?r) ∧ Woman(?r)
+```
+
+This rule states that if person p has a parent q, and q has a sibling r who is a woman, then r is p's aunt.
+
+A bibliographic example:
+
+```
+Paper(?p) ∧ publishedIn(?p, ?j) ∧ impactFactor(?j, ?i) ∧ greaterThan(?i, 5.0) → HighImpactPaper(?p)
+```
+
+This rule classifies papers published in journals with an impact factor greater than 5.0 as high-impact papers.
+
+:::
+
+Semantic Web rules enhance the inferential capabilities of knowledge graphs, allowing for more complex reasoning patterns while maintaining interoperability with existing Semantic Web standards.
+
+## Ontologies for knowledge graphs
+
+Ontologies provide the semantic framework for organizing knowledge in a structured, consistent, and interoperable manner.
+
+### What is an ontology?
+
+::: {#def-ontology}
+
+## Ontology
+
+An **ontology** is a formal, explicit specification of a shared conceptualization. It provides a structured representation of knowledge that:
+
+1. Defines a vocabulary of terms representing classes of entities, relationships, and attributes
+2. Specifies the semantics of these terms through formal axioms and constraints
+3. Creates a framework for organizing and integrating knowledge across domains
+
+In practical terms, an ontology typically consists of:
+
+- A taxonomy of classes (concepts)
+- Relationships between classes
+- Properties associated with classes
+- Constraints and rules governing these elements
+- Instances of classes (individuals) in some cases
+
+:::
+
+Ontologies serve several crucial functions in knowledge graphs:
+
+::: {#exm-ontology-functions}
+
+## Functions of ontologies in knowledge graphs
+
+1. **Providing semantic structure**: Defining the meaning of entities and relationships
+
+   - Example: Specifying that "treats" in a medical context means a therapeutic relationship between a medication and a condition, not a social interaction
+
+2. **Supporting interoperability**: Enabling different systems to share and integrate data
+
+   - Example: Mapping the concept "Author" in one system to "Creator" in another through their shared ontological definition
+
+3. **Enabling inference**: Allowing the derivation of implicit knowledge
+
+   - Example: Inferring that if Alzheimer's is a subclass of Neurodegenerative Disease, and Medication X treats Neurodegenerative Diseases, then Medication X might treat Alzheimer's
+
+4. **Validating data**: Ensuring consistency and detecting errors
+
+   - Example: Identifying a logical impossibility if something is classified as both a LivingOrganism and a ChemicalCompound
+
+5. **Guiding knowledge acquisition**: Providing a framework for what knowledge should be captured
+   - Example: Specifying that for every Medication, information about dosage, contraindications, and side effects should be recorded
+
+:::
+
+Ontologies range from lightweight taxonomies to complex logical theories, depending on the domain and application requirements. The appropriate level of formality and detail depends on the specific use case and reasoning needs.
+
+### Types of ontologies
+
+Ontologies can be categorized based on their scope, level of generality, expressivity, and purpose:
+
+::: {#def-ontology-types}
+
+## Ontology types
+
+1. **Based on scope and generality**:
+
+   - **Top-level (upper) ontologies**: Describe very general concepts applicable across domains
+   - **Domain ontologies**: Represent concepts specific to a particular field
+   - **Task ontologies**: Describe vocabulary related to a specific activity or task
+   - **Application ontologies**: Specialized for a particular application
+
+2. **Based on expressivity**:
+
+   - **Lightweight ontologies**: Primarily taxonomic structures with minimal logical formalism
+   - **Heavyweight ontologies**: Rich logical axiomatization with formal semantics
+
+3. **Based on purpose**:
+   - **Reference ontologies**: Comprehensive models of a domain for knowledge sharing
+   - **Application ontologies**: Tailored for specific systems or applications
+   - **Bridge ontologies**: Connect and align concepts across different ontologies
+
+:::
+
+::: {#exm-ontology-types}
+
+## Examples of different ontology types
+
+1. **Top-level ontology**: BFO (Basic Formal Ontology)
+
+   - Includes abstract concepts like 'continuant' and 'occurrent'
+   - Used as a foundation for scientific domain ontologies
+
+2. **Domain ontology**: Gene Ontology (GO)
+
+   - Represents knowledge about gene and gene product attributes
+   - Covers molecular functions, biological processes, and cellular components
+
+3. **Task ontology**: OBI (Ontology for Biomedical Investigations)
+
+   - Focuses on the design, protocols, and instrumentation of scientific investigations
+   - Specialized for representing experimental processes
+
+4. **Application ontology**: An e-commerce product ontology
+
+   - Specific to a particular online marketplace
+   - Combines elements of product classification with site-specific attributes
+
+5. **Lightweight vs. heavyweight comparison**:
+
+   - **Lightweight**: A simple product category hierarchy with subsumption relationships
+
+     ```
+     ElectronicDevice
+       ├── Computer
+       │     ├── Laptop
+       │     └── Desktop
+       └── MobileDevice
+             ├── Smartphone
+             └── Tablet
+     ```
+
+   - **Heavyweight**: A biomedical ontology with complex axioms
+     ```
+     Heart ⊑ Organ ⊓ ∃hasFunction.BloodPumping
+     ∀hasFunction.BloodPumping ⊑ ∃partOf.CardiovascularSystem
+     Cardiomyopathy ⊑ Disease ⊓ ∃affects.Heart ⊓ ∀hasPathology.AbnormalHeartMuscle
+     ```
+
+:::
+
+Different types of ontologies serve different purposes in knowledge graphs. Many knowledge graph applications combine multiple ontologies, using top-level ontologies to provide structural consistency while domain and application ontologies supply specialized knowledge.
+
+### Ontology design principles
+
+Designing effective ontologies requires balancing competing considerations and following established best practices:
+
+::: {#def-ontology-design-principles}
+
+## Ontology design principles
+
+1. **Clarity**: Concepts should be defined precisely with formal axioms and natural language documentation
+2. **Coherence**: Definitions should be logically consistent and inference results should align with definitions
+3. **Extensibility**: The ontology should accommodate future growth without requiring redesign
+4. **Minimal encoding bias**: Representation should be at the knowledge level, not driven by implementation details
+5. **Minimal ontological commitment**: Make the fewest claims about the domain, allowing for various use cases
+6. **Modularity**: Organize the ontology into cohesive, loosely-coupled modules
+7. **Reuse**: Leverage existing ontologies when possible rather than reinventing concepts
+
+:::
+
+::: {#exm-ontology-design}
+
+## Ontology design in practice
+
+**Poor design practices**:
+
+- **Confusing is-a with part-of**: "Finger is-a Hand" instead of "Finger part-of Hand"
+- **Mixing levels of abstraction**: Having both "Dog" and "German Shepherd" as direct subclasses of "Animal"
+- **Circular definitions**: Defining A in terms of B and B in terms of A
+- **Inconsistent naming conventions**: Using both CamelCase and snake_case for class names
+- **Overly complex class hierarchies**: Creating deep taxonomies that are difficult to navigate and maintain
+
+**Good design practices**:
+
+1. **Clear class hierarchy**:
+
+   ```
+   Vehicle
+     ├── LandVehicle
+     │     ├── Automobile
+     │     └── Motorcycle
+     └── WaterVehicle
+           ├── Sailboat
+           └── Motorboat
+   ```
+
+2. **Consistent property definitions**:
+
+   ```
+   Property: hasManufacturer
+   Domain: Product
+   Range: Organization
+   Characteristics: Functional (a product has exactly one manufacturer)
+   ```
+
+3. **Proper documentation**:
+
+   ```
+   Class: ClinicalTrial
+   Definition: A research study involving human participants designed to evaluate the safety and efficacy of medical interventions.
+   Examples: Phase I drug trials, randomized controlled studies
+   Subclass of: ScientificInvestigation
+   ```
+
+4. **Modular design**:
+   - Core module: basic types and relationships
+   - Domain-specific modules: specialized concepts
+   - Mapping modules: alignments with other ontologies
+
+:::
+
+Following these principles leads to ontologies that are more maintainable, reusable, and effective at supporting knowledge graph applications. The principles should be applied pragmatically, with the specific requirements of the knowledge graph in mind.
+
+### Ontology engineering methodologies
+
+Ontology engineering methodologies provide structured approaches to ontology development, from requirement gathering to deployment and maintenance:
+
+::: {#def-ontology-engineering}
+
+## Ontology engineering methodologies
+
+**Ontology engineering** is the disciplined approach to designing, implementing, evaluating, and maintaining ontologies. Major methodologies include:
+
+1. **METHONTOLOGY**: A structured methodology covering the entire ontology lifecycle
+
+   - Knowledge acquisition → Conceptualization → Formalization → Implementation → Maintenance
+
+2. **On-To-Knowledge**: A process focused on knowledge management applications
+
+   - Feasibility study → Kickoff → Refinement → Evaluation → Maintenance
+
+3. **NeOn Methodology**: A scenario-based approach for networked ontologies
+
+   - Supports various development paths rather than prescribing a rigid workflow
+
+4. **OBO Foundry Principles**: Guidelines for collaborative ontology development in biomedical domains
+   - Emphasizes open development, common formats, and clear versioning
+
+:::
+
+::: {#exm-ontology-engineering}
+
+## Ontology engineering in practice
+
+**Applying METHONTOLOGY to develop a university ontology**:
+
+1. **Specification**:
+
+   - Purpose: Represent academic structures and relationships for a university information system
+   - Scope: Departments, courses, people (faculty, students, staff), facilities, academic processes
+   - Users: Registrar's office, academic advisors, students, faculty
+
+2. **Knowledge acquisition**:
+
+   - Sources: University catalogs, academic policies, interviews with stakeholders, existing database schemas
+   - Techniques: Document analysis, structured interviews, collaborative workshops
+
+3. **Conceptualization**:
+
+   - Create glossary of terms: "Course", "Faculty", "Department", "Degree Program", etc.
+   - Identify concept hierarchies: Academic (Professor, Associate Professor, Assistant Professor)
+   - Define relationships: teaches(Faculty, Course), enrolledIn(Student, Course)
+   - Identify axioms: "A course must have at least one instructor", "A student cannot be enrolled in two courses that meet at the same time"
+
+4. **Formalization**:
+
+   - Express in formal language (e.g., OWL):
+
+     ```
+     Class: Course
+       SubClassOf: AcademicEntity
+       DisjointWith: Person, Department
+
+     ObjectProperty: teaches
+       Domain: Faculty
+       Range: Course
+
+     Class: GraduateCourse
+       SubClassOf: Course
+       SubClassOf: enrolledIn only GraduateStudent
+     ```
+
+5. **Implementation**:
+
+   - Encode in ontology editor (Protégé)
+   - Validate with reasoning tools
+   - Document with annotations
+
+6. **Maintenance**:
+   - Establish versioning protocol
+   - Define processes for extension requests
+   - Create documentation for ontology users
+
+:::
+
+Methodology selection depends on project context, team expertise, and specific requirements. Larger, more complex ontologies typically benefit from more structured methodologies, while simpler projects may use lightweight approaches.
+
+### Upper ontologies
+
+Upper ontologies (also called foundational or top-level ontologies) provide the most general concepts that apply across all domains, serving as a foundation for more specific domain ontologies:
+
+::: {#def-upper-ontology}
+
+## Upper ontology
+
+An **upper ontology** (or **top-level ontology**) defines very general concepts that are common across all domains. These ontologies:
+
+1. Provide a framework for integrating more specific domain ontologies
+2. Define fundamental distinctions like physical vs. abstract, continuant vs. occurrent
+3. Support interoperability across diverse knowledge systems
+4. Usually maintain strict logical consistency and philosophical rigor
+
+:::
+
+Several important upper ontologies are widely used in knowledge graph applications:
+
+::: {#exm-upper-ontologies}
+
+## Major upper ontologies
+
+1. **Basic Formal Ontology (BFO)**:
+
+   - Developed for scientific domains, especially biomedical
+   - Primary division between **continuants** (entities that persist through time) and **occurrents** (processes, events)
+   - Continuants further divided into **independent** (things like organisms, molecules) and **dependent** (qualities, functions)
+   - Used in OBO Foundry biomedical ontologies
+
+2. **Descriptive Ontology for Linguistic and Cognitive Engineering (DOLCE)**:
+
+   - Focused on capturing natural language categories and common sense
+   - Includes **endurants** (objects), **perdurants** (events), **qualities**, and **abstracts**
+   - Emphasizes ontological distinctions relevant to human cognition
+   - Used in semantic web applications and natural language processing
+
+3. **Suggested Upper Merged Ontology (SUMO)**:
+
+   - Comprehensive upper ontology with mappings to all WordNet concepts
+   - Includes concepts for physical entities, processes, abstract entities, etc.
+   - Has both a core upper ontology and domain ontologies
+   - Used in NLP, information retrieval, and semantic interoperability
+
+4. **CIDOC Conceptual Reference Model (CRM)**:
+   - Upper ontology for cultural heritage information
+   - Focuses on events, temporal entities, physical and conceptual objects
+   - Provides a foundation for metadata integration in museums, archives, and libraries
+
+:::
+
+Using upper ontologies provides several benefits for knowledge graphs:
+
+1. Promotes consistency in conceptual modeling
+2. Facilitates integration of multiple domain ontologies
+3. Provides well-founded semantic distinctions
+4. Supports reasoning across domains
+
+However, they also introduce challenges, including:
+
+1. Steep learning curve for domain experts
+2. Potential philosophical disagreements
+3. Overhead of maintaining alignment with upper ontology
+
+The decision to use an upper ontology should consider the scale, complexity, and integration requirements of the knowledge graph project.
+
+### Domain ontologies
+
+Domain ontologies capture the concepts, relationships, and axioms specific to a particular field or application area:
+
+::: {#def-domain-ontology}
+
+## Domain ontology
+
+A **domain ontology** represents concepts within a specific field of knowledge, including:
+
+1. Specialized terminology and vocabulary of the domain
+2. Relationships specific to the field
+3. Domain-specific constraints and axioms
+4. Standard practices and shared understandings among domain experts
+
+Domain ontologies may be aligned with upper ontologies to facilitate cross-domain integration.
+
+:::
+
+::: {#exm-domain-ontologies}
+
+## Examples of domain ontologies
+
+1. **Gene Ontology (GO)**:
+
+   - Covers molecular functions, biological processes, and cellular components
+   - Used to annotate gene products across species
+   - Example concepts: "DNA replication", "mitochondrion", "protein binding"
+   - Contains over 45,000 terms with precisely defined relationships
+
+2. **Financial Industry Business Ontology (FIBO)**:
+
+   - Represents financial instruments, business entities, and market data
+   - Standardizes financial terminology across institutions
+   - Example concepts: "Derivative", "Interest Rate Swap", "Collateral"
+   - Supports regulatory reporting and cross-institutional data exchange
+
+3. **Pizza Ontology**:
+
+   - Educational example used to teach ontology development
+   - Models pizza types, toppings, and bases
+   - Demonstrates classification principles and restriction patterns
+   - Example concepts: "VegetarianPizza", "TomatoTopping", "ThinCrust"
+
+4. **Chemical Entities of Biological Interest (ChEBI)**:
+   - Focuses on chemical compounds relevant to biological systems
+   - Organized by both structural and functional classifications
+   - Example concepts: "penicillin", "hormone", "vitamin"
+   - Contains detailed chemical structures and properties
+
+:::
+
+Domain ontologies are essential components of knowledge graphs, providing the specialized vocabulary and semantics needed for particular applications. Their development typically involves close collaboration with domain experts and may leverage existing standards, vocabularies, and data models in the field.
+
+### Application ontologies and ontology design patterns
+
+Application ontologies focus on specific use cases, while ontology design patterns provide reusable solutions to common modeling problems:
+
+::: {#def-application-ontology}
+
+## Application ontology
+
+An **application ontology** is tailored for a specific application or system, often combining elements from domain and task ontologies. Application ontologies typically:
+
+1. Focus on practical requirements rather than theoretical completeness
+2. Include only concepts relevant to the target application
+3. May sacrifice some generality for efficiency and usability
+4. Often integrate multiple domains relevant to the application
+
+:::
+
+::: {#def-ontology-pattern}
+
+## Ontology design pattern
+
+An **ontology design pattern** (ODP) is a reusable solution to a recurring ontology design problem. ODPs serve as:
+
+1. Building blocks for creating larger ontologies
+2. Best practices for modeling specific types of knowledge
+3. Templates that can be specialized for particular domains
+4. Means to improve ontology quality and consistency
+
+:::
+
+::: {#exm-application-ontology}
+
+## Application ontology example
+
+**E-commerce product catalog ontology**:
+
+This application ontology integrates concepts from multiple domains to support an online shopping platform:
+
+**Classes**:
+
+- Product (with subclasses like Electronics, Clothing, Books)
+- Customer
+- Order
+- Review
+- Promotion
+- ShippingMethod
+
+**Properties**:
+
+- hasPrice, hasDescription, hasImage, inStock
+- placedBy (Order to Customer)
+- contains (Order to Product)
+- reviewedBy, hasRating
+
+**Axioms**:
+
+- Every Order must have at least one Product
+- A DiscountedProduct must have both an originalPrice and a currentPrice
+- A FeaturedProduct must appear on the homepage
+
+This ontology combines product classification (domain knowledge) with e-commerce specific concepts (application knowledge) to support specific functions like product search, recommendation, and order processing.
+
+:::
+
+::: {#exm-ontology-patterns}
+
+## Ontology design pattern examples
+
+1. **Participation pattern**:
+
+   - Represents involvement of an object in an event
+   - Core elements: Object, Event, participatesIn relationship
+   - Example: Person participatesIn Conference
+
+2. **N-ary relationship pattern**:
+
+   - Represents relationships involving more than two entities
+   - Reifies the relationship as a class with multiple binary relationships
+   - Example: Diagnosis (connects Patient, Doctor, Disease, and Date)
+
+3. **Information object pattern**:
+
+   - Distinguishes between information and what it's about
+   - Core elements: InformationObject, isAbout relationship, Subject
+   - Example: MedicalRecord isAbout Patient
+
+4. **Time interval pattern**:
+   - Represents temporal information with clear semantics
+   - Core elements: TimeInterval, hasBeginning, hasEnd, TimePoint
+   - Example: Project hasTimeInterval Interval1, Interval1 hasBeginning "2023-01-15"
+
+:::
+
+Application ontologies and ontology design patterns represent practical approaches to ontology engineering that balance theoretical rigor with usability concerns. They help make ontology development more efficient and result in more consistent, maintainable knowledge graphs.
+
+## Semantic web technologies for knowledge graphs
+
+The Semantic Web technology stack provides standardized languages and tools for implementing knowledge graphs with well-defined semantics.
+
+### Resource Description Framework (RDF)
+
+RDF provides the fundamental data model for Semantic Web applications and serves as the foundation for many knowledge graph implementations:
+
+::: {#def-rdf}
+
+## Resource Description Framework (RDF)
+
+The **Resource Description Framework (RDF)** is a standard model for data interchange on the Web, with features including:
+
+1. A graph-based data model consisting of triples (subject, predicate, object)
+2. Global identification of resources using URIs/IRIs
+3. Support for both structured and semi-structured data
+4. A foundation for more expressive semantic technologies like RDFS and OWL
+
+The basic building block of RDF is the triple, which consists of:
+
+- **Subject**: A resource being described (URI or blank node)
+- **Predicate**: A property or relationship (URI)
+- **Object**: A value, which can be a URI, blank node, or literal value
+
+:::
+
+::: {#exm-rdf}
+
+## RDF examples
+
+**RDF triples (Turtle syntax)**:
+
+```turtle
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:JohnDoe a foaf:Person ;
+    foaf:name "John Doe" ;
+    foaf:mbox <mailto:john@example.org> ;
+    ex:employedBy ex:Acme ;
+    ex:startDate "2020-01-15"^^xsd:date .
+
+ex:Acme a ex:Company ;
+    ex:founded "1985"^^xsd:integer ;
+    ex:headquartersIn ex:NewYork .
+```
+
+**The same RDF data as a graph**:
+
+```
+[ex:JohnDoe] --a--> [foaf:Person]
+      |
+      |--foaf:name--> ["John Doe"]
+      |
+      |--foaf:mbox--> [mailto:john@example.org]
+      |
+      |--ex:employedBy--> [ex:Acme] --a--> [ex:Company]
+      |                       |
+      |                       |--ex:founded--> ["1985"^^xsd:integer]
+      |                       |
+      |                       |--ex:headquartersIn--> [ex:NewYork]
+      |
+      |--ex:startDate--> ["2020-01-15"^^xsd:date]
+```
+
+:::
+
+RDF provides several serialization formats, including:
+
+1. **RDF/XML**: The original XML-based syntax
+2. **Turtle**: A concise, human-friendly text format
+3. **JSON-LD**: JSON-based format for integrating with web applications
+4. **N-Triples**: A line-based, plain text format for simple processing
+5. **TriG**: An extension of Turtle for named graphs
+
+The flexibility and simplicity of the RDF model make it an ideal foundation for knowledge graphs, allowing for incremental extension and integration of diverse data sources.
+
+### RDF Schema (RDFS)
+
+RDF Schema extends RDF with a vocabulary for describing classes, properties, and their relationships, providing basic semantic capabilities:
+
+::: {#def-rdfs}
+
+## RDF Schema (RDFS)
+
+**RDF Schema (RDFS)** is a semantic extension of RDF that provides a vocabulary for describing:
+
+1. **Classes and instances**: rdfs:Class, rdf:type
+2. **Class hierarchies**: rdfs:subClassOf
+3. **Property hierarchies**: rdfs:subPropertyOf
+4. **Domain and range constraints**: rdfs:domain, rdfs:range
+5. **Documentation**: rdfs:label, rdfs:comment
+
+RDFS enables basic inference capabilities, such as inheritance of class properties and instance membership transitivity.
+
+:::
+
+::: {#exm-rdfs}
+
+## RDFS example
+
+```turtle
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <http://example.org/> .
+
+# Class definitions
+ex:Person a rdfs:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "A human individual" .
+
+ex:Researcher a rdfs:Class ;
+    rdfs:subClassOf ex:Person ;
+    rdfs:label "Researcher" .
+
+ex:Publication a rdfs:Class ;
+    rdfs:label "Publication" .
+
+# Property definitions
+ex:authorOf a rdf:Property ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Publication ;
+    rdfs:label "author of" .
+
+ex:hasCoAuthor a rdf:Property ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Person ;
+    rdfs:subPropertyOf ex:collaboratesWith .
+
+# Instances
+ex:JohnDoe a ex:Researcher .
+ex:Paper1 a ex:Publication .
+ex:JohnDoe ex:authorOf ex:Paper1 .
+```
+
+**Inferences enabled by RDFS**:
+
+- Since ex:JohnDoe is a ex:Researcher, and ex:Researcher is a subclass of ex:Person, we can infer that ex:JohnDoe is a ex:Person.
+- Since ex:JohnDoe ex:authorOf ex:Paper1, and the domain of ex:authorOf is ex:Person, we can infer that ex:JohnDoe is a ex:Person (redundant in this case).
+- Since ex:JohnDoe ex:authorOf ex:Paper1, and the range of ex:authorOf is ex:Publication, we can infer that ex:Paper1 is a ex:Publication (redundant in this case).
+
+:::
+
+RDFS provides a lightweight ontology language that balances expressivity with simplicity. It supports basic schema definition and inference capabilities while remaining computationally tractable. For many knowledge graph applications, RDFS provides sufficient semantics without the complexity of more expressive languages like OWL.
+
+### Web Ontology Language (OWL)
+
+OWL extends RDFS with more expressive constructs for defining complex ontologies, based on description logic:
+
+::: {#def-owl}
+
+## Web Ontology Language (OWL)
+
+The **Web Ontology Language (OWL)** is a family of knowledge representation languages for authoring ontologies, characterized by:
+
+1. Formal semantics based on description logics
+2. More expressive constructs than RDFS
+3. Support for complex class expressions and property characteristics
+4. Different profiles (sublanguages) with varying expressivity/complexity tradeoffs
+
+Key OWL constructs include:
+
+- **Class expressions**: intersection, union, complement, restrictions
+- **Property characteristics**: functional, inverse functional, transitive, symmetric
+- **Property restrictions**: existential (someValuesFrom), universal (allValuesFrom), cardinality
+- **Complex axioms**: disjointness, equivalence, property chains
+
+:::
+
+OWL comes in several profiles, each offering different expressivity and computational complexity trade-offs:
+
+::: {#def-owl-profiles}
+
+## OWL profiles
+
+1. **OWL Full**: The most expressive variant, but undecidable (no guarantee of computational tractability)
+
+2. **OWL DL**: Based on description logic, maintains decidability while providing high expressivity
+
+3. **OWL 2 profiles**:
+   - **OWL 2 EL**: Optimized for large biomedical ontologies with complex class hierarchies
+   - **OWL 2 QL**: Designed for efficient query answering with large instance data
+   - **OWL 2 RL**: Rule-based subset supporting forward-chaining rule implementations
+
+:::
+
+::: {#exm-owl}
+
+## OWL examples
+
+**Class definitions with complex expressions**:
+
+```turtle
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ex: <http://example.org/> .
+
+# Class intersection
+ex:ProfessorEmeritus a owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            ex:Professor
+            ex:RetiredFaculty
+        )
+    ] .
+
+# Class with property restriction
+ex:ResearchProfessor a owl:Class ;
+    owl:equivalentClass [
+        owl:intersectionOf (
+            ex:Professor
+            [ a owl:Restriction ;
+              owl:onProperty ex:supervisesStudents ;
+              owl:someValuesFrom ex:GraduateStudent ]
+            [ a owl:Restriction ;
+              owl:onProperty ex:hasPublication ;
+              owl:minCardinality "5"^^xsd:nonNegativeInteger ]
+        )
+    ] .
+```
+
+**Property characteristics**:
+
+```turtle
+ex:hasParent a owl:ObjectProperty .
+
+ex:hasAncestor a owl:ObjectProperty ;
+    owl:transitiveProperty true ;
+    rdfs:subPropertyOf ex:hasRelative .
+
+ex:hasChild a owl:ObjectProperty ;
+    owl:inverseOf ex:hasParent .
+
+ex:marriedTo a owl:ObjectProperty ;
+    owl:symmetricProperty true ;
+    owl:irreflexiveProperty true .
+
+ex:hasBirthDate a owl:DatatypeProperty ;
+    owl:functionalProperty true .
+```
+
+**Disjointness and complex axioms**:
+
+```turtle
+ex:Student owl:disjointWith ex:Faculty .
+
+ex:supervisorOf owl:propertyChainAxiom (
+    ex:advisorOf ex:memberOf
+) .
+```
+
+:::
+
+OWL provides the semantic richness required for complex knowledge graphs, particularly in domains requiring sophisticated reasoning and inference. Its formal semantics enables consistency checking, classification, and query answering beyond what's possible with simpler representations.
+
+### SPARQL query language
+
+SPARQL provides a standardized way to query and manipulate RDF data, serving as the primary query language for knowledge graphs built on Semantic Web technologies:
+
+::: {#def-sparql}
+
+## SPARQL
+
+**SPARQL** (SPARQL Protocol and RDF Query Language) is the standard query language for RDF data, offering:
+
+1. A SQL-like syntax for querying graph patterns in RDF data
+2. Support for various query forms: SELECT, CONSTRUCT, ASK, DESCRIBE
+3. Query modifiers like filtering, ordering, and aggregation
+4. Graph manipulation capabilities through INSERT and DELETE operations (SPARQL Update)
+
+SPARQL queries primarily match graph patterns against RDF datasets, retrieving or modifying the matching subgraphs.
+
+:::
+
+::: {#exm-sparql}
+
+## SPARQL query examples
+
+**Basic SELECT query**:
+
+```sparql
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT ?person ?name
+WHERE {
+  ?person a ex:Researcher ;
+          foaf:name ?name ;
+          ex:publishedIn ?journal .
+  ?journal ex:impactFactor ?impact .
+  FILTER (?impact > 5.0)
+}
+ORDER BY DESC(?impact)
+LIMIT 10
+```
+
+This query finds the top 10 researchers who have published in high-impact journals (impact factor > 5.0).
+
+**CONSTRUCT query to create new triples**:
+
+```sparql
+PREFIX ex: <http://example.org/>
+
+CONSTRUCT {
+  ?person ex:expertIn ?field .
+}
+WHERE {
+  ?person ex:authorOf ?paper .
+  ?paper ex:hasTopic ?field .
+  {
+    SELECT ?person ?field (COUNT(?paper) as ?count)
+    WHERE {
+      ?person ex:authorOf ?paper .
+      ?paper ex:hasTopic ?field .
+    }
+    GROUP BY ?person ?field
+    HAVING (?count >= 5)
+  }
+}
+```
+
+This CONSTRUCT query creates new "expertIn" relationships for researchers who have authored at least 5 papers on a particular topic.
+
+**ASK query**:
+
+```sparql
+PREFIX ex: <http://example.org/>
+
+ASK {
+  ex:JohnDoe ex:collaboratesWith ex:JaneSmith .
+}
+```
+
+This query returns a boolean indicating whether John Doe collaborates with Jane Smith.
+
+**SPARQL Update**:
+
+```sparql
+PREFIX ex: <http://example.org/>
+
+DELETE {
+  ?paper ex:status "under review" .
+}
+INSERT {
+  ?paper ex:status "published" ;
+         ex:publicationDate "2024-05-15"^^xsd:date .
+}
+WHERE {
+  ?paper ex:manuscriptID "MS-2024-156" .
+}
+```
+
+This update changes the status of a specific paper from "under review" to "published" and adds a publication date.
+
+:::
+
+SPARQL's ability to express complex graph patterns and transformations makes it a powerful tool for working with knowledge graphs. It enables not only data retrieval but also knowledge discovery through pattern matching, aggregation, and path queries across the graph structure.
+
+### Semantic Web stack and linked data principles
+
+The Semantic Web stack provides a layered architecture of technologies for building knowledge graphs, while linked data principles establish best practices for publishing and connecting structured data:
+
+::: {#def-semantic-web-stack}
+
+## Semantic Web stack
+
+The **Semantic Web stack** (or "Semantic Web layer cake") is a layered architecture of technologies that build upon each other to enable the vision of a web of structured, machine-readable data:
+
+1. **Foundation**: URI/IRI, Unicode, XML
+2. **Data model**: RDF
+3. **Schema and ontology**: RDFS, OWL
+4. **Query**: SPARQL
+5. **Rules**: RIF, SWRL
+6. **Proof and trust**: Digital signatures, Web of trust
+
+:::
+
+::: {#def-linked-data}
+
+## Linked data principles
+
+**Linked data** refers to a set of best practices for publishing and connecting structured data on the web, established by Tim Berners-Lee:
+
+1. Use URIs (or IRIs) as names for things
+2. Use HTTP URIs so that people can look up those names
+3. When someone looks up a URI, provide useful information, using standards (RDF, SPARQL)
+4. Include links to other URIs so they can discover more things
+
+:::
+
+::: {#exm-linked-data}
+
+## Linked data in practice
+
+**Publishing linked data about scientific publications**:
+
+1. **Identify resources with HTTP URIs**:
+
+   - `http://example.org/publications/paper123` (the paper)
+   - `http://example.org/researchers/smith42` (an author)
+   - `http://example.org/topics/machine-learning` (a topic)
+
+2. **Return RDF data when the URI is dereferenced**:
+
+   ```turtle
+   @prefix ex: <http://example.org/> .
+   @prefix dct: <http://purl.org/dc/terms/> .
+   @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+   ex:publications/paper123 a ex:ResearchPaper ;
+       dct:title "Advances in Knowledge Graph Embeddings" ;
+       dct:published "2023"^^xsd:integer ;
+       ex:author ex:researchers/smith42 ;
+       ex:topic ex:topics/machine-learning, ex:topics/knowledge-graphs .
+   ```
+
+3. **Include links to external datasets**:
+
+   ```turtle
+   ex:researchers/smith42 a foaf:Person ;
+       foaf:name "Jane Smith" ;
+       owl:sameAs <http://orcid.org/0000-0002-1234-5678> ;
+       ex:affiliation <http://dbpedia.org/resource/Stanford_University> .
+
+   ex:topics/machine-learning owl:sameAs <http://dbpedia.org/resource/Machine_learning> .
+   ```
+
+4. **Support SPARQL queries over the data**:
+   - Provide a SPARQL endpoint at `http://example.org/sparql`
+   - Enable discovery of related resources through query
+
+:::
+
+The combination of Semantic Web technologies and linked data principles provides a comprehensive framework for implementing interoperable knowledge graphs. This approach facilitates not only the representation of knowledge within a single system but also the integration of knowledge across distributed sources throughout the web.
+
+## Practical ontology development
+
+This section covers practical aspects of ontology development, from tools and languages to evaluation and governance.
+
+### Ontology development tools
+
+Various tools support different aspects of the ontology development process:
+
+::: {#def-ontology-tools}
+
+## Ontology development tools
+
+**Ontology development tools** assist in creating, editing, visualizing, and managing ontologies. Key categories include:
+
+1. **Ontology editors**: Graphical interfaces for creating and editing ontologies
+2. **Reasoners**: Software that performs logical inference and consistency checking
+3. **Visualization tools**: Generate graphical representations of ontological structures
+4. **Collaborative platforms**: Support team-based ontology development
+5. **Repositories**: Store, version, and distribute ontologies
+
+:::
+
+::: {#exm-ontology-tools}
+
+## Common ontology development tools
+
+1. **Protégé**:
+
+   - Full-featured, open-source ontology editor developed at Stanford
+   - Supports OWL, RDF, and XML Schema
+   - Extensible plugin architecture
+   - Integrated visualization and reasoning capabilities
+   - Example usage: Creating an OWL ontology with class hierarchies, property definitions, and restrictions
+
+2. **TopBraid Composer**:
+
+   - Commercial semantic modeling environment
+   - Supports RDFS, OWL, SHACL, and other W3C standards
+   - Integrated graph database and SPARQL query capabilities
+   - Enterprise features for team development
+   - Example usage: Developing industry standards and enterprise knowledge models
+
+3. **WebProtégé**:
+
+   - Web-based collaborative ontology development platform
+   - Multi-user editing with change tracking
+   - Simplified interface for domain experts
+   - Example usage: Distributed teams collaboratively developing a medical ontology
+
+4. **OWL reasoners**:
+
+   - HermiT: First reasoner to fully support OWL 2 DL
+   - Pellet: Open-source reasoner with explanation facilities
+   - FaCT++: Fast tableaux-based reasoner
+   - ELK: Specialized for OWL 2 EL profile ontologies
+   - Example usage: Verifying ontology consistency and computing inferred class hierarchies
+
+5. **Ontology repositories**:
+   - BioPortal: Repository for biomedical ontologies
+   - OBO Foundry: Coordinated collection of interoperable ontologies
+   - LOV (Linked Open Vocabularies): Catalog of reusable vocabularies
+   - Example usage: Discovering existing ontologies for reuse in a new knowledge graph project
+
+:::
+
+The selection of appropriate tools depends on factors such as the ontology language (RDF, OWL), team expertise, scale of the project, and specific requirements for reasoning or collaboration. Many projects use multiple tools at different stages of the ontology lifecycle.
+
+### Ontology languages for knowledge graphs
+
+Different ontology languages offer varying expressivity, semantic foundations, and computational properties:
+
+::: {#def-ontology-languages}
+
+## Ontology languages
+
+**Ontology languages** are formal languages used to construct ontologies, differing in their:
+
+1. Expressivity (what can be represented)
+2. Formal semantics (how expressions are interpreted)
+3. Reasoning complexity (computational properties)
+4. Syntax and serialization formats
+
+Modern ontology languages typically build on established logical formalisms while providing practical features for knowledge engineering.
+
+:::
+
+::: {#exm-ontology-languages}
+
+## Comparison of ontology languages
+
+1. **RDF Schema (RDFS)**:
+
+   - **Expressivity**: Basic class hierarchies, domain/range constraints
+   - **Key features**: Classes, subclasses, properties, domain/range
+   - **Limitations**: No class expressions, property restrictions, or disjointness
+   - **Use case**: Simple vocabulary definition, lightweight taxonomies
+   - **Example**:
+     ```turtle
+     ex:Researcher rdfs:subClassOf ex:Person .
+     ex:authorOf rdfs:domain ex:Person ; rdfs:range ex:Publication .
+     ```
+
+2. **OWL (Web Ontology Language)**:
+
+   - **Expressivity**: Rich class expressions, property characteristics, complex axioms
+   - **Key features**: Class constructors, property restrictions, disjointness, equivalence
+   - **Limitations**: Decidability constraints (in OWL DL), complexity trade-offs
+   - **Use case**: Complex domain models requiring formal reasoning
+   - **Example**:
+     ```turtle
+     ex:Researcher owl:equivalentClass [
+       owl:intersectionOf (
+         ex:Person
+         [ owl:onProperty ex:authorOf ; owl:minCardinality 1 ]
+       )
+     ] .
+     ```
+
+3. **SKOS (Simple Knowledge Organization System)**:
+
+   - **Expressivity**: Designed for thesauri, taxonomies, classification schemes
+   - **Key features**: Concepts, labels, semantic relationships (broader/narrower)
+   - **Limitations**: Limited formal semantics, focus on terminology organization
+   - **Use case**: Migration of existing classification systems, multilingual vocabularies
+   - **Example**:
+     ```turtle
+     ex:MachineLearning a skos:Concept ;
+       skos:prefLabel "Machine Learning"@en ;
+       skos:altLabel "ML"@en ;
+       skos:broader ex:ArtificialIntelligence .
+     ```
+
+4. **SHACL (Shapes Constraint Language)**:
+   - **Expressivity**: Graph validation, constraints, rules
+   - **Key features**: Shape definitions, property constraints, logical constraints
+   - **Limitations**: Focused on validation rather than inference
+   - **Use case**: Data quality enforcement, schema validation
+   - **Example**:
+     ```turtle
+     ex:ResearcherShape a sh:NodeShape ;
+       sh:targetClass ex:Researcher ;
+       sh:property [
+         sh:path ex:name ;
+         sh:datatype xsd:string ;
+         sh:minCount 1 ;
+       ] ;
+       sh:property [
+         sh:path ex:affiliation ;
+         sh:class ex:Institution ;
+       ] .
+     ```
+
+:::
+
+The choice of ontology language should be guided by:
+
+1. The complexity of the domain and required expressivity
+2. The need for automated reasoning and inference
+3. The expertise of the development team
+4. Integration requirements with existing systems
+5. Performance considerations for the target application
+
+Many knowledge graph projects use a combination of languages—for example, OWL for the core ontology with SHACL for data validation, or SKOS for terminology with RDFS for basic structural relationships.
+
+### Ontology evaluation and quality assurance
+
+Evaluating ontologies is essential to ensure they meet requirements and maintain quality over time:
+
+::: {#def-ontology-evaluation}
+
+## Ontology evaluation
+
+**Ontology evaluation** assesses the quality of an ontology along various dimensions:
+
+1. **Structural evaluation**: Metrics on the ontology's graph properties
+2. **Logical evaluation**: Consistency, satisfiability, and reasoning complexity
+3. **Functional evaluation**: Fitness for the intended purpose or competency
+4. **Usability evaluation**: Clarity, documentation, and ease of understanding
+
+Evaluation may be performed automatically through tools or metrics, manually by experts, or through application in real-world scenarios.
+
+:::
+
+## Practical ontology development (continued)
+
+::: {#exm-ontology-evaluation}
+
+## Ontology evaluation methods
+
+1. **Structural metrics**:
+
+   - **Size and complexity**: Number of classes, properties, axioms
+   - **Graph metrics**: Average depth, breadth, branching factor
+   - **Connectivity**: Distribution of relationships, isolated components
+   - **Example**: A medical ontology with 8,000 classes, average depth of 12, and cohesion metric of 0.85
+
+2. **Logical quality**:
+
+   - **Consistency checking**: Identifying logical contradictions
+   - **Satisfiability**: Ensuring classes can have instances
+   - **Redundancy detection**: Finding equivalent classes or subsumption cycles
+   - **Example**: Using the HermiT reasoner to detect that "VegetarianPizzaWithHam" is unsatisfiable due to conflicting definitions
+
+3. **Competency questions**:
+
+   - Pre-defined questions the ontology should be able to answer
+   - Formalized as SPARQL queries or other formal queries
+   - Coverage evaluation based on query results
+   - **Example**:
+     - Question: "Which researchers work on both machine learning and knowledge graphs?"
+     - SPARQL: `SELECT ?r WHERE { ?r a :Researcher ; :worksOn :MachineLearning ; :worksOn :KnowledgeGraphs }`
+     - Evaluation: Does the query return expected results?
+
+4. **Expert review**:
+   - Domain experts assess correctness and completeness
+   - Ontology engineers evaluate modeling decisions and best practices
+   - User evaluation of clarity and understandability
+   - **Example**: A panel of medical experts reviewing a disease ontology for accurate classification of conditions
+
+:::
+
+Ontology quality assurance involves both preventive measures and ongoing evaluation:
+
+::: {#def-ontology-qa}
+
+## Ontology quality assurance
+
+**Ontology quality assurance** encompasses processes and practices to maintain high-quality ontologies throughout their lifecycle:
+
+1. **Quality control**:
+
+   - Automated tests and validation
+   - Peer review processes
+   - Formal approval workflows
+
+2. **Documentation**:
+
+   - Conceptual definitions and examples
+   - Annotation properties for human-readable descriptions
+   - Usage guidelines and patterns
+
+3. **Continuous evaluation**:
+   - Change impact analysis
+   - Regression testing
+   - User feedback mechanisms
+
+:::
+
+::: {#exm-ontology-qa}
+
+## Ontology quality assurance in practice
+
+**Quality assurance process for a biomedical ontology**:
+
+1. **Development phase**:
+
+   - Use of upper ontology (BFO) to ensure philosophical consistency
+   - Implementation of naming conventions (e.g., CamelCase for classes)
+   - Automated checks for missing labels or definitions
+   - Weekly peer review sessions for new additions
+
+2. **Pre-release validation**:
+
+   - Logical consistency checking with multiple reasoners
+   - Custom SPARQL queries to detect modeling anti-patterns
+   - Verification against competency questions
+   - Domain expert review of key sections
+
+3. **Release and maintenance**:
+
+   - Version control with semantic versioning (e.g., 2.4.1)
+   - Detailed release notes documenting changes
+   - Deprecation process for obsolete terms
+   - Automated regression tests to ensure backward compatibility
+
+4. **User feedback loop**:
+   - Issue tracking system for error reports
+   - Term request process for new concepts
+   - Usage metrics to identify widely used vs. neglected sections
+   - Regular community calls for collaborative resolution of complex issues
+
+:::
+
+Effective ontology evaluation and quality assurance processes are essential for creating and maintaining ontologies that provide reliable semantic foundations for knowledge graphs. They help prevent errors, ensure semantic coherence, and maintain alignment with evolving domain knowledge.
+
+### Ontology integration and alignment
+
+In real-world knowledge graphs, multiple ontologies often need to be combined or aligned:
+
+::: {#def-ontology-integration}
+
+## Ontology integration and alignment
+
+**Ontology integration** combines multiple ontologies into a coherent unified ontology.
+
+**Ontology alignment** (or mapping) establishes correspondences between concepts in different ontologies without necessarily merging them.
+
+These processes address:
+
+1. **Semantic heterogeneity**: Different conceptualizations of the same domain
+2. **Structural differences**: Variations in modeling approaches and granularity
+3. **Terminology variations**: Different terms for the same concepts
+4. **Scope differences**: Partial overlap between domains
+
+:::
+
+::: {#exm-ontology-integration}
+
+## Ontology integration and alignment examples
+
+1. **Simple equivalence mappings**:
+
+   ```turtle
+   ex1:Researcher owl:equivalentClass ex2:Scientist .
+   ex1:authorOf owl:equivalentProperty ex2:wrote .
+   ex1:University owl:equivalentClass ex2:HigherEducationInstitution .
+   ```
+
+2. **Complex alignment patterns**:
+
+   ```turtle
+   # Concept in ontology 1 is broader than in ontology 2
+   ex1:Disease rdfs:subClassOf ex2:PathologicalProcess .
+
+   # Property chain alignment
+   ex1:hasDirector owl:propertyChainAxiom (ex2:hasDepartment ex2:headedBy) .
+
+   # Class expression alignment
+   ex1:Patient owl:equivalentClass [
+     owl:intersectionOf (
+       ex2:Person
+       [ a owl:Restriction ;
+         owl:onProperty ex2:undergoes ;
+         owl:someValuesFrom ex2:MedicalProcedure ]
+     )
+   ] .
+   ```
+
+3. **Integration through upper ontology**: Both source ontologies are aligned to a common upper ontology (e.g., BFO or DOLCE), which provides a shared framework for integration:
+
+   ```turtle
+   ex1:Person rdfs:subClassOf bfo:Object .
+   ex2:Human rdfs:subClassOf bfo:Object .
+   # This shared superclass facilitates alignment
+   ```
+
+4. **Ontology import and module extraction**:
+
+   ```turtle
+   # Ontology 1 imports specific modules from Ontology 2
+   @prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+   <http://example.org/ontology1>
+     a owl:Ontology ;
+     owl:imports <http://example.org/ontology2-module> .
+   ```
+
+:::
+
+Approaches to ontology alignment and integration include:
+
+1. **Manual alignment**: Expert-driven identification of corresponding concepts
+2. **Semi-automated alignment**: Tools suggest potential matches for expert validation
+3. **Automated alignment**: Algorithms identify correspondences based on:
+   - Lexical similarity (string matching, synonyms)
+   - Structural similarity (graph patterns)
+   - Semantic similarity (based on instances or external resources)
+   - Background knowledge (leveraging existing alignments or resources)
+
+::: {#exm-alignment-tools}
+
+## Ontology alignment tools and techniques
+
+1. **Matching systems**:
+
+   - **AgreementMaker**: Interactive system with multiple matching algorithms
+   - **LogMap**: Scalable matching with logical consistency verification
+   - **ALIN**: Interactive matching tool with user validation
+
+2. **Alignment representation**:
+
+   - **Alignment API**: Standard format for representing and manipulating alignments
+   - **EDOAL**: Expressive language for complex alignments
+
+3. **Collaborative platforms**:
+
+   - **VocBench**: Collaborative environment supporting alignment
+   - **WebProtégé**: Shared editing with importing and alignment capabilities
+
+4. **Alignment evaluation**:
+   - **Precision**: Proportion of correct alignments among those returned
+   - **Recall**: Proportion of correct alignments found
+   - **F-measure**: Harmonic mean of precision and recall
+   - **Coherence**: Logical consistency of the aligned ontologies
+
+:::
+
+Ontology integration and alignment are critical for building comprehensive knowledge graphs that leverage existing semantic resources. Successful integration enables knowledge sharing across domains and systems while maintaining semantic coherence.
+
+### Ontology maintenance and evolution
+
+Ontologies are living artifacts that must evolve as domains change and knowledge expands:
+
+::: {#def-ontology-evolution}
+
+## Ontology maintenance and evolution
+
+**Ontology maintenance** involves keeping an ontology current, correct, and usable over time.
+
+**Ontology evolution** refers to the process of adapting an ontology to changes in:
+
+1. The domain being modeled
+2. Requirements or use cases
+3. Related ontologies or data sources
+4. Best practices or standards
+
+Evolution must be managed to preserve compatibility with existing data and applications while incorporating necessary changes.
+
+:::
+
+::: {#exm-ontology-evolution}
+
+## Ontology evolution examples
+
+1. **Term addition**:
+
+   - Adding new class "QuantumMachineLearning" as technology evolves
+   - Adding properties to represent newly discovered relationships
+
+2. **Refinement and specialization**:
+
+   - Splitting general concept "Cancer" into more specific types
+   - Adding subclasses to represent finer distinctions
+
+3. **Restructuring**:
+
+   - Reorganizing a taxonomy to better reflect current understanding
+   - Moving properties to more appropriate classes
+
+4. **Deprecation**:
+
+   - Marking obsolete terms: `ex:LegacyTerm owl:deprecated true`
+   - Providing replacement recommendations: `ex:LegacyTerm rdfs:seeAlso ex:NewTerm`
+
+5. **Ontology refactoring**:
+   - Modularizing a monolithic ontology
+   - Aligning with a new upper ontology
+   - Improving naming conventions
+
+:::
+
+Effective ontology evolution requires carefully designed processes and infrastructure:
+
+::: {#def-evolution-management}
+
+## Evolution management
+
+**Ontology evolution management** encompasses:
+
+1. **Version control**:
+
+   - Systematic tracking of changes
+   - Semantic versioning schemes
+   - Historical preservation
+
+2. **Change documentation**:
+
+   - Release notes and change logs
+   - Rationale for modifications
+   - Impact assessment
+
+3. **Compatibility mechanisms**:
+   - Deprecation workflows
+   - Legacy support
+   - Migration paths
+4. **Governance processes**:
+   - Change request protocols
+   - Review and approval workflows
+   - Stakeholder involvement
+
+:::
+
+::: {#exm-evolution-management}
+
+## Evolution management in practice
+
+**Version management for Gene Ontology (GO)**:
+
+1. **Systematic versioning**:
+
+   - Daily releases with timestamp identifiers
+   - Monthly releases for wider distribution
+   - Persistent URI pattern including version information
+
+2. **Change tracking**:
+
+   - Each term has metadata about creation and modification
+   - Full history preserved in GitHub repository
+   - Change log categorizes changes (additions, obsoletions, etc.)
+
+3. **Term lifecycle**:
+
+   - New terms proposed through GitHub issues
+   - Terms can be marked obsolete but never deleted
+   - Obsolete terms include recommendations for replacements
+
+4. **Evolution governance**:
+   - Editorial working groups for different sections
+   - Regular ontology developer calls
+   - Clear documentation of decision-making processes
+   - Community engagement for significant changes
+
+:::
+
+Effective management of ontology evolution ensures that knowledge graphs can adapt to changing requirements and expanding knowledge while maintaining semantic stability and supporting existing applications. This balance between stability and evolution is essential for long-lived knowledge graph systems.
+
+### Ontology governance and collaboration
+
+Large-scale ontology development typically involves multiple stakeholders and requires formal governance:
+
+::: {#def-ontology-governance}
+
+## Ontology governance
+
+**Ontology governance** encompasses the policies, processes, and organizational structures that guide the development, maintenance, and use of ontologies. Key aspects include:
+
+1. **Decision-making authority**: Who can approve changes or additions
+2. **Stakeholder representation**: How different perspectives are incorporated
+3. **Quality control procedures**: Standards for acceptance and validation
+4. **Conflict resolution mechanisms**: Processes for resolving disagreements
+5. **Intellectual property policies**: Licensing and attribution requirements
+
+:::
+
+::: {#exm-ontology-governance}
+
+## Governance models
+
+1. **Centralized governance** (OBO Foundry model):
+
+   - Central editorial board reviews all changes
+   - Strict adherence to shared principles and best practices
+   - Formal approval process for new terms
+   - Example: Gene Ontology Consortium governance with specialized curators and editors
+
+2. **Federated governance** (W3C model):
+
+   - Distributed responsibility across working groups
+   - Formal recommendation track with public review
+   - Consensus-based decision making
+   - Example: Development of OWL specification through W3C working groups
+
+3. **Community governance** (Wikipedia-like model):
+
+   - Open contribution with post-review
+   - Meritocratic authority based on participation
+   - Community voting for controversial decisions
+   - Example: Wikidata's collaborative knowledge base development
+
+4. **Corporate governance**:
+   - Internal authority structure aligned with organizational hierarchy
+   - Business needs driving prioritization
+   - Integration with enterprise data governance
+   - Example: Industry-specific ontologies maintained by standards bodies
+
+:::
+
+Collaborative ontology development requires appropriate tools and processes:
+
+::: {#def-collaborative-development}
+
+## Collaborative ontology development
+
+**Collaborative ontology development** involves multiple individuals or organizations working together to create and maintain ontologies. Key enablers include:
+
+1. **Collaborative platforms**: Shared editing environments with access control
+2. **Communication channels**: Forums, mailing lists, and synchronous discussions
+3. **Contribution workflows**: Clear processes for suggesting and incorporating changes
+4. **Tracking systems**: Issue management and feature requests
+5. **Documentation practices**: Guidelines, examples, and tutorials
+
+:::
+
+::: {#exm-collaboration-practices}
+
+## Collaboration practices in action
+
+**Example: National Center for Biomedical Ontology (NCBO) collaboration approach**:
+
+1. **Infrastructure**:
+
+   - BioPortal as a central repository for ontologies
+   - GitHub for version control and issue tracking
+   - Dedicated mailing lists for announcements and discussions
+   - Regular virtual meetings and annual in-person workshops
+
+2. **Contribution process**:
+
+   - Clear contributor guidelines documented on website
+   - Issue templates for different types of changes
+   - Pull request workflow with required reviews
+   - Continuous integration tests for automated validation
+
+3. **Community engagement**:
+
+   - Training workshops for new contributors
+   - Recognition of contributions in release notes
+   - Transparent roadmap and prioritization
+   - Regular community surveys for feedback
+
+4. **Conflict resolution**:
+   - Structured discussion process for contentious issues
+   - Escalation path to editorial board for unresolved conflicts
+   - Documentation of decisions and rationale
+   - Periodic review of controversial decisions
+
+:::
+
+Effective governance and collaboration processes are critical for developing ontologies that are widely adopted, technically sound, and sustainable over time. They help balance competing perspectives, maintain quality, and ensure that ontologies meet the needs of their intended users.
+
+## Applications of ontologies in knowledge graphs
+
+This section explores how ontologies are applied in knowledge graph contexts to support various functionalities.
+
+### Schema validation and constraints
+
+Ontologies provide a foundation for validating knowledge graph data and enforcing structural constraints:
+
+::: {#def-schema-validation}
+
+## Schema validation
+
+**Schema validation** in knowledge graphs ensures that data conforms to the defined ontological structure. Validation can check:
+
+1. **Type constraints**: Entities belong to appropriate classes
+2. **Property constraints**: Relationships have correct domains and ranges
+3. **Cardinality constraints**: Required properties are present and multiplicity limits are respected
+4. **Value constraints**: Property values meet specified conditions
+5. **Structural constraints**: Graph patterns follow expected configurations
+
+:::
+
+::: {#exm-validation-languages}
+
+## Validation languages and examples
+
+1. **SHACL (Shapes Constraint Language)**:
+
+   ```turtle
+   ex:PersonShape a sh:NodeShape ;
+     sh:targetClass ex:Person ;
+     sh:property [
+       sh:path ex:name ;
+       sh:datatype xsd:string ;
+       sh:minCount 1 ;
+       sh:maxCount 1 ;
+     ] ;
+     sh:property [
+       sh:path ex:age ;
+       sh:datatype xsd:integer ;
+       sh:minInclusive 0 ;
+       sh:maxInclusive 150 ;
+     ] ;
+     sh:property [
+       sh:path ex:email ;
+       sh:pattern "^[^@]+@[^@]+\\.[^@]+$" ;
+       sh:uniqueLang true ;
+     ] .
+   ```
+
+2. **ShEx (Shape Expressions)**:
+
+   ```
+   ex:PersonShape {
+     rdf:type [ ex:Person ] ;
+     ex:name xsd:string {1,1} ;
+     ex:age xsd:integer? AND >= 0 AND <= 150 ;
+     ex:email xsd:string? AND /^[^@]+@[^@]+\.[^@]+$/ ;
+     ex:friend @ex:PersonShape* ;
+   }
+   ```
+
+3. **OWL constraints** (using OWL axioms for validation):
+
+   ```turtle
+   ex:Person rdfs:subClassOf [
+     a owl:Restriction ;
+     owl:onProperty ex:name ;
+     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+     owl:onDataRange xsd:string
+   ] .
+
+   ex:hasParent a owl:ObjectProperty ;
+     rdfs:domain ex:Person ;
+     rdfs:range ex:Person .
+   ```
+
+:::
+
+Schema validation serves several important functions in knowledge graph applications:
+
+1. **Data quality assurance**: Identifying and preventing errors during data ingestion
+2. **Consistency enforcement**: Ensuring uniform representation across the graph
+3. **Application safety**: Preventing runtime errors due to unexpected data structures
+4. **Documentation**: Providing explicit specifications of expected data patterns
+5. **Interoperability**: Facilitating data exchange between systems with shared expectations
+
+Different validation approaches offer different trade-offs between expressivity, performance, and integration with other semantic technologies.
+
+### Semantic search and query enhancement
+
+Ontologies enhance search and query capabilities by leveraging semantic relationships:
+
+::: {#def-semantic-search}
+
+## Semantic search
+
+**Semantic search** uses knowledge about concepts and their relationships to improve information retrieval beyond keyword matching. Ontology-based semantic search can provide:
+
+1. **Query expansion**: Including synonyms, subtypes, or related concepts
+2. **Concept-based matching**: Finding results based on meaning rather than exact terms
+3. **Faceted search**: Organizing results along multiple semantic dimensions
+4. **Contextual disambiguation**: Resolving ambiguous terms based on query context
+5. **Natural language understanding**: Interpreting questions in terms of ontological concepts
+
+:::
+
+::: {#exm-semantic-search}
+
+## Semantic search examples
+
+1. **Query expansion using taxonomic relationships**:
+
+   - Original query: "treatment for diabetes"
+   - Expanded using subclasses: "treatment for type 1 diabetes OR type 2 diabetes OR gestational diabetes"
+   - Expanded using subproperties: "treatment OR therapy OR medication OR intervention for diabetes"
+
+2. **Ontology-based query interpretation**:
+
+   - Natural language query: "Which universities are located in California?"
+   - Ontological mapping:
+     - "universities" → instances of class ex:University
+     - "located in" → property ex:locatedIn
+     - "California" → instance ex:California of class ex:State
+   - SPARQL translation:
+     ```sparql
+     SELECT ?university WHERE {
+       ?university a ex:University ;
+                  ex:locatedIn ex:California .
+     }
+     ```
+
+3. **Faceted navigation based on ontology**:
+   - Product search with dynamically generated facets:
+     - Categories based on class hierarchy (Electronics > Computers > Laptops)
+     - Features based on property values (Memory: 8GB, 16GB, 32GB)
+     - Compatibility based on relationships (Compatible with: Windows, macOS)
+   - Each facet derived from ontological structure
+
+:::
+
+Ontologies can also enhance query processing through inference:
+
+::: {#def-query-inference}
+
+## Query inference
+
+**Query inference** uses logical reasoning based on ontological knowledge to derive answers that aren't explicitly stated in the data. Types include:
+
+1. **Subsumption reasoning**: Inferring class membership through hierarchies
+2. **Property reasoning**: Using property characteristics like transitivity or inverses
+3. **Rule-based inference**: Applying custom inference rules
+4. **Description logic reasoning**: Complex inference based on class expressions
+
+:::
+
+::: {#exm-query-inference}
+
+## Query inference examples
+
+1. **Subsumption reasoning**:
+
+   ```sparql
+   # Query for all mammals
+   SELECT ?animal WHERE {
+     ?animal a ex:Mammal .
+   }
+   ```
+
+   Would also return instances of ex:Dog, ex:Cat, and other subclasses of ex:Mammal through reasoning.
+
+2. **Transitive property reasoning**:
+
+   ```sparql
+   # Query for all parts of the cardiovascular system
+   SELECT ?part WHERE {
+     ?part ex:partOf ex:CardiovascularSystem .
+   }
+   ```
+
+   Would find direct parts and their parts recursively if ex:partOf is defined as transitive.
+
+3. **Rule-based inference**: With a rule: "If a drug inhibits a protein that is overexpressed in a disease, then the drug potentially treats that disease"
+   ```sparql
+   # Query for potential treatments for cancer
+   SELECT ?drug WHERE {
+     ?drug ex:potentiallyTreats ex:Cancer .
+   }
+   ```
+   Would find drugs based on their protein interactions, not just explicit treatment relationships.
+
+:::
+
+Semantic search and query enhancement make knowledge graphs more accessible and powerful by allowing users to find information based on meaning rather than exact syntactic matches. This is particularly valuable in complex domains where terminology may vary and relationships between concepts are important.
+
+### Reasoning and inference
+
+Ontologies enable automated reasoning and inference to derive implicit knowledge from explicit facts:
+
+::: {#def-reasoning}
+
+## Reasoning and inference
+
+**Reasoning** is the process of deriving logical conclusions from premises through systematic rules.
+
+**Inference** refers to the specific conclusions drawn through reasoning.
+
+In knowledge graphs, reasoning leverages ontological knowledge to:
+
+1. **Complete missing information**: Deriving implicit facts
+2. **Check consistency**: Identifying logical contradictions
+3. **Classify instances**: Determining class membership
+4. **Simplify queries**: Precomputing inferred relationships
+
+:::
+
+Different reasoning mechanisms apply to different ontology languages:
+
+::: {#def-reasoning-types}
+
+## Types of reasoning
+
+1. **RDFS reasoning**: Basic inference based on subclass/subproperty hierarchies and domain/range constraints
+2. **OWL reasoning**: More complex inference using description logic semantics
+3. **Rule-based reasoning**: Custom inference rules often expressed in languages like SWRL or SPARQL CONSTRUCT
+4. **Statistical reasoning**: Probabilistic inference using confidence scores or statistical methods
+
+:::
+
+::: {#exm-reasoning}
+
+## Reasoning examples
+
+1. **RDFS inference**:
+
+   ```turtle
+   # Explicit knowledge:
+   ex:Researcher rdfs:subClassOf ex:Person .
+   ex:Alice a ex:Researcher .
+   ex:authorOf rdfs:domain ex:Person .
+   ex:Alice ex:authorOf ex:Paper1 .
+
+   # Inferred:
+   ex:Alice a ex:Person . # Subclass inheritance
+   ```
+
+2. **OWL property reasoning**:
+
+   ```turtle
+   # Explicit knowledge:
+   ex:hasParent a owl:TransitiveProperty .
+   ex:hasAncestor a owl:TransitiveProperty .
+   ex:hasParent rdfs:subPropertyOf ex:hasAncestor .
+   ex:John ex:hasParent ex:Mary .
+   ex:Mary ex:hasParent ex:Elizabeth .
+
+   # Inferred:
+   ex:John ex:hasParent ex:Elizabeth . # Transitivity
+   ex:John ex:hasAncestor ex:Mary . # Subproperty
+   ex:John ex:hasAncestor ex:Elizabeth . # Combined inference
+   ```
+
+3. **OWL class reasoning**:
+
+   ```turtle
+   # Explicit knowledge:
+   ex:Parent owl:equivalentClass [
+     owl:intersectionOf (
+       ex:Person
+       [ owl:onProperty ex:hasChild ; owl:someValuesFrom ex:Person ]
+     )
+   ] .
+   ex:Sarah a ex:Person .
+   ex:James a ex:Person .
+   ex:Sarah ex:hasChild ex:James .
+
+   # Inferred:
+   ex:Sarah a ex:Parent . # Class expression satisfaction
+   ```
+
+4. **Rule-based reasoning** (SWRL):
+   ```
+   ex:Person(?p) ^ ex:hasParent(?p, ?parent) ^ ex:hasSibling(?parent, ?s) ^ ex:Female(?s)
+   -> ex:hasAunt(?p, ?s)
+   ```
+   This rule infers "aunt" relationships based on parent and sibling relationships.
+
+:::
+
+Practical considerations for reasoning in knowledge graphs include:
+
+1. **Performance trade-offs**: More expressive reasoning is computationally expensive
+2. **Materialization vs. query-time reasoning**: Pre-computing inferences vs. on-demand
+3. **Reasoning boundaries**: Limiting scope to maintain tractability
+4. **Closed-world vs. open-world semantics**: Different assumptions about unknown information
+
+::: {#exm-reasoning-approaches}
+
+## Reasoning approaches in practice
+
+1. **Materialization approach** (forward chaining):
+
+   - Compute all possible inferences in advance
+   - Store inferred triples alongside explicit ones
+   - Fast query execution but higher storage requirements
+   - Must recompute when data changes
+   - Example: Adding 10 million inferred triples to a knowledge graph during a nightly batch process
+
+2. **Query rewriting approach** (backward chaining):
+
+   - Rewrite queries to account for inference rules
+   - Compute inferences only as needed for query answers
+   - Lower storage requirements but more complex query processing
+   - Example: Expanding a query for "mammals" to include all subclasses automatically
+
+3. **Hybrid approach**:
+   - Materialize some inference types (e.g., class hierarchy)
+   - Use query-time reasoning for others (e.g., complex property chains)
+   - Balance between performance and freshness
+   - Example: Materializing taxonomic relationships while computing transitive closures at query time
+
+:::
+
+Reasoning capabilities are a key advantage of ontology-based knowledge graphs, allowing them to represent knowledge more compactly and answer queries more intelligently than simple graph databases. However, reasoning must be applied judiciously to balance expressivity with computational practicality.
+
+### Ontology-based data integration
+
+Ontologies provide semantic frameworks for integrating heterogeneous data sources:
+
+::: {#def-data-integration}
+
+## Ontology-based data integration
+
+**Ontology-based data integration** uses ontologies to combine data from multiple sources into a unified knowledge graph. Key approaches include:
+
+1. **Global-as-view (GAV)**: The global schema is defined as a view over source schemas
+2. **Local-as-view (LAV)**: Source schemas are defined as views over the global schema
+3. **Hybrid approaches**: Combining aspects of both GAV and LAV
+
+Ontologies serve as:
+
+- Global schemas providing a unified view
+- Semantic mappings between source and target schemas
+- Query mediation frameworks
+
+:::
+
+::: {#exm-data-integration}
+
+## Data integration examples
+
+1. **Ontology as global schema**:
+
+   - Global ontology: Unified biomedical ontology with classes for genes, proteins, diseases
+   - Data sources: GenBank (genes), UniProt (proteins), OMIM (genetic disorders)
+   - Mappings: Define how each source maps to the global ontology
+   - Query: User queries the global schema, system translates to source-specific queries
+
+2. **Semantic mappings** (using R2RML - RDB to RDF Mapping Language):
+
+   ```turtle
+   @prefix rr: <http://www.w3.org/ns/r2rml#> .
+   @prefix ex: <http://example.org/> .
+
+   # Map a database table to ontology classes
+   <#ResearcherMapping>
+     rr:logicalTable [ rr:tableName "researchers" ] ;
+     rr:subjectMap [
+       rr:template "http://example.org/researcher/{id}" ;
+       rr:class ex:Researcher ;
+     ] ;
+     rr:predicateObjectMap [
+       rr:predicate ex:name ;
+       rr:objectMap [ rr:column "name" ] ;
+     ] ;
+     rr:predicateObjectMap [
+       rr:predicate ex:affiliation ;
+       rr:objectMap [
+         rr:template "http://example.org/institution/{institution_id}" ;
+       ] ;
+     ] .
+   ```
+
+3. **OBDA (Ontology-Based Data Access)** configuration:
+   ```xml
+   <mapping id="researchers">
+     <source>
+       SELECT id, name, email, dept_id FROM researchers
+     </source>
+     <target>
+       :researcher/{id} a :Researcher ;
+         :name {name} ;
+         :email {email} ;
+         :department :department/{dept_id} .
+     </target>
+   </mapping>
+   ```
+
+:::
+
+Ontology-based data integration offers several advantages:
+
+1. **Semantic mediation**: Resolving semantic heterogeneity between sources
+2. **Schema evolution resilience**: Adapting to changes in source schemas
+3. **Query federation**: Distributing queries across multiple sources
+4. **Data quality enhancement**: Identifying inconsistencies through ontological constraints
+5. **Incremental integration**: Adding new sources without disrupting existing ones
+
+::: {#exm-integration-challenges}
+
+## Integration challenges and solutions
+
+1. **Schema heterogeneity**:
+
+   - **Challenge**: Sources use different models for the same concepts
+   - **Example**: One source models "author" as an attribute, another as an entity
+   - **Solution**: Ontological mappings that express transformations between models
+
+2. **Semantic conflicts**:
+
+   - **Challenge**: Same terms with different meanings across sources
+   - **Example**: "Citation" as bibliographic reference vs. legal citation
+   - **Solution**: Explicit semantic definitions in the ontology with source-specific mappings
+
+3. **Identity resolution**:
+
+   - **Challenge**: Identifying when entities in different sources refer to the same real-world object
+   - **Example**: Matching author records across publication databases
+   - **Solution**: Ontology-driven entity resolution using equivalent identifiers and properties
+
+4. **Data quality variations**:
+   - **Challenge**: Sources have different levels of completeness, accuracy, or granularity
+   - **Example**: Some sources provide detailed publication metadata, others minimal
+   - **Solution**: Provenance tracking and quality assessment frameworks
+
+:::
+
+Ontology-based data integration is fundamental to building comprehensive knowledge graphs that aggregate information from multiple sources while maintaining semantic coherence. By providing a shared conceptual model, ontologies enable intelligent integration that preserves meaning across heterogeneous data landscapes.
+
+### Knowledge graph completion and enrichment
+
+Ontologies support the automatic completion and enrichment of knowledge graphs:
+
+::: {#def-kg-completion}
+
+## Knowledge graph completion
+
+**Knowledge graph completion** involves automatically adding missing facts to a knowledge graph through:
+
+1. **Logical inference**: Using ontological axioms to derive implied facts
+2. **Statistical prediction**: Estimating likely missing relationships based on patterns
+3. **External knowledge integration**: Incorporating facts from outside sources
+4. **Link prediction**: Identifying probable connections between existing entities
+
+:::
+
+::: {#exm-kg-completion}
+
+## Knowledge graph completion examples
+
+1. **Logical completion** using OWL axioms:
+
+   ```turtle
+   # Ontology definitions
+   ex:FatherOf rdfs:subPropertyOf ex:ParentOf .
+   ex:ParentOf owl:inverseOf ex:ChildOf .
+   ex:GrandparentOf owl:propertyChainAxiom (ex:ParentOf ex:ParentOf) .
+
+   # Explicit facts
+   ex:John ex:FatherOf ex:Mary .
+   ex:Mary ex:ParentOf ex:Lisa .
+
+   # Inferred (completed) facts
+   ex:John ex:ParentOf ex:Mary . # Subproperty inference
+   ex:Mary ex:ChildOf ex:John . # Inverse property inference
+   ex:John ex:GrandparentOf ex:Lisa . # Property chain inference
+   ```
+
+2. **Statistical completion** using embedding models:
+
+   - Train knowledge graph embeddings (e.g., TransE, ComplEx)
+   - Score potential triples based on embedding similarity
+   - Add high-confidence predictions to the graph
+   - Example: Predicting drug-disease associations based on similar molecular structures and known treatment patterns
+
+3. **Rule-based completion**:
+   ```
+   # Rule: People affiliated with the same institution likely collaborate
+   ex:Person(?p1) ^ ex:Person(?p2) ^ ex:affiliated(?p1, ?i) ^ ex:affiliated(?p2, ?i) ^
+   ex:hasPublication(?p1, ?pub) ^ ex:hasPublication(?p2, ?pub) ^
+   differentFrom(?p1, ?p2) -> ex:collaborates(?p1, ?p2)
+   ```
+
+:::
+
+Ontologies also guide knowledge graph enrichment, which adds new dimensions to existing knowledge:
+
+::: {#def-kg-enrichment}
+
+## Knowledge graph enrichment
+
+**Knowledge graph enrichment** extends a knowledge graph with:
+
+1. **Additional properties**: New attributes for existing entities
+2. **Contextual information**: Temporal, spatial, or provenance data
+3. **Semantic annotations**: Links to concepts in external ontologies
+4. **Metadata and qualifiers**: Confidence scores, relevance indicators, or usage notes
+
+:::
+
+::: {#exm-kg-enrichment}
+
+## Knowledge graph enrichment examples
+
+1. **Ontology-driven entity typing**:
+
+   - Analyze entity descriptions and relationships
+   - Map to most specific class in domain ontology
+   - Example: Classifying "acetaminophen" as ex:NonSteroidalAntiInflammatoryDrug based on its properties and relationships
+
+2. **Property enrichment** through external data:
+
+   - Identify missing important properties based on ontology
+   - Query external sources for values
+   - Example: Adding geographic coordinates to location entities using a geocoding
+
+3. **Semantic annotation** with domain concepts:
+
+   - Analyze textual descriptions associated with entities
+   - Extract mentions of ontology concepts
+   - Link entities to relevant concepts
+   - Example: Annotating a clinical document with SNOMED CT concepts for medical conditions mentioned in the text
+
+4. **Contextual enrichment**:
+
+   - Temporal: Adding time validity to facts
+   - Spatial: Enhancing location information with geographic context
+   - Provenance: Recording sources and extraction methods
+   - Example:
+
+     ```turtle
+     ex:Statement1 {
+       ex:Berlin ex:capitalOf ex:Germany .
+     }
+
+     ex:Statement1 ex:validFrom "1990-10-03"^^xsd:date ;
+                  ex:source ex:OfficialRecords ;
+                  ex:confidence "1.0"^^xsd:decimal .
+     ```
+
+:::
+
+Knowledge graph completion and enrichment leverage ontological knowledge to make graphs more comprehensive, accurate, and useful. By combining logical, statistical, and external knowledge, these processes transform sparse data into rich, interconnected knowledge resources.
+
+### Explainable AI and knowledge graphs
+
+Ontology-based knowledge graphs support explainable AI by providing structured, interpretable representations:
+
+::: {#def-explainable-ai}
+
+## Explainable AI with knowledge graphs
+
+**Explainable AI** (XAI) aims to make artificial intelligence systems' decisions understandable to humans. Ontology-based knowledge graphs contribute to XAI by:
+
+1. **Providing symbolic representations** alongside numerical/statistical models
+2. **Offering traceable reasoning paths** that humans can follow
+3. **Linking predictions to authoritative knowledge sources**
+4. **Supporting counterfactual reasoning** about alternative scenarios
+5. **Enabling semantic query capabilities** for exploring model behavior
+
+:::
+
+::: {#exm-explainable-ai}
+
+## Explainability examples
+
+1. **Medical diagnosis explanation**:
+
+   - AI system predicts "Rheumatoid Arthritis" based on symptoms
+   - Knowledge graph provides explanation path:
+     - Symptoms (joint pain, morning stiffness, symmetrical joints) are associated with inflammatory arthritis
+     - Patient's lab results (positive RF, elevated CRP) are characteristic of rheumatoid arthritis
+     - Each step references relevant medical knowledge from ontology
+     - Explanation includes disease definition from standard medical ontology
+
+2. **Recommendation explanation**:
+
+   - Movie recommendation system suggests "The Matrix"
+   - Knowledge graph explains:
+     ```
+     You watched "Inception" (sci-fi thriller with mind-bending plot)
+     You rated "Blade Runner" highly (sci-fi with philosophical themes)
+     "The Matrix" shares genre (sci-fi), themes (reality perception, AI),
+     and director style (visual effects) with these films
+     ```
+   - Explanation references ontological concepts (genres, themes, stylistic elements)
+
+3. **Financial decision explanation**:
+   - Loan application system denies a mortgage application
+   - Knowledge graph-backed explanation:
+     - Debt-to-income ratio (concept from financial ontology) exceeds threshold
+     - Credit utilization (defined relationship between credit used and available) is high
+     - Explanation includes regulatory references and suggestion for improvement paths
+     - Counterfactual analysis: "If your monthly debt was reduced by $300, approval probability would increase to 75%"
+
+:::
+
+Ontologies enhance explainability in several ways:
+
+::: {#def-ontology-explainability}
+
+## Ontological contributions to explainability
+
+1. **Conceptual grounding**: Linking model features to well-defined domain concepts
+2. **Relationship contextualization**: Showing how entities and features relate to each other
+3. **Background knowledge**: Providing domain context beyond the training data
+4. **Common-sense reasoning**: Incorporating general world knowledge
+5. **Natural language generation**: Supporting verbalization of explanations using ontological terms
+
+:::
+
+::: {#exm-ontology-explainability}
+
+## Ontology for explainability example
+
+**Customer churn prediction explanation**:
+
+Without ontology:
+
+```
+Feature importance:
+- monthly_fee: 0.32
+- contract_months: 0.28
+- service_calls_6m: 0.22
+- age: 0.08
+- location: 0.06
+```
+
+With ontology-enhanced explanation:
+
+```
+This customer has a HIGH churn risk (87%) because:
+- They pay a PREMIUM rate ($85/month) but have BASIC service level
+  (defined in service ontology as misaligned value)
+- Their 12-month contract is nearing expiration (78% of customers
+  reconsider at contract end according to historical patterns)
+- They have made 5 support calls in 6 months, categorized as:
+  * 3 network reliability issues (indicating service quality problems
+    for their location, which affects 13% of customers in their region)
+  * 2 billing inquiries (suggesting possible billing confusion)
+
+Recommended retention actions:
+- Offer service upgrade matching their premium payment
+- Present 24-month renewal with improved terms
+- Address network reliability in their service area
+```
+
+The ontology provides context about:
+
+- How features relate to business concepts
+- What constitutes normal vs. abnormal values
+- How features connect to actionable business processes
+- Domain-specific interpretations of numerical values
+
+:::
+
+By integrating ontologies with machine learning systems through knowledge graphs, organizations can develop AI that not only makes accurate predictions but also explains its reasoning in domain-relevant terms that stakeholders can understand and trust.
+
+## Summary
+
+This chapter has explored the rich landscape of knowledge representation and ontologies as they apply to knowledge graphs. We've covered the theoretical foundations, practical implementations, and diverse applications of formal knowledge representation in graph-based knowledge systems.
+
+Key topics included:
+
+1. **Foundations of knowledge representation**, including different approaches, primitives, and relationship types that form the conceptual building blocks of knowledge graphs.
+
+2. **Logic-based knowledge representation**, exploring how propositional logic, first-order logic, description logics, and rule-based formalisms provide different balances of expressivity and tractability.
+
+3. **Ontologies for knowledge graphs**, examining what ontologies are, their types, design principles, and methodologies for development.
+
+4. **Semantic Web technologies**, covering the standards that implement knowledge representation for the web: RDF, RDFS, OWL, and SPARQL.
+
+5. **Practical ontology development**, addressing tools, languages, evaluation, integration, maintenance, and governance aspects of ontology engineering.
+
+6. **Applications of ontologies in knowledge graphs**, demonstrating how ontologies enable schema validation, semantic search, reasoning, data integration, knowledge graph completion, and explainable AI.
+
+The intersection of knowledge representation theory and ontology engineering practice provides a powerful foundation for knowledge graphs. By formalizing domain knowledge and relationships, ontologies allow knowledge graphs to capture not just data but meaningful, contextualized information that supports sophisticated applications across diverse domains.
+
+As knowledge graphs continue to evolve, the principles and techniques of knowledge representation and ontology engineering remain essential for building systems that can effectively capture, organize, and leverage the complex knowledge of our world.
+
+## Exercises
+
+::: {#exr-knowledge-representation}
+
+## Knowledge representation comparison
+
+Compare and contrast three different knowledge representation approaches (e.g., logic-based, frame-based, graph-based) by:
+
+1. Representing the same domain excerpt (e.g., academic publications and authorship) in each approach
+2. Analyzing the expressivity of each representation
+3. Discussing the computational implications of each approach
+4. Identifying scenarios where each approach would be most appropriate
+
+Provide concrete examples for each representation and explain your reasoning.
+
+:::
+
+::: {#exr-description-logic}
+
+## Description logic modeling
+
+Design a description logic ontology for a university domain that includes:
+
+1. At least 10 classes (e.g., Person, Student, Faculty, Course, Department)
+2. At least 5 object properties (e.g., teaches, enrolledIn, memberOf)
+3. At least 3 data properties (e.g., name, studentID, credits)
+4. Class definitions using various constructors (intersection, union, negation, restrictions)
+5. Property characteristics (e.g., functional, transitive, inverse)
+
+Use formal DL notation and explain the semantics of your models. Then, provide examples of inference that would be enabled by your ontology.
+
+:::
+
+::: {#exr-ontology-design}
+
+## Ontology design and evaluation
+
+Select a specific domain of interest and:
+
+1. Design a small ontology (15-20 classes, 10-15 properties) following best practices
+2. Document your design decisions and how you applied ontology design principles
+3. Specify at least 5 competency questions your ontology should answer
+4. Evaluate your ontology against these competency questions
+5. Identify potential limitations of your design and how it might evolve
+
+Your solution should include a diagram of the ontology structure and sample instances.
+
+:::
+
+::: {#exr-semantic-web}
+
+## Semantic Web implementation
+
+Implement a small knowledge graph using Semantic Web technologies:
+
+1. Create an RDFS or OWL ontology for a domain of your choice
+2. Populate the ontology with instance data (at least 20 instances with relationships)
+3. Write SPARQL queries that demonstrate:
+   - Simple pattern matching
+   - Filtering and ordering
+   - Optional patterns
+   - Aggregation
+4. Demonstrate at least one inference capability enabled by your ontology
+
+Provide the ontology code, instance data, queries, and results, with explanations.
+
+:::
+
+::: {#exr-ontology-application}
+
+## Ontology application scenario
+
+Develop a detailed scenario for applying ontologies to a real-world knowledge graph application:
+
+1. Describe the domain and specific use case
+2. Identify key ontological requirements and challenges
+3. Design a solution architecture that leverages ontologies
+4. Explain how reasoning or inference would enhance the application
+5. Discuss integration with other systems or data sources
+6. Address practical considerations like performance and maintenance
+
+Your scenario should demonstrate a deep understanding of how ontological knowledge can add value in practical applications.
+
+:::
+
+## Further reading
+
+1. Allemang, D., & Hendler, J. (2011). _Semantic Web for the Working Ontologist: Effective Modeling in RDFS and OWL_ (2nd ed.). Morgan Kaufmann.
+
+2. Baader, F., Calvanese, D., McGuinness, D. L., Nardi, D., & Patel-Schneider, P. F. (Eds.). (2010). _The Description Logic Handbook: Theory, Implementation and Applications_ (2nd ed.). Cambridge University Press.
+
+3. Gómez-Pérez, A., Fernández-López, M., & Corcho, O. (2004). _Ontological Engineering: With Examples from the Areas of Knowledge Management, e-Commerce and the Semantic Web_. Springer.
+
+4. Hitzler, P., Krötzsch, M., & Rudolph, S. (2010). _Foundations of Semantic Web Technologies_. Chapman and Hall/CRC.
+
+5. Guarino, N., Oberle, D., & Staab, S. (2009). What is an Ontology? In _Handbook on Ontologies_ (pp. 1-17). Springer.
+
+6. Heath, T., & Bizer, C. (2011). _Linked Data: Evolving the Web into a Global Data Space_. Morgan & Claypool.
+
+7. Staab, S., & Studer, R. (Eds.). (2009). _Handbook on Ontologies_ (2nd ed.). Springer.
+
+8. Davis, R., Shrobe, H., & Szolovits, P. (1993). What is a Knowledge Representation? _AI Magazine_, 14(1), 17-33.
+
+9. Smith, B., et al. (2007). The OBO Foundry: Coordinated Evolution of Ontologies to Support Biomedical Data Integration. _Nature Biotechnology_, 25(11), 1251-1255.
+
+10. Musen, M. A. (2015). The Protégé Project: A Look Back and a Look Forward. _AI Matters_, 1(4), 4-12.

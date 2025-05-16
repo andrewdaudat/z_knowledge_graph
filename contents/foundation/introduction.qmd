@@ -1,0 +1,570 @@
+# Introduction to knowledge graphs and network science
+
+Knowledge graphs represent a powerful paradigm for organizing, integrating, and analyzing complex information. This chapter introduces the fundamental concepts, historical development, and key applications of knowledge graphs, establishing the foundation for the more specialized topics covered in subsequent chapters.
+
+## What are knowledge graphs?
+
+Knowledge graphs are structured representations of facts that store information in the form of entities, relationships, and attributes. Unlike traditional data structures that often rely on tabular representations or hierarchical models, knowledge graphs utilize a flexible graph-based approach to represent interconnected knowledge.
+
+::: {#def-knowledge-graph}
+
+## Knowledge graph
+
+A **knowledge graph** is a graph-based data structure that integrates heterogeneous information from various sources into a unified representation where:
+
+1. Entities are represented as nodes (vertices)
+2. Relationships between entities are represented as edges
+3. Attributes or properties of entities are stored as node properties
+4. Context, provenance, or metadata may be attached to both nodes and edges
+
+More formally, a knowledge graph $G$ can be defined as a tuple:
+
+$$G = (E, R, A, V)$$
+
+where:
+
+- $E$ is a set of entities (nodes)
+- $R \subseteq E \times L_R \times E$ is a set of relationships (edges) with labels from $L_R$
+- $A$ is a set of attributes associated with entities
+- $V$ is a set of values assigned to attributes for specific entities
+
+:::
+
+Knowledge graphs differ from traditional databases and other data structures in several important ways. While relational databases excel at storing structured data with well-defined schemas, knowledge graphs offer greater flexibility for representing heterogeneous and interconnected information. This flexibility makes knowledge graphs particularly valuable for domains where relationships between entities are complex and evolving.
+
+::: {#exm-simple-knowledge-graph}
+
+## A simple knowledge graph
+
+Consider a simple knowledge graph representing information about authors and books:
+
+Entities (E):
+
+- Person: "Jane Smith"
+- Book: "Graph Theory Fundamentals"
+- University: "Stanford University"
+
+Relationships (R):
+
+- ("Jane Smith", "authorOf", "Graph Theory Fundamentals")
+- ("Jane Smith", "affiliatedWith", "Stanford University")
+
+Attributes (A) and Values (V):
+
+- ("Jane Smith", "birthYear", "1975")
+- ("Graph Theory Fundamentals", "publicationYear", "2018")
+- ("Stanford University", "location", "California, USA")
+
+This knowledge graph captures not just the entities themselves, but the meaningful relationships between them and their properties.
+
+:::
+
+## Historical development and evolution
+
+Knowledge graphs have evolved from several converging research traditions in computer science, linguistics, and artificial intelligence. Understanding this historical context provides valuable perspective on current approaches and future directions.
+
+### Early semantic networks
+
+The concept of representing knowledge in graph-like structures dates back to the 1950s and 1960s with the development of semantic networks.
+
+::: {#def-semantic-network}
+
+## Semantic network
+
+A **semantic network** is a graph where nodes represent concepts or entities and edges represent semantic relationships between them. It was one of the earliest graph-based knowledge representation formalisms used in artificial intelligence and cognitive science.
+
+:::
+
+In 1956, computer scientist Ross Quillian proposed semantic networks as a way to represent linguistic knowledge for natural language processing. These early networks focused primarily on taxonomic (is-a) and partonomic (part-of) relationships between concepts.
+
+::: {#exm-semantic-network}
+
+## Early semantic network
+
+A simple semantic network representing animal classification might have:
+
+- Nodes: {Animal, Mammal, Bird, Dog, Cat, Robin, Sparrow}
+- Edges: {(Mammal, is-a, Animal), (Bird, is-a, Animal), (Dog, is-a, Mammal), (Cat, is-a, Mammal), (Robin, is-a, Bird), (Sparrow, is-a, Bird)}
+
+This structure enables basic inheritance of properties: if we know that all animals breathe, we can infer that dogs breathe without explicitly storing that fact.
+
+:::
+
+### Frame systems and expert systems
+
+In the 1970s, Marvin Minsky introduced frame systems, which expanded semantic networks by grouping related information about entities into structured units called frames. This approach influenced expert systems development, where domain-specific knowledge was encoded to solve complex problems.
+
+::: {#def-frame}
+
+## Frame
+
+A **frame** is a knowledge representation structure that groups attributes and values related to a concept or entity. Each frame typically includes slots (attributes) that can contain values or procedural attachments (methods).
+
+:::
+
+Expert systems like MYCIN (for medical diagnosis) and DENDRAL (for chemical structure analysis) demonstrated that structured knowledge representation could enable computer systems to perform complex reasoning tasks.
+
+### The semantic web vision
+
+The modern concept of knowledge graphs gained significant momentum with Tim Berners-Lee's vision of the Semantic Web, proposed in 2001. Berners-Lee envisioned an extension of the World Wide Web where information would be given well-defined meaning, enabling computers and humans to work in cooperation.
+
+::: {#def-semantic-web}
+
+## Semantic web
+
+The **semantic web** refers to the extension of the World Wide Web through standards set by the World Wide Web Consortium (W3C) that promote common data formats and exchange protocols, with the goal of making internet data machine-readable and enabling automated reasoning about web content.
+
+:::
+
+This vision led to the development of key technologies that form the foundation of many modern knowledge graphs:
+
+1. **Resource Description Framework (RDF)** - A standard model for data interchange on the Web, representing information as triples in the form of subject-predicate-object expressions.
+
+2. **RDF Schema (RDFS)** - A set of classes with certain properties that provide basic elements for describing ontologies.
+
+3. **Web Ontology Language (OWL)** - A family of knowledge representation languages for authoring ontologies with formally defined semantics.
+
+4. **SPARQL** - A query language for retrieving and manipulating data stored in RDF format.
+
+### From theory to practice: Large-scale knowledge graphs
+
+While academic research on semantic networks and the Semantic Web laid important theoretical foundations, the emergence of large-scale commercial knowledge graphs demonstrated their practical value. In 2012, Google introduced its Knowledge Graph, which enhanced search results with structured information gathered from various sources. This was followed by similar initiatives from other technology companies:
+
+1. **Google Knowledge Graph** - Powers enhanced search results and supports various Google services with structured information about people, places, and things.
+
+2. **Facebook Graph API** - Represents information about users, photos, pages, and other Facebook objects in a social graph.
+
+3. **Microsoft Academic Graph** - A heterogeneous graph containing scientific publication records, citation relationships, authors, institutions, and research topics.
+
+4. **Amazon Product Graph** - Powers product recommendations and search by representing relationships between products, customers, and other entities.
+
+5. **DBpedia** - A community effort to extract structured information from Wikipedia and make it available on the Web.
+
+6. **Wikidata** - A free and collaborative knowledge base that acts as a source of open data for Wikipedia and other Wikimedia projects.
+
+These implementations demonstrated that knowledge graphs could be deployed at web scale, containing billions of entities and relationships while supporting real-time querying and inference.
+
+## Knowledge graph fundamentals
+
+To understand knowledge graphs fully, we must examine their core components and structural principles.
+
+### Entities and relationships
+
+The fundamental building blocks of knowledge graphs are entities and relationships.
+
+::: {#def-entity}
+
+## Entity
+
+An **entity** represents a distinct object, concept, event, or thing in a knowledge graph. Formally, an entity $e \in E$ is a node in the graph structure that has a unique identifier and may have associated attributes and values.
+
+:::
+
+::: {#def-relationship}
+
+## Relationship
+
+A **relationship** represents a directed connection between two entities in a knowledge graph. Formally, a relationship $r \in R$ is a triple $(e_1, l, e_2)$ where $e_1, e_2 \in E$ are entities and $l \in L_R$ is a relationship label from the set of possible relationship types.
+
+:::
+
+Relationships in knowledge graphs are typically directed, meaning they have a specific orientation from a source entity to a target entity. However, some knowledge graph implementations support bidirectional or undirected relationships as well.
+
+### Attributes and values
+
+While relationships connect entities to other entities, attributes connect entities to literal values such as strings, numbers, dates, or other data types.
+
+::: {#def-attribute}
+
+## Attribute
+
+An **attribute** represents a property or characteristic of an entity. Formally, an attribute $a \in A$ is a key that can be associated with an entity $e \in E$ to store a specific value $v \in V$.
+
+:::
+
+Attributes provide detailed information about entities without creating new nodes in the graph. For example, rather than creating a node for "1975" to represent a person's birth year, this information is more efficiently stored as an attribute of the person entity.
+
+### Schema and ontologies
+
+While knowledge graphs provide flexibility in data representation, they often employ schemas or ontologies to provide structure and semantic meaning to the data.
+
+::: {#def-ontology}
+
+## Ontology
+
+An **ontology** is a formal specification of a conceptualization that defines the types, properties, and interrelationships of entities within a domain. In knowledge graphs, ontologies provide a vocabulary for describing entities and relationships, constraints on how they can be used, and axioms that enable logical inference.
+
+:::
+
+Ontologies can range from lightweight taxonomies that define basic hierarchical relationships to complex logical frameworks with formal semantics. The level of ontological formality in a knowledge graph depends on its intended use cases and reasoning requirements.
+
+::: {#exm-simple-ontology}
+
+## Simple ontology for an academic knowledge graph
+
+A simple ontology for an academic domain might define:
+
+Entity types:
+
+- Person
+- Publication
+- Institution
+- Conference
+- ResearchTopic
+
+Relationship types:
+
+- authorOf (Person → Publication)
+- affiliatedWith (Person → Institution)
+- publishedAt (Publication → Conference)
+- relatesToTopic (Publication → ResearchTopic)
+- collaboratesWith (Person → Person)
+
+Constraints:
+
+- A Publication must have at least one author
+- A Person can be affiliated with multiple Institutions
+- Conference events occur on specific dates and at specific locations
+
+This ontology provides structure to the knowledge graph and enables validation of new information added to it.
+
+:::
+
+### Context and provenance
+
+Modern knowledge graphs often incorporate context and provenance information to track the source, reliability, and temporal validity of facts.
+
+::: {#def-provenance}
+
+## Provenance
+
+**Provenance** in a knowledge graph refers to metadata about the origin, derivation, or history of a piece of knowledge. This may include information about the source, the time of acquisition, the extraction method, and confidence measures.
+
+:::
+
+Provenance information is crucial for assessing the reliability of information, resolving conflicts between contradictory statements, and supporting trust mechanisms in knowledge graphs that integrate data from multiple sources.
+
+## The relationship between knowledge graphs and network science
+
+Knowledge graphs represent a specific application of network science principles to the domain of knowledge representation. Network science provides the theoretical foundation and analytical tools for understanding and working with complex networks across various domains.
+
+::: {#def-network-science}
+
+## Network science
+
+**Network science** is the academic field that studies complex networks such as telecommunication networks, computer networks, biological networks, cognitive and semantic networks, and social networks. It combines elements from mathematics, physics, computer science, statistics, and data science to understand the structure, dynamics, and functions of networks.
+
+:::
+
+The relationship between knowledge graphs and network science is bidirectional:
+
+1. **Network science informs knowledge graph analysis**: Concepts from network science such as centrality measures, community detection, and network evolution models provide powerful tools for analyzing and understanding knowledge graphs.
+
+2. **Knowledge graphs extend network science**: Knowledge graphs introduce semantic richness and heterogeneity to network models, requiring adaptations of classical network analysis techniques and inspiring new approaches.
+
+This relationship is particularly evident in several key areas:
+
+### Structure and topology
+
+Network science provides metrics and models for analyzing the structural properties of knowledge graphs:
+
+- **Degree distribution**: The distribution of connections across entities often follows power laws, with few highly connected entities and many sparsely connected ones.
+
+- **Small-world properties**: Many knowledge graphs exhibit small-world characteristics, where most nodes can be reached from any other node in a small number of steps despite having relatively few edges.
+
+- **Community structure**: Entities in knowledge graphs often form natural clusters or communities based on dense interconnections.
+
+::: {#exm-small-world}
+
+## Small-world property in a knowledge graph
+
+In a knowledge graph of scientific publications:
+
+- The average path length between any two publications might be approximately 4-6 steps
+- Most papers are connected to only a few others (sparse connectivity)
+- Yet almost any paper can be reached from any other through a small number of citation links
+
+This small-world property facilitates knowledge discovery and traversal across seemingly distant domains.
+
+:::
+
+### Dynamics and evolution
+
+Network science provides frameworks for understanding how knowledge graphs evolve over time:
+
+- **Preferential attachment**: New entities often connect preferentially to already well-connected entities, leading to rich-get-richer dynamics.
+
+- **Growth models**: Mathematical models from network science help predict how knowledge graphs expand over time.
+
+- **Temporal patterns**: Analysis of edge formation over time reveals patterns in how knowledge emerges and connects.
+
+### Information flow and diffusion
+
+Network science models of information flow help understand how knowledge propagates through knowledge graphs:
+
+- **Centrality measures**: Identify influential entities that serve as hubs for information transmission.
+
+- **Information cascades**: Model how new facts or corrections propagate through a knowledge graph.
+
+- **Resilience and robustness**: Assess how knowledge graphs respond to removal of entities or relationships.
+
+## Applications and use cases
+
+Knowledge graphs have found applications across numerous domains, demonstrating their versatility and power for organizing and reasoning with complex information.
+
+### Search and information retrieval
+
+One of the most visible applications of knowledge graphs is in enhancing search engines. By incorporating structured knowledge, search engines can:
+
+1. Understand the semantics of search queries, distinguishing between different meanings of ambiguous terms
+2. Provide direct answers to factual questions rather than just links to documents
+3. Support entity-centric search, allowing users to explore relationships around specific entities
+4. Enhance query expansion by understanding related concepts
+
+::: {#exm-search-application}
+
+## Knowledge graph in search
+
+When a user searches for "Einstein," a knowledge graph-enhanced search engine might:
+
+- Display a summary of Albert Einstein including his birth date, death date, major achievements, and related images
+- List his key publications with publication dates
+- Show related scientists like Niels Bohr, Max Planck, and others
+- Provide options to explore specific aspects like his work on relativity or his personal life
+
+This rich, structured response is powered by the underlying knowledge graph that connects Einstein to various entities and facts.
+
+:::
+
+### Recommendation systems
+
+Knowledge graphs have transformed recommendation systems by enabling context-aware, explainable recommendations:
+
+1. **Content-based recommendations**: Using detailed entity attributes and relationships to find truly similar items
+2. **Collaborative knowledge-enhanced filtering**: Combining user behavior patterns with semantic knowledge about items
+3. **Path-based recommendations**: Finding complex connection paths between users and potential items of interest
+4. **Cross-domain recommendations**: Leveraging connections across different types of entities (movies, books, music) to provide diverse recommendations
+
+The graph structure allows for tracing the "reasoning" behind recommendations, making them more transparent to users.
+
+### Question answering and virtual assistants
+
+Knowledge graphs serve as the backbone for many question answering systems and virtual assistants:
+
+1. **Factoid question answering**: Directly retrieving facts stored in the knowledge graph
+2. **Complex question decomposition**: Breaking down complex questions into subqueries that can be answered from the graph
+3. **Contextual understanding**: Maintaining conversation context by referencing entities in the knowledge graph
+4. **Multimodal interaction**: Connecting language understanding with visual and other modalities
+
+Systems like Google Assistant, Amazon Alexa, and Apple Siri rely heavily on knowledge graphs to understand and respond to user queries.
+
+### Data integration and master data management
+
+Organizations use knowledge graphs to integrate heterogeneous data sources:
+
+1. **Entity resolution**: Identifying when different records refer to the same real-world entity
+2. **Schema mapping**: Aligning different data models through semantic relationships
+3. **Master data management**: Maintaining a single, consistent view of critical business entities
+4. **Data lineage tracking**: Recording the provenance and transformations of data
+
+This application is particularly valuable in enterprise settings where data silos pose significant challenges.
+
+::: {#exm-data-integration}
+
+## Enterprise data integration
+
+A financial institution might use a knowledge graph to integrate:
+
+- Customer data from multiple systems (CRM, transaction records, support tickets)
+- Product information (accounts, loans, investment vehicles)
+- Regulatory and compliance information
+- Market and economic data
+
+The knowledge graph connects these domains, allowing questions that span multiple systems, such as "Show all high-value customers who have both investment accounts and mortgages but haven't been contacted in 6 months."
+
+:::
+
+### Scientific discovery and research
+
+Knowledge graphs are increasingly important in scientific domains:
+
+1. **Literature-based discovery**: Finding implicit connections between concepts mentioned in scientific literature
+2. **Drug discovery**: Identifying potential drug targets by analyzing biological interaction networks
+3. **Material science**: Predicting properties of novel materials based on knowledge about similar compounds
+4. **Research collaboration networks**: Analyzing patterns of collaboration and knowledge flow in academic communities
+
+In these contexts, knowledge graphs help synthesize information across vast corpora of scientific publications and datasets.
+
+### Fraud detection and risk assessment
+
+Financial institutions and insurance companies use knowledge graphs for:
+
+1. **Fraud ring detection**: Identifying suspicious patterns of connections between entities
+2. **Risk propagation analysis**: Understanding how risk spreads through networks of connected entities
+3. **Regulatory compliance**: Tracking complex ownership structures and relationships for compliance purposes
+4. **Anomaly detection**: Identifying transactions or patterns that deviate from normal behavior
+
+The graph structure is particularly effective at revealing hidden relationships that might indicate fraudulent activity.
+
+## Challenges and limitations
+
+Despite their power and flexibility, knowledge graphs face several significant challenges:
+
+### Construction and maintenance
+
+Building and maintaining high-quality knowledge graphs requires substantial effort:
+
+1. **Information extraction**: Automatically extracting structured information from unstructured text remains challenging
+2. **Quality control**: Ensuring accuracy and consistency across billions of facts
+3. **Currency**: Keeping information up-to-date as the world changes
+4. **Scaling**: Managing the computational complexity of operations on very large graphs
+
+These challenges have led to the development of various semi-automated approaches that combine machine learning with human curation.
+
+### Incompleteness and uncertainty
+
+Real-world knowledge graphs are inevitably incomplete:
+
+1. **Open-world assumption**: The absence of a fact doesn't imply its negation
+2. **Conflicting information**: Different sources may provide contradictory information
+3. **Temporal validity**: Facts change over time, requiring temporal qualification
+4. **Probabilistic knowledge**: Many facts are not absolutely certain
+
+Techniques for handling incompleteness and uncertainty, such as knowledge graph embedding models and probabilistic graphical models, are active areas of research.
+
+### Scalability and performance
+
+As knowledge graphs grow to billions of entities and relationships, computational challenges emerge:
+
+1. **Query optimization**: Efficient execution of complex graph queries
+2. **Distributed storage and processing**: Partitioning graphs across multiple machines
+3. **Indexing strategies**: Creating appropriate indexes for different query patterns
+4. **Real-time updates**: Modifying the graph while maintaining query performance
+
+These challenges have led to specialized graph database technologies and distributed computation frameworks.
+
+### Ethical and social considerations
+
+Knowledge graphs raise important ethical questions:
+
+1. **Privacy**: Integrating information from multiple sources may reveal sensitive patterns
+2. **Bias**: Knowledge graphs may inherit and amplify biases present in their source data
+3. **Transparency**: The complexity of knowledge graphs can make reasoning difficult to explain
+4. **Power concentration**: Large-scale knowledge graphs are primarily controlled by major technology companies
+
+Addressing these challenges requires interdisciplinary approaches that combine technical solutions with ethical frameworks and policy considerations.
+
+## Emerging trends and future directions
+
+The field of knowledge graphs continues to evolve rapidly, with several noteworthy trends:
+
+### Multimodal knowledge graphs
+
+Traditional knowledge graphs primarily represent textual knowledge, but emerging approaches incorporate multiple modalities:
+
+1. **Visual knowledge**: Connecting images and visual attributes to entities
+2. **Audio knowledge**: Representing relationships between sounds, music, and spoken content
+3. **Spatiotemporal knowledge**: Capturing geographic and temporal dimensions of information
+4. **Cross-modal reasoning**: Drawing inferences across different modalities
+
+These multimodal knowledge graphs enable richer representations and more comprehensive reasoning.
+
+### Neural-symbolic integration
+
+The integration of knowledge graphs with neural networks has become a major research direction:
+
+1. **Knowledge graph embeddings**: Representing entities and relationships in continuous vector spaces
+2. **Graph neural networks**: Learning representations that respect the graph structure
+3. **Neuro-symbolic reasoning**: Combining logical reasoning with neural learning
+4. **Knowledge-infused language models**: Enhancing large language models with structured knowledge
+
+These approaches aim to combine the interpretability and explicit nature of symbolic representations with the learning capabilities of neural networks.
+
+### Decentralized and collaborative knowledge graphs
+
+While early knowledge graphs were often centralized resources, new models for distributed construction and maintenance are emerging:
+
+1. **Blockchain-based knowledge graphs**: Using distributed ledger technology to track provenance and changes
+2. **Federated knowledge graphs**: Connecting multiple knowledge graphs while maintaining local control
+3. **Collaborative construction**: Developing tools and platforms for community-driven knowledge creation
+4. **Knowledge commons**: Establishing shared, open knowledge resources with appropriate governance structures
+
+These approaches address concerns about centralization while enabling broader participation in knowledge creation.
+
+### Self-evolving knowledge systems
+
+The next generation of knowledge graphs may have increased autonomy:
+
+1. **Continuous learning**: Automatically updating based on new information
+2. **Active information seeking**: Identifying knowledge gaps and seeking information to fill them
+3. **Self-correction**: Detecting and resolving inconsistencies
+4. **Adaptive reasoning**: Selecting appropriate inference mechanisms based on the task
+
+These capabilities would reduce the maintenance burden while increasing the adaptability of knowledge systems.
+
+## Summary
+
+This chapter has introduced the fundamental concepts of knowledge graphs, their historical development, and their relationship to network science. We have explored the core components of knowledge graphs—entities, relationships, attributes, and ontologies—and examined how they support a wide range of applications from search engines to scientific discovery.
+
+Knowledge graphs represent a powerful paradigm for organizing and reasoning with complex, interconnected information. By combining the structural insights of network science with the semantic richness of knowledge representation, they offer unique capabilities for navigating the complexity of modern information ecosystems.
+
+In the following chapters, we will build on this foundation to explore more specialized aspects of knowledge graphs, including their mathematical foundations, construction techniques, analysis methods, and applications across various domains.
+
+## Exercises
+
+::: {#exr-kg-comparison}
+
+## Knowledge graph comparison
+
+Compare and contrast knowledge graphs with relational databases, document stores, and property graphs. For each comparison, identify at least three strengths and three limitations of knowledge graphs relative to the alternative approach.
+
+:::
+
+::: {#exr-design-kg}
+
+## Knowledge graph design
+
+Design a simple knowledge graph for a domain of your choice (e.g., movies, sports, academic publications). Identify the main entity types, relationship types, and key attributes. Draw a diagram illustrating the ontology and provide 5-10 example facts that would be represented in the knowledge graph.
+
+:::
+
+::: {#exr-kg-applications}
+
+## Industry application analysis
+
+Select a specific industry (healthcare, finance, retail, etc.) and analyze how knowledge graphs are being used or could be used in that industry. Identify three specific use cases, the benefits they provide, and the challenges in implementing them.
+
+:::
+
+::: {#exr-network-measures}
+
+## Network measures in knowledge graphs
+
+Consider a knowledge graph with 1000 entities and 5000 relationships. Discuss how the following network science measures would be interpreted in this context:
+
+1. Average degree
+2. Clustering coefficient
+3. Path length
+4. Centrality measures (degree, betweenness, closeness)
+
+:::
+
+::: {#exr-kg-construction}
+
+## Knowledge graph construction challenges
+
+You are tasked with building a knowledge graph about climate change using scientific literature, news articles, and social media as sources. Identify and explain five major challenges you would face and propose approaches to address each challenge.
+
+:::
+
+## Further reading
+
+1. Hogan, A., Blomqvist, E., Cochez, M., d'Amato, C., Melo, G. D., Gutierrez, C., ... & Zimmermann, A. (2021). Knowledge graphs. ACM Computing Surveys (CSUR), 54(4), 1-37.
+
+2. Paulheim, H. (2017). Knowledge graph refinement: A survey of approaches and evaluation methods. Semantic web, 8(3), 489-508.
+
+3. Ji, S., Pan, S., Cambria, E., Marttinen, P., & Philip, S. Y. (2021). A survey on knowledge graphs: Representation, acquisition, and applications. IEEE Transactions on Neural Networks and Learning Systems, 33(2), 494-514.
+
+4. Fensel, D., Şimşek, U., Angele, K., Huaman, E., Kärle, E., Panasiuk, O., ... & Wahler, A. (2020). Introduction: What Is a Knowledge Graph? In Knowledge Graphs (pp. 1-10). Springer, Cham.
+
+5. Barabási, A. L. (2016). Network science. Cambridge University Press.

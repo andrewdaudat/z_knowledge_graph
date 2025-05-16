@@ -1,0 +1,11 @@
+{
+  "proseWrap": "never",
+  "overrides": [
+    {
+      "files": "*.qmd",
+      "options": {
+        "parser": "markdown"
+      }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+# _quarto.yml
+project:
+  type: book
+  output-dir: docs
+book:
+  title: "Knowledge Graphs: Foundations, Applications, and Analysis"
+  author: Tue Nguyen
+  # logo: logo.png
+  # repo-url: not available
+  # repo-branch: main
+  # repo-actions: [issue]
+  # sharing: [x, facebook]
+  # Sidebar
+  sidebar:
+    style: "floating"
+    collapse-level: 1
+    border: true
+    search: true
+  # Footer
+  page-footer:
+    center: |
+      [&copy; Tue Nguyen](https://tuedsci.github.io/)
+  # Chapters
+  chapters:
+    - index.qmd
+    - part: Introduction
+      chapters:
+        - contents/foundation/outline.qmd
+        - contents/foundation/introduction.qmd
+        - contents/foundation/math-fundamentals.qmd
+        - contents/foundation/graph-fundamentals.qmd
+        - contents/foundation/knowledge-representation.qmd
+    - part: Construction and processing
+      chapters:
+        - contents/construction/kg-construction.qmd
+        # - contents/construction/knowledge-graph-processing.qmd
+
+format:
+  html:
+    # TOC
+    toc: true
+    toc-location: right
+    smooth-scroll: true
+    toc-title: On this page
+    # toc-expand: 1
+    toc-depth: 3
+    # Numbering
+    number-sections: true
+    number-depth: 3
+    # Math
+    html-math-method: katex
+    # Code
+    code-fold: false
+    # Fig
+    fig-cap-location: bottom
+    fig-cap-style: caption
+    fig-cap-font-size: small
+    fig-cap-font-weight: normal
+    # Callout
+    callout-appearance: default
+    callout-icon: false
+    # Theme: cyborg, darkly, solar, superhero, quartz, vapor
+    theme:
+      dark: [superhero, assets/style-dark.scss]
+      light: [flatly, assets/style-light.scss]
+    fontsize: 1.1rem
+    linestretch: 1.6
+    # Links
+    link-external-newwindow: true
+    # Mermaid
+    mermaid:
+      theme: neutral
+
+execute:
+  cache: true
+  freeze: auto
+
+resources:
+  - assets/**

@@ -1,0 +1,12 @@
+---
+title: "Theorems"
+listing:
+  contents: "../contents/snippets/thm/*.qmd"
+  type: table
+  sort: filename
+  fields: [filename]
+  categories: false
+  sort-ui: false
+  filter-ui: [filename]
+  page-size: 10
+---

@@ -1,0 +1,1328 @@
+# Mathematical fundamentals
+
+This chapter establishes the mathematical tools and frameworks necessary for a rigorous understanding of knowledge graphs. While knowledge graphs are intuitive at a conceptual level, their formal analysis requires a solid mathematical foundation. We'll cover the essential mathematical concepts that underpin knowledge graph representation, analysis, and algorithms, providing sufficient background for students from diverse disciplines.
+
+## Set theory and relations
+
+Set theory provides the most fundamental mathematical language for describing knowledge graphs, as graphs fundamentally represent relationships between sets of entities.
+
+### Basic set concepts
+
+::: {#def-set}
+
+## Set
+
+A **set** is a collection of distinct objects, called elements or members. If an object $x$ is an element of set $A$, we write $x \in A$. If $x$ is not an element of $A$, we write $x \notin A$.
+
+:::
+
+Sets can be defined by explicitly listing their elements (e.g., $A = \{1, 2, 3\}$) or by specifying a property that determines membership (e.g., $B = \{x \in \mathbb{Z} \mid x > 0\}$, the set of positive integers).
+
+Several set operations are particularly relevant for knowledge graph operations:
+
+::: {#def-set-operations}
+
+## Basic set operations
+
+Let $A$ and $B$ be sets. The basic set operations are:
+
+1. **Union**: $A \cup B = \{x \mid x \in A \text{ or } x \in B\}$
+2. **Intersection**: $A \cap B = \{x \mid x \in A \text{ and } x \in B\}$
+3. **Difference**: $A \setminus B = \{x \mid x \in A \text{ and } x \notin B\}$
+4. **Cartesian product**: $A \times B = \{(a, b) \mid a \in A \text{ and } b \in B\}$
+
+:::
+
+The Cartesian product is particularly important for knowledge graphs, as it forms the basis for defining relations between sets.
+
+### Relations and their properties
+
+Relations formalize the concept of relationships between elements of sets, which is the essence of knowledge graph structure.
+
+::: {#def-relation}
+
+## Relation
+
+A **binary relation** $R$ from set $A$ to set $B$ is a subset of the Cartesian product $A \times B$. If $(a, b) \in R$, we say that $a$ is related to $b$ by $R$, often written as $a R b$.
+
+A binary relation on a single set $A$ is a subset of $A \times A$.
+
+:::
+
+For knowledge graphs, we're particularly interested in binary relations, though higher-order relations (involving more than two elements) are also relevant for certain knowledge representation tasks.
+
+Binary relations can possess various properties that influence their behavior in knowledge graphs:
+
+::: {#def-relation-properties}
+
+## Properties of binary relations
+
+Let $R$ be a binary relation on a set $A$. $R$ may have the following properties:
+
+1. **Reflexive**: $\forall a \in A, (a, a) \in R$
+2. **Irreflexive**: $\forall a \in A, (a, a) \notin R$
+3. **Symmetric**: $\forall a, b \in A, (a, b) \in R \implies (b, a) \in R$
+4. **Antisymmetric**: $\forall a, b \in A, ((a, b) \in R \text{ and } (b, a) \in R) \implies a = b$
+5. **Transitive**: $\forall a, b, c \in A, ((a, b) \in R \text{ and } (b, c) \in R) \implies (a, c) \in R$
+
+:::
+
+These properties have important implications for reasoning with knowledge graphs:
+
+- **Reflexivity** and **irreflexivity** define whether entities can relate to themselves, which is relevant for certain relationship types (e.g., "is identical to" is reflexive, while "is parent of" is irreflexive).
+
+- **Symmetry** determines whether relationships are bidirectional. For example, "is sibling of" is symmetric, while "is parent of" is not.
+
+- **Antisymmetry** is characteristic of ordering relations and hierarchies, such as "is subset of" or "is ancestor of."
+
+- **Transitivity** enables inference chains in knowledge graphs. For instance, if "is subset of" is transitive, and $A$ is a subset of $B$ and $B$ is a subset of $C$, then $A$ is a subset of $C$.
+
+::: {#exm-relation-properties}
+
+## Relations in a bibliographic knowledge graph
+
+Consider a bibliographic knowledge graph with papers and authors:
+
+Relations:
+
+- "cites": Paper → Paper (irreflexive, antisymmetric, transitive)
+- "authored by": Paper → Author (neither reflexive nor irreflexive, not symmetric, not antisymmetric, not transitive)
+- "collaborates with": Author → Author (irreflexive, symmetric, not transitive)
+
+The different properties of these relations affect how we can reason about the knowledge graph. For example, the transitivity of "cites" means we can analyze citation chains, while the symmetry of "collaborates with" means we only need to store this relation in one direction.
+
+:::
+
+### Special types of relations
+
+Certain types of relations have special significance in knowledge representation:
+
+::: {#def-equivalence-relation}
+
+## Equivalence relation
+
+A binary relation $R$ on a set $A$ is an **equivalence relation** if it is reflexive, symmetric, and transitive.
+
+An equivalence relation partitions a set into disjoint subsets called **equivalence classes**, where elements in the same class are related to each other, and elements in different classes are not related.
+
+:::
+
+Equivalence relations are important in knowledge graphs for entity resolution, where we need to determine whether different identifiers refer to the same real-world entity.
+
+::: {#def-partial-order}
+
+## Partial order
+
+A binary relation $R$ on a set $A$ is a **partial order** if it is reflexive, antisymmetric, and transitive.
+
+A partial order allows some elements to be comparable and others to be incomparable.
+
+:::
+
+Partial orders represent hierarchical relationships in knowledge graphs, such as taxonomies, part-whole relationships, and specialization hierarchies.
+
+::: {#exm-partial-order}
+
+## Partial order in a taxonomy
+
+In a biological taxonomy knowledge graph:
+
+- Entities: {Animal, Mammal, Bird, Dog, Cat, Robin}
+- "is-a" relation: {(Mammal, Animal), (Bird, Animal), (Dog, Mammal), (Cat, Mammal), (Robin, Bird)}
+
+The "is-a" relation forms a partial order when we add the reflexive pairs (e.g., (Animal, Animal), etc.). This partial order captures the hierarchical organization of biological classification.
+
+:::
+
+### Functions as special relations
+
+Functions represent a special type of relation where each input is associated with exactly one output.
+
+::: {#def-function}
+
+## Function
+
+A **function** $f: A \rightarrow B$ is a relation from set $A$ to set $B$ such that for every element $a \in A$, there exists exactly one element $b \in B$ where $(a, b) \in f$.
+
+The set $A$ is called the **domain** of the function, and the set $B$ is called the **codomain**.
+
+:::
+
+In knowledge graphs, functions appear as special types of relationships and as operations that transform or query the graph.
+
+::: {#exm-functions-kg}
+
+## Functions in knowledge graphs
+
+1. **Attribute functions**: Map entities to attribute values, e.g., "birthDate(AlbertEinstein) = 1879-03-14"
+
+2. **Embedding functions**: Map entities or relations to vector representations, e.g., "embed(AlbertEinstein) = [0.2, 0.5, -0.3, ...]"
+
+3. **Query functions**: Map graph patterns to result sets, e.g., "findAllScientistsBornIn(Germany) = {AlbertEinstein, MaxPlanck, ...}"
+
+:::
+
+## Linear algebra for knowledge graphs
+
+Linear algebra provides powerful tools for representing and analyzing knowledge graphs, particularly for computational implementations and learning algorithms.
+
+### Vectors and vector spaces
+
+Vectors serve as the foundation for many knowledge graph algorithms and representation techniques.
+
+::: {#def-vector}
+
+## Vector and vector space
+
+A **vector** is an element of a vector space. A **vector space** over a field $F$ (typically $\mathbb{R}$ or $\mathbb{C}$) is a set $V$ equipped with operations of addition and scalar multiplication that satisfy certain axioms.
+
+In the context of knowledge graphs, we most commonly work with real vector spaces $\mathbb{R}^n$, where vectors are represented as $n$-tuples of real numbers.
+
+:::
+
+Vectors in knowledge graphs often represent:
+
+1. Entities or relationships in embedding models
+2. Feature vectors for nodes or edges
+3. Activation patterns in neural network approaches to graph processing
+
+::: {#exm-entity-embedding}
+
+## Entity embedding vectors
+
+In a knowledge graph embedding model, entities might be represented as 100-dimensional vectors:
+
+- "AlbertEinstein" → [0.24, -0.82, 0.12, ..., 0.55]
+- "TheoryOfRelativity" → [0.18, -0.23, 0.73, ..., -0.11]
+- "Princeton" → [-0.45, 0.91, 0.22, ..., 0.03]
+
+These vector representations capture semantic similarities and relationships in the vector space geometry.
+
+:::
+
+### Matrices and graph representation
+
+Matrices provide a natural way to represent the structure of knowledge graphs for computational processing.
+
+::: {#def-matrix}
+
+## Matrix
+
+A **matrix** is a rectangular array of numbers, symbols, or expressions arranged in rows and columns. A matrix with $m$ rows and $n$ columns is an $m \times n$ matrix.
+
+For a matrix $A$, the element in the $i$-th row and $j$-th column is denoted $A_{ij}$.
+
+:::
+
+Several matrix representations are particularly relevant for knowledge graphs:
+
+::: {#def-adjacency-matrix}
+
+## Adjacency matrix
+
+The **adjacency matrix** of a graph with $n$ vertices is an $n \times n$ matrix $A$ where:
+
+$$
+A_{ij} = \begin{cases}
+1 & \text{if there is an edge from vertex } i \text{ to vertex } j \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+For weighted graphs, the entry $A_{ij}$ can represent the weight of the edge.
+
+:::
+
+In knowledge graphs with multiple types of relationships, we can use a collection of adjacency matrices, one for each relationship type.
+
+::: {#def-incidence-matrix}
+
+## Incidence matrix
+
+The **incidence matrix** of a directed graph with $n$ vertices and $m$ edges is an $n \times m$ matrix $B$ where:
+
+$$
+B_{ij} = \begin{cases}
+-1 & \text{if vertex } i \text{ is the source of edge } j \\
+1 & \text{if vertex } i \text{ is the target of edge } j \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+:::
+
+Incidence matrices are useful for certain analytical techniques and for representing higher-order relationships.
+
+::: {#exm-adjacency-matrix}
+
+## Adjacency matrix for a simple knowledge graph
+
+Consider a small knowledge graph with entities {A, B, C, D} and a single relationship type:
+
+Edges: {(A, B), (B, C), (C, A), (B, D)}
+
+The adjacency matrix would be:
+
+$$
+A = \begin{pmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0
+\end{pmatrix}
+$$
+
+This matrix captures the graph structure in a form that enables algebraic operations.
+
+:::
+
+### Tensor representations
+
+For knowledge graphs with multiple types of relationships, tensor representations provide a natural extension of matrix representations.
+
+::: {#def-tensor}
+
+## Tensor
+
+A **tensor** is a multidimensional array that generalizes scalars, vectors, and matrices to higher dimensions. An $n$-th order tensor has $n$ indices.
+
+:::
+
+In knowledge graph representation, a common approach is to use a 3rd-order tensor to represent the entire graph:
+
+::: {#def-kg-tensor}
+
+## Knowledge graph tensor
+
+A knowledge graph with $n$ entities and $m$ relationship types can be represented as a 3rd-order tensor $\mathcal{T} \in \{0,1\}^{n \times n \times m}$ where:
+
+$$
+\mathcal{T}_{ijk} = \begin{cases}
+1 & \text{if entity } i \text{ is related to entity } j \text{ via relationship type } k \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+:::
+
+This tensor representation can be viewed as a stack of adjacency matrices, one for each relationship type.
+
+::: {#exm-tensor-representation}
+
+## Tensor representation of a knowledge graph
+
+Consider a knowledge graph with entities {Person, Book, University} and relationship types {authorOf, affiliatedWith}.
+
+The tensor representation would have slices:
+
+authorOf:
+
+$$
+\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{pmatrix}
+$$
+
+affiliatedWith:
+
+$$
+\begin{pmatrix}
+0 & 0 & 1 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{pmatrix}
+$$
+
+Where the rows and columns correspond to [Person, Book, University].
+
+:::
+
+### Basic matrix operations
+
+Several matrix operations are particularly relevant for knowledge graph algorithms:
+
+::: {#def-matrix-operations}
+
+## Basic matrix operations
+
+For matrices $A$ and $B$ of compatible dimensions:
+
+1. **Matrix addition**: $(A + B)_{ij} = A_{ij} + B_{ij}$
+
+2. **Matrix multiplication**: $(AB)_{ij} = \sum_k A_{ik} B_{kj}$
+
+3. **Transpose**: $A^T_{ij} = A_{ji}$
+
+4. **Trace**: $\text{tr}(A) = \sum_i A_{ii}$ (the sum of diagonal elements)
+
+:::
+
+Matrix multiplication is especially important for knowledge graphs, as it underlies many graph algorithms:
+
+::: {#exm-matrix-multiplication-paths}
+
+## Matrix multiplication and path counting
+
+If $A$ is the adjacency matrix of a graph, then $A^2_{ij}$ gives the number of paths of length 2 from vertex $i$ to vertex $j$.
+
+More generally, $A^k_{ij}$ gives the number of paths of length $k$ from $i$ to $j$.
+
+This property is useful for analyzing connectivity and reachability in knowledge graphs.
+
+:::
+
+### Eigenvalues and eigenvectors
+
+Eigendecomposition provides powerful tools for analyzing the structure of knowledge graphs.
+
+::: {#def-eigendecomposition}
+
+## Eigenvalues and eigenvectors
+
+For a square matrix $A$, a non-zero vector $v$ is an **eigenvector** of $A$ if there exists a scalar $\lambda$ (the **eigenvalue**) such that:
+
+$$Av = \lambda v$$
+
+The **eigendecomposition** of a diagonalizable matrix $A$ is:
+
+$$A = P\Lambda P^{-1}$$
+
+where $\Lambda$ is a diagonal matrix of eigenvalues and $P$ is a matrix whose columns are the corresponding eigenvectors.
+
+:::
+
+Eigenvalues and eigenvectors have numerous applications in knowledge graph analysis:
+
+1. **Spectral clustering**: Using eigenvectors of the graph Laplacian to identify communities
+2. **Centrality measures**: Eigenvector centrality defines importance based on the principal eigenvector
+3. **Dimensionality reduction**: Projecting onto the eigenvectors corresponding to the largest eigenvalues
+4. **Dynamic analysis**: Understanding how information propagates through a graph
+
+::: {#exm-eigenvector-centrality}
+
+## Eigenvector centrality
+
+In a knowledge graph representing a citation network, the eigenvector centrality of a paper (corresponding to the principal eigenvector of the adjacency matrix) indicates its importance based on the importance of papers that cite it.
+
+This recursive definition of importance captures the intuition that citations from influential papers should count more than citations from obscure papers.
+
+:::
+
+### Matrix decompositions
+
+Matrix decompositions are fundamental to many knowledge graph algorithms, particularly for embedding and learning tasks.
+
+::: {#def-svd}
+
+## Singular Value Decomposition (SVD)
+
+The **Singular Value Decomposition** of a matrix $A \in \mathbb{R}^{m \times n}$ is:
+
+$$A = U\Sigma V^T$$
+
+where:
+
+- $U \in \mathbb{R}^{m \times m}$ is an orthogonal matrix whose columns are the left singular vectors
+- $\Sigma \in \mathbb{R}^{m \times n}$ is a diagonal matrix with non-negative singular values
+- $V \in \mathbb{R}^{n \times n}$ is an orthogonal matrix whose columns are the right singular vectors
+
+:::
+
+SVD and related decompositions like non-negative matrix factorization (NMF) serve as the basis for many knowledge graph embedding techniques:
+
+::: {#exm-svd-application}
+
+## SVD for knowledge graph embedding
+
+Consider a knowledge graph represented as an adjacency matrix $A$. By computing a truncated SVD:
+
+$$A \approx U_k \Sigma_k V_k^T$$
+
+where $k$ is much smaller than the dimensions of $A$, we obtain low-dimensional embeddings:
+
+- The rows of $U_k \Sigma_k^{1/2}$ provide embeddings for source entities
+- The rows of $V_k \Sigma_k^{1/2}$ provide embeddings for target entities
+
+These embeddings capture the structural patterns in the knowledge graph in a compact form.
+
+:::
+
+## Probability and statistics for knowledge graphs
+
+Probability theory and statistics provide the tools for handling uncertainty, making predictions, and analyzing patterns in knowledge graphs.
+
+### Basic probability concepts
+
+Probability theory gives us the language to reason about uncertainty in knowledge graphs.
+
+::: {#def-probability-space}
+
+## Probability space
+
+A **probability space** is a triple $(\Omega, \mathcal{F}, P)$ where:
+
+- $\Omega$ is the sample space (set of all possible outcomes)
+- $\mathcal{F}$ is a sigma-algebra on $\Omega$ (collection of events)
+- $P: \mathcal{F} \rightarrow [0, 1]$ is a probability measure satisfying:
+  1. $P(\Omega) = 1$
+  2. For any countable sequence of disjoint events $E_1, E_2, \ldots$, we have $P(\cup_i E_i) = \sum_i P(E_i)$
+
+:::
+
+In the context of knowledge graphs, probability theory helps us reason about the likelihood of relationships, the uncertainty in facts, and make predictions about missing information.
+
+::: {#exm-probabilistic-kg}
+
+## Probabilistic knowledge graph
+
+In a probabilistic knowledge graph, relationships might have associated probabilities:
+
+- (AlbertEinstein, developedTheory, TheoryOfRelativity, 0.99)
+- (AlbertEinstein, bornIn, Germany, 0.95)
+- (AlbertEinstein, workedAt, InstituteForAdvancedStudy, 0.90)
+
+These probabilities could represent confidence scores, based on the reliability of the source or the uncertainty in the extraction process.
+
+:::
+
+### Random variables and distributions
+
+Random variables provide a way to model uncertain quantities in knowledge graphs.
+
+::: {#def-random-variable}
+
+## Random variable
+
+A **random variable** is a function $X: \Omega \rightarrow E$ from a probability space $(\Omega, \mathcal{F}, P)$ to a measurable space $(E, \mathcal{E})$.
+
+The **probability distribution** of $X$ is the measure $P_X$ on $(E, \mathcal{E})$ defined by $P_X(A) = P(X^{-1}(A))$ for $A \in \mathcal{E}$.
+
+:::
+
+Several probability distributions are particularly relevant for knowledge graph models:
+
+::: {#def-common-distributions}
+
+## Common probability distributions
+
+1. **Bernoulli distribution**: Models binary outcomes (success/failure) with probability of success $p$
+
+2. **Multinomial distribution**: Generalizes the Bernoulli distribution to multiple outcomes
+
+3. **Normal (Gaussian) distribution**: Continuous distribution with probability density function: $$f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+4. **Uniform distribution**: Assigns equal probability to all outcomes in a finite or continuous space
+
+:::
+
+::: {#exm-distribution-applications}
+
+## Probability distributions in knowledge graphs
+
+1. **Bernoulli distribution**: Modeling the existence of a specific relation between two entities
+
+2. **Multinomial distribution**: Modeling the type of relation that exists between two entities
+
+3. **Normal distribution**: Modeling embedding vectors in continuous vector spaces
+
+4. **Uniform distribution**: Prior distribution for entities when no additional information is available
+
+:::
+
+### Conditional probability and Bayes' theorem
+
+Conditional probability is crucial for reasoning under uncertainty in knowledge graphs.
+
+::: {#def-conditional-probability}
+
+## Conditional probability
+
+The **conditional probability** of event $A$ given event $B$ is defined as:
+
+$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
+
+for $P(B) > 0$.
+
+:::
+
+Bayes' theorem provides a way to update beliefs based on new evidence, which is fundamental for probabilistic reasoning in knowledge graphs.
+
+::: {#def-bayes-theorem}
+
+## Bayes' theorem
+
+**Bayes' theorem** states that for events $A$ and $B$ with $P(B) > 0$:
+
+$$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$$
+
+where:
+
+- $P(A)$ is the prior probability of $A$
+- $P(A|B)$ is the posterior probability of $A$ given $B$
+- $P(B|A)$ is the likelihood of $B$ given $A$
+- $P(B)$ is the marginal probability of $B$
+
+:::
+
+::: {#exm-bayes-reasoning}
+
+## Bayesian reasoning in knowledge graphs
+
+Consider the task of determining whether an entity is a Scientist based on known relationships:
+
+- Prior: $P(\text{isScientist}(e)) = 0.01$ (base rate of scientists in the population)
+- Likelihood: $P(\text{publishedPaper}(e) | \text{isScientist}(e)) = 0.8$ (80% of scientists published papers)
+- Likelihood: $P(\text{publishedPaper}(e) | \neg\text{isScientist}(e)) = 0.05$ (5% of non-scientists published papers)
+
+If we observe that entity $e$ published a paper, we can update our belief:
+
+$$P(\text{isScientist}(e) | \text{publishedPaper}(e)) = \frac{0.8 \times 0.01}{0.8 \times 0.01 + 0.05 \times 0.99} \approx 0.14$$
+
+This indicates that despite the strong likelihood ratio, the rarity of scientists means that publishing a paper alone doesn't make it highly probable that someone is a scientist.
+
+:::
+
+### Statistical inference
+
+Statistical inference provides methods for drawing conclusions from data, which is essential for learning and reasoning with knowledge graphs.
+
+::: {#def-statistical-inference}
+
+## Statistical inference
+
+**Statistical inference** is the process of using data to infer properties of an underlying distribution or process.
+
+Two main approaches to statistical inference are:
+
+1. **Frequentist inference**: Based on the frequency or proportion of data
+2. **Bayesian inference**: Based on updating prior beliefs with observed data
+
+:::
+
+In knowledge graphs, statistical inference is used for tasks such as:
+
+1. **Link prediction**: Inferring missing relationships between entities
+2. **Entity resolution**: Determining whether different identifiers refer to the same entity
+3. **Relation extraction**: Identifying relationships from unstructured text
+4. **Uncertainty quantification**: Assessing confidence in derived facts
+
+::: {#exm-link-prediction}
+
+## Statistical inference for link prediction
+
+In link prediction, we might model the probability of a relationship between entities $e_i$ and $e_j$ of type $r_k$ as:
+
+$$P(r_k(e_i, e_j) = 1 | \mathcal{G}) = \sigma(f(e_i, r_k, e_j))$$
+
+where:
+
+- $\mathcal{G}$ is the existing knowledge graph
+- $f$ is a scoring function based on features of the entities and relation
+- $\sigma$ is the logistic function to convert scores to probabilities
+
+By fitting this model to observed links, we can make predictions about unobserved links.
+
+:::
+
+### Information theory
+
+Information theory provides tools for quantifying information content and uncertainty, which are valuable for knowledge graph analysis and compression.
+
+::: {#def-entropy}
+
+## Entropy
+
+The **entropy** of a discrete random variable $X$ with probability mass function $p(x)$ is:
+
+$$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x)$$
+
+Entropy measures the average uncertainty or information content of $X$.
+
+:::
+
+::: {#def-mutual-information}
+
+## Mutual information
+
+The **mutual information** between two random variables $X$ and $Y$ is:
+
+$$I(X;Y) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log_2 \frac{p(x,y)}{p(x)p(y)}$$
+
+Mutual information measures the amount of information obtained about one random variable through observing the other.
+
+:::
+
+Information-theoretic concepts have several applications in knowledge graphs:
+
+::: {#exm-information-theory-applications}
+
+## Information theory in knowledge graphs
+
+1. **Entropy of node degrees**: Measuring the heterogeneity of connectivity in the graph
+
+2. **Mutual information between attributes**: Identifying redundant or correlated attributes
+
+3. **Information gain**: Selecting the most informative features for link prediction
+
+4. **Minimum description length**: Balancing model complexity and fit in knowledge graph completion
+
+:::
+
+## Computational complexity theory
+
+Computational complexity theory helps us understand the fundamental limits and efficiency of algorithms for processing knowledge graphs.
+
+### Basic complexity classes
+
+Complexity classes categorize computational problems based on the resources required to solve them.
+
+::: {#def-complexity-classes}
+
+## Common complexity classes
+
+1. **P**: Problems solvable in polynomial time by a deterministic Turing machine
+
+2. **NP**: Problems verifiable in polynomial time by a deterministic Turing machine
+
+3. **NP-Hard**: Problems at least as hard as the hardest problems in NP
+
+4. **NP-Complete**: Problems that are both in NP and NP-Hard
+
+:::
+
+Many important knowledge graph problems fall into challenging complexity classes:
+
+::: {#exm-kg-complexity}
+
+## Complexity of knowledge graph problems
+
+1. **Subgraph isomorphism**: Determining whether a graph contains a subgraph isomorphic to another graph is NP-complete. This affects pattern matching queries in knowledge graphs.
+
+2. **Optimal graph partitioning**: Finding the optimal way to partition a graph to minimize edge cuts is NP-hard, which impacts distributed storage of large knowledge graphs.
+
+3. **Maximum clique**: Finding the largest complete subgraph is NP-hard, which affects community detection in knowledge graphs.
+
+:::
+
+### Computational complexity of graph algorithms
+
+The computational complexity of graph algorithms is particularly relevant for knowledge graph processing.
+
+::: {#def-graph-algorithm-complexity}
+
+## Complexity of common graph algorithms
+
+1. **Breadth-first search (BFS)**: $O(|V| + |E|)$ for traversing a graph with vertices $V$ and edges $E$
+
+2. **Dijkstra's algorithm**: $O(|E| + |V| \log |V|)$ with a binary heap for finding shortest paths
+
+3. **Floyd-Warshall algorithm**: $O(|V|^3)$ for all-pairs shortest paths
+
+4. **Graph isomorphism**: Not known to be in P or NP-complete, but subexponential algorithms exist
+
+:::
+
+Understanding these complexity bounds helps in designing efficient systems for knowledge graph querying and analysis.
+
+::: {#exm-complexity-analysis}
+
+## Complexity analysis of a knowledge graph query
+
+Consider a query to find all people who are connected to Albert Einstein through at most three collaboration links.
+
+Using BFS, this query has complexity $O(|V| + |E|)$, where $|V|$ is the number of entities and $|E|$ is the number of relationships in the knowledge graph.
+
+For a large-scale knowledge graph with millions of entities, this query might be practical, whereas a query requiring an NP-hard algorithm might be infeasible.
+
+:::
+
+### Approximation algorithms
+
+For many NP-hard problems relevant to knowledge graphs, approximation algorithms provide practical solutions.
+
+::: {#def-approximation-algorithm}
+
+## Approximation algorithm
+
+An **approximation algorithm** for an optimization problem runs in polynomial time and produces a solution whose value is guaranteed to be within a certain factor of the optimal solution.
+
+An algorithm has an **approximation ratio** of $\alpha$ if it produces a solution with value at most $\alpha$ times the optimal value (for minimization problems) or at least $1/\alpha$ times the optimal value (for maximization problems).
+
+:::
+
+::: {#exm-approximation-applications}
+
+## Approximation algorithms in knowledge graphs
+
+1. **Minimum vertex cover**: A simple 2-approximation algorithm exists, useful for selecting a minimal set of entities that cover all relationships.
+
+2. **Maximum cut**: The Goemans-Williamson algorithm provides a 0.878-approximation, valuable for graph partitioning problems.
+
+3. **k-center clustering**: A 2-approximation algorithm exists, applicable to entity clustering in knowledge graphs.
+
+:::
+
+### Parameterized complexity
+
+Parameterized complexity provides an alternative framework for analyzing algorithms, particularly relevant for knowledge graph queries that may have certain structural parameters.
+
+::: {#def-parameterized-complexity}
+
+## Parameterized complexity
+
+**Parameterized complexity** analyzes the running time of algorithms in terms of both the input size $n$ and a parameter $k$ that captures some aspect of the problem's structure.
+
+A problem is **fixed-parameter tractable (FPT)** if it can be solved in time $f(k) \cdot n^{O(1)}$, where $f$ is any computable function.
+
+:::
+
+::: {#exm-parameterized-application}
+
+## Parameterized complexity in knowledge graphs
+
+Many graph problems that are NP-hard in general become fixed-parameter tractable when parameterized appropriately:
+
+1. **k-path finding**: Finding a path of length k is FPT when parameterized by k, which is relevant for bounded-length path queries in knowledge graphs.
+
+2. **Treewidth**: Many NP-hard problems become FPT when parameterized by the treewidth of the graph, which can be leveraged for query optimization in knowledge graphs with bounded treewidth.
+
+:::
+
+## Logic and formal systems
+
+Logic provides the foundation for representing knowledge and reasoning with knowledge graphs.
+
+### Propositional logic
+
+Propositional logic is the simplest form of formal logic, dealing with propositions and logical operators.
+
+::: {#def-propositional-logic}
+
+## Propositional logic
+
+**Propositional logic** deals with propositions (statements that can be either true or false) and logical connectives:
+
+- Negation ($\neg$): "not"
+- Conjunction ($\land$): "and"
+- Disjunction ($\lor$): "or"
+- Implication ($\rightarrow$): "if...then"
+- Equivalence ($\leftrightarrow$): "if and only if"
+
+A **formula** in propositional logic is built from atomic propositions and logical connectives.
+
+:::
+
+While propositional logic is limited for knowledge representation, it provides the foundation for more expressive logics.
+
+### First-order logic
+
+First-order logic (FOL) extends propositional logic with quantifiers and predicates, making it much more expressive for knowledge representation.
+
+::: {#def-first-order-logic}
+
+## First-order logic
+
+**First-order logic (FOL)** extends propositional logic with:
+
+- Variables representing objects in a domain
+- Predicates representing properties or relations
+- Functions representing mappings between objects
+- Quantifiers:
+  - Universal quantifier ($\forall$): "for all"
+  - Existential quantifier ($\exists$): "there exists"
+
+A **formula** in FOL is built from predicates, functions, variables, logical connectives, and quantifiers.
+
+:::
+
+FOL is widely used for formal knowledge representation in knowledge graphs, particularly in ontologies and logical reasoning systems.
+
+::: {#exm-fol-knowledge}
+
+## FOL in knowledge graphs
+
+Consider representing knowledge about scientists and their work:
+
+$$\forall x (Scientist(x) \rightarrow \exists y (Paper(y) \land Author(x, y)))$$
+
+This formula states: "For every scientist x, there exists a paper y such that x is an author of y."
+
+We could also represent:
+
+$$\forall x \forall y (AuthorOf(x, y) \land Paper(y) \rightarrow Researcher(x))$$
+
+"Anyone who is an author of a paper is a researcher."
+
+$$\forall x \forall y (SupervisorOf(x, y) \rightarrow \neg SupervisorOf(y, x))$$
+
+"If x is a supervisor of y, then y cannot be a supervisor of x."
+
+These FOL formulas capture complex domain knowledge that can be encoded in knowledge graph schemas and used for reasoning.
+
+:::
+
+### Description logics
+
+Description logics are a family of formal knowledge representation languages that are particularly well-suited for defining ontologies used in knowledge graphs.
+
+::: {#def-description-logic}
+
+## Description logic
+
+**Description logics (DLs)** are a family of formal languages for knowledge representation that balance expressivity with computational tractability. They provide:
+
+1. **Concepts** (or classes): Sets of individuals
+2. **Roles** (or properties): Binary relations between individuals
+3. **Individuals**: Specific objects in the domain
+
+DLs support various constructors for building complex concepts and roles, and offer reasoning services like subsumption, satisfiability, and instance checking.
+
+:::
+
+Description logics form the theoretical foundation for ontology languages like OWL (Web Ontology Language), which are widely used to define the schema of knowledge graphs.
+
+::: {#exm-dl-concepts}
+
+## Description logic expressions
+
+Basic DL concept constructors include:
+
+1. **Intersection**: Scientist ⊓ Professor (individuals who are both scientists and professors)
+2. **Union**: Author ⊔ Editor (individuals who are either authors or editors)
+3. **Negation**: ¬Student (individuals who are not students)
+4. **Existential restriction**: ∃authorOf.Paper (individuals who are authors of at least one paper)
+5. **Universal restriction**: ∀memberOf.ResearchInstitute (individuals who are only members of research institutes)
+6. **Cardinality restrictions**: ≥3 authorOf.Paper (individuals who are authors of at least 3 papers)
+
+These constructors allow for the definition of complex concepts from simpler ones, providing a rich vocabulary for knowledge representation.
+
+:::
+
+### Reasoning systems
+
+Reasoning systems apply logical inference rules to derive new knowledge from existing facts and axioms.
+
+::: {#def-inference-rules}
+
+## Inference rules
+
+**Inference rules** are patterns of reasoning that allow the derivation of new statements from existing ones. Common inference rules include:
+
+1. **Modus Ponens**: From P and P → Q, infer Q
+2. **Resolution**: From (P ∨ Q) and (¬P ∨ R), infer (Q ∨ R)
+3. **Universal Instantiation**: From ∀x P(x), infer P(a) for any specific a
+4. **Existential Instantiation**: From ∃x P(x), infer P(a) for some a
+
+:::
+
+In knowledge graphs, reasoning systems apply these and other inference rules to derive implicit facts from explicitly stated knowledge.
+
+::: {#exm-reasoning-kg}
+
+## Reasoning in knowledge graphs
+
+Given the following facts in a knowledge graph:
+
+- authorOf(Einstein, RelativityPaper)
+- cites(RelativityPaper, MaxwellPaper)
+- ∀x ∀y ∀z (authorOf(x, y) ∧ cites(y, z) → influencedBy(x, z))
+
+A reasoning system would derive:
+
+- influencedBy(Einstein, MaxwellPaper)
+
+This inference makes explicit knowledge that was previously only implicit in the graph.
+
+:::
+
+### Non-classical logics
+
+While classical logics like FOL provide a strong foundation, knowledge graphs often need to represent and reason with uncertainty, vagueness, or conflicting information, requiring non-classical logics.
+
+::: {#def-non-classical-logics}
+
+## Non-classical logics
+
+**Non-classical logics** extend or modify principles of classical logic to handle phenomena that classical logic cannot adequately address. Relevant non-classical logics include:
+
+1. **Fuzzy logic**: Handles degrees of truth (values between 0 and 1)
+2. **Probabilistic logic**: Incorporates uncertainty through probability theory
+3. **Temporal logic**: Represents and reasons about time-dependent information
+4. **Modal logic**: Deals with modalities like possibility, necessity, belief, and knowledge
+5. **Paraconsistent logic**: Tolerates contradictions without logical explosion
+
+:::
+
+::: {#exm-fuzzy-logic}
+
+## Fuzzy logic in knowledge graphs
+
+In a fuzzy knowledge graph, relationships might have truth values between 0 and 1:
+
+- isHotLocation(Phoenix, 0.9)
+- isColdLocation(Phoenix, 0.1)
+- isHotLocation(Alaska, 0.2)
+
+Fuzzy logic operators like min (for conjunction) and max (for disjunction) allow reasoning with these partial truths:
+
+- min(isHotLocation(Phoenix), hasBeaches(Phoenix)) = min(0.9, 0.7) = 0.7
+
+This corresponds to the truth value of the conjunction "Phoenix is hot AND has beaches."
+
+:::
+
+## Mathematical economics for knowledge graphs
+
+Economic concepts provide valuable frameworks for understanding the formation, evolution, and utilization of knowledge graphs.
+
+### Utility theory
+
+Utility theory provides a framework for representing preferences and making rational decisions, which is relevant for optimizing knowledge graph construction and querying.
+
+::: {#def-utility-function}
+
+## Utility function
+
+A **utility function** $u: \Omega \rightarrow \mathbb{R}$ **represents** a preference relation $\succsim$ on $\Omega$ if for all $\omega, \omega' \in \Omega$:
+
+$$\omega \succsim \omega' \iff u(\omega) \geq u(\omega')$$
+
+:::
+
+In knowledge graph contexts, utility functions can represent the value of different configurations, query outcomes, or information states.
+
+::: {#exm-utility-kg}
+
+## Utility functions in knowledge graphs
+
+For a knowledge graph completion task, a utility function might evaluate the value of adding a particular fact:
+
+$$u(\text{add fact } f \text{ to } KG) = \text{Information Gain}(KG + f) - \text{Cost}(f)$$
+
+where Information Gain measures how much new knowledge is enabled by adding fact $f$, and Cost represents the computational or storage cost.
+
+This allows rational decision-making about which facts to prioritize adding to the knowledge graph.
+
+:::
+
+### Game theory
+
+Game theory analyzes strategic interactions between rational agents, providing insights into the dynamics of knowledge graph formation and usage.
+
+::: {#def-game-theory}
+
+## Game theory
+
+**Game theory** is the study of mathematical models of strategic interaction among rational agents. Key concepts include:
+
+1. **Players**: The decision-makers
+2. **Strategies**: The actions available to players
+3. **Payoffs**: The utility received by players based on the strategies chosen
+4. **Nash equilibrium**: A set of strategies where no player can benefit by changing their strategy unilaterally
+
+:::
+
+Game theory has several applications in knowledge graph contexts:
+
+::: {#exm-game-theory-applications}
+
+## Game theory in knowledge graphs
+
+1. **Contribution games**: Modeling the incentives for different actors to contribute knowledge to a collaborative knowledge graph
+
+2. **Information sharing games**: Analyzing strategic decisions about which knowledge to share versus keep private
+
+3. **Adversarial knowledge graphs**: Modeling scenarios where adversaries attempt to manipulate or poison knowledge graphs
+
+Consider a simple contribution game where two organizations decide whether to contribute their proprietary knowledge to a shared knowledge graph:
+
+Payoff matrix: | | Org 2 Contributes | Org 2 Withholds | |---------------|-------------------|-----------------| | Org 1 Contributes | (8, 8) | (2, 10) | | Org 1 Withholds | (10, 2) | (4, 4) |
+
+This represents a Prisoner's Dilemma scenario, where the Nash equilibrium (both withhold) is sub-optimal compared to mutual contribution.
+
+:::
+
+### Network economics
+
+Network economics studies how network structures influence economic outcomes, which is directly applicable to knowledge graphs as network structures.
+
+::: {#def-network-economics}
+
+## Network economics
+
+**Network economics** studies economic aspects of networks, including:
+
+1. **Network effects**: The value of a product or service increases as more people use it
+2. **Network externalities**: The impact of one user's decisions on the utility of other users
+3. **Two-sided markets**: Platforms that connect two distinct user groups
+4. **Network formation**: How and why links form between agents
+
+:::
+
+These concepts help understand the economic dynamics of knowledge graph ecosystems:
+
+::: {#exm-network-economics-kg}
+
+## Network economics in knowledge graphs
+
+1. **Value scaling**: The value of a knowledge graph often increases superlinearly with its size and connectivity due to network effects
+
+2. **Contribution incentives**: As more entities contribute to a knowledge graph, the incentive for others to contribute may increase due to positive externalities
+
+3. **Knowledge graph platforms**: Often connect data providers and data consumers in a two-sided market
+
+4. **Strategic linking**: Entities may form connections in knowledge graphs based on economic incentives rather than purely informational considerations
+
+:::
+
+## Information geometry
+
+Information geometry applies differential geometry to spaces of probability distributions, providing tools for analyzing statistical models in knowledge graphs.
+
+::: {#def-information-geometry}
+
+## Information geometry
+
+**Information geometry** studies statistical manifolds—spaces of probability distributions—using tools from differential geometry. Key concepts include:
+
+1. **Statistical manifold**: A smooth manifold where each point corresponds to a probability distribution
+2. **Fisher information metric**: A Riemannian metric on statistical manifolds
+3. **Divergence measures**: Functions that quantify the "distance" between probability distributions
+
+:::
+
+Information geometry provides powerful tools for analyzing probabilistic knowledge graph models:
+
+::: {#exm-information-geometry-applications}
+
+## Information geometry in knowledge graphs
+
+1. **Embedding spaces**: Analyzing the geometry of knowledge graph embedding spaces
+
+2. **Model comparison**: Using divergence measures to compare different probabilistic models of the same knowledge graph
+
+3. **Parameter optimization**: Leveraging the geometry of parameter spaces for more efficient learning algorithms
+
+For instance, the Kullback-Leibler (KL) divergence between two probabilistic knowledge graph models $P$ and $Q$ can be used to measure how much information is lost when using $Q$ to approximate $P$:
+
+$$D_{KL}(P \parallel Q) = \sum_{(s,r,o)} P(s,r,o) \log \frac{P(s,r,o)}{Q(s,r,o)}$$
+
+where $(s,r,o)$ ranges over all possible subject-relation-object triples.
+
+:::
+
+## Category theory
+
+Category theory provides an abstract framework for studying mathematical structures and relationships, offering a powerful perspective on knowledge representation.
+
+::: {#def-category-theory}
+
+## Category theory
+
+**Category theory** is a formalism that abstracts many mathematical concepts. A category consists of:
+
+1. **Objects**: The entities being studied
+2. **Morphisms** (or arrows): Maps between objects
+3. **Composition operation**: A way to combine morphisms
+4. **Identity morphisms**: For each object, a morphism from the object to itself
+
+Categories must satisfy certain axioms regarding associativity of composition and the behavior of identity morphisms.
+
+:::
+
+Category theory offers a unifying perspective on different knowledge representation formalisms:
+
+::: {#exm-category-theory-kg}
+
+## Category theory in knowledge graphs
+
+Knowledge graphs can be viewed through the lens of category theory in several ways:
+
+1. **Knowledge graphs as categories**: Entities as objects and relationships as morphisms
+
+2. **Knowledge graph transformations**: Functors between knowledge graph categories representing mappings or translations
+
+3. **Integration of heterogeneous knowledge**: Using categorical constructs like colimits to formalize the integration of different knowledge sources
+
+4. **Compositional reasoning**: Using categorical composition to model multi-step inference paths
+
+For example, the composition of relationships in a knowledge graph corresponds directly to morphism composition in the corresponding category:
+
+If we have relationships (morphisms) worksWith(Alice, Bob) and supervises(Bob, Charlie), their composition gives us a relationship between Alice and Charlie that represents "Alice works with someone who supervises Charlie."
+
+:::
+
+## Summary
+
+This chapter has provided a comprehensive overview of the mathematical foundations essential for understanding and working with knowledge graphs. We've covered:
+
+1. **Set theory and relations**: The fundamental language for describing entities and relationships in knowledge graphs.
+
+2. **Linear algebra**: Tools for representing and computing with knowledge graphs, particularly through matrix and tensor representations.
+
+3. **Probability and statistics**: Frameworks for handling uncertainty and making inferences in knowledge graphs.
+
+4. **Computational complexity**: Insights into the algorithmic challenges and computational limits of knowledge graph operations.
+
+5. **Logic and formal systems**: Languages for representing knowledge and reasoning about knowledge graphs.
+
+6. **Mathematical economics**: Concepts for understanding the incentives and strategic dynamics of knowledge graph ecosystems.
+
+7. **Information geometry**: Tools for analyzing the structure of probabilistic models in knowledge graphs.
+
+8. **Category theory**: An abstract perspective on knowledge representation and transformation.
+
+These mathematical foundations provide the theoretical underpinnings for the more applied topics in subsequent chapters. While not every knowledge graph application requires deep expertise in all these areas, understanding these foundations enables more rigorous analysis, more efficient algorithms, and more powerful knowledge graph systems.
+
+## Exercises
+
+::: {#exr-adjacency-matrices}
+
+## Adjacency matrices and graph operations
+
+Consider a knowledge graph with entities $E = \{e_1, e_2, e_3, e_4\}$ and two types of relationships: "related to" ($R_1$) and "depends on" ($R_2$). The adjacency matrices are:
+
+$$
+R_1 = \begin{pmatrix}
+0 & 1 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+0 & 1 & 0 & 1 \\
+0 & 0 & 1 & 0
+\end{pmatrix}
+\quad
+R_2 = \begin{pmatrix}
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0
+\end{pmatrix}
+$$
+
+1. Draw the graph corresponding to these adjacency matrices.
+2. Compute $R_1^2$ and interpret the result.
+3. Compute the combined adjacency matrix $R_1 + R_2$ and interpret the result.
+4. Determine which entities have the highest degree centrality considering both relation types.
+5. Is there a path of length 2 that uses both relation types from $e_1$ to $e_4$? If so, identify it.
+
+:::
+
+::: {#exr-set-theoretical-operations}
+
+## Set-theoretical operations on knowledge graphs
+
+Let $KG_1$ and $KG_2$ be two knowledge graphs with:
+
+$KG_1 = (E_1, R_1)$ where:
+
+- $E_1 = \{Alice, Bob, Charlie, Research\_Paper\_1, University\_X\}$
+- $R_1 = \{(Alice, authorOf, Research\_Paper\_1), (Bob, authorOf, Research\_Paper\_1), (Alice, affiliatedWith, University\_X), (Bob, affiliatedWith, University\_X)\}$
+
+$KG_2 = (E_2, R_2)$ where:
+
+- $E_2 = \{Alice, Charlie, David, Research\_Paper\_2, University\_Y\}$
+- $R_2 = \{(Alice, authorOf, Research\_Paper\_2), (Charlie, authorOf, Research\_Paper\_2), (Charlie, affiliatedWith, University\_Y), (David, affiliatedWith, University\_Y)\}$
+
+1. Define and compute the union of these knowledge graphs, $KG_1 \cup KG_2$.
+2. Define and compute the intersection of these knowledge graphs, $KG_1 \cap KG_2$.
+3. Identify all entities in $(E_1 \cup E_2) \setminus (E_1 \cap E_2)$.
+4. Construct a query that would retrieve all papers authored by people affiliated with University_X.
+5. What challenges might arise when performing set operations on knowledge graphs with different schemas or ontologies?
+
+:::
+
+::: {#exr-probability-kg}
+
+## Probabilistic reasoning in knowledge graphs
+
+Consider a probabilistic knowledge graph with the following facts and their associated probabilities:
+
+1. (Alice, hasSkill, Programming) - 0.9
+2. (Alice, hasSkill, Statistics) - 0.8
+3. (Programming, requiredFor, DataScientist) - 0.95
+4. (Statistics, requiredFor, DataScientist) - 0.9
+5. (Alice, hasRole, DataScientist) - 0.7
+
+Assuming independence between facts, answer the following:
+
+1. What is the probability that Alice has both Programming and Statistics skills?
+2. What is the probability that Alice has either Programming or Statistics skills (or both)?
+3. Using probabilistic inference, compute the probability that Alice is a Data Scientist based on her skills.
+4. If we learn with certainty that Alice is a Data Scientist, how would this affect our beliefs about her skills? (Hint: Apply Bayes' theorem)
+5. Discuss the independence assumption in this scenario. Is it realistic? Why or why not?
+
+:::
+
+::: {#exr-logical-reasoning}
+
+## Logical reasoning with description logics
+
+Consider a knowledge graph with the following TBox (terminological knowledge) expressed in description logic:
+
+```
+Professor ⊑ AcademicStaff
+Researcher ⊑ AcademicStaff
+Course ⊑ ∃taughtBy.Professor
+Publication ⊑ ∃hasAuthor.Researcher
+Professor ⊓ Researcher ⊑ SeniorAcademic
+∃authorOf.Publication ⊑ Researcher
+```
+
+And the following ABox (assertional knowledge):
+
+```
+Professor(Alice)
+Course(CS101)
+taughtBy(CS101, Alice)
+authorOf(Alice, Paper1)
+Publication(Paper1)
+```
+
+1. What additional facts can be inferred from this knowledge base?
+2. Is Alice a Researcher? Explain your reasoning.
+3. Is Alice a SeniorAcademic? Explain your reasoning.
+4. Write a query in first-order logic that would retrieve all SeniorAcademics.
+5. Extend the TBox with a definition of "TeachingAssistant" that ensures teaching assistants are not professors but can teach courses.
+
+:::
+
+::: {#exr-computational-complexity}
+
+## Computational complexity analysis
+
+For each of the following problems related to knowledge graphs, analyze the computational complexity and discuss approaches to address the computational challenges:
+
+1. Given a knowledge graph with $n$ entities and $m$ relationships, what is the time complexity of finding all entities that are exactly $k$ hops away from a given entity?
+
+2. What is the complexity of determining whether a knowledge graph contains a subgraph isomorphic to a given pattern graph? How does this affect the implementation of complex pattern matching queries?
+
+3. Consider the problem of finding the shortest path between two entities in a knowledge graph where relationships have different weights (costs). Discuss an efficient algorithm and its complexity.
+
+4. What is the complexity of optimally partitioning a knowledge graph across $k$ machines to minimize the number of relationships that span different machines? Is this problem tractable for large knowledge graphs?
+
+5. For a knowledge graph with billions of entities and relationships, discuss strategies to make common queries tractable despite the theoretical complexity constraints.
+
+:::
+
+## Further reading
+
+1. Bordes, A., Usunier, N., Garcia-Duran, A., Weston, J., & Yakhnenko, O. (2013). Translating embeddings for modeling multi-relational data. In _Advances in Neural Information Processing Systems_ (pp. 2787-2795).
+
+2. Getoor, L., & Taskar, B. (Eds.). (2007). _Introduction to Statistical Relational Learning_. MIT press.
+
+3. Goldreich, O. (2008). _Computational Complexity: A Conceptual Perspective_. Cambridge University Press.
+
+4. Hitzler, P., Krötzsch, M., Parsia, B., Patel-Schneider, P. F., & Rudolph, S. (2012). _OWL 2 Web Ontology Language Primer (Second Edition)_. W3C Recommendation.
+
+5. Leskovec, J., Rajaraman, A., & Ullman, J. D. (2014). _Mining of Massive Datasets_. Cambridge University Press.
+
+6. Nickel, M., Murphy, K., Tresp, V., & Gabrilovich, E. (2016). A review of relational machine learning for knowledge graphs. _Proceedings of the IEEE_, 104(1), 11-33.
+
+7. Pearl, J. (2009). _Causality: Models, Reasoning, and Inference_ (2nd ed.). Cambridge University Press.
+
+8. Spivak, D. I. (2014). _Category Theory for the Sciences_. MIT Press.
+
+9. Varian, H. R. (2010). _Intermediate Microeconomics: A Modern Approach_ (8th ed.). W.W. Norton & Company.
+
+10. Zhang, C., & Ma, Y. (Eds.). (2012). _Ensemble Machine Learning: Methods and Applications_. Springer.

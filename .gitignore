@@ -1,0 +1,67 @@
+# Data files
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.sqlite
+*.db
+*.json
+*.pickle
+*.pkl
+*.h5
+*.hdf5
+*.parquet
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Python
+/_output/
+/_site/
+/_docs/
+/docs/
+data/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Large models
+models/
+*.h5
+*.pkl
+*.joblib
+/.quarto/

@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - pages/*.qmd
+    - "contents/snippets/*/*.qmd"
+    - "contents/snippets/test/*.qmd"
+    # - "contents/snippets/thm/*.qmd"
+
+website:
+  title: "AGT Website"
+
+  navbar:
+    background: dark
+    # logo: "assets/logo.png"
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Definitions"
+        file: pages/definitions.qmd
+      - text: "Theorems"
+        file: pages/theorems.qmd
+      - text: "Test"
+        file: pages/test.qmd
+
+format:
+  html:
+    theme:
+      dark: [superhero, assets/style-dark.scss]
+      light: [flatly, assets/style-light.scss]
+    toc: true
+    toc-location: right
+    page-layout: article
+    tbl-colwidths: false
+
+execute:
+  freeze: auto
+  enabled: false # Disable code execution

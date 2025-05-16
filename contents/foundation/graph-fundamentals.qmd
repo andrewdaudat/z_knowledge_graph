@@ -1,0 +1,2045 @@
+# Graph Theory Fundamentals
+
+This chapter introduces the core concepts of graph theory that form the theoretical foundation for knowledge graphs. Graph theory provides the mathematical framework for representing, analyzing, and reasoning about the structure of knowledge graphs. We'll cover essential graph-theoretic concepts, focusing on their relevance to knowledge graph applications while providing both intuitive understanding and formal definitions.
+
+## Basic graph definitions and terminology
+
+Graphs provide a mathematical abstraction for representing relationships between entities. This section introduces the foundational definitions and terminology of graph theory.
+
+### Graphs, vertices, and edges
+
+::: {#def-graph}
+
+## Graph
+
+A **graph** $G$ is an ordered pair $(V, E)$ where:
+
+- $V$ is a set of **vertices** (also called nodes)
+- $E$ is a set of **edges**, where each edge is a connection between two vertices
+
+In a simple graph, $E \subseteq \{\{u, v\} \mid u, v \in V, u \neq v\}$, meaning edges connect unordered pairs of distinct vertices.
+
+:::
+
+For knowledge graphs, vertices typically represent entities, while edges represent relationships between entities. The basic graph definition provides the foundation for more specialized graph types used in knowledge graph applications.
+
+::: {#exm-simple-graph}
+
+## Simple graph
+
+Consider a simple graph representing collaborations between researchers:
+
+$V = \{Alice, Bob, Charlie, Diana\}$  
+$E = \{\{Alice, Bob\}, \{Alice, Charlie\}, \{Bob, Charlie\}, \{Charlie, Diana\}\}$
+
+This graph can be visualized with researchers as vertices and collaborations as edges connecting them.
+
+:::
+
+Graphs can be visualized in multiple ways:
+
+1. **Graphical representation**: Vertices as points or circles, edges as lines connecting vertices
+2. **Adjacency matrix**: A square matrix where entry $a_{ij}$ is 1 if vertices $i$ and $j$ are connected by an edge, and 0 otherwise
+3. **Adjacency list**: A collection of lists, where the list for vertex $v$ contains all vertices adjacent to $v$
+
+### Directed and undirected graphs
+
+Knowledge graphs typically employ directed graphs to represent asymmetric relationships between entities.
+
+::: {#def-directed-graph}
+
+## Directed graph
+
+A **directed graph** (or **digraph**) $G$ is an ordered pair $(V, E)$ where:
+
+- $V$ is a set of vertices
+- $E \subseteq \{(u, v) \mid u, v \in V\}$ is a set of **directed edges** or **arcs**
+
+Each directed edge $(u, v)$ is an ordered pair, representing a connection from vertex $u$ (the **source** or **tail**) to vertex $v$ (the **target** or **head**).
+
+:::
+
+In knowledge graphs, directed edges represent directional relationships, such as "authorOf," "locatedIn," or "employedBy."
+
+::: {#exm-directed-graph}
+
+## Directed graph
+
+Consider a directed graph representing a citation network:
+
+$V = \{Paper1, Paper2, Paper3, Paper4\}$  
+$E = \{(Paper2, Paper1), (Paper3, Paper1), (Paper3, Paper2), (Paper4, Paper2)\}$
+
+Here, each directed edge $(Paper_i, Paper_j)$ indicates that Paper $i$ cites Paper $j$. Note the directionality: if Paper2 cites Paper1, this doesn't imply Paper1 cites Paper2.
+
+:::
+
+Undirected graphs model symmetric relationships, where the connection between two entities has no inherent direction.
+
+::: {#def-undirected-graph}
+
+## Undirected graph
+
+An **undirected graph** $G$ is an ordered pair $(V, E)$ where:
+
+- $V$ is a set of vertices
+- $E$ is a set of unordered pairs of vertices, called **edges**
+
+Each edge $\{u, v\}$ represents a bidirectional connection between vertices $u$ and $v$.
+
+:::
+
+::: {#exm-undirected-graph}
+
+## Undirected graph
+
+Consider an undirected graph representing geographical adjacency between countries:
+
+$V = \{France, Germany, Italy, Switzerland\}$  
+$E = \{\{France, Germany\}, \{France, Italy\}, \{France, Switzerland\}, \{Germany, Switzerland\}, \{Italy, Switzerland\}\}$
+
+Each edge represents that two countries share a border, which is inherently symmetric: if Country A shares a border with Country B, then Country B also shares a border with Country A.
+
+:::
+
+### Graph terminology
+
+To discuss graphs effectively, we need a common vocabulary for their components and structures.
+
+::: {#def-adjacency}
+
+## Adjacency and incidence
+
+In a graph $G = (V, E)$:
+
+1. Two vertices $u$ and $v$ are **adjacent** if there is an edge connecting them.
+2. An edge $e$ is **incident** to a vertex $v$ if $v$ is an endpoint of $e$.
+3. The **neighborhood** of a vertex $v$, denoted $N(v)$, is the set of all vertices adjacent to $v$.
+
+:::
+
+::: {#def-degree}
+
+## Degree
+
+In an undirected graph, the **degree** of a vertex $v$, denoted $\deg(v)$, is the number of edges incident to $v$.
+
+In a directed graph:
+
+- The **in-degree** of $v$, denoted $\deg^-(v)$, is the number of edges with $v$ as their target.
+- The **out-degree** of $v$, denoted $\deg^+(v)$, is the number of edges with $v$ as their source.
+- The total degree is $\deg(v) = \deg^-(v) + \deg^+(v)$.
+
+:::
+
+::: {#exm-degree}
+
+## Vertex degrees
+
+In the citation network example:
+
+- $\deg^-(Paper1) = 2$ (cited by 2 papers)
+- $\deg^+(Paper1) = 0$ (cites 0 papers)
+- $\deg^-(Paper2) = 2$ (cited by 2 papers)
+- $\deg^+(Paper2) = 1$ (cites 1 paper)
+- $\deg^-(Paper3) = 0$ (cited by 0 papers)
+- $\deg^+(Paper3) = 2$ (cites 2 papers)
+
+:::
+
+The degree distribution of a graph—the frequency distribution of degrees across all vertices—provides important insights into the graph's structure. Many real-world networks, including knowledge graphs, exhibit power-law degree distributions, where a small number of vertices have very high degrees while most vertices have low degrees.
+
+::: {#def-walk-path-cycle}
+
+## Walks, paths, and cycles
+
+In a graph $G = (V, E)$:
+
+1. A **walk** is a sequence of vertices $v_1, v_2, \ldots, v_k$ where consecutive vertices are connected by edges.
+
+2. A **path** is a walk where no vertex appears more than once.
+
+3. A **cycle** is a closed walk (starting and ending at the same vertex) where no vertex except the first/last appears more than once, and the walk has at least three edges.
+
+The **length** of a walk, path, or cycle is the number of edges it contains.
+
+:::
+
+::: {#exm-path-cycle}
+
+## Paths and cycles
+
+In a knowledge graph about historical figures:
+
+A path: Newton → influencedBy → Descartes → bornIn → France
+
+This represents a path from Newton to France through their relationships to Descartes.
+
+A cycle: Einstein → collaboratedWith → Bohr → attendedSameConference → Einstein
+
+This cycle represents a closed relationship loop between Einstein and Bohr.
+
+:::
+
+### Weighted graphs
+
+In many applications, including knowledge graphs, relationships may have different strengths, probabilities, or costs, which can be represented using weighted graphs.
+
+::: {#def-weighted-graph}
+
+## Weighted graph
+
+A **weighted graph** $G = (V, E, w)$ is a graph with a weight function $w: E \rightarrow \mathbb{R}$ that assigns a real number (weight) to each edge.
+
+:::
+
+In knowledge graphs, weights might represent:
+
+- Confidence scores for extracted relationships
+- Strength of association between entities
+- Costs or distances in physical networks
+- Probabilities of relationships
+
+::: {#exm-weighted-graph}
+
+## Weighted knowledge graph
+
+In a medical knowledge graph:
+
+$V = \{Diabetes, Obesity, HeartDisease, Exercise\}$  
+$E = \{(Obesity, Diabetes), (Obesity, HeartDisease), (Exercise, Obesity), (Exercise, HeartDisease)\}$  
+$w(Obesity, Diabetes) = 0.85$ (strong correlation)  
+$w(Obesity, HeartDisease) = 0.7$ (moderate correlation)  
+$w(Exercise, Obesity) = -0.6$ (negative correlation, meaning exercise reduces obesity)  
+$w(Exercise, HeartDisease) = -0.5$ (negative correlation)
+
+These weights quantify the strength and direction of relationships between medical conditions and factors.
+
+:::
+
+### Multigraphs and hypergraphs
+
+Standard graphs allow at most one edge between any pair of vertices. However, knowledge representation often requires more flexible structures.
+
+::: {#def-multigraph}
+
+## Multigraph
+
+A **multigraph** is a graph that allows multiple edges (also called parallel edges) between the same pair of vertices.
+
+Formally, a multigraph $G = (V, E, f)$ consists of:
+
+- A set $V$ of vertices
+- A set $E$ of edges
+- A function $f: E \rightarrow \{\{u, v\} \mid u, v \in V\}$ that maps each edge to an unordered pair of vertices
+
+:::
+
+In knowledge graphs, multigraphs can represent multiple different relationships between the same entities.
+
+::: {#exm-multigraph}
+
+## Multigraph
+
+In a social network knowledge graph:
+
+$V = \{Alice, Bob\}$  
+$E = \{e_1, e_2, e_3\}$  
+$f(e_1) = \{Alice, Bob\}$ with type "colleague"  
+$f(e_2) = \{Alice, Bob\}$ with type "friendOf"  
+$f(e_3) = \{Alice, Bob\}$ with type "collaborator"
+
+This multigraph captures that Alice and Bob have multiple types of relationships simultaneously.
+
+:::
+
+Hypergraphs extend graphs by allowing edges to connect more than two vertices, which is useful for representing higher-order relationships.
+
+::: {#def-hypergraph}
+
+## Hypergraph
+
+A **hypergraph** $H = (V, E)$ consists of:
+
+- A set $V$ of vertices
+- A set $E$ of hyperedges, where each hyperedge is a non-empty subset of $V$
+
+:::
+
+Hypergraphs can represent relationships that inherently involve more than two entities, which occur frequently in knowledge representation.
+
+::: {#exm-hypergraph}
+
+## Hypergraph
+
+In a movie knowledge graph:
+
+$V = \{TheGodfather, MarlonBrando, AlPacino, FrancisFordCoppola\}$  
+$E = \{\{TheGodfather, MarlonBrando, AlPacino, FrancisFordCoppola\}\}$
+
+This single hyperedge represents the collaborative relationship between a movie, its director, and its main actors—a relationship that naturally involves more than two entities.
+
+:::
+
+## Special graph structures
+
+Certain graph structures appear frequently in knowledge representation and have special properties that make them useful for specific applications.
+
+### Bipartite graphs
+
+Bipartite graphs divide vertices into two disjoint sets, with edges only connecting vertices from different sets.
+
+::: {#def-bipartite-graph}
+
+## Bipartite graph
+
+A **bipartite graph** is a graph $G = (V, E)$ where the vertex set $V$ can be partitioned into two disjoint subsets $V_1$ and $V_2$ such that every edge in $E$ connects a vertex in $V_1$ to a vertex in $V_2$.
+
+Formally, $V = V_1 \cup V_2$ with $V_1 \cap V_2 = \emptyset$, and for every edge $\{u, v\} \in E$, either $u \in V_1$ and $v \in V_2$ or $u \in V_2$ and $v \in V_1$.
+
+:::
+
+In knowledge graphs, bipartite structures naturally emerge when representing relationships between two distinct entity types.
+
+::: {#exm-bipartite-graph}
+
+## Bipartite graph
+
+In a bibliographic knowledge graph:
+
+$V_1 = \{Paper1, Paper2, Paper3\}$ (papers)  
+$V_2 = \{Author1, Author2, Author3\}$ (authors)  
+$E = \{\{Paper1, Author1\}, \{Paper1, Author2\}, \{Paper2, Author2\}, \{Paper2, Author3\}, \{Paper3, Author1\}, \{Paper3, Author3\}\}$
+
+This bipartite graph represents the authorship relationships between papers and authors, where edges only connect papers to authors, never papers to papers or authors to authors.
+
+:::
+
+### Complete graphs
+
+Complete graphs represent the maximum possible connectivity between vertices.
+
+::: {#def-complete-graph}
+
+## Complete graph
+
+A **complete graph** on $n$ vertices, denoted $K_n$, is an undirected graph where every pair of distinct vertices is connected by a unique edge.
+
+A complete graph with $n$ vertices has $\frac{n(n-1)}{2}$ edges.
+
+:::
+
+In knowledge graphs, complete subgraphs (cliques) often represent tightly interconnected communities or fully specified relationships within a group.
+
+::: {#exm-complete-graph}
+
+## Complete graph
+
+In a collaboration network:
+
+$V = \{Researcher1, Researcher2, Researcher3, Researcher4\}$  
+$E = \{\{Researcher1, Researcher2\}, \{Researcher1, Researcher3\}, \{Researcher1, Researcher4\}, \{Researcher2, Researcher3\}, \{Researcher2, Researcher4\}, \{Researcher3, Researcher4\}\}$
+
+This $K_4$ complete graph represents a research team where every member has collaborated with every other member.
+
+:::
+
+### Trees and forests
+
+Trees are connected graphs without cycles, which makes them useful for representing hierarchical relationships.
+
+::: {#def-tree}
+
+## Tree
+
+A **tree** is a connected, undirected graph with no cycles.
+
+Equivalent characterizations of a tree:
+
+1. A connected graph with $n$ vertices and $n-1$ edges
+2. A graph where any two vertices are connected by exactly one path
+3. A connected graph that becomes disconnected if any edge is removed
+4. An acyclic graph that becomes cyclic if any edge is added
+
+:::
+
+::: {#def-forest}
+
+## Forest
+
+A **forest** is an undirected graph where each connected component is a tree.
+
+:::
+
+Trees are particularly important for representing taxonomies, hierarchies, and organizational structures in knowledge graphs.
+
+::: {#exm-tree}
+
+## Tree structure
+
+In a taxonomic knowledge graph:
+
+$V = \{Animal, Mammal, Bird, Dog, Cat, Eagle, Sparrow\}$  
+$E = \{\{Animal, Mammal\}, \{Animal, Bird\}, \{Mammal, Dog\}, \{Mammal, Cat\}, \{Bird, Eagle\}, \{Bird, Sparrow\}\}$
+
+This tree represents a biological classification where each edge connects a more general category to a more specific one.
+
+:::
+
+### Directed acyclic graphs (DAGs)
+
+Directed acyclic graphs combine direction with the absence of cycles, making them suitable for representing dependencies and partial orderings.
+
+::: {#def-dag}
+
+## Directed acyclic graph
+
+A **directed acyclic graph** (DAG) is a directed graph that contains no directed cycles.
+
+:::
+
+DAGs are fundamental structures in knowledge graphs, representing hierarchies, dependencies, causal relationships, and processes.
+
+::: {#exm-dag}
+
+## Directed acyclic graph
+
+In a knowledge graph representing prerequisite relationships between courses:
+
+$V = \{Calculus1, Calculus2, LinearAlgebra, DifferentialEquations, RealAnalysis\}$  
+$E = \{(Calculus2, Calculus1), (DifferentialEquations, Calculus2), (DifferentialEquations, LinearAlgebra), (RealAnalysis, Calculus2)\}$
+
+This DAG represents that Calculus1 is a prerequisite for Calculus2, which in turn is a prerequisite for both DifferentialEquations and RealAnalysis, and LinearAlgebra is also a prerequisite for DifferentialEquations.
+
+:::
+
+### Regular graphs
+
+Regular graphs have a uniform degree across all vertices, providing a structured pattern of connectivity.
+
+::: {#def-regular-graph}
+
+## Regular graph
+
+A **$k$-regular graph** is an undirected graph where every vertex has the same degree $k$.
+
+:::
+
+While perfect regularity is rare in real-world knowledge graphs, near-regular substructures can reveal standardized patterns of relationships.
+
+::: {#exm-regular-graph}
+
+## Regular graph
+
+In a molecular knowledge graph representing carbon structures:
+
+$V = \{C1, C2, C3, C4, C5, C6\}$ (carbon atoms)  
+$E = \{\{C1, C2\}, \{C2, C3\}, \{C3, C4\}, \{C4, C5\}, \{C5, C6\}, \{C6, C1\}\}$
+
+This 2-regular graph (every vertex has degree 2) represents a simple carbon ring, such as benzene without hydrogen atoms.
+
+:::
+
+## Graph properties and measures
+
+Graph properties and measures help us analyze the structure and characteristics of knowledge graphs, enabling comparison, classification, and inference about their behavior.
+
+### Connectivity
+
+Connectivity measures how well vertices in a graph are connected to each other.
+
+::: {#def-connectivity}
+
+## Connectivity
+
+A graph is **connected** if there is a path between every pair of vertices.
+
+In a directed graph:
+
+1. A graph is **weakly connected** if its underlying undirected graph is connected.
+2. A graph is **strongly connected** if there is a directed path from every vertex to every other vertex.
+
+A **connected component** is a maximal connected subgraph of a graph.
+
+:::
+
+Connectivity analysis in knowledge graphs helps identify isolated clusters of knowledge and ensure proper integration of information.
+
+::: {#exm-connectivity}
+
+## Connectivity in a knowledge graph
+
+Consider a knowledge graph with two connected components:
+
+Component 1: {Computer Science, Algorithms, Data Structures, Complexity Theory}  
+Component 2: {Sociology, Social Networks, Group Dynamics}
+
+If there are no paths between these components, they represent isolated domains of knowledge. Adding cross-disciplinary relationships, such as (Social Networks, Algorithms), would connect these components, enabling cross-domain inference.
+
+:::
+
+### Distance measures
+
+Distance measures quantify how far apart vertices are in a graph.
+
+::: {#def-distance-measures}
+
+## Distance measures
+
+In a graph $G$:
+
+1. The **distance** between vertices $u$ and $v$, denoted $d(u, v)$, is the length of the shortest path between them.
+
+2. The **diameter** of $G$ is the maximum distance between any pair of vertices: $\text{diam}(G) = \max_{u, v \in V} d(u, v)$.
+
+3. The **average path length** is the average of all shortest path lengths between all pairs of vertices.
+
+:::
+
+Distance measures in knowledge graphs help understand the overall structure and the ease of navigating between different domains of knowledge.
+
+::: {#exm-distance-measures}
+
+## Distance measures in a knowledge graph
+
+In a scientific collaboration network:
+
+- $d(\text{Einstein}, \text{Bohr}) = 1$ (direct collaborators)
+- $d(\text{Einstein}, \text{Feynman}) = 2$ (connected through a mutual collaborator)
+- $d(\text{Einstein}, \text{Hawking}) = 3$ (three steps of collaboration connections)
+
+If the diameter of this network is 6, this indicates that any two scientists in the network can be connected through at most 6 collaboration links—an example of the "small world" phenomenon.
+
+:::
+
+### Centrality measures
+
+Centrality measures identify the most important or influential vertices in a graph according to various criteria.
+
+::: {#def-centrality-measures}
+
+## Centrality measures
+
+Common centrality measures include:
+
+1. **Degree centrality**: The degree of a vertex (normalized by the maximum possible degree).
+
+   - In directed graphs: in-degree, out-degree, or total degree centrality.
+
+2. **Closeness centrality**: The reciprocal of the sum of the shortest path distances from a vertex to all other vertices. $C_C(v) = \frac{n-1}{\sum_{u \neq v} d(v, u)}$
+
+3. **Betweenness centrality**: The number of shortest paths between other vertices that pass through a given vertex. $C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the number of shortest paths from $s$ to $t$, and $\sigma_{st}(v)$ is the number of those paths that pass through $v$.
+
+4. **Eigenvector centrality**: A measure where the centrality of a vertex is proportional to the sum of the centralities of its neighbors. Defined by the eigenvector equation: $\lambda \mathbf{c} = A \mathbf{c}$ where $A$ is the adjacency matrix, $\lambda$ is the largest eigenvalue, and $\mathbf{c}$ is the centrality vector.
+
+:::
+
+Centrality measures help identify key entities, concepts, or relationships in knowledge graphs.
+
+::: {#exm-centrality}
+
+## Centrality in a knowledge graph
+
+In a drug interaction knowledge graph:
+
+- **Degree centrality**: Identifies drugs that interact with many other drugs, potentially indicating broad pharmacological activity.
+
+- **Betweenness centrality**: Identifies drugs that frequently act as bridges between different pharmacological classes, potentially with unique mechanistic properties.
+
+- **Eigenvector centrality**: Identifies drugs that interact with other highly interactive drugs, potentially representing central nodes in medication cascades.
+
+For example, warfarin might have high betweenness centrality because it bridges between anticoagulants, cardiovascular drugs, and dietary supplements, serving as a key intermediary in many drug interaction paths.
+
+:::
+
+### Clustering coefficient
+
+The clustering coefficient measures the degree to which vertices in a graph tend to cluster together.
+
+::: {#def-clustering-coefficient}
+
+## Clustering coefficient
+
+The **local clustering coefficient** for a vertex $v$ is the proportion of connections among its neighbors relative to the maximum possible number:
+
+$C(v) = \frac{2|\{e_{ij} : v_i, v_j \in N(v), e_{ij} \in E\}|}{k_v(k_v-1)}$
+
+where $k_v$ is the degree of vertex $v$ and $N(v)$ is the neighborhood of $v$.
+
+The **global clustering coefficient** (or transitivity) is the ratio of closed triplets to the total number of triplets (both open and closed).
+
+:::
+
+In knowledge graphs, clustering coefficients help identify tightly connected communities or domains with high internal connectivity.
+
+::: {#exm-clustering}
+
+## Clustering in a knowledge graph
+
+In an academic co-authorship network:
+
+- Research labs or close-knit research communities typically have high clustering coefficients, as collaborators of a researcher often collaborate with each other.
+
+- Interdisciplinary researchers might have lower clustering coefficients, as their collaborators from different fields may not work together.
+
+For instance, if Alice collaborates with 10 researchers, and among those 10 researchers there are 30 collaborative pairs, Alice's local clustering coefficient would be: $C(\text{Alice}) = \frac{2 \times 30}{10 \times 9} = \frac{60}{90} = 0.67$
+
+This relatively high coefficient suggests Alice works within a fairly cohesive research community.
+
+:::
+
+### Assortativity
+
+Assortativity measures the tendency of vertices to connect with similar vertices.
+
+::: {#def-assortativity}
+
+## Assortativity
+
+**Assortativity** (or assortative mixing) is the preference for vertices to attach to others that are similar in some way.
+
+Degree assortativity is measured by the Pearson correlation coefficient of the degrees at either ends of an edge:
+
+$r = \frac{\sum_{ij} (e_{ij} - a_i b_j)}{\sigma_a \sigma_b}$
+
+where $e_{ij}$ is the fraction of edges connecting vertices of degrees $i$ and $j$, and $a_i$ and $b_j$ are the fraction of edges with one end having degree $i$ and $j$ respectively.
+
+:::
+
+Assortativity in knowledge graphs can reveal patterns in how different types of entities relate to each other.
+
+::: {#exm-assortativity}
+
+## Assortativity in a knowledge graph
+
+In a scholarly knowledge graph:
+
+- **Positive assortativity** by field of study would indicate that researchers primarily cite work within their own field.
+
+- **Negative assortativity** by publication date would indicate that newer papers tend to cite older papers rather than other new papers.
+
+- **Neutral assortativity** by institution would indicate that citation patterns are not influenced by institutional affiliation.
+
+These patterns help understand the flow of information and the structure of academic disciplines within the knowledge graph.
+
+:::
+
+## Graph representations and data structures
+
+The choice of graph representation affects the efficiency of operations and queries on knowledge graphs. This section covers common representations and their trade-offs.
+
+### Adjacency matrix
+
+::: {#def-adjacency-matrix}
+
+## Adjacency matrix
+
+The **adjacency matrix** of a graph $G$ with $n$ vertices is an $n \times n$ matrix $A$ where:
+
+$A_{ij} = \begin{cases}
+1 & \text{if there is an edge from vertex } i \text{ to vertex } j \\
+0 & \text{otherwise}
+\end{cases}$
+
+For weighted graphs, $A_{ij}$ contains the weight of the edge from $i$ to $j$ (or infinity/zero if no edge exists).
+
+:::
+
+Adjacency matrices provide constant-time edge lookups but require $\Theta(n^2)$ space regardless of the number of edges.
+
+::: {#exm-adjacency-matrix}
+
+## Adjacency matrix representation
+
+For the directed graph with vertices {A, B, C, D} and edges {(A, B), (B, C), (C, A), (B, D)}:
+
+$$
+A = \begin{pmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0
+\end{pmatrix}
+$$
+
+This representation makes it easy to check if two vertices are connected (O(1) time) but requires O(n²) space even for sparse graphs.
+
+:::
+
+### Adjacency list
+
+::: {#def-adjacency-list}
+
+## Adjacency list
+
+An **adjacency list** representation of a graph $G$ consists of an array or list of the vertices, where each vertex has a linked list of its adjacent vertices.
+
+For each vertex $v$, the adjacency list contains only the vertices that are adjacent to $v$.
+
+:::
+
+Adjacency lists are space-efficient for sparse graphs, using $\Theta(|V| + |E|)$ space.
+
+::: {#exm-adjacency-list}
+
+## Adjacency list representation
+
+For the same directed graph as in the previous example:
+
+A → [B]  
+B → [C, D]  
+C → [A]  
+D → []
+
+This representation is more space-efficient for sparse graphs (where |E| << |V|²) and makes it easy to iterate through neighbors, but requires O(degree(v)) time to check if two vertices are connected.
+
+:::
+
+### Incidence matrix
+
+::: {#def-incidence-matrix}
+
+## Incidence matrix
+
+The **incidence matrix** of a directed graph with $n$ vertices and $m$ edges is an $n \times m$ matrix $B$ where:
+
+$B_{ij} = \begin{cases}
+-1 & \text{if vertex } i \text{ is the source of edge } j \\
+1 & \text{if vertex } i \text{ is the target of edge } j \\
+0 & \text{otherwise}
+\end{cases}$
+
+For undirected graphs, the non-zero entries are typically all 1.
+
+:::
+
+Incidence matrices are useful for certain graph algorithms and when analyzing the relationship between vertices and edges.
+
+::: {#exm-incidence-matrix}
+
+## Incidence matrix representation
+
+For the directed graph with vertices {A, B, C, D} and edges {e₁:(A, B), e₂:(B, C), e₃:(C, A), e₄:(B, D)}:
+
+$$
+B = \begin{pmatrix}
+-1 & 0 & 1 & 0 \\
+1 & -1 & 0 & -1 \\
+0 & 1 & -1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+This representation makes it easy to determine the endpoints of an edge and is useful for certain graph algorithms like finding Eulerian paths.
+
+:::
+
+### Edge list
+
+::: {#def-edge-list}
+
+## Edge list
+
+An **edge list** representation simply stores a collection of all edges in the graph, each edge represented as a pair (or triple, if weighted) of vertices.
+
+:::
+
+Edge lists are simple but inefficient for many operations. However, they're useful for certain algorithms and as input/output formats.
+
+::: {#exm-edge-list}
+
+## Edge list representation
+
+For our example directed graph:
+
+[(A, B), (B, C), (C, A), (B, D)]
+
+This representation is simple and useful for storing or transmitting graph data, but inefficient for most graph operations and queries.
+
+:::
+
+### Advanced representations for knowledge graphs
+
+Knowledge graphs often require specialized representations that can efficiently handle heterogeneous relationships, attributes, and large-scale data.
+
+::: {#def-property-graph}
+
+## Property graph
+
+A **property graph** is a graph data model where:
+
+1. Vertices and edges have unique identifiers
+2. Both vertices and edges can have a set of properties (key-value pairs)
+3. Edges have a directed relationship type
+
+This model extends basic graph representations to capture the rich structure of knowledge graphs.
+
+:::
+
+::: {#exm-property-graph}
+
+## Property graph representation
+
+In a bibliographic knowledge graph:
+
+Vertices:
+
+- (id: 1, type: "Person", properties: {name: "Alice Smith", affiliation: "University X"})
+- (id: 2, type: "Paper", properties: {title: "Graph Neural Networks", year: 2020})
+
+Edges:
+
+- (source: 1, target: 2, type: "authored", properties: {order: "first author", contribution: "methodology"})
+
+This representation captures both the graph structure and the detailed attributes of entities and relationships.
+
+:::
+
+::: {#def-rdf-triple}
+
+## RDF triple store
+
+An **RDF triple store** is a specialized database for storing and retrieving RDF triples through semantic queries.
+
+Each RDF triple has the form (subject, predicate, object), where:
+
+- Subject: A resource (entity), typically identified by a URI
+- Predicate: A relationship type or property, identified by a URI
+- Object: Either another resource or a literal value
+
+Triple stores often use specialized indexing schemes like SPO, OSP, and POS to efficiently query different patterns.
+
+:::
+
+::: {#exm-rdf-triple}
+
+## RDF triple store representation
+
+In an RDF knowledge graph:
+
+```
+(ex:Einstein, ex:discoveredTheory, ex:Relativity)
+(ex:Einstein, ex:bornIn, ex:Germany)
+(ex:Relativity, ex:publishedIn, "1905"^^xsd:integer)
+(ex:Relativity, rdf:type, ex:ScientificTheory)
+```
+
+These triples form a connected graph where URIs act as global identifiers, enabling integration across datasets.
+
+:::
+
+## Graph algorithms fundamentals
+
+Graph algorithms provide systematic methods for navigating, analyzing, and manipulating knowledge graphs. This section introduces fundamental graph algorithms relevant to knowledge graph applications.
+
+### Graph traversal algorithms
+
+Graph traversal algorithms systematically explore a graph, visiting each vertex and/or edge exactly once.
+
+::: {#def-bfs}
+
+## Breadth-first search (BFS)
+
+**Breadth-first search** explores a graph level by level, visiting all neighbors of a vertex before moving to the next level.
+
+Key properties:
+
+1. Uses a queue data structure
+2. Finds shortest paths in unweighted graphs
+3. Runs in O(|V| + |E|) time
+
+BFS starts from a source vertex and explores vertices in increasing order of their distance from the source.
+
+:::
+
+::: {#exm-bfs}
+
+## BFS traversal
+
+In a knowledge graph representing disease-gene associations:
+
+Starting BFS from "Diabetes":
+
+- Level 0: Diabetes
+- Level 1: Gene1, Gene2, Gene3 (genes directly associated with Diabetes)
+- Level 2: Obesity, HeartDisease, Cancer (other diseases associated with those genes)
+- Level 3: Gene4, Gene5 (genes associated with level 2 diseases but not directly with Diabetes)
+- Level 4: KidneyDisease, Hypertension (other diseases associated with level 3 genes)
+
+This BFS traversal identifies diseases that are progressively more distant from Diabetes in terms of shared genetic pathways.
+
+:::
+
+::: {#def-dfs}
+
+## Depth-first search (DFS)
+
+**Depth-first search** explores a graph by going as deep as possible along each branch before backtracking.
+
+Key properties:
+
+1. Uses a stack data structure (or recursion)
+2. Can identify connected components
+3. Runs in O(|V| + |E|) time
+
+DFS is particularly useful for exploring paths, detecting cycles, and identifying strongly connected components.
+
+:::
+
+::: {#exm-dfs}
+
+## DFS traversal
+
+In a knowledge graph representing historical influence between philosophers:
+
+DFS starting from "Plato" might follow:
+
+- Plato → Aristotle → Alexander → Ptolemy (backtrack)
+- Aristotle → Thomas Aquinas → Descartes → Kant (backtrack)
+- Aristotle → Averroes (backtrack)
+- Plato → Plotinus → Augustine → Anselm (backtrack)
+
+This DFS traversal explores complete chains of influence before moving to alternative branches.
+
+:::
+
+### Shortest path algorithms
+
+Shortest path algorithms find the most efficient ways to navigate between entities in a knowledge graph.
+
+::: {#def-dijkstra}
+
+## Dijkstra's algorithm
+
+**Dijkstra's algorithm** finds the shortest path from a source vertex to all other vertices in a graph with non-negative edge weights.
+
+Key properties:
+
+1. Uses a priority queue (min-heap)
+2. Greedy algorithm that always selects the vertex with the minimum distance
+3. Time complexity: O(|E| + |V| log |V|) with binary heaps
+4. Does not work with negative edge weights
+
+:::
+
+::: {#exm-dijkstra}
+
+## Dijkstra's algorithm in a knowledge graph
+
+In a transportation knowledge graph where:
+
+- Vertices represent cities
+- Edges represent flights
+- Weights represent either travel time, cost, or distance
+
+Dijkstra's algorithm can find the fastest/cheapest/shortest route from New York to Tokyo by:
+
+1. Starting with distance 0 to New York and infinity to all other cities
+2. Repeatedly selecting the unvisited city with the smallest known distance
+3. Updating distances to its neighbors if a shorter path is found
+4. Terminating when Tokyo is reached or all cities are visited
+
+The result might be: New York → Chicago → San Francisco → Tokyo, with a total cost of $850.
+
+:::
+
+::: {#def-bellman-ford}
+
+## Bellman-Ford algorithm
+
+The **Bellman-Ford algorithm** finds shortest paths from a source vertex to all other vertices, even in graphs with negative edge weights (but no negative cycles).
+
+Key properties:
+
+1. Can detect negative cycles
+2. Time complexity: O(|V| × |E|)
+3. More versatile than Dijkstra's but slower
+
+:::
+
+::: {#exm-bellman-ford}
+
+## Bellman-Ford in a knowledge graph
+
+In a financial knowledge graph where:
+
+- Vertices represent currencies
+- Edges represent exchange rates
+- Weights represent log(exchange rate)
+
+Negative weights occur naturally, and negative cycles represent arbitrage opportunities.
+
+Bellman-Ford can:
+
+1. Find the most favorable sequence of currency conversions
+2. Detect arbitrage opportunities (negative cycles)
+3. Determine the optimal trading path from USD to EUR
+
+For example, it might identify: USD → JPY → GBP → EUR as the most favorable conversion path.
+
+:::
+
+::: {#def-floyd-warshall}
+
+## Floyd-Warshall algorithm
+
+The **Floyd-Warshall algorithm** finds shortest paths between all pairs of vertices in a graph.
+
+Key properties:
+
+1. Dynamic programming approach
+2. Can handle negative edge weights (but no negative cycles)
+3. Time complexity: O(|V|³)
+4. Space complexity: O(|V|²)
+
+:::
+
+::: {#exm-floyd-warshall}
+
+## Floyd-Warshall in a knowledge graph
+
+In a protein interaction knowledge graph where:
+
+- Vertices represent proteins
+- Edges represent known interactions
+- Weights represent interaction strength or confidence
+
+Floyd-Warshall can create a complete distance matrix showing the shortest path distance between every pair of proteins, enabling:
+
+1. Identification of protein clusters
+2. Discovery of potential indirect interactions
+3. Ranking of proteins by their centrality in the interaction network
+
+This comprehensive analysis reveals the overall structure of the protein interaction network, not just paths from a single source.
+
+:::
+
+### Minimum spanning tree algorithms
+
+Minimum spanning tree (MST) algorithms find a subset of edges that connect all vertices with minimum total weight.
+
+::: {#def-mst}
+
+## Minimum spanning tree
+
+A **minimum spanning tree** (MST) of a connected, undirected, weighted graph is a tree that includes all vertices and a subset of edges with minimum total weight.
+
+:::
+
+::: {#def-kruskal}
+
+## Kruskal's algorithm
+
+**Kruskal's algorithm** builds an MST by adding edges in order of increasing weight, skipping edges that would create cycles.
+
+Key properties:
+
+1. Uses a disjoint-set data structure
+2. Greedy algorithm
+3. Time complexity: O(|E| log |E|) or O(|E| log |V|)
+
+:::
+
+::: {#exm-kruskal}
+
+## Kruskal's algorithm in a knowledge graph
+
+In a social network knowledge graph where:
+
+- Vertices represent people
+- Edges represent relationships
+- Weights represent relationship strength (lower = stronger)
+
+Kruskal's algorithm can identify the minimum spanning tree by:
+
+1. Sorting all relationships by strength
+2. Adding the strongest relationships first
+3. Avoiding redundant connections (cycles)
+
+The resulting MST represents the strongest set of relationships that connect everyone in the network with minimal total "social distance."
+
+:::
+
+::: {#def-prim}
+
+## Prim's algorithm
+
+**Prim's algorithm** builds an MST by starting from a vertex and repeatedly adding the lowest-weight edge that connects a vertex in the tree to a vertex outside the tree.
+
+Key properties:
+
+1. Uses a priority queue
+2. Grows the tree from a single starting point
+3. Time complexity: O(|E| + |V| log |V|) with binary heaps
+
+:::
+
+::: {#exm-prim}
+
+## Prim's algorithm in a knowledge graph
+
+In a network infrastructure knowledge graph where:
+
+- Vertices represent data centers
+- Edges represent potential connection lines
+- Weights represent installation costs
+
+Prim's algorithm can design a minimum-cost network by:
+
+1. Starting from a designated main data center
+2. Repeatedly connecting the closest unconnected data center
+3. Building an optimal spanning tree that minimizes total cable installation costs
+
+The resulting MST represents the most cost-effective way to connect all data centers.
+
+:::
+
+### Connected components algorithms
+
+Connected components algorithms identify cohesive subgraphs within larger graphs.
+
+::: {#def-connected-components}
+
+## Connected components algorithm
+
+The **connected components algorithm** identifies all connected components in an undirected graph using DFS or BFS.
+
+Time complexity: O(|V| + |E|)
+
+:::
+
+::: {#exm-connected-components}
+
+## Connected components in a knowledge graph
+
+In a scientific knowledge graph:
+
+Connected components might represent distinct scientific disciplines if there are few cross-disciplinary connections:
+
+- Component 1: {Physics, Quantum Mechanics, Relativity, String Theory}
+- Component 2: {Biology, Genetics, Ecology, Evolution}
+- Component 3: {Computer Science, Algorithms, Machine Learning}
+
+Identifying these components helps understand the structure of scientific knowledge and potential gaps in interdisciplinary research.
+
+:::
+
+::: {#def-strongly-connected-components}
+
+## Strongly connected components algorithm
+
+The **strongly connected components (SCC) algorithm** identifies maximal strongly connected subgraphs in a directed graph, where every vertex is reachable from every other vertex within the component.
+
+Tarjan's algorithm and Kosaraju's algorithm are common implementations with O(|V| + |E|) time complexity.
+
+:::
+
+::: {#exm-strongly-connected-components}
+
+## Strongly connected components in a knowledge graph
+
+In a citation knowledge graph:
+
+Strongly connected components might represent research clusters with high internal citation density:
+
+- SCC 1: {Paper1, Paper2, Paper3} (all papers cite each other)
+- SCC 2: {Paper4, Paper5} (these papers cite each other)
+- Paper6 (not in any non-trivial SCC)
+
+These SCCs reveal cohesive research communities where ideas and citations flow in multiple directions within the group.
+
+:::
+
+### Graph coloring and matching algorithms
+
+Graph coloring and matching algorithms solve various assignment and partitioning problems on graphs.
+
+::: {#def-graph-coloring}
+
+## Graph coloring
+
+**Graph coloring** assigns colors to vertices such that no adjacent vertices share the same color, using the minimum number of colors possible.
+
+Finding the optimal coloring (minimum number of colors) is NP-hard, but practical algorithms exist for approximate solutions.
+
+:::
+
+::: {#exm-graph-coloring}
+
+## Graph coloring in a knowledge graph
+
+In a knowledge graph representing potential conflicts:
+
+- Vertices represent tasks or events
+- Edges connect tasks that cannot occur simultaneously
+
+Graph coloring can:
+
+1. Assign time slots (colors) to events
+2. Ensure conflicting events don't share time slots
+3. Minimize the total number of time slots needed
+
+For example, in exam scheduling, coloring can assign days to exams while ensuring no student has two exams on the same day.
+
+:::
+
+::: {#def-bipartite-matching}
+
+## Bipartite matching
+
+**Bipartite matching** finds a subset of edges in a bipartite graph such that no two edges share a common vertex, maximizing the number of matches.
+
+The Hungarian algorithm or Ford-Fulkerson algorithm can solve this problem in polynomial time.
+
+:::
+
+::: {#exm-bipartite-matching}
+
+## Bipartite matching in a knowledge graph
+
+In a job market knowledge graph:
+
+- Left vertices represent job seekers
+- Right vertices represent job openings
+- Edges represent qualifications (a person is qualified for a job)
+
+Maximum bipartite matching can:
+
+1. Assign job seekers to jobs they're qualified for
+2. Ensure each person gets at most one job and each job is filled by at most one person
+3. Maximize the total number of successful job placements
+
+The resulting matching represents an optimal job assignment strategy.
+
+:::
+
+## Graph decomposition and community detection
+
+Graph decomposition and community detection methods identify the structural components and natural groupings within knowledge graphs.
+
+### Graph partitioning
+
+::: {#def-graph-partitioning}
+
+## Graph partitioning
+
+**Graph partitioning** divides a graph into smaller components with specific properties, typically minimizing the number of edges between different components while keeping components relatively balanced in size.
+
+Finding the optimal partition is NP-hard, but heuristic algorithms like Kernighan-Lin and spectral partitioning provide practical solutions.
+
+:::
+
+::: {#exm-graph-partitioning}
+
+## Graph partitioning in a knowledge graph
+
+In a large-scale distributed knowledge graph:
+
+Graph partitioning can divide the knowledge graph across multiple servers by:
+
+1. Grouping related entities together on the same server
+2. Minimizing cross-server relationships to reduce communication overhead
+3. Balancing the number of entities per server for load balancing
+
+For example, a social network knowledge graph might be partitioned geographically, with users from the same region stored on the same server.
+
+:::
+
+### Community detection
+
+::: {#def-community-detection}
+
+## Community detection
+
+**Community detection** identifies groups of vertices that are more densely connected internally than with the rest of the graph.
+
+Common approaches include:
+
+1. Modularity optimization
+2. Label propagation
+3. Clique percolation
+4. Louvain method
+5. Infomap algorithm
+
+:::
+
+::: {#exm-community-detection}
+
+## Community detection in a knowledge graph
+
+In a scientific collaboration knowledge graph:
+
+Community detection can identify research communities by:
+
+1. Analyzing patterns of co-authorship
+2. Finding groups of researchers who frequently collaborate
+3. Distinguishing separate fields and subfields based on collaboration density
+
+The resulting communities might correspond to research fields like "quantum computing," "natural language processing," or "climate modeling," even without explicit field labels.
+
+:::
+
+### Core-periphery structure
+
+::: {#def-core-periphery}
+
+## Core-periphery structure
+
+A **core-periphery structure** divides a graph into two parts:
+
+1. A densely connected **core** of central vertices
+2. A sparsely connected **periphery** of peripheral vertices that are primarily connected to the core
+
+Various algorithms identify this structure by maximizing the density within the core and minimizing it within the periphery.
+
+:::
+
+::: {#exm-core-periphery}
+
+## Core-periphery in a knowledge graph
+
+In a corporate knowledge graph:
+
+Core-periphery analysis can reveal organizational structure by:
+
+1. Identifying a core of central entities (key executives, major departments, flagship products)
+2. Distinguishing the periphery (supporting roles, minor products, external contractors)
+3. Understanding information flow patterns between core and periphery
+
+The core might consist of the executive team and major product lines, while the periphery includes supporting services and regional operations.
+
+:::
+
+### Hierarchical clustering
+
+::: {#def-hierarchical-clustering}
+
+## Hierarchical clustering
+
+**Hierarchical clustering** creates a tree of clusters by either:
+
+1. **Agglomerative** (bottom-up): Starting with each vertex as its own cluster and iteratively merging the closest clusters
+2. **Divisive** (top-down): Starting with all vertices in one cluster and recursively splitting clusters
+
+The result is a dendrogram showing clusters at multiple levels of granularity.
+
+:::
+
+::: {#exm-hierarchical-clustering}
+
+## Hierarchical clustering in a knowledge graph
+
+In a product knowledge graph:
+
+Hierarchical clustering can create a taxonomy of products by:
+
+1. Grouping products based on feature similarity
+2. Forming a multilevel hierarchy from specific product variants to general categories
+3. Allowing exploration at different levels of specificity
+
+The resulting hierarchy might show smartphones grouped by brand at one level, by operating system at a higher level, and with all electronics at an even higher level.
+
+:::
+
+## Specialized graph types for knowledge representation
+
+Knowledge graphs often employ specialized graph types that extend standard graphs to better represent complex knowledge.
+
+### Property graphs
+
+::: {#def-property-graph-model}
+
+## Property graph model
+
+The **property graph model** extends the basic graph model with:
+
+1. Labeled vertices and edges
+2. Properties (key-value pairs) on both vertices and edges
+3. Multiple edges allowed between the same vertices, distinguished by different labels
+
+This model provides rich expressivity for knowledge representation.
+
+:::
+
+::: {#exm-property-graph-model}
+
+## Property graph model in practice
+
+In a biomedical knowledge graph:
+
+Vertices:
+
+- (id: 1, label: "Drug", properties: {name: "Aspirin", formula: "C9H8O4"})
+- (id: 2, label: "Disease", properties: {name: "Headache", ICD10: "R51"})
+- (id: 3, label: "Protein", properties: {name: "COX-2", uniprotID: "P35354"})
+
+Edges:
+
+- (source: 1, target: 2, label: "treats", properties: {efficacy: 0.78, mechanism: "direct"})
+- (source: 1, target: 3, label: "inhibits", properties: {strength: "high", reversible: true})
+- (source: 3, target: 2, label: "implicated_in", properties: {evidence: "strong", pathway: "inflammatory"})
+
+This rich structure captures both the connections between entities and detailed information about each entity and relationship.
+
+:::
+
+### RDF graphs
+
+::: {#def-rdf-graph}
+
+## RDF graph
+
+The **Resource Description Framework (RDF)** represents knowledge as a graph of triples in the form (subject, predicate, object), where:
+
+- Subjects are resources (entities)
+- Predicates are properties or relationships
+- Objects are either resources or literal values
+
+RDF uses URIs (Uniform Resource Identifiers) as global identifiers, enabling cross-dataset knowledge integration.
+
+:::
+
+::: {#exm-rdf-graph}
+
+## RDF graph example
+
+A fragment of an RDF knowledge graph about Albert Einstein:
+
+```
+ex:Einstein rdf:type ex:Scientist .
+ex:Einstein ex:birthDate "1879-03-14"^^xsd:date .
+ex:Einstein ex:won ex:NobelPrize .
+ex:Einstein ex:developedTheory ex:Relativity .
+ex:Relativity ex:publishedYear "1905"^^xsd:integer .
+```
+
+These triples form a connected graph, with Einstein as a central node connected to various attributes and related entities.
+
+:::
+
+### Ontology graphs
+
+::: {#def-ontology-graph}
+
+## Ontology graph
+
+An **ontology graph** extends knowledge graphs with formal semantics, typically using description logics, to represent:
+
+1. Classes and class hierarchies
+2. Properties and property hierarchies
+3. Constraints and axioms
+4. Logic-based inference rules
+
+Ontology graphs enable automated reasoning and inference beyond explicit statements.
+
+:::
+
+::: {#exm-ontology-graph}
+
+## Ontology graph example
+
+A biological ontology fragment:
+
+```
+ex:Mammal rdfs:subClassOf ex:Animal .
+ex:Dog rdfs:subClassOf ex:Mammal .
+ex:Cat rdfs:subClassOf ex:Mammal .
+ex:hasPart rdf:type owl:TransitiveProperty .
+ex:Animal owl:disjointWith ex:Plant .
+ex:Dog owl:equivalentClass [
+    owl:intersectionOf (
+        ex:Mammal
+        [ owl:onProperty ex:hasBehavior ; owl:hasValue ex:Barking ]
+    )
+] .
+```
+
+This ontology defines a hierarchy of animal classes, specifies that hasPart is transitive, declares that animals and plants are disjoint, and provides a complex class definition for dogs.
+
+:::
+
+### Hypergraphs in knowledge representation
+
+::: {#def-hypergraph-representation}
+
+## Hypergraph representation
+
+A **hypergraph representation** of knowledge uses hyperedges to connect multiple entities simultaneously, suitable for representing higher-order relationships that inherently involve more than two entities.
+
+Formally, a hypergraph $H = (V, E)$ consists of a set of vertices $V$ and a set of hyperedges $E$, where each hyperedge is a non-empty subset of $V$.
+
+:::
+
+::: {#exm-hypergraph-representation}
+
+## Hypergraph representation example
+
+In a biomedical knowledge graph:
+
+A metabolic reaction might be represented as a hyperedge connecting multiple molecules:
+
+$e_1 = \{Glucose, ATP, Glucose-6-phosphate, ADP\}$
+
+This single hyperedge represents the reaction: Glucose + ATP → Glucose-6-phosphate + ADP
+
+Similarly, a clinical trial might be represented as a hyperedge connecting multiple entities:
+
+$e_2 = \{DrugX, ConditionY, Hospital1, EfficacyZ, SideEffectW\}$
+
+Hyperedges naturally represent these multi-entity relationships that would be awkward to decompose into binary relationships.
+
+:::
+
+### Temporal and dynamic graphs
+
+::: {#def-temporal-graph}
+
+## Temporal graph
+
+A **temporal graph** (or dynamic graph) extends standard graphs by incorporating time:
+
+$G_{temp} = (V, E, T)$
+
+where $T$ is a time domain, and edges (and possibly vertices) have associated time intervals indicating when they are valid.
+
+:::
+
+::: {#exm-temporal-graph}
+
+## Temporal graph example
+
+In a historical knowledge graph:
+
+Temporal edges capture changing relationships over time:
+
+- (Napoleon, rulerOf, France, [1804-1814, 1815])
+- (France, politicalSystem, Empire, [1804-1814, 1815])
+- (France, politicalSystem, Republic, [1792-1804, 1848-1852])
+
+Temporal vertices might represent entities that exist only during specific time periods:
+
+- (GrandArmy, type, MilitaryUnit, [1805-1815])
+
+These temporal annotations enable queries about the state of knowledge at particular points in time, such as "Who ruled France in 1810?" or "What was France's political system in 1820?"
+
+:::
+
+### Probabilistic and uncertain graphs
+
+::: {#def-probabilistic-graph}
+
+## Probabilistic graph
+
+A **probabilistic graph** associates probabilities with vertices, edges, or subgraphs to represent uncertain knowledge:
+
+$G_{prob} = (V, E, P)$
+
+where $P$ assigns probability values to elements of the graph, reflecting confidence, uncertainty, or statistical likelihood.
+
+:::
+
+::: {#exm-probabilistic-graph}
+
+## Probabilistic graph example
+
+In a medical knowledge graph:
+
+Edges with probabilities represent uncertain relationships:
+
+- (Smoking, causes, LungCancer, 0.85)
+- (Asbestos, causes, LungCancer, 0.70)
+- (GeneMutation, causes, LungCancer, 0.55)
+
+These probabilities might represent the strength of evidence, the relative risk contribution, or the confidence in the causal relationship.
+
+Probabilistic inference can then answer questions like:
+
+- What is the probability of developing lung cancer given both smoking and asbestos exposure?
+- What is the most likely cause of lung cancer in a specific population?
+
+:::
+
+## Applications of graph theory in knowledge graphs
+
+This section explores how the graph-theoretic concepts and algorithms introduced earlier apply to specific knowledge graph tasks and applications.
+
+### Entity resolution and linking
+
+::: {#def-entity-resolution}
+
+## Entity resolution
+
+**Entity resolution** (or entity linking, record linkage) is the process of identifying and combining different references to the same real-world entity in a knowledge graph.
+
+Graph-theoretic approaches leverage the network structure to improve entity resolution beyond simple attribute matching.
+
+:::
+
+::: {#exm-entity-resolution}
+
+## Entity resolution example
+
+In a bibliographic knowledge graph:
+
+The system needs to determine if "J. Smith from MIT" and "John Smith from Massachusetts Institute of Technology" refer to the same person.
+
+Graph-based entity resolution might:
+
+1. Analyze the neighborhood structure (co-authors, publications, citations)
+2. Apply similarity metrics to the subgraphs surrounding each entity
+3. Use transitivity to propagate identity information
+
+If both entities have similar patterns of collaboration with the same set of other researchers, the system might conclude they are likely the same person, despite differences in how the name and affiliation are recorded.
+
+:::
+
+### Link prediction
+
+::: {#def-link-prediction}
+
+## Link prediction
+
+**Link prediction** aims to predict missing edges or future connections in a graph based on observed graph structure.
+
+Common approaches use:
+
+1. Neighborhood-based metrics (common neighbors, Jaccard coefficient)
+2. Path-based metrics (shortest path, Katz index)
+3. Random walk methods
+4. Graph neural networks
+
+:::
+
+::: {#exm-link-prediction}
+
+## Link prediction example
+
+In a drug discovery knowledge graph:
+
+Link prediction can identify potential drug-target interactions by:
+
+1. Analyzing patterns in known drug-target interactions
+2. Considering the chemical similarity between drugs (graph structure in chemical space)
+3. Incorporating protein similarity (graph structure in protein space)
+4. Predicting missing edges between drugs and targets
+
+For example, if Drug A and Drug B are structurally similar, and Drug A is known to interact with Protein X, link prediction might suggest that Drug B also interacts with Protein X, prioritizing this for experimental validation.
+
+:::
+
+### Path-based reasoning and inference
+
+::: {#def-path-reasoning}
+
+## Path-based reasoning
+
+**Path-based reasoning** uses paths in a knowledge graph to infer new relationships or answer complex queries.
+
+Approaches include:
+
+1. Path ranking algorithms
+2. Meta-path analysis
+3. Composition of relation patterns
+
+:::
+
+::: {#exm-path-reasoning}
+
+## Path-based reasoning example
+
+In a biomedical knowledge graph, path-based reasoning might identify drug repurposing opportunities:
+
+1. Identify a path: Drug A → inhibits → Protein X → regulates → Gene Y → associated with → Disease B
+2. Infer a potential relationship: Drug A might treat Disease B
+
+By systematically analyzing such paths across the knowledge graph, the system can generate hypotheses about drug repurposing opportunities, even when direct evidence is absent.
+
+Similarly, in a financial knowledge graph, path analysis might detect:
+
+1. Company A → subsidiary of → Company B → headquartered in → Country C → has tax treaty with → Country D
+2. Inferring potential tax optimization strategies based on these indirect relationships
+
+:::
+
+### Knowledge graph completion
+
+::: {#def-kg-completion}
+
+## Knowledge graph completion
+
+**Knowledge graph completion** aims to infer missing facts in a knowledge graph, combining:
+
+1. Link prediction (predicting missing edges)
+2. Node prediction (inferring missing entities)
+3. Type prediction (determining entity types)
+4. Value prediction (filling in missing attributes)
+
+:::
+
+::: {#exm-kg-completion}
+
+## Knowledge graph completion example
+
+In a geographic knowledge graph:
+
+The system might complete missing information about cities:
+
+1. Predict population for cities with unknown population based on patterns of similar cities
+2. Infer climate classifications for regions without explicit climate data
+3. Complete missing "located in" relationships for suburbs or districts
+4. Predict typical temperature ranges based on latitude, elevation, and proximity to oceans
+
+These predictions leverage both the explicit graph structure and implicit patterns in the existing knowledge.
+
+:::
+
+### Query answering over knowledge graphs
+
+::: {#def-kg-query}
+
+## Knowledge graph querying
+
+**Knowledge graph querying** uses graph patterns to retrieve information, typically through languages like SPARQL or Cypher.
+
+Graph algorithms support efficient query processing through:
+
+1. Query planning and optimization
+2. Index-based access
+3. Parallel and distributed processing
+
+:::
+
+::: {#exm-kg-query}
+
+## Knowledge graph query example
+
+A SPARQL query to find medications that treat both diabetes and hypertension:
+
+```sparql
+SELECT ?medication WHERE {
+  ?medication rdf:type ex:Medication .
+  ?medication ex:treats ex:Diabetes .
+  ?medication ex:treats ex:Hypertension .
+}
+```
+
+This query finds all medications connected by "treats" edges to both diabetes and hypertension. Efficient processing might use:
+
+1. Index lookups to find medications treating diabetes
+2. Index lookups to find medications treating hypertension
+3. Set intersection to find medications in both sets
+
+:::
+
+### Community-based knowledge organization
+
+::: {#def-community-organization}
+
+## Community-based knowledge organization
+
+**Community-based knowledge organization** applies community detection algorithms to identify coherent domains, topics, or subject areas within knowledge graphs.
+
+:::
+
+::: {#exm-community-organization}
+
+## Community organization example
+
+In a scientific knowledge graph:
+
+Community detection can automatically organize research into coherent fields and subfields by:
+
+1. Analyzing patterns of citation
+2. Identifying clusters of densely interconnected papers
+3. Extracting key terms or concepts from each cluster
+
+This organization might reveal:
+
+- A machine learning community with subcommunities for neural networks, Bayesian methods, and reinforcement learning
+- A medical community with subcommunities for cardiology, oncology, and neurology
+- Interdisciplinary bridges between communities, such as computational biology
+
+This automated organization can help with literature discovery, trend analysis, and identifying emerging research areas.
+
+:::
+
+## Graph theory extensions for knowledge graphs
+
+This section explores theoretical extensions to standard graph theory that address the specific needs and challenges of knowledge graphs.
+
+### Higher-order graph analysis
+
+::: {#def-higher-order}
+
+## Higher-order graph analysis
+
+**Higher-order graph analysis** extends beyond pairwise relationships to examine patterns involving multiple entities simultaneously, including:
+
+1. Motif analysis (recurring subgraph patterns)
+2. Graphlet analysis (small induced subgraphs)
+3. Clique analysis (completely connected subgraphs)
+4. Simplicial complex representations (higher-dimensional relationships)
+
+:::
+
+::: {#exm-higher-order}
+
+## Higher-order analysis example
+
+In a social knowledge graph:
+
+Motif analysis might reveal common relationship patterns:
+
+- Triadic closure: If A is friends with B and C, then B and C are likely to become friends
+- Authority structures: A central person connected to many others who aren't connected to each other
+- Cliques: Groups where everyone knows everyone else
+
+These higher-order patterns provide insights beyond what individual edges can reveal, identifying characteristic structures that shape how knowledge is organized.
+
+:::
+
+### Multilayer and multiplex graphs
+
+::: {#def-multilayer-graph}
+
+## Multilayer graph
+
+A **multilayer graph** represents multiple types of relationships or interaction contexts as separate layers in a unified framework:
+
+$M = (V, E_1, E_2, ..., E_L)$
+
+where each $E_i$ represents edges of a particular type or layer.
+
+:::
+
+::: {#exm-multilayer-graph}
+
+## Multilayer graph example
+
+In a comprehensive social knowledge graph:
+
+Different layers might represent distinct relationship types:
+
+- Layer 1: Professional relationships (collaborates with, reports to)
+- Layer 2: Social relationships (friends with, family member of)
+- Layer 3: Communication patterns (emails, messages, calls)
+- Layer 4: Physical proximity (co-located, neighbors)
+
+Multilayer analysis can reveal:
+
+- How relationships in one layer influence those in another
+- Different centrality of individuals across layers
+- Community structures that span multiple layers
+- Discrepancies between formal and informal relationship networks
+
+:::
+
+### Heterogeneous information networks
+
+::: {#def-heterogeneous-network}
+
+## Heterogeneous information network
+
+A **heterogeneous information network** (HIN) is a graph with multiple types of vertices and edges, formally defined as:
+
+$G = (V, E, T_V, T_E, \phi_V, \phi_E)$
+
+where:
+
+- $T_V$ is a set of vertex types
+- $T_E$ is a set of edge types
+- $\phi_V: V \rightarrow T_V$ maps vertices to their types
+- $\phi_E: E \rightarrow T_E$ maps edges to their types
+
+:::
+
+::: {#exm-heterogeneous-network}
+
+## Heterogeneous network example
+
+In an academic knowledge graph:
+
+Vertex types might include:
+
+- Authors
+- Papers
+- Conferences
+- Institutions
+- Research topics
+
+Edge types might include:
+
+- authorOf (Author → Paper)
+- publishedIn (Paper → Conference)
+- affiliatedWith (Author → Institution)
+- cites (Paper → Paper)
+- hasTopic (Paper → Topic)
+
+This heterogeneity enables rich queries and analyses that consider the semantics of different entity and relationship types, such as finding authors who frequently publish on specific topics at particular conferences.
+
+:::
+
+### Semantic networks and conceptual graphs
+
+::: {#def-semantic-network}
+
+## Semantic network
+
+A **semantic network** is a graph structure that represents semantic relationships between concepts, focusing on the meaning of information rather than just structure.
+
+Semantic networks typically include:
+
+1. Hierarchical relationships (is-a, part-of)
+2. Semantic relations (causes, enables, contradicts)
+3. Modifiers and attributes
+
+:::
+
+::: {#exm-semantic-network}
+
+## Semantic network example
+
+In a cognitive linguistics knowledge graph:
+
+A semantic network might represent conceptual relationships:
+
+- (Bird, is-a, Animal)
+- (Wing, part-of, Bird)
+- (Flying, capability-of, Bird)
+- (Flying, requires, Wing)
+- (Penguin, is-a, Bird)
+- (Penguin, cannot, Flying)
+- (Water, habitat-of, Penguin)
+
+This network captures not just factual relationships but semantic knowledge about capabilities, requirements, and exceptions, supporting more human-like reasoning about concepts.
+
+:::
+
+## Summary
+
+This chapter has provided a comprehensive introduction to graph theory fundamentals as they apply to knowledge graphs. We've covered:
+
+1. **Basic graph definitions and terminology**: The essential vocabulary and concepts for discussing graph structures.
+
+2. **Special graph structures**: Important graph types like bipartite graphs, directed acyclic graphs, and trees that frequently appear in knowledge representation.
+
+3. **Graph properties and measures**: Quantitative tools for analyzing graph structure, including connectivity, centrality, and clustering.
+
+4. **Graph representations and data structures**: Ways to computationally represent graphs, from adjacency matrices to specialized knowledge graph formats.
+
+5. **Graph algorithms fundamentals**: Core algorithms for traversing, searching, and analyzing graphs, including BFS, DFS, and shortest path algorithms.
+
+6. **Graph decomposition and community detection**: Methods for identifying the natural divisions and groupings within graphs.
+
+7. **Specialized graph types for knowledge representation**: Extensions to the basic graph model that better capture the complexity of knowledge, including property graphs, RDF graphs, and temporal graphs.
+
+8. **Applications of graph theory in knowledge graphs**: Practical tasks that leverage graph theory, such as entity resolution, link prediction, and query answering.
+
+9. **Graph theory extensions for knowledge graphs**: Advanced theoretical frameworks that address the unique challenges of knowledge graphs, including higher-order analysis and heterogeneous networks.
+
+This foundation in graph theory provides the theoretical tools necessary for understanding, designing, and working with knowledge graphs across various domains and applications. As we proceed to subsequent chapters, we'll build on these concepts to explore more specialized aspects of knowledge graph construction, analysis, and application.
+
+## Exercises
+
+::: {#exr-graph-representation}
+
+## Graph representation
+
+Consider a small knowledge graph about scientists and their discoveries:
+
+Entities: Einstein, Bohr, Newton, TheoryOfRelativity, QuantumMechanics, LawsOfMotion Relationships:
+
+- (Einstein, developed, TheoryOfRelativity)
+- (Einstein, influencedBy, Newton)
+- (Bohr, developed, QuantumMechanics)
+- (Bohr, influencedBy, Einstein)
+- (Newton, developed, LawsOfMotion)
+
+1. Represent this knowledge graph as an adjacency matrix.
+2. Represent it as an adjacency list.
+3. Represent it as a property graph with appropriate node and edge properties.
+4. Convert it to a set of RDF triples.
+5. Draw the directed graph representation.
+6. Discuss the advantages and disadvantages of each representation for different types of queries or operations on this knowledge graph.
+
+:::
+
+::: {#exr-graph-algorithms}
+
+## Graph algorithms
+
+Using the scientists knowledge graph from the previous exercise:
+
+1. Trace the steps of a BFS traversal starting from Einstein.
+2. Trace the steps of a DFS traversal starting from Einstein.
+3. Identify all paths from Newton to QuantumMechanics, if any.
+4. Calculate the in-degree and out-degree of each entity.
+5. If we added a confidence weight to each relationship (0-1 scale), describe how Dijkstra's algorithm could be modified to find the most reliable path between two entities.
+6. Discuss how you would identify the most central entity in this knowledge graph using different centrality measures.
+
+:::
+
+::: {#exr-community-detection}
+
+## Community detection and graph partitioning
+
+Consider an expanded version of the scientists knowledge graph that includes 30 scientists, their discoveries, publications, and institutions, with approximately 100 relationships between them.
+
+1. Describe a methodology for detecting scientific communities in this knowledge graph.
+2. If you needed to partition this knowledge graph across three servers while minimizing cross-server relationships, outline your approach.
+3. How would you identify the core-periphery structure in this scientific collaboration network?
+4. Explain how hierarchical clustering could be applied to create a taxonomy of scientific fields.
+5. Discuss how temporal information (publication dates, lifespans of scientists) could be incorporated into the community detection process.
+
+:::
+
+::: {#exr-specialized-graphs}
+
+## Specialized graph types
+
+Design a knowledge graph for representing a university with departments, professors, students, courses, and research projects.
+
+1. Create a property graph schema with appropriate vertex and edge types, and properties.
+2. Design an RDF schema for the same domain.
+3. Identify relationships that might be better represented as hyperedges and explain why.
+4. Describe how you would incorporate temporal aspects (enrollment periods, course offerings by semester, faculty appointments).
+5. Discuss how uncertainty might be represented in this knowledge graph (e.g., uncertain course prerequisites, potential research collaborations).
+
+:::
+
+::: {#exr-graph-operations}
+
+## Graph operations and analysis
+
+Consider a knowledge graph representing a healthcare system with patients, doctors, diseases, treatments, and medications.
+
+1. Formulate a path query to find all potential treatments for a specific disease.
+2. Design an algorithm to identify doctors who frequently prescribe similar medications.
+3. Describe how you would use link prediction to suggest potential drug interactions.
+4. Outline a community detection approach to identify disease clusters with similar treatment patterns.
+5. Discuss how centrality measures could help identify key medications that are essential to the treatment of multiple conditions.
+6. Explain how you would evaluate the quality of your knowledge graph using graph-theoretic metrics.
+
+:::
+
+## Further reading
+
+1. Bang-Jensen, J., & Gutin, G. Z. (2008). _Digraphs: Theory, Algorithms and Applications_. Springer Science & Business Media.
+
+2. Bondy, J. A., & Murty, U. S. R. (2008). _Graph Theory_. Springer.
+
+3. Fortunato, S. (2010). Community detection in graphs. _Physics Reports_, 486(3-5), 75-174.
+
+4. Goyal, P., & Ferrara, E. (2018). Graph embedding techniques, applications, and performance: A survey. _Knowledge-Based Systems_, 151, 78-94.
+
+5. Leskovec, J., Rajaraman, A., & Ullman, J. D. (2020). _Mining of Massive Datasets_. Cambridge University Press. (Chapter 10: Analysis of Social Networks)
+
+6. Newman, M. (2018). _Networks_. Oxford University Press.
+
+7. Robinson, I., Webber, J., & Eifrem, E. (2015). _Graph Databases: New Opportunities for Connected Data_. O'Reilly Media.
+
+8. Shi, C., Li, Y., Zhang, J., Sun, Y., & Philip, S. Y. (2017). A survey of heterogeneous information network analysis. _IEEE Transactions on Knowledge and Data Engineering_, 29(1), 17-37.
+
+9. West, D. B. (2001). _Introduction to Graph Theory_. Prentice Hall.
+
+10. Zhang, C., Yao, X., & Sun, J. (2020). Representation Learning for Heterogeneous Information Networks. _Proceedings of the AAAI Conference on Artificial Intelligence_, 34(5), 9330-9337.
